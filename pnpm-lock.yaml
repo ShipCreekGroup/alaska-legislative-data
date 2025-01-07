@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@types/google-apps-script':
-        specifier: ^1.0.91
-        version: 1.0.91
     devDependencies:
       typescript:
         specifier: ^5.7.2
@@ -18,16 +14,11 @@ importers:
 
 packages:
 
-  '@types/google-apps-script@1.0.91':
-    resolution: {integrity: sha512-si93/GKuhaMPgbYUnGpU4jzqkid4+zxHi+Sm0IyGUJ/OPha5sM/hklGEyosSxsoE5Qkla3f7O64rJ05NdRQpJA==}
-
   typescript@5.7.2:
     resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
     engines: {node: '>=14.17'}
     hasBin: true
 
 snapshots:
-
-  '@types/google-apps-script@1.0.91': {}
 
   typescript@5.7.2: {}
