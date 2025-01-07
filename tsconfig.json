@@ -1,20 +1,17 @@
 {
   "compilerOptions": {
     "target": "es2017",
+    "module": "esnext",
+    "moduleResolution": "node",
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
+    "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./",
     "declaration": true,
-    "sourceMap": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+    "emitDeclarationOnly": false,
+    "noEmit": false,
+    "removeComments": false, // when compiling ts to js, keep comments
   },
   "include": [
     "*.ts"

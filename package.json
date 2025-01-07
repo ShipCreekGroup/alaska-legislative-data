@@ -1,10 +1,11 @@
 {
 	"name": "alaska-legislative-api",
 	"version": "0.0.1",
-	"dependencies": {
-	},
 	"scripts": {
 		"build": "tsc",
-		"cli": "node --experimental-strip-types cli.ts"
+		"example": "node --experimental-strip-types cli.ts"
+	},
+	"devDependencies": {
+		"typescript": "^5.7.2"
 	}
 }

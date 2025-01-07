@@ -173,6 +173,11 @@ export class Client {
     return parsed.Basis;
   }
 
+  /**
+   * Retrieves bill information from the Alaska Legislature API
+   * @param [options] - Optional parameters for the request
+   * @returns Promise<Array<Bills>> Array of bill objects matching the query parameters
+   */
   async getBills(options?: GetBillsOptions) {
     const headerStrings = queriesToHeaderStrings(options?.queries);
     const bills = await this.request('bills', options, headerStrings);
