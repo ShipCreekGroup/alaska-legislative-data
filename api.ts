@@ -1,4 +1,3 @@
-export type ApiVersion = '1.0' | '1.2' | '1.4' | string;
 export type Chamber = 'H' | 'S';
 
 export interface Actions {
@@ -153,17 +152,16 @@ export interface GetSessionsOptions extends BaseOptions {
 
 export class Client {
   private baseUrl: string;
-  private version: ApiVersion;
 
-  constructor(baseUrl?: string, version?: ApiVersion) {
+  constructor(baseUrl?: string) {
     baseUrl = baseUrl || 'https://www.akleg.gov/publicservice/basis';
     this.baseUrl = baseUrl.replace(/\/$/, ''); // Remove trailing slash if present
-    this.version = version || '1.4';
   }
 
   get baseHeaders() {
     return new Headers({
-      'X-Alaska-Legislature-Basis-Version': this.version,
+      // need >=1.4 to be able to use json=true query parameter
+      'X-Alaska-Legislature-Basis-Version': '1.4',
       'Accept-Encoding': 'gzip;q=1.0',
     });
   }
