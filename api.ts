@@ -149,20 +149,36 @@ export interface GetSessionsOptions extends BaseOptions {
   queries?: SessionQueries;
 }
 
+type Fetcher = (url: string, headers: Record<string, string>) => Promise<string | Record<string, any>>;
+
 export class Client {
   private baseUrl: string;
+  private fetcher: Fetcher;
 
-  constructor(baseUrl?: string) {
+  /**
+   * @param baseUrl - The base URL for the API
+   * @param fetcher - The fetcher function to use for the API requests.
+   *   This is useful if you are in eg a Google Apps Script environment where
+   *   the web standard fetch API is not available, and you need to use the
+   *   Google Apps Script UrlFetch API instead.
+   */
+  constructor(baseUrl?: string, fetcher?: Fetcher) {
     baseUrl = baseUrl || 'https://www.akleg.gov/publicservice/basis';
     this.baseUrl = baseUrl.replace(/\/$/, ''); // Remove trailing slash if present
+    this.fetcher = fetcher || this.defaultFetch;
   }
 
-  get baseHeaders() {
-    return new Headers({
+  private async defaultFetch(url: string, headers: Record<string, string>) {
+    const response = await fetch(url, {headers});
+    return await response.json();
+  }
+
+  get baseHeaders() : Record<string, string> {
+    return {
       // need >=1.4 to be able to use json=true query parameter
       'X-Alaska-Legislature-Basis-Version': '1.4',
       'Accept-Encoding': 'gzip;q=1.0',
-    });
+    };
   }
 
   private async request(
@@ -189,21 +205,19 @@ export class Client {
 
     const headers = this.baseHeaders;
     headerStrings.forEach(headerString => {
-      headers.append('X-Alaska-Legislature-Basis-Query', headerString);
+      headers['X-Alaska-Legislature-Basis-Query'] = headerString;
     });
     if (options.range) {
-      headers.append('X-Alaska-Query-ResultRange', options.range);
+      headers['X-Alaska-Query-ResultRange'] = options.range;
     }
     
     console.debug(url);
     console.debug(headers);
-    const response = await fetch(url, {headers});
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    let response = await this.fetcher(url, headers);
+    if (typeof response === 'string') {
+      response = JSON.parse(response) as Record<string, any>;
     }
-    const parsed = await response.json();
-    return parsed.Basis;
+    return response.Basis;
   }
 
   /**
