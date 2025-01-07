@@ -1,4 +1,7 @@
 export type Chamber = 'H' | 'S';
+/* including fulltext means the entire text is included in the response,
+ * otherwise only the url is included. */
+export type Fulltext = true | 'urlonly';
 
 export interface Actions {
   code?: string;
@@ -72,7 +75,7 @@ export interface Members {
 export interface Media {}
 
 export interface Minutes {
-  fulltext?: string;
+  fulltext?: Fulltext;
 }
 
 export interface Subjects {
@@ -80,7 +83,7 @@ export interface Subjects {
 }
 
 export interface Versions {
-  fulltext?: string;
+  fulltext?: Fulltext;
 }
 
 export interface Votes {
