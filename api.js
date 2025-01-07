@@ -209,16 +209,6 @@ export class Client {
   }
 
   /**
-   * @returns {Record<string, string>}
-   */
-  get baseHeaders() {
-    return {
-      'X-Alaska-Legislature-Basis-Version': '1.4',
-      'Accept-Encoding': 'gzip;q=1.0',
-    };
-  }
-
-  /**
    * @param {'bills' | 'committees' | 'meetings' | 'members' | 'sessions'} section
    * @param {GenericOptions} [options]
    * @returns {Promise<any>}
@@ -240,7 +230,10 @@ export class Client {
     const queryString = new URLSearchParams(params).toString();
     const url = `${this.baseUrl}/${section}${queryString ? '?' + queryString : ''}`;
 
-    const headers = this.baseHeaders;
+    const headers = {
+      'X-Alaska-Legislature-Basis-Version': '1.4',
+      'Accept-Encoding': 'gzip;q=1.0',
+    };
     if (headerString) {
       headers['X-Alaska-Legislature-Basis-Query'] = headerString;
     }
