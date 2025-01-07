@@ -1,14 +1,10 @@
 // @ts-check
-/**
- * @typedef {'H' | 'S'} Chamber
- */
+/** @typedef {'H' | 'S'} Chamber */
+
+/** @typedef {true | 'urlonly'} Fulltext */
 
 /**
- * @typedef {true | 'urlonly'} Fulltext
- */
-
-/**
- * @typedef {Object} Actions
+ * @typedef {Object} ActionConstraints
  * @property {string} [code]
  * @property {string} [text]
  * @property {string} [date]
@@ -17,19 +13,20 @@
  */
 
 /**
- * @typedef {Object} Bills
- * @property {string} [name]
- * @property {Chamber} [chamber]
- * @property {string} [bill]
- * @property {boolean} [onfloor]
- * @property {string} [shorttitle]
- * @property {string} [statustext]
- * @property {string} [statuscode]
- * @property {string} [committeecode]
+ * @typedef {Object} BillConstraints
+ * @property {string} [name] The bill name, eg 'CSHB 2(STA)(FLD H)'
+ * @property {Chamber} [chamber] 'H' for House, 'S' for Senate
+ * @property {string} [bill] The bill number, eg 'HB  6'
+ * @property {boolean} [onfloor] 
+ * @property {string} [shorttitle] eg 'CONTRACTS: PROHIBIT ISRAEL DISCRIMINATION'
+ * @property {string} [statustext] eg '014'
+ * @property {string} [statuscode] eg 'FAILED(H) PERM FILED(H)'
+ * @property {string} [committeecode] The code of the committee that the bill is 
+ *   currently in, eg 'STA' for the 'State Affairs' committee.
  */
 
 /**
- * @typedef {Object} Committees
+ * @typedef {Object} CommitteeConstraints
  * @property {string} [category]
  * @property {Chamber} [chamber]
  * @property {string} [location]
@@ -39,7 +36,7 @@
  */
 
 /**
- * @typedef {Object} FiscalNotes
+ * @typedef {Object} FiscalNoteConstraints
  * @property {Chamber} [chamber]
  * @property {string} [date]
  * @property {string} [startdate]
@@ -49,7 +46,7 @@
  */
 
 /**
- * @typedef {Object} Journals
+ * @typedef {Object} JournalConstraints
  * @property {Chamber} [chamber]
  * @property {string} [date]
  * @property {string} [startdate]
@@ -60,7 +57,7 @@
  */
 
 /**
- * @typedef {Object} Meetings
+ * @typedef {Object} MeetingConstraints
  * @property {string} [date]
  * @property {string} [startdate]
  * @property {string} [enddate]
@@ -68,7 +65,7 @@
  */
 
 /**
- * @typedef {Object} Members
+ * @typedef {Object} MemberConstraints
  * @property {string} [building]
  * @property {Chamber} [chamber]
  * @property {string} [comment]
@@ -81,72 +78,70 @@
  * @property {string} [code] three letter code, eg 'BIS' for Click Bishop, 'BCH' for Tom Begich, etc
  */
 
-/**
- * @typedef {Object} Media
- */
+/** @typedef {Object} MediaConstraints */
 
 /**
- * @typedef {Object} Minutes
+ * @typedef {Object} MinuteConstraints
  * @property {Fulltext} [fulltext]
  */
 
 /**
- * @typedef {Object} Subjects
+ * @typedef {Object} SubjectConstraints
  * @property {string} [text]
  */
 
 /**
- * @typedef {Object} Versions
+ * @typedef {Object} VersionConstraints
  * @property {Fulltext} [fulltext]
  */
 
 /**
- * @typedef {Object} Votes
+ * @typedef {Object} VoteConstraints
  * @property {string} [vote]
  * @property {string} [title]
  */
 
 /**
- * @typedef {Members} Sponsors
+ * @typedef {MemberConstraints} SponsorConstraints
  */
 
 /**
  * @typedef {Object} BillQueries
- * @property {Actions} [Actions]
- * @property {Bills} [Bills]
- * @property {FiscalNotes} [Fiscalnotes]
- * @property {Members} [Sponsors]
- * @property {Subjects} [Subjects]
- * @property {Versions} [Versions]
- * @property {Votes} [Votes]
+ * @property {ActionConstraints} [Actions]
+ * @property {BillConstraints} [Bills]
+ * @property {FiscalNoteConstraints} [Fiscalnotes]
+ * @property {SponsorConstraints} [Sponsors]
+ * @property {SubjectConstraints} [Subjects]
+ * @property {VersionConstraints} [Versions]
+ * @property {VoteConstraints} [Votes]
  */
 
 /**
  * @typedef {Object} CommitteeQueries
- * @property {Bills} [Bills]
- * @property {Committees} [Committees]
- * @property {Meetings} [Meetings]
- * @property {Members} [Members]
+ * @property {BillConstraints} [Bills]
+ * @property {CommitteeConstraints} [Committees]
+ * @property {MeetingConstraints} [Meetings]
+ * @property {MemberConstraints} [Members]
  */
 
 /**
  * @typedef {Object} MemberQueries
- * @property {Bills} [Bills]
- * @property {Committees} [Committees]
- * @property {Members} [Members]
- * @property {Votes} [Votes]
+ * @property {BillConstraints} [Bills]
+ * @property {CommitteeConstraints} [Committees]
+ * @property {MemberConstraints} [Members]
+ * @property {VoteConstraints} [Votes]
  */
 
 /**
  * @typedef {Object} MeetingQueries
- * @property {Media} [Media]
- * @property {Minutes} [Minutes]
- * @property {Meetings} [Meetings]
+ * @property {MediaConstraints} [Media]
+ * @property {MinuteConstraints} [Minutes]
+ * @property {MeetingConstraints} [Meetings]
  */
 
 /**
  * @typedef {Object} SessionQueries
- * @property {Journals} [Journals]
+ * @property {JournalConstraints} [Journals]
  */
 
 /**
@@ -156,151 +151,184 @@
  * @property {string} [range]
  */
 
+/** @typedef {BaseOptions & {queries?: BillQueries}} GetBillsOptions */
+/** @typedef {BaseOptions & {queries?: MeetingQueries}} GetMeetingsOptions */
+/** @typedef {BaseOptions & {queries?: MemberQueries}} GetMembersOptions */
+/** @typedef {BaseOptions & {queries?: CommitteeQueries}} GetCommitteesOptions */
+/** @typedef {BaseOptions & {queries?: SessionQueries}} GetSessionsOptions */
+
+/** @typedef {'GET' | 'HEAD'} Method */
+
 /**
- * @typedef {BaseOptions & {queries?: BillQueries}} GetBillsOptions
+ * @typedef {Object} FetchArgs
+ * @property {string} url
+ * @property {Record<string, string>} headers
+ * @property {Method} [method]
  */
 
 /**
- * @typedef {BaseOptions & {queries?: MeetingQueries}} GetMeetingsOptions
+ * @typedef {Object} FetchResponse
+ * @property {string} payload
+ * @property {Record<string, string>} headers
+ */
+
+/** @typedef {(args: FetchArgs) => Promise<FetchResponse>} Fetcher */
+
+/**
+ * A fetcher that uses the web standard fetch() API.
+ * @param {FetchArgs} args
+ * @returns {Promise<FetchResponse>}
+ */
+export async function webFetch(args) {
+  const response = await fetch(args.url, { headers: args.headers, method: args.method });
+  return {
+    payload: await response.text(),
+    headers: Object.fromEntries(response.headers.entries()),
+  };
+}
+
+/**
+ * 
+ * @typedef {Object} IntoConfig
+ * @property {string} [baseUrl] - The base URL for the API
+ * @property {Fetcher} [fetcher] - The fetcher function to use for the API requests.
+ *   This is useful if you are in eg a Google Apps Script environment where
+ *   the web standard fetch API is not available, and you need to use the
+ *   Google Apps Script UrlFetch API instead.
  */
 
 /**
- * @typedef {BaseOptions & {queries?: MemberQueries}} GetMembersOptions
+ * The Config class is used to configure the API client.
+ * @example
+ * const config = new Config({ baseUrl: 'https://www.akleg.gov/publicservice/basis', fetcher: myCustomFetcher });
  */
-
-/**
- * @typedef {BaseOptions & {queries?: CommitteeQueries}} GetCommitteesOptions
- */
-
-/**
- * @typedef {BaseOptions & {queries?: SessionQueries}} GetSessionsOptions
- */
-
-/**
- * @typedef {(url: string, headers: Record<string, string>) => Promise<string | Record<string, any>>} Fetcher
- */
-
-/**
- * @typedef {BaseOptions & {queries?: Record<string, any>}} GenericOptions
- */
-
-export class Client {
+export class Config {
   /**
-   * @param {string} [baseUrl] - The base URL for the API
-   * @param {Fetcher} [fetcher] - The fetcher function to use for the API requests.
-   *   This is useful if you are in eg a Google Apps Script environment where
-   *   the web standard fetch API is not available, and you need to use the
-   *   Google Apps Script UrlFetch API instead.
+   * @param {IntoConfig} [config]
    */
-  constructor(baseUrl, fetcher) {
-    baseUrl = baseUrl || 'https://www.akleg.gov/publicservice/basis';
-    this.baseUrl = baseUrl.replace(/\/$/, ''); // Remove trailing slash if present
-    this.fetcher = fetcher || this.defaultFetch;
+  constructor(config) {
+    config = config || {};
+    this.baseUrl = config.baseUrl || 'https://www.akleg.gov/publicservice/basis';
+    this.baseUrl = this.baseUrl.replace(/\/$/, ''); // Remove trailing slash if present
+    this.fetcher = config.fetcher || webFetch;
+  }
+}
+
+/**
+ * Builds the arguments for an HTTP request.
+ * 
+ * This is a low-level function that is normally not needed to be called directly.
+ * But sometimes, you need to build the arguments for an HTTP request manually,
+ * for example when you are using a custom fetcher.
+ * 
+ * @param {'bills' | 'committees' | 'meetings' | 'members' | 'sessions'} section
+ * @param {BaseOptions & {queries?: Record<string, any>}} [options]
+ * @param {string} [baseUrl]
+ * @returns {FetchArgs}
+ */
+export function buildArgs(section, options, baseUrl) {
+  if (!options) {
+    options = {};
+  }
+  if (!baseUrl) {
+    baseUrl = new Config().baseUrl;
+  }
+  /** @type {{ json: string, session?: string, chamber?: Chamber }} */
+  let params = { json: 'true' };
+  if (options.session) {
+    params.session = options.session.toString();
+  }
+  if (options.chamber) {
+    params.chamber = options.chamber;
+  }
+  const headerString = _queriesToHeaderString(options.queries);
+
+  const queryString = new URLSearchParams(params).toString();
+  const url = `${baseUrl}/${section}${queryString ? '?' + queryString : ''}`;
+
+  const headers = {
+    'X-Alaska-Legislature-Basis-Version': '1.4',
+    'Accept-Encoding': 'gzip;q=1.0',
+  };
+  if (headerString) {
+    headers['X-Alaska-Legislature-Basis-Query'] = headerString;
+  }
+  if (options.range) {
+    headers['X-Alaska-Query-ResultRange'] = options.range;
   }
 
-  /**
-   * @param {string} url
-   * @param {Record<string, string>} headers
-   * @returns {Promise<any>}
-   */
-  async defaultFetch(url, headers) {
-    const response = await fetch(url, { headers });
-    return await response.json();
-  }
+  return { url, headers};
+}
 
-  /**
-   * @param {'bills' | 'committees' | 'meetings' | 'members' | 'sessions'} section
-   * @param {GenericOptions} [options]
-   * @returns {Promise<any>}
-   */
-  async request(section, options) {
-    if (!options) {
-      options = {};
-    }
-    /** @type {{ json: string, session?: string, chamber?: Chamber }} */
-    let params = { json: 'true' };
-    if (options.session) {
-      params.session = options.session.toString();
-    }
-    if (options.chamber) {
-      params.chamber = options.chamber;
-    }
-    const headerString = queriesToHeaderString(options.queries);
-
-    const queryString = new URLSearchParams(params).toString();
-    const url = `${this.baseUrl}/${section}${queryString ? '?' + queryString : ''}`;
-
-    const headers = {
-      'X-Alaska-Legislature-Basis-Version': '1.4',
-      'Accept-Encoding': 'gzip;q=1.0',
-    };
-    if (headerString) {
-      headers['X-Alaska-Legislature-Basis-Query'] = headerString;
-    }
-    if (options.range) {
-      headers['X-Alaska-Query-ResultRange'] = options.range;
-    }
-
-    console.debug(url);
-    console.debug(headers);
-    let response = await this.fetcher(url, headers);
-    if (typeof response === 'string') {
-      response = JSON.parse(response);
-    }
-    return response.Basis;
-  }
-
+/**
+ * The Bills class is a wrapper around the bills section of the API.
+ *
+ * @example
+ * const bills = new Bills({ queries: { Bills: { name: '*38' } } });
+ * const nResults = await bills.count();
+ * const data = await bills.fetch();
+ * console.log(nResults);
+ * console.log(data);
+ */
+export class Bills {
   /**
    * @param {GetBillsOptions} [options]
-   * @returns {Promise<any>}
+   * @param {IntoConfig} [config]
    */
-  async getBills(options) {
-    const bills = await this.request('bills', options);
-    return bills.Bills;
+  constructor(options, config) {
+    this.options = options;
+    this.config = new Config(config);
   }
 
   /**
-   * @param {GetMeetingsOptions} [options]
-   * @returns {Promise<any>}
+   * @returns {FetchArgs}
    */
-  async getMeetings(options) {
-    const meetings = await this.request('meetings', options);
-    return meetings.Meetings;
+    fetchArgs() {
+      return buildArgs('bills', this.options, this.config.baseUrl);
+    }
+
+  /**
+   * @returns {Promise<any[]>}
+   */
+  async fetch() {
+    return (await _data(this.fetchArgs(), this.config.fetcher)).Bills;
   }
 
   /**
-   * @param {GetMembersOptions} [options]
-   * @returns {Promise<any>}
+   * @returns {Promise<number>}
    */
-  async getMembers(options) {
-    const members = await this.request('members', options);
-    return members.Members;
+  async count() {
+    return _count(this.fetchArgs(), this.config.fetcher);
   }
+}
 
-  /**
-   * @param {GetCommitteesOptions} [options]
-   * @returns {Promise<any>}
-   */
-  async getCommittees(options) {
-    const committees = await this.request('committees', options);
-    return committees.Committees;
-  }
+/**
+ * @param {FetchArgs} args
+ * @param {Fetcher} fetcher
+ * @returns {Promise<any>}
+ */
+async function _data(args, fetcher) {
+  args = {...args, method: 'GET'}
+  const response = await fetcher(args);
+  return JSON.parse(response.payload).Basis;
+}
 
-  /**
-   * @param {GetSessionsOptions} [options]
-   * @returns {Promise<any>}
-   */
-  async getSessions(options) {
-    const sessions = await this.request('sessions', options);
-    return sessions.Sessions;
-  }
+/**
+ * @param {FetchArgs} args
+ * @param {Fetcher} fetcher
+ * @returns {Promise<number>}
+ */
+async function _count(args, fetcher) {
+  args = { ...args, method: 'HEAD' };
+  const response = await fetcher(args);
+  return Number(response.headers['x-alaska-query-count']);
 }
 
 /**
  * @param {Record<string, any> | undefined} queries
  * @returns {string | null}
  */
-function queriesToHeaderString(queries) {
+function _queriesToHeaderString(queries) {
   if (!queries) {
     return null;
   }
