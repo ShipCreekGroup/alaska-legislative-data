@@ -1,3 +1,3 @@
 # Vote Tracker
 
-A typescript library for interacting with the Alaska Legislative API.
+A types javascript library for interacting with the Alaska Legislative API.
