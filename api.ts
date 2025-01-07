@@ -154,6 +154,9 @@ export interface GetSessionsOptions extends BaseOptions {
 
 type Fetcher = (url: string, headers: Record<string, string>) => Promise<string | Record<string, any>>;
 
+interface GenericOptions extends BaseOptions {
+  queries?: Record<string, any>;
+}
 export class Client {
   private baseUrl: string;
   private fetcher: Fetcher;
@@ -186,14 +189,10 @@ export class Client {
 
   private async request(
     section: "bills" | "committees" | "meetings" |"members" | "sessions",
-    options?: BaseOptions,
-    headerStrings?: string[]
+    options?: GenericOptions,
   ){
     if (!options) {
       options = {};
-    }
-    if (!headerStrings) {
-      headerStrings = [];
     }
     let params: Record<string, string> = {json: 'true'};
     if (options.session) {
@@ -202,14 +201,15 @@ export class Client {
     if (options.chamber) {
       params.chamber = options.chamber;
     }
+    const headerString = queriesToHeaderString(options.queries);
 
     const queryString = new URLSearchParams(params).toString();
     const url = `${this.baseUrl}/${section}${queryString ? '?' + queryString : ''}`;
 
     const headers = this.baseHeaders;
-    headerStrings.forEach(headerString => {
+    if (headerString) {
       headers['X-Alaska-Legislature-Basis-Query'] = headerString;
-    });
+    }
     if (options.range) {
       headers['X-Alaska-Query-ResultRange'] = options.range;
     }
@@ -223,45 +223,35 @@ export class Client {
     return response.Basis;
   }
 
-  /**
-   * Retrieves bill information from the Alaska Legislature API
-   * @param [options] - Optional parameters for the request
-   * @returns Promise<Array<Bills>> Array of bill objects matching the query parameters
-   */
   async getBills(options?: GetBillsOptions) {
-    const headerStrings = queriesToHeaderStrings(options?.queries);
-    const bills = await this.request('bills', options, headerStrings);
+    const bills = await this.request('bills', options);
     return bills.Bills;
   }
 
   async getMeetings(options?: GetMeetingsOptions) {
-    const headerStrings = queriesToHeaderStrings(options?.queries);
-    const meetings = await this.request('meetings', options, headerStrings);
+    const meetings = await this.request('meetings', options);
     return meetings.Meetings;
   }
 
   async getMembers(options?: GetMembersOptions) {
-    const headerStrings = queriesToHeaderStrings(options?.queries);
-    const members = await this.request('members', options, headerStrings);
+    const members = await this.request('members', options);
     return members.Members;
   }
 
   async getCommittees(options?: GetCommitteesOptions) {
-    const headerStrings = queriesToHeaderStrings(options?.queries);
-    const committees = await this.request('committees', options, headerStrings);
+    const committees = await this.request('committees', options);
     return committees.Committees;
   }
 
   async getSessions(options?: GetSessionsOptions) {
-    const headerStrings = queriesToHeaderStrings(options?.queries);
-    const sessions = await this.request('sessions', options, headerStrings);
+    const sessions = await this.request('sessions', options);
     return sessions.Sessions;
   }
 } 
 
-function queriesToHeaderStrings(queries: Record<string, any> | undefined) {
+function queriesToHeaderString(queries: Record<string, any> | undefined) {
   if (!queries) {
-    return [];
+    return null;
   }
   const headerStrings: string[] = [];
   for (const [include, constraints] of Object.entries(queries)) {
@@ -269,5 +259,5 @@ function queriesToHeaderStrings(queries: Record<string, any> | undefined) {
     let constraintsString = Object.entries(constraints).map(([k, v]) => `${k}=${v}`).join(';');
     headerStrings.push(`${include};${constraintsString}`);
   }
-  return headerStrings;
+  return headerStrings.join(',');
 }
