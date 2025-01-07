@@ -1,7 +1,7 @@
 // @ts-check
 /** @typedef {'H' | 'S'} Chamber */
-
 /** @typedef {true | 'urlonly'} Fulltext */
+/** @typedef {'GET' | 'HEAD'} HttpMethod */
 
 /**
  * @typedef {Object} ActionConstraints
@@ -157,13 +157,11 @@
 /** @typedef {BaseOptions & {queries?: CommitteeQueries}} GetCommitteesOptions */
 /** @typedef {BaseOptions & {queries?: SessionQueries}} GetSessionsOptions */
 
-/** @typedef {'GET' | 'HEAD'} Method */
-
 /**
  * @typedef {Object} FetchArgs
  * @property {string} url
  * @property {Record<string, string>} headers
- * @property {Method} [method]
+ * @property {HttpMethod} [method]
  */
 
 /**
