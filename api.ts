@@ -126,7 +126,6 @@ export interface SessionQueries {
 
 export interface BaseOptions {
   session?: number;
-  minifyresult?: boolean;
   chamber?: Chamber;
   range?: string;
 }
@@ -181,9 +180,6 @@ export class Client {
     if (options.session) {
       params.session = options.session.toString();
     }
-    if (options.range) {
-      params.minifyresult = options.minifyresult ? 'true' : 'false';
-    }
     if (options.chamber) {
       params.chamber = options.chamber;
     }
@@ -206,9 +202,6 @@ export class Client {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    // const parser = new XMLParser();
-    // return parser.parse(await response.text()).Basis;
     const parsed = await response.json();
     return parsed.Basis;
   }
