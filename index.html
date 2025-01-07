@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alaska Legislative API</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "alaska-legislative-api": "https://cdn.jsdelivr.net/npm/alaska-legislative-api@0.0.3/dist/api.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Alaska Legislative API</h1>
+  <div id="root">
+    <select id="memberSelect">
+      <option value="">Select a member...</option>
+    </select>
+    <div id="memberDetails"></div>
+  </div>
+  <script type="module">
+    import { Client } from 'alaska-legislative-api';
+
+    const client = new Client();
+    let allMembers = [];
+    let allBills = [];
+
+    function setMemberOptions() {
+      const memberSelect = document.getElementById('memberSelect');
+      allMembers.forEach(member => {
+        const option = document.createElement('option');
+        option.value = member.Code;
+        option.textContent = member.FormalName;
+        memberSelect.appendChild(option);
+      });
+    }
+
+    async function main() {
+      allMembers = await client.getMembers({session: 33});
+      allBills = await client.getBills({session: 33, queries: {Votes: {}}});
+      console.log(allMembers);
+      console.log(allBills);
+      setMemberOptions();
+    }
+    main();
+  </script>
+</body>
+</html>

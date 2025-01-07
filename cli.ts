@@ -8,52 +8,39 @@ async function getAllMembers(session?: number) {
   }
   const results = await client.getMembers({
     session: session,
-    range: '1',
-    queries:{
-      Members: {
-        chamber: 'S',
-        firstname: 'J*',
-      },
-      Committees: {},
+    // range: '10',
+    queries: {
+      // Members: {
+      //   chamber: 'S',
+      //   firstname: 'J*',
+      // },
+      Votes: {},
+      // Committees: {},
     },
   });
 
   return results;
 }
 
-async function getAllBills(session?: number) {
+async function getBills(session?: number) {
   if (!session) {
     session = 33;
   }
   const results = await client.getBills({
     session: session,
-    range: '1',
+    range: '10',
+    queries: {
+      Votes: {},
+    },
   });
   return results;
 }
 
-async function test() {
-  return await client.getBills({
-    session: 33,
-    queries: {
-      Sponsors: {
-        building: '100',
-        chamber: 'S',
-      },
-      Bills: {
-        bill: '*2',
-      },
-      Votes:{}
-    },
-    range: '1',
-  });
-}
-
 async function main() {
-  const results = await getAllMembers();
-  console.log(results.length);
-  console.log(results.slice(0, 5));
-  // console.log(results[0].Votes)
+  let results = await getAllMembers();
+  // results = results.slice(0, 5);
+  const jsonResults = JSON.stringify(results, null, 2);
+  console.log(jsonResults);
 }
 
 await main();
