@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"scripts": {
 		"build": "tsc",
-		"example": "node --experimental-strip-types cli.ts"
+		"example": "pnpm run build && node dist/cli.js"
 	},
 	"devDependencies": {
 		"typescript": "^5.7.2"

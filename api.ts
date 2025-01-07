@@ -69,7 +69,8 @@ export interface Members {
   code?: string;
 }
 
-export interface Sponsors extends Members {}
+// There actually are no constraints for media, you can only choose to include it or not
+export interface Media {}
 
 export interface Minutes {
   fulltext?: string;
@@ -88,25 +89,66 @@ export interface Votes {
   title?: string;
 }
 
+export interface Sponsors extends Members {}
+
+export interface BillQueries {
+  Actions?: Actions;
+  Bills?: Bills;
+  Fiscalnotes?: FiscalNotes;
+  Sponsors?: Members;
+  Subjects?: Subjects;
+  Versions?: Versions;
+  Votes?: Votes;
+}
+
+export interface CommitteeQueries {
+  Bills?: Bills;
+  Committees?: Committees;
+  Meetings?: Meetings;
+  Members?: Members;
+}
+
+export interface MemberQueries {
+  Bills?: Bills;
+  Committees?: Committees;
+  Members?: Members;
+  Votes?: Votes;
+}
+
+export interface MeetingQueries {
+  Media?: Media;
+  Minutes?: Minutes;
+  Meetings?: Meetings;
+}
+
+export interface SessionQueries {
+  Journals?: Journals;
+}
+
 export interface BaseOptions {
   session?: number;
   minifyresult?: boolean;
   chamber?: Chamber;
   range?: string;
 }
-
-export interface BillQueries {
-  Sponsors?: Members;
-  Actions?: Actions;
-  Subjects?: Subjects;
-  Versions?: Versions;
-  Fiscalnotes?: FiscalNotes;
-  Votes?: Votes;
-  Bills?: Bills;
-}
-
 export interface GetBillsOptions extends BaseOptions {
   queries?: BillQueries;
+}
+
+export interface GetMeetingsOptions extends BaseOptions {
+  queries?: MeetingQueries;
+}
+
+export interface GetMembersOptions extends BaseOptions {
+  queries?: MemberQueries;
+}
+
+export interface GetCommitteesOptions extends BaseOptions {
+  queries?: CommitteeQueries;
+}
+
+export interface GetSessionsOptions extends BaseOptions {
+  queries?: SessionQueries;
 }
 
 export class Client {
@@ -127,7 +169,7 @@ export class Client {
   }
 
   private async request(
-    section: "bills" | "committees" | "members" | "sessions",
+    section: "bills" | "committees" | "meetings" |"members" | "sessions",
     options?: BaseOptions,
     headerStrings?: string[]
   ){
@@ -182,6 +224,30 @@ export class Client {
     const headerStrings = queriesToHeaderStrings(options?.queries);
     const bills = await this.request('bills', options, headerStrings);
     return bills.Bills;
+  }
+
+  async getMeetings(options?: GetMeetingsOptions) {
+    const headerStrings = queriesToHeaderStrings(options?.queries);
+    const meetings = await this.request('meetings', options, headerStrings);
+    return meetings.Meetings;
+  }
+
+  async getMembers(options?: GetMembersOptions) {
+    const headerStrings = queriesToHeaderStrings(options?.queries);
+    const members = await this.request('members', options, headerStrings);
+    return members.Members;
+  }
+
+  async getCommittees(options?: GetCommitteesOptions) {
+    const headerStrings = queriesToHeaderStrings(options?.queries);
+    const committees = await this.request('committees', options, headerStrings);
+    return committees.Committees;
+  }
+
+  async getSessions(options?: GetSessionsOptions) {
+    const headerStrings = queriesToHeaderStrings(options?.queries);
+    const sessions = await this.request('sessions', options, headerStrings);
+    return sessions.Sessions;
   }
 } 
 
