@@ -8,7 +8,7 @@ async function getAllMembers(session?: number) {
   }
   const results = await client.getMembers({
     session: session,
-    // range: '10',
+    range: '2',
     queries: {
       // Members: {
       //   chamber: 'S',
