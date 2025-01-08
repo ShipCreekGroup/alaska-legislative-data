@@ -3,7 +3,7 @@
 /** @typedef {true | 'urlonly'} Fulltext Whether to return a {@link UrlDocument} or a {@link RawDocument}*/
 /** @typedef {'GET' | 'HEAD'} HttpMethod */
 /** @typedef {string} Party there is no restriction on this */
-/** @typedef {'A ' | 'Y ' | 'N ' | 'E '} VoteChoice */
+/** @typedef { 'Y ' | 'N ' | 'E ' | 'A ' } VoteChoice Note the trailing space. Yea, Nay, Excused, Absent */
 /** @typedef {string} MemberCode  eg 'BIS' for Click Bishop, 'BCH' for Tom Begich, etc */
 /** @typedef {string} BillCode  eg 'HB   7' */
 /** @typedef {string} CommitteeCode  a three letter code eg 'HSS' for Health and Social Services */
@@ -215,7 +215,7 @@
  * @property {Membership[]} [CommitteeMemberships]
  * @property {Membership[]} [PastCommitteeMemberships]
  * @property {Bill[]} [BillSponsorships]
- * @property {BillVote[]} [Votes]
+ * @property {Vote[]} [Votes]
  * */
 
 /** 
@@ -233,10 +233,10 @@
 
 /**
  * A record of a vote on a {@link Bill}.
- * @typedef {Object} BillVote
+ * @typedef {Object} Vote
  * @property {VoteChoice} [Vote]
  * @property {string} [VoteNum] eg 'H0040'
- * @property {BillCode | null} Bill eg 'HB   7'
+ * @property {BillCode | null} Bill eg 'HB   7'. `null` if the vote is not on a bill, eg to confirm a committee appointment.
  * @property {MemberCode} Member eg 'HEO
  * @property {Party} MemberParty eg 'D'
  * @property {Chamber} MemberChamber eg 'H'
@@ -337,7 +337,7 @@
  * @property {Sponsorship[]} [Sponsors]
  * @property {Version[]} [Versions]
  * @property {FiscalNote[]} [FiscalNotes]
- * @property {BillVote[]} [Votes]
+ * @property {Vote[]} [Votes]
  * @property {Document} [Enacted]
  * @property {Subject[]} [Subjects] eg ['ATTORNEY GENERAL', 'INSURANCE']
  * @property {Action[]} [Actions]
