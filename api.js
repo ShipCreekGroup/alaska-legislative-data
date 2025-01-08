@@ -8,6 +8,7 @@
 /** @typedef {string} BillCode  eg 'HB   7' */
 /** @typedef {string} CommitteeCode  a three letter code eg 'HSS' for Health and Social Services */
 /** @typedef {string} yyyymmdd  A date in the format yyyy-mm-dd eg '2025-01-08' */
+/** @typedef {string} mmddyyyy  A date in the format mm/dd/yyyy eg '03/16/2011' */
 
 /**
  * @typedef {Object} ActionConstraints
@@ -275,7 +276,7 @@
  * @extends {Document}
  * @property {string} Name eg 'Fiscal Note 1'
  * @property {string} Preparer eg 'Health & Social Services - Dept.'
- * @property {string} PublishedDate eg '03/16/2011'
+ * @property {mmddyyyy} PublishedDate eg '03/16/2011'
  * @property {Chamber} Chamber eg 'H'
  * @property {string} FiscalImpact eg 'N'
  */
