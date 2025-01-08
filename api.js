@@ -371,6 +371,27 @@ export async function webFetch(args) {
   };
 }
 
+/** 
+ * @typedef {Object} Logger 
+ * @property {function(any): void} error
+ * @property {function(any): void} warn
+ * @property {function(any): void} info
+ * @property {function(any): void} debug
+ * */
+
+/**
+ * A logger that logs everything to console.error, such that it can be piped to stdout.
+ * @returns {Logger}
+ */
+export function defaultLogger() {
+  return {
+    error: (...args) => console.error(`${new Date().toISOString()} ERROR:`, ...args),
+    warn: (...args) => console.error(`${new Date().toISOString()} WARN:`, ...args),
+    info: (...args) => console.error(`${new Date().toISOString()} INFO:`, ...args),
+    debug: (...args) => console.error(`${new Date().toISOString()} DEBUG:`, ...args),
+  };
+}
+
 /**
  * @typedef {Object} IntoConfig
  * @property {string} [baseUrl] - The base URL for the API
@@ -378,6 +399,7 @@ export async function webFetch(args) {
  *   This is useful if you are in eg a Google Apps Script environment where
  *   the web standard fetch API is not available, and you need to use the
  *   Google Apps Script UrlFetch API instead.
+ * @property {Logger} [logger] - Where this library will log errors and warnings.
  */
 
 /**
@@ -394,6 +416,7 @@ export class Config {
     this.baseUrl = config.baseUrl || 'https://www.akleg.gov/publicservice/basis';
     this.baseUrl = this.baseUrl.replace(/\/$/, ''); // Remove trailing slash if present
     this.fetcher = config.fetcher || webFetch;
+    this.logger = config.logger || defaultLogger();
   }
 }
 
@@ -450,14 +473,14 @@ export class Bills {
    * @returns {Promise<Bill[]>}
    */
   async fetch() {
-    return (await _data(this.fetchArgs(), this.config.fetcher)).Bills;
+    return (await _data(this.fetchArgs(), this.config)).Bills;
   }
 
   /**
    * @returns {Promise<number>}
    */
   async count() {
-    return _count(this.fetchArgs(), this.config.fetcher);
+    return _count(this.fetchArgs(), this.config);
   }
 }
 
@@ -492,14 +515,14 @@ export class Committees {
    * @returns {Promise<any[]>}
    */
   async fetch() {
-    return (await _data(this.fetchArgs(), this.config.fetcher)).Committees;
+    return (await _data(this.fetchArgs(), this.config)).Committees;
   }
 
   /**
    * @returns {Promise<number>}
    */
   async count() {
-    return _count(this.fetchArgs(), this.config.fetcher);
+    return _count(this.fetchArgs(), this.config);
   }
 }
 
@@ -527,14 +550,14 @@ export class Meetings {
    * @returns {Promise<any[]>}
    */
   async fetch() {
-    return (await _data(this.fetchArgs(), this.config.fetcher)).Meetings;
+    return (await _data(this.fetchArgs(), this.config)).Meetings;
   }
 
   /**
    * @returns {Promise<number>}
    */
   async count() {
-    return _count(this.fetchArgs(), this.config.fetcher);
+    return _count(this.fetchArgs(), this.config);
   }
 }
 
@@ -569,14 +592,14 @@ export class Members {
    *   the 'Votes' field will be present.
    */
   async fetch() {
-    return (await _data(this.fetchArgs(), this.config.fetcher)).Members;
+    return (await _data(this.fetchArgs(), this.config)).Members;
   }
 
   /**
    * @returns {Promise<number>}
    */
   async count() {
-    return _count(this.fetchArgs(), this.config.fetcher);
+    return _count(this.fetchArgs(), this.config);
   }
 }
 
@@ -604,14 +627,14 @@ export class Sessions {
    * @returns {Promise<any[]>}
    */
   async fetch() {
-    return (await _data(this.fetchArgs(), this.config.fetcher)).Sessions;
+    return (await _data(this.fetchArgs(), this.config)).Sessions;
   }
 
   /**
    * @returns {Promise<number>}
    */
   async count() {
-    return _count(this.fetchArgs(), this.config.fetcher);
+    return _count(this.fetchArgs(), this.config);
   }
 }
 
@@ -658,22 +681,23 @@ export function buildArgs(section, params, baseUrl) {
     headers['X-Alaska-Query-ResultRange'] = params.range;
   }
 
-  return { url, headers};
+  return {url, headers};
 }
 
 /**
  * @param {FetchArgs} args
- * @param {Fetcher} fetcher
+ * @param {Config} config
  * @returns {Promise<any>}
  */
-async function _data(args, fetcher) {
-  args = {...args, method: 'GET'}
-  const response = await fetcher(args);
+async function _data(args, config) {
+  args = {...args, method: 'GET'};
+  config.logger.debug(args);
+  const response = await config.fetcher(args);
   let parsed;
   try {
     parsed = JSON.parse(response.payload);
   } catch (e) {
-    console.error(response.payload);
+    config.logger.error(response.payload);
     throw e;
   }
   return parsed.Basis;
@@ -681,12 +705,13 @@ async function _data(args, fetcher) {
 
 /**
  * @param {FetchArgs} args
- * @param {Fetcher} fetcher
+ * @param {Config} config
  * @returns {Promise<number>}
  */
-async function _count(args, fetcher) {
+async function _count(args, config) {
   args = { ...args, method: 'HEAD' };
-  const response = await fetcher(args);
+  config.logger.debug(args);
+  const response = await config.fetcher(args);
   return Number(response.headers['x-alaska-query-count']);
 }
 
