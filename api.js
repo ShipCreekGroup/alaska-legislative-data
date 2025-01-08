@@ -388,7 +388,7 @@ export function defaultLogger() {
     error: (...args) => console.error(`${new Date().toISOString()} ERROR:`, ...args),
     warn: (...args) => console.error(`${new Date().toISOString()} WARN:`, ...args),
     info: (...args) => console.error(`${new Date().toISOString()} INFO:`, ...args),
-    debug: (...args) => console.error(`${new Date().toISOString()} DEBUG:`, ...args),
+    debug: (...args) => null,
   };
 }
 
