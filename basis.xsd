@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Pulled from https://www.akleg.gov/basis/basis.xsd on 2025-01-07 -->
+<!-- OK, this appears to really be out of date, at least the JSON response
+it is giving me does not match this schema. -->
 <schema targetNamespace="http://www.legis.state.ak.us/Basis"  xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.legis.state.ak.us/Basis">
 
   <!-- Root Element, Every Basis document must start with this element -->

@@ -1,35 +1,57 @@
 // @ts-check
-import { Bills } from './api.js';
+import { Bills, Members, Sessions, buildArgs} from './api.js';
 
-function bills(session) {
-  if (!session) {
-    session = 33;
-  }
+async function bills() {
   const results = new Bills({
-    session: session,
     range: '10',
     queries: {
-      Actions: {},
-      Bills : {
-        // committeecode: 'dasd',
-        // bill: 'HB   *1*'
+      // actions: {},
+      // bills : {},
+      // fiscalnotes: {},
+      sponsors: {
+        district: '13',
       },
-      Fiscalnotes: {},
-      Sponsors: {},
-      Subjects: {},
-      Versions: {},
-      Votes: {},
+      // subjects: {},
+      // versions: {},
+      // votes: {},
     },
   });
-  return results;
+  return await results.fetch();
+}
+
+async function members() {
+  const results = new Members({
+    range: '1',
+    queries: {
+      // members: {IsActive: false},
+      // committees: {},
+      bills: {
+        bill: '*115',
+      },
+      // votes: {},
+    },
+  });
+  return await results.fetch();
+}
+async function sessions() {
+  const results = new Sessions({
+    range: '1',
+    queries: {
+      // members: {isactive: false},
+      // committees: {},
+      // bills: {},
+      // votes: {},
+    },
+  });
+  return await results.fetch();
 }
 
 async function main() {
-  let b = bills();
-  // results = results.slice(0, 5);
-  const jsonResults = JSON.stringify(await b.fetch(), null, 2);
+  const results = await bills();
+  // const results = await members();
+  // const results = await sessions();
+  const jsonResults = JSON.stringify(results, null, 2);
   console.log(jsonResults);
-//   console.log(await b.count());
 }
 
 await main(); 
