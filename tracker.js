@@ -58,12 +58,14 @@ function simplifyMember(member) {
   };
 }
 
+// we have to get the votes for each member individually because
+// if we do them all at once we get a timeout error
 async function fetchVotesForMember(memberCode) {
   const queries = {
     members: { code: memberCode },
     votes: {}
   };
-  const members = await (new Members({session: 33, queries})).fetch();
+  const members = await new Members({session: 33, queries}).fetch();
   
   /** @type {import('./api.js').Vote[]} */
   // @ts-ignore  this thinks the type is BasicMember, but it's FullMember
@@ -73,7 +75,7 @@ async function fetchVotesForMember(memberCode) {
 }
 
 async function main() {
-  const allMembers = await (new Members({session: 33})).fetch();
+  const allMembers = await new Members({session: 33}).fetch();
   console.error(allMembers.length);
   const prunedMembers = allMembers.map(simplifyMember);
   prunedMembers.sort(sortByDistrict);
