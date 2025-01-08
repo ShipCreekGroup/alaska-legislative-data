@@ -173,119 +173,6 @@
  * @property {JournalConstraints} [journals]  Filter based on journals of this session
  */
 
-/**
- * @typedef {Object} FetchArgs
- * @property {string} url
- * @property {Record<string, string>} headers
- * @property {HttpMethod} [method]
- */
-
-/**
- * @typedef {Object} FetchResponse
- * @property {string} payload
- * @property {Record<string, string>} headers
- */
-
-/** @typedef {(args: FetchArgs) => Promise<FetchResponse>} Fetcher */
-
-/**
- * A fetcher that uses the web standard fetch() API.
- * @param {FetchArgs} args
- * @returns {Promise<FetchResponse>}
- */
-export async function webFetch(args) {
-  const response = await fetch(args.url, { headers: args.headers, method: args.method });
-  return {
-    payload: await response.text(),
-    headers: Object.fromEntries(response.headers.entries()),
-  };
-}
-
-/**
- * 
- * @typedef {Object} IntoConfig
- * @property {string} [baseUrl] - The base URL for the API
- * @property {Fetcher} [fetcher] - The fetcher function to use for the API requests.
- *   This is useful if you are in eg a Google Apps Script environment where
- *   the web standard fetch API is not available, and you need to use the
- *   Google Apps Script UrlFetch API instead.
- */
-
-/**
- * The Config class is used to configure the API client.
- * @example
- * const config = new Config({ baseUrl: 'https://www.akleg.gov/publicservice/basis', fetcher: myCustomFetcher });
- */
-export class Config {
-  /**
-   * @param {IntoConfig} [config]
-   */
-  constructor(config) {
-    config = config || {};
-    this.baseUrl = config.baseUrl || 'https://www.akleg.gov/publicservice/basis';
-    this.baseUrl = this.baseUrl.replace(/\/$/, ''); // Remove trailing slash if present
-    this.fetcher = config.fetcher || webFetch;
-  }
-}
-
-/**
- * @typedef {Object} BaseParams
- * @property {number} [session] If not provided, will not filter by session.
- * @property {Chamber} [chamber]
- * @property {string} [range] This is a little complex:
- *  - '10' to get the first 10 results
- *  - '10..20' to get results 10 through 20
- *  - '..30' to get the last 30 results
- */
-
-/**
- * Builds the arguments for an HTTP request.
- * 
- * This is a low-level function that is normally not needed to be called directly.
- * But sometimes, you need to build the arguments for an HTTP request manually,
- * for example when you are using a custom fetcher.
- * 
- * @param {'bills' | 'committees' | 'meetings' | 'members' | 'sessions'} section
- * @param {BaseParams & {queries?: Record<string, any>}} [params]
- * @param {string} [baseUrl]
- * @returns {FetchArgs}
- */
-export function buildArgs(section, params, baseUrl) {
-  if (!params) {
-    params = {};
-  }
-  if (!baseUrl) {
-    baseUrl = new Config().baseUrl;
-  }
-  /** @type {{ json: string, session?: string, chamber?: Chamber }} */
-  const urlParams = { json: 'true' };
-  if (params.session) {
-    urlParams.session = params.session.toString();
-  }
-  if (params.chamber) {
-    urlParams.chamber = params.chamber;
-  }
-  const headerString = _queriesToHeaderString(params.queries);
-
-  const queryString = new URLSearchParams(urlParams).toString();
-  const url = `${baseUrl}/${section}${queryString ? '?' + queryString : ''}`;
-
-  const headers = {
-    'X-Alaska-Legislature-Basis-Version': '1.4',
-    'Accept-Encoding': 'gzip;q=1.0',
-  };
-  if (headerString) {
-    headers['X-Alaska-Legislature-Basis-Query'] = headerString;
-  }
-  if (params.range) {
-    headers['X-Alaska-Query-ResultRange'] = params.range;
-  }
-
-  return { url, headers};
-}
-
-/** @typedef {BaseParams & {queries?: BillQueries}} BillsParams */
-
 /** 
  * @typedef {Object} BasicMember
  * @property {number} [UID] eg 0. IDK what this is for.
@@ -393,7 +280,8 @@ export function buildArgs(section, params, baseUrl) {
  * @property {string} FiscalImpact eg 'N'
  */
 
-/** Information about a committee.
+/**
+ * Information about a committee.
  * @typedef {Object} Committee
  * @property {Chamber} Chamber eg 'S' or 'H'
  * @property {string} Code eg 'HSS'
@@ -407,6 +295,7 @@ export function buildArgs(section, params, baseUrl) {
  * */
 
 /** 
+ * A document where the data is stored as a URL.
  * @typedef {Object} UrlDocument
  * @property {string} Url eg 'https://www.akleg.gov/PDF/27/F/HB0007-1-2-021411-LAW-N.PDF'
  * @property {null} Mime
@@ -414,13 +303,13 @@ export function buildArgs(section, params, baseUrl) {
  * @property {null} Data
  * */
 /** 
+ * A document where the data is directly stored as bytes.
  * @typedef {Object} RawDocument
  * @property {null} Url
  * @property {string} Mime eg 'application/pdf'
  * @property {string} Encoding eg 'base64'
  * @property {string} Data eg '...'
  * */
-
 /** 
  * @typedef {RawDocument | UrlDocument} Document
  * */
@@ -457,6 +346,71 @@ export function buildArgs(section, params, baseUrl) {
  * @property {any[]} [Statutes]
 */
 
+/**
+ * @typedef {Object} FetchArgs
+ * @property {string} url
+ * @property {Record<string, string>} headers
+ * @property {HttpMethod} [method]
+ */
+/**
+ * @typedef {Object} FetchResponse
+ * @property {string} payload
+ * @property {Record<string, string>} headers
+ */
+/** @typedef {(args: FetchArgs) => Promise<FetchResponse>} Fetcher */
+/**
+ * A {@link Fetcher} that uses the web standard fetch() API.
+ * @param {FetchArgs} args
+ * @returns {Promise<FetchResponse>}
+ */
+export async function webFetch(args) {
+  const response = await fetch(args.url, { headers: args.headers, method: args.method });
+  return {
+    payload: await response.text(),
+    headers: Object.fromEntries(response.headers.entries()),
+  };
+}
+
+/**
+ * @typedef {Object} IntoConfig
+ * @property {string} [baseUrl] - The base URL for the API
+ * @property {Fetcher} [fetcher] - The fetcher function to use for the API requests.
+ *   This is useful if you are in eg a Google Apps Script environment where
+ *   the web standard fetch API is not available, and you need to use the
+ *   Google Apps Script UrlFetch API instead.
+ */
+
+/**
+ * The Config class is used to configure the API client.
+ * @example
+ * const config = new Config({ baseUrl: 'https://www.akleg.gov/publicservice/basis', fetcher: myCustomFetcher });
+ */
+export class Config {
+  /**
+   * @param {IntoConfig} [config]
+   */
+  constructor(config) {
+    config = config || {};
+    this.baseUrl = config.baseUrl || 'https://www.akleg.gov/publicservice/basis';
+    this.baseUrl = this.baseUrl.replace(/\/$/, ''); // Remove trailing slash if present
+    this.fetcher = config.fetcher || webFetch;
+  }
+}
+
+/**
+ * @typedef {Object} BaseParams
+ * @property {number} [session] If not provided, will not filter by session.
+ * @property {Chamber} [chamber]
+ * @property {string} [range] This is a little complex:
+ *  - '10' to get the first 10 results
+ *  - '10..20' to get results 10 through 20
+ *  - '..30' to get the last 30 results
+ */
+/** @typedef {BaseParams & {queries?: BillQueries}} BillsParams */
+/** @typedef {BaseParams & {queries?: CommitteeQueries}} CommitteesParams */
+/** @typedef {BaseParams & {queries?: MeetingQueries}} MeetingsParams */
+/** @typedef {BaseParams & {queries?: MemberQueries}} MembersParams */
+/** @typedef {BaseParams & {queries?: SessionQueries}} SessionsParams */
 
 /**
  * The Bills class is a wrapper around the bills section of the API.
@@ -507,8 +461,6 @@ export class Bills {
   }
 }
 
-/** @typedef {BaseParams & {queries?: CommitteeQueries}} CommitteesParams */
-
 /**
  * The Committees class is a wrapper around the committees section of the API.
  *
@@ -551,8 +503,6 @@ export class Committees {
   }
 }
 
-/** @typedef {BaseParams & {queries?: MeetingQueries}} MeetingsParams */
-
 /**
  * The Meetings class is a wrapper around the meetings section of the API.
  */
@@ -587,8 +537,6 @@ export class Meetings {
     return _count(this.fetchArgs(), this.config.fetcher);
   }
 }
-
-/** @typedef {BaseParams & {queries?: MemberQueries}} MembersParams */
 
 /**
  * The Members class is a wrapper around the members section of the API.
@@ -632,8 +580,6 @@ export class Members {
   }
 }
 
-/** @typedef {BaseParams & {queries?: SessionQueries}} SessionsParams */
-
 /**
  * The Sessions class is a wrapper around the sessions section of the API.
  */
@@ -667,6 +613,52 @@ export class Sessions {
   async count() {
     return _count(this.fetchArgs(), this.config.fetcher);
   }
+}
+
+/**
+ * Builds the arguments for an HTTP request.
+ * 
+ * This is a low-level function that is normally not needed to be called directly.
+ * But sometimes, you need to build the arguments for an HTTP request manually,
+ * for example when you are using a custom fetcher.
+ * 
+ * @param {'bills' | 'committees' | 'meetings' | 'members' | 'sessions'} section
+ * @param {BaseParams & {queries?: Record<string, any>}} [params]
+ * @param {string} [baseUrl]
+ * @returns {FetchArgs}
+ */
+export function buildArgs(section, params, baseUrl) {
+  if (!params) {
+    params = {};
+  }
+  if (!baseUrl) {
+    baseUrl = new Config().baseUrl;
+  }
+  /** @type {{ json: string, session?: string, chamber?: Chamber }} */
+  const urlParams = { json: 'true' };
+  if (params.session) {
+    urlParams.session = params.session.toString();
+  }
+  if (params.chamber) {
+    urlParams.chamber = params.chamber;
+  }
+  const headerString = _queriesToHeaderString(params.queries);
+
+  const queryString = new URLSearchParams(urlParams).toString();
+  const url = `${baseUrl}/${section}${queryString ? '?' + queryString : ''}`;
+
+  const headers = {
+    'X-Alaska-Legislature-Basis-Version': '1.4',
+    'Accept-Encoding': 'gzip;q=1.0',
+  };
+  if (headerString) {
+    headers['X-Alaska-Legislature-Basis-Query'] = headerString;
+  }
+  if (params.range) {
+    headers['X-Alaska-Query-ResultRange'] = params.range;
+  }
+
+  return { url, headers};
 }
 
 /**
