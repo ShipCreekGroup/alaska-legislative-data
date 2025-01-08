@@ -152,9 +152,9 @@
  */
 
 /** @typedef {BaseOptions & {queries?: BillQueries}} GetBillsOptions */
+/** @typedef {BaseOptions & {queries?: CommitteeQueries}} GetCommitteesOptions */
 /** @typedef {BaseOptions & {queries?: MeetingQueries}} GetMeetingsOptions */
 /** @typedef {BaseOptions & {queries?: MemberQueries}} GetMembersOptions */
-/** @typedef {BaseOptions & {queries?: CommitteeQueries}} GetCommitteesOptions */
 /** @typedef {BaseOptions & {queries?: SessionQueries}} GetSessionsOptions */
 
 /**
@@ -290,6 +290,153 @@ export class Bills {
    */
   async fetch() {
     return (await _data(this.fetchArgs(), this.config.fetcher)).Bills;
+  }
+
+  /**
+   * @returns {Promise<number>}
+   */
+  async count() {
+    return _count(this.fetchArgs(), this.config.fetcher);
+  }
+}
+
+/**
+ * The Committees class is a wrapper around the committees section of the API.
+ *
+ * @example
+ * const committees = new Committees({ queries: { Committees: { name: '*38' } } });
+ * const nResults = await committees.count();
+ * const data = await committees.fetch();
+ * console.log(nResults);
+ * console.log(data);
+ */
+export class Committees {
+  /**
+   * @param {GetCommitteesOptions} [options]
+   * @param {IntoConfig} [config]
+   */
+  constructor(options, config) {
+    this.options = options;
+    this.config = new Config(config);
+  }
+
+  /**
+   * @returns {FetchArgs}
+   */
+    fetchArgs() {
+      return buildArgs('committees', this.options, this.config.baseUrl);
+    }
+
+  /**
+   * @returns {Promise<any[]>}
+   */
+  async fetch() {
+    return (await _data(this.fetchArgs(), this.config.fetcher)).Committees;
+  }
+
+  /**
+   * @returns {Promise<number>}
+   */
+  async count() {
+    return _count(this.fetchArgs(), this.config.fetcher);
+  }
+}
+
+/**
+ * The Meetings class is a wrapper around the meetings section of the API.
+ */
+export class Meetings {
+  /**
+   * @param {GetMeetingsOptions} [options]
+   * @param {IntoConfig} [config]
+   */
+  constructor(options, config) {
+    this.options = options;
+    this.config = new Config(config);
+  }
+
+  /**
+   * @returns {FetchArgs}
+   */
+  fetchArgs() {
+    return buildArgs('meetings', this.options, this.config.baseUrl);
+  }
+  
+  /**
+   * @returns {Promise<any[]>}
+   */
+  async fetch() {
+    return (await _data(this.fetchArgs(), this.config.fetcher)).Meetings;
+  }
+
+  /**
+   * @returns {Promise<number>}
+   */
+  async count() {
+    return _count(this.fetchArgs(), this.config.fetcher);
+  }
+}
+
+/**
+ * The Members class is a wrapper around the members section of the API.
+ */
+export class Members {
+  /**
+   * @param {GetMembersOptions} [options]
+   * @param {IntoConfig} [config]
+   */
+  constructor(options, config) {
+    this.options = options;
+    this.config = new Config(config);
+  }
+
+  /**
+   * @returns {FetchArgs}
+   */
+  fetchArgs() {
+    return buildArgs('members', this.options, this.config.baseUrl);
+  }
+
+  /**
+   * @returns {Promise<any[]>}
+   */
+  async fetch() {
+    return (await _data(this.fetchArgs(), this.config.fetcher)).Members;
+  }
+
+  /**
+   * @returns {Promise<number>}
+   */
+  async count() {
+    return _count(this.fetchArgs(), this.config.fetcher);
+  }
+}
+
+/**
+ * The Sessions class is a wrapper around the sessions section of the API.
+ */
+export class Sessions {
+  /**
+   * @param {GetSessionsOptions} [options]
+   * @param {IntoConfig} [config]
+   */
+  constructor(options, config) {
+    this.options = options;
+    this.config = new Config(config);
+  }
+
+  /**
+   * @returns {FetchArgs}
+   */
+  fetchArgs() {
+    return buildArgs('sessions', this.options, this.config.baseUrl);
+  }
+
+  /**
+   * @returns {Promise<any[]>}
+   */
+  async fetch() {
+    return (await _data(this.fetchArgs(), this.config.fetcher)).Sessions;
   }
 
   /**
