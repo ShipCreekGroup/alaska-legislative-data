@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Pulled from https://www.akleg.gov/basis/basis.xsd on 2025-01-07 -->
+<schema targetNamespace="http://www.legis.state.ak.us/Basis"  xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.legis.state.ak.us/Basis">
+
+  <!-- Root Element, Every Basis document must start with this element -->
+  <element name="Basis" >
+    <complexType >
+      <sequence maxOccurs="1" minOccurs="1">
+        <!-- Fault Fragmentrs -->
+        <choice maxOccurs="unbounded" minOccurs="0">
+          <element name="Warning" type="tns:FaultType" />
+          <element name="Error" type="tns:FaultType" />
+        </choice>
+
+        <choice maxOccurs="1" minOccurs="0">
+          <!-- Collection of Bills -->
+          <element name="Bills" maxOccurs="1" minOccurs="0">
+            <complexType>
+              <sequence maxOccurs="unbounded" minOccurs="0">
+                <element name="Bill" type="tns:BillType"/>
+              </sequence>
+            </complexType>
+          </element>
+          <!-- Collection of Committees -->
+          <element name="Committees" maxOccurs="1" minOccurs="0">
+            <complexType>
+              <sequence maxOccurs="unbounded" minOccurs="0">
+                <element name="Committee" type="tns:Committee"/>
+              </sequence>
+            </complexType>
+          </element>
+          <!-- Collection of Laws -->
+          <element name="Laws" maxOccurs="1" minOccurs="0">
+            <complexType>
+              <sequence maxOccurs="unbounded" minOccurs="0">
+                <element name="Law" type="tns:DocumentType"/>
+              </sequence>
+            </complexType>
+          </element>
+          <!-- Collection of Sessions -->
+          <element name="Sessions" maxOccurs="1" minOccurs="0">
+            <complexType>
+              <sequence maxOccurs="unbounded" minOccurs="0">
+                <element name="Session" type="tns:SessionType"/>
+              </sequence>
+            </complexType>
+          </element>
+          <!-- Collection of Executive Orders -->
+          <element name="ExecutiveOrders" maxOccurs="1" minOccurs="0">
+            <complexType>
+              <sequence maxOccurs="unbounded" minOccurs="0">
+                <element name="ExecutiveOrder" type="tns:DocumentType"/>
+              </sequence>
+            </complexType>
+          </element>
+          <!-- Collection of Members -->
+          <element name="Members" maxOccurs="1" minOccurs="0">
+            <complexType>
+              <sequence maxOccurs="unbounded" minOccurs="0">
+                <element name="Member" type="tns:Member"/>
+              </sequence>
+            </complexType>
+          </element>
+
+          <!-- Session Summary: This covers the summary subsection for sessions -->
+          <element name="SessionSummary" type="tns:SessionSummationType" maxOccurs="1" minOccurs="0" />
+        </choice>        
+      </sequence>
+    </complexType>
+  </element>
+
+  <!-- ********************************************************************** -->
+  <!-- Collection Types ***************************************************** -->
+  <!-- ********************************************************************** -->
+
+  <!-- Collection of Documents -->
+  <complexType name="DocumentsType">
+    <sequence maxOccurs="unbounded" minOccurs="0">
+      <element name="Document" type="tns:DocumentType"/>
+    </sequence>
+  </complexType>
+
+  <!-- ********************************************************************** -->
+  <!-- Top Level Element Types ********************************************** -->
+  <!-- ********************************************************************** -->
+
+  <!-- Bill Instance Description -->
+  <complexType name="BillType">
+    <sequence maxOccurs="1" minOccurs="1">
+
+      <!-- ********* Summary Information - required of every Bill instance ********* -->
+      <!-- Items with minOccurs of 0 MUST be filled if the value exists -->
+      <element name="Name" type="string"/>
+      <element name="ShortTitle" type="string"/>
+      
+      <element name="StatusText" >
+        <complexType>
+          <simpleContent>
+            <extension base="string">
+              <attribute name="statuscode" type="string"></attribute>
+            </extension>
+          </simpleContent>
+        </complexType>
+      </element>
+      
+      <element name="StatusDate" type="string"/>
+      
+      <element name="CurrentCommittee" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <simpleContent>
+            <extension base="string">
+              <attribute name="committeecode" type="string"></attribute>
+            </extension>
+          </simpleContent>
+        </complexType>
+      </element>
+      
+      <element name="Veto" maxOccurs="1" minOccurs="0">
+          <simpleType>
+            <restriction base="string">
+              <enumeration value="Full"></enumeration>
+              <enumeration value="Partial"></enumeration>
+            </restriction>
+        </simpleType>
+      </element>
+      <element name="Title" type="string" maxOccurs="1" minOccurs="0"/>
+      <!-- ********* End of Summary Information ********* -->
+
+      <element name="FullText" type="tns:DocumentType" maxOccurs="1" minOccurs="0"/>
+
+      <!-- Collection of Sponsoring Members -->
+      <element name="Sponsors" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence>
+          <element name="SponsorStatement" type="anyURI" maxOccurs="1" minOccurs="0"/>
+          <choice>
+            <element name="Committee" maxOccurs="1" minOccurs="0">
+              <complexType>
+                <simpleContent>
+                  <extension base="string">
+                    <attribute name="chamber" use="required"/>
+                    <attribute name="code" use="required"/>
+                  </extension>
+                </simpleContent>
+              </complexType>
+            </element>
+            <element name="MemberDetails" maxOccurs="unbounded" minOccurs="0">
+              <complexType>
+                <complexContent>
+                  <extension base="tns:MemberSummaryType">
+                    <attribute name="primesponsor" type="boolean" use="optional"></attribute>
+                  </extension>
+                </complexContent>
+              </complexType>
+            </element>
+          </choice>
+          </sequence>
+        </complexType>
+      </element>
+
+      <element name="Votes" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Vote" maxOccurs="unbounded" minOccurs="0">
+              <complexType>
+                <sequence maxOccurs="unbounded" minOccurs="0">
+                  <element name="Member" type="string" maxOccurs="1" minOccurs="0"/>
+                  <element name="Title" type="string" maxOccurs="1" minOccurs="1"/>
+                  <element name="Date" type="string" maxOccurs="1" minOccurs="1"/>
+                </sequence>
+                <attribute name="vote" use="required"/>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+
+
+      <!-- Action Collection -->
+      <element name="Actions" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Action" type="tns:ActionType"/>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- Collection of version information -->
+      <element name="Versions" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Version">
+              <complexType>
+                <complexContent>
+                  <extension base="tns:DocumentType">
+                    <sequence>
+                      <element name="Title" type="string" maxOccurs="1" minOccurs="1"/>
+                    </sequence>
+                    <attribute name="versionletter" type="string" use="required"/>
+                    <attribute name="introdate" type="string" use="required"/>
+                    <attribute name="passedhouse" type="string" use="optional"/>
+                    <attribute name="passedsenate" type="string" use="optional"/>
+                  </extension>
+                </complexContent>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- List of subject keys, used for searching and display grouping -->
+      <element name="Subjects" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Subject" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- Collection of Fiscal Notes associated with bill -->
+      <element name="FiscalNotes" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="FiscalNote">
+              <complexType >
+                <complexContent>
+                  <extension base="tns:DocumentType">
+                    <attribute name="name" type="string" use="required"/>
+                    <attribute name="preparer" type="string" />
+                    <attribute name="date" type="string" />
+                    <attribute name="chamber" type="string" />
+                    <attribute name="fiscalimpact" type="string" />
+                  </extension>
+                </complexContent>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- Collection of Ammendments associated with bill -->
+      <element name="Ammendments" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Ammendment" type="tns:DocumentType"/>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- Supporting Documents -->
+      <element name="Documents" type="tns:DocumentsType" maxOccurs="1" minOccurs="0"/>
+
+    </sequence>
+
+    <attribute name="billnumber" type="string" use="required"></attribute>
+    <attribute name="chamber" type="string" use="required"></attribute>
+  </complexType>
+
+  <!-- Session Instance Description -->
+  <complexType name="SessionType">
+    <sequence>
+      <element name="Journals" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Journal">
+              <complexType >
+                <complexContent>
+                  <extension base="tns:DocumentType">
+                    <attribute name="journaltype" type="string" use="required"/>
+                    <attribute name="startpage" type="positiveInteger" use="required"/>
+                    <attribute name="endpage" type="positiveInteger" use="required"/>
+                    <attribute name="journaldate" type="date" use="required"/>
+                    <attribute name="draft" type="boolean" use="optional"/>
+                  </extension>
+                </complexContent>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      
+      <element name="Laws" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Law" type="tns:DocumentType"/>
+          </sequence>
+        </complexType>
+      </element>
+    </sequence>
+    <attribute name="number" type="string" use="required"></attribute>
+    <attribute name="year" type="gYear" use="required"></attribute>
+  </complexType>
+
+  <!-- Committee Instance Description -->
+  <complexType name="Committee">
+    <sequence>
+
+      <!-- Member Collection -->
+      <element name="CommitteeMembers" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence>
+            <element name="MemberDetails" maxOccurs="unbounded" minOccurs="0">
+              <complexType>
+                <complexContent>
+                  <extension base="tns:MemberSummaryType">
+                    <attribute name="Position" type="tns:CommitteePositionType" use="optional"></attribute>
+                  </extension>
+                </complexContent>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- Collection of  Committee Meetings -->
+      <element name="Meetings" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Meeting" type="tns:Meeting"/>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- Bills Under the Purview of This Committee-->
+      <element name="BillSponsorships" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Bill" type="tns:BillType"/>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!--Active Documents -->
+      <element name="Documents" type="tns:DocumentsType" maxOccurs="1" minOccurs="0"/>
+
+    </sequence>
+    <attribute name="name" type="string" use="required"/>
+    <attribute name="chamber" type="string" use="required"/>
+    <attribute name="category" type="string" use="optional"/>
+    <attribute name="code" type="string" use="required"/>
+  </complexType>
+
+  <!-- Member Instance Description -->
+  <complexType name="Member">
+    <sequence>
+
+      <!-- Summary information required -->
+      <element name="MemberDetails" type="tns:MemberSummaryType" maxOccurs="1" minOccurs="1"/>
+
+      <!-- Current Committee Memberships for Member -->
+      <element name="Committees" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Committee" maxOccurs="1" minOccurs="0">
+              <complexType>
+                <simpleContent>
+                  <extension base="string">
+                    <attribute name="chamber" use="required"/>
+                    <attribute name="code" use="required"/>
+                  </extension>
+                </simpleContent>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- Bills Currently Sponsored by Member-->
+      <element name="BillSponsorships" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Bill" type="tns:BillType"/>
+          </sequence>
+        </complexType>
+      </element>
+
+      <!-- The voting record -->
+      <element name="Votes" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence maxOccurs="unbounded" minOccurs="0">
+            <element name="Vote" maxOccurs="unbounded" minOccurs="0">
+              <complexType>
+                <sequence maxOccurs="unbounded" minOccurs="0">
+                  <element name="Bill" type="string" maxOccurs="1" minOccurs="0"/>
+                  <element name="Title" type="string" maxOccurs="1" minOccurs="1"/>
+                  <element name="Date" type="string" maxOccurs="1" minOccurs="1"/>
+                </sequence>
+                <attribute name="vote" use="required"/>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+
+  </sequence>
+  </complexType>
+
+  <!-- Meeting Instance Description -->
+  <complexType name="Meeting">
+    <complexContent>
+      <extension base="tns:MeetingSummary">
+        <sequence maxOccurs="1" minOccurs="1">
+          <element name="Agenda" maxOccurs="1" minOccurs="0">
+            <complexType>
+              <sequence maxOccurs="unbounded" minOccurs="1">
+                <element name ="Item">
+                  <complexType>
+                    <sequence maxOccurs="1" minOccurs="1">
+                      <element name="StartTime" type="string" maxOccurs="1" minOccurs="0"/>
+                      <element name="Text" type="string" maxOccurs="1" minOccurs="1"/>
+                      <element name="BillRoot" maxOccurs="1" minOccurs="0">
+                        <complexType>
+                          <simpleContent>
+                            <extension base="string">
+                              <attribute name="firsthearing" type="boolean" use="optional"/>
+                            </extension>
+                          </simpleContent>
+                        </complexType>
+                      </element>
+                    </sequence>
+                    <attribute name="teleconferenced" type="boolean" use="optional"/>
+                  </complexType>
+                </element>
+              </sequence>
+            </complexType>
+          </element>
+          <element name="Minutes" type="tns:MinutesType" maxOccurs="1" minOccurs="0"/>
+          <element name="Media" type="tns:DocumentType" maxOccurs="1" minOccurs="0"/>
+      
+          <!--Relavent Documents -->
+          <element name="Documents" type="tns:DocumentsType" maxOccurs="1" minOccurs="0"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <!-- ********************************************************************** -->
+  <!-- Component Types ****************************************************** -->
+  <!-- ********************************************************************** -->
+  
+  <!-- Meeting details used in Instance Description -->
+  <complexType name="MeetingSummary">
+    <sequence>
+      <element name="Schedule" type="dateTime" maxOccurs="1" minOccurs="1"/>
+      <element name="Location" type="string" maxOccurs="1" minOccurs="1"/>
+      <element name="Sponsor" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <simpleContent>
+            <extension base="string">
+              <attribute name="type" type="string" use="required"/>
+            </extension>
+          </simpleContent>
+        </complexType>
+      </element>
+      <element name="Title" type="string" maxOccurs="1" minOccurs="0"/>
+    </sequence>
+  </complexType>
+
+  <simpleType name="CommitteePositionType">
+    <restriction base="string">
+      <enumeration value="Chair"></enumeration>
+      <enumeration value="Vice Chair"></enumeration>
+      <enumeration value="Member"></enumeration>
+      <enumeration value="Alternate"></enumeration>
+    </restriction>
+  </simpleType>
+
+  <simpleType name="PartyType">
+    <restriction base="string">
+      <!-- Right Now we have no restriction, but this type exists just incase we want to restrict-->
+      <pattern value=".*"/>
+    </restriction>
+  </simpleType>
+
+  <simpleType name="MimeType">
+    <annotation>
+      <documentation source="http://www.w3schools.com/media/media_mimeref.asp" xml:lang="en">
+        See www.w3schools.com for a good description of these types and file suffixes that apply.
+      </documentation>
+    </annotation>
+    <restriction base="string">
+      <!-- mp3 -->
+      <enumeration value="audio/mpeg"/>
+      <!-- Simple Text Document -->
+      <enumeration value="text/plain"/>
+      <!-- Simple HTML Document -->
+      <enumeration value="text/html"/>
+      <!-- PDF Document -->
+      <enumeration value="application/pdf"/>
+      <!-- MS Word Document -->
+      <enumeration value="application/msword"/>
+    </restriction>
+  </simpleType>
+
+  <!-- Session Summary Statistics -->
+  <complexType name="SessionSummationType">
+    <sequence maxOccurs="1" minOccurs="0">
+      <element name="Bills" type="tns:SummationType"/>
+      <element name="JointResolutions" type="tns:SummationType"/>
+      <element name="ConcurrentResolutions" type="tns:SummationType"/>
+      <element name="Resolutions" type="tns:SummationType"/>
+      <element name="SpecialConcurrentResolutions" type="tns:SummationType"/>
+    </sequence>
+    <attribute name="chamber" type="string" use="optional"/>
+  </complexType>
+
+  <complexType name="SummationType">
+    <sequence>
+      <element name="Introduced" type="nonNegativeInteger"/>
+      <element name="Passed" type="nonNegativeInteger"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="PersonType">
+    <sequence>
+      <element name="FirstName" type="string"/>
+      <element name="MiddleName" type="string" maxOccurs="1" minOccurs="0"/>
+      <element name="LastName" type="string"/>
+      <element name="EMail" type="string"/>
+      <element name="Phone" type="string"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="MemberSummaryType">
+    <complexContent>
+      <extension base="tns:PersonType">
+        <sequence>
+          <element name="District" type="string"/>
+          <element name="Party" type="tns:PartyType"/>
+          <element name="Building" type="string"/>
+          <element name="Room" type="string"/>
+          <element name="Comment" type="string" maxOccurs="1" minOccurs="0"/>
+        </sequence>
+        <attribute name="chamber" type="string" use="required"/>
+        <attribute name="code" type="string" use="optional"/>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="MinutesType">
+    <complexContent>
+      <extension base="tns:DocumentType">
+        <sequence>
+          <element name="When" type="dateTime"/>
+        </sequence>
+        <attribute name="chamber" type="string" use="required"/>
+        <attribute name="committeecode" type="string" use="required"/>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="DocumentType">
+    <sequence>
+      <element name="Content" maxOccurs="1" minOccurs="0">
+        <complexType>
+          <sequence>
+            <element name="Bytes" maxOccurs="1" minOccurs="0">
+              <complexType>
+                <simpleContent>
+                  <extension base="string">
+                    <attribute name="contenttype" type="tns:MimeType" use="required"/>
+                    <attribute name="encoding" type="string" use="optional"/>
+                  </extension>
+                </simpleContent>
+              </complexType>
+            </element>
+            <element name="Url" type="anyURI"  maxOccurs="1" minOccurs="0"/>
+          </sequence>
+        </complexType>
+    </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="ActionType">
+    <sequence>
+      <element name="ActionText" type="string"/>
+    </sequence>
+    <attribute name="journaldate" type="date" use="optional"/>
+    <attribute name="journalpage" type="positiveInteger" use="optional"/>
+    <attribute name="chamber" type="string" use="required"/>
+    <attribute name="code" type="string" use="optional"/>
+  </complexType>
+
+  <complexType name="FaultType">
+    <sequence maxOccurs="1" minOccurs="1">
+      <element name="Code" type="string"/>
+      <element name="Description" type="string"/>
+    </sequence>
+  </complexType>
+</schema>
