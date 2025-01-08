@@ -145,19 +145,6 @@
  */
 
 /**
- * @typedef {Object} BaseOptions
- * @property {number} [session]
- * @property {Chamber} [chamber]
- * @property {string} [range]
- */
-
-/** @typedef {BaseOptions & {queries?: BillQueries}} GetBillsOptions */
-/** @typedef {BaseOptions & {queries?: CommitteeQueries}} GetCommitteesOptions */
-/** @typedef {BaseOptions & {queries?: MeetingQueries}} GetMeetingsOptions */
-/** @typedef {BaseOptions & {queries?: MemberQueries}} GetMembersOptions */
-/** @typedef {BaseOptions & {queries?: SessionQueries}} GetSessionsOptions */
-
-/**
  * @typedef {Object} FetchArgs
  * @property {string} url
  * @property {Record<string, string>} headers
@@ -213,6 +200,16 @@ export class Config {
 }
 
 /**
+ * @typedef {Object} BaseParams
+ * @property {number} [session] 
+ * @property {Chamber} [chamber]
+ * @property {string} [range] This is a little complex:
+ *  - '10' to get the first 10 results
+ *  - '10..20' to get results 10 through 20
+ *  - '..30' to get the last 30 results
+ */
+
+/**
  * Builds the arguments for an HTTP request.
  * 
  * This is a low-level function that is normally not needed to be called directly.
@@ -220,28 +217,28 @@ export class Config {
  * for example when you are using a custom fetcher.
  * 
  * @param {'bills' | 'committees' | 'meetings' | 'members' | 'sessions'} section
- * @param {BaseOptions & {queries?: Record<string, any>}} [options]
+ * @param {BaseParams & {queries?: Record<string, any>}} [params]
  * @param {string} [baseUrl]
  * @returns {FetchArgs}
  */
-export function buildArgs(section, options, baseUrl) {
-  if (!options) {
-    options = {};
+export function buildArgs(section, params, baseUrl) {
+  if (!params) {
+    params = {};
   }
   if (!baseUrl) {
     baseUrl = new Config().baseUrl;
   }
   /** @type {{ json: string, session?: string, chamber?: Chamber }} */
-  let params = { json: 'true' };
-  if (options.session) {
-    params.session = options.session.toString();
+  const urlParams = { json: 'true' };
+  if (params.session) {
+    urlParams.session = params.session.toString();
   }
-  if (options.chamber) {
-    params.chamber = options.chamber;
+  if (params.chamber) {
+    urlParams.chamber = params.chamber;
   }
-  const headerString = _queriesToHeaderString(options.queries);
+  const headerString = _queriesToHeaderString(params.queries);
 
-  const queryString = new URLSearchParams(params).toString();
+  const queryString = new URLSearchParams(urlParams).toString();
   const url = `${baseUrl}/${section}${queryString ? '?' + queryString : ''}`;
 
   const headers = {
@@ -251,12 +248,14 @@ export function buildArgs(section, options, baseUrl) {
   if (headerString) {
     headers['X-Alaska-Legislature-Basis-Query'] = headerString;
   }
-  if (options.range) {
-    headers['X-Alaska-Query-ResultRange'] = options.range;
+  if (params.range) {
+    headers['X-Alaska-Query-ResultRange'] = params.range;
   }
 
   return { url, headers};
 }
+
+/** @typedef {BaseParams & {queries?: BillQueries}} BillsParams */
 
 /**
  * The Bills class is a wrapper around the bills section of the API.
@@ -270,11 +269,11 @@ export function buildArgs(section, options, baseUrl) {
  */
 export class Bills {
   /**
-   * @param {GetBillsOptions} [options]
+   * @param {BillsParams} [params]
    * @param {IntoConfig} [config]
    */
-  constructor(options, config) {
-    this.options = options;
+  constructor(params, config) {
+    this.params = params;
     this.config = new Config(config);
   }
 
@@ -282,7 +281,7 @@ export class Bills {
    * @returns {FetchArgs}
    */
     fetchArgs() {
-      return buildArgs('bills', this.options, this.config.baseUrl);
+      return buildArgs('bills', this.params, this.config.baseUrl);
     }
 
   /**
@@ -300,6 +299,8 @@ export class Bills {
   }
 }
 
+/** @typedef {BaseParams & {queries?: CommitteeQueries}} CommitteesParams */
+
 /**
  * The Committees class is a wrapper around the committees section of the API.
  *
@@ -312,11 +313,11 @@ export class Bills {
  */
 export class Committees {
   /**
-   * @param {GetCommitteesOptions} [options]
+   * @param {CommitteesParams} [params]
    * @param {IntoConfig} [config]
    */
-  constructor(options, config) {
-    this.options = options;
+  constructor(params, config) {
+    this.params = params;
     this.config = new Config(config);
   }
 
@@ -324,7 +325,7 @@ export class Committees {
    * @returns {FetchArgs}
    */
     fetchArgs() {
-      return buildArgs('committees', this.options, this.config.baseUrl);
+      return buildArgs('committees', this.params, this.config.baseUrl);
     }
 
   /**
@@ -342,16 +343,18 @@ export class Committees {
   }
 }
 
+/** @typedef {BaseParams & {queries?: MeetingQueries}} MeetingsParams */
+
 /**
  * The Meetings class is a wrapper around the meetings section of the API.
  */
 export class Meetings {
   /**
-   * @param {GetMeetingsOptions} [options]
+   * @param {MeetingsParams} [params]
    * @param {IntoConfig} [config]
    */
-  constructor(options, config) {
-    this.options = options;
+  constructor(params, config) {
+    this.params = params;
     this.config = new Config(config);
   }
 
@@ -359,7 +362,7 @@ export class Meetings {
    * @returns {FetchArgs}
    */
   fetchArgs() {
-    return buildArgs('meetings', this.options, this.config.baseUrl);
+    return buildArgs('meetings', this.params, this.config.baseUrl);
   }
   
   /**
@@ -377,16 +380,18 @@ export class Meetings {
   }
 }
 
+/** @typedef {BaseParams & {queries?: MemberQueries}} MembersParams */
+
 /**
  * The Members class is a wrapper around the members section of the API.
  */
 export class Members {
   /**
-   * @param {GetMembersOptions} [options]
+   * @param {MembersParams} [params]
    * @param {IntoConfig} [config]
    */
-  constructor(options, config) {
-    this.options = options;
+  constructor(params, config) {
+    this.params = params;
     this.config = new Config(config);
   }
 
@@ -394,7 +399,7 @@ export class Members {
    * @returns {FetchArgs}
    */
   fetchArgs() {
-    return buildArgs('members', this.options, this.config.baseUrl);
+    return buildArgs('members', this.params, this.config.baseUrl);
   }
 
   /**
@@ -412,16 +417,18 @@ export class Members {
   }
 }
 
+/** @typedef {BaseParams & {queries?: SessionQueries}} SessionsParams */
+
 /**
  * The Sessions class is a wrapper around the sessions section of the API.
  */
 export class Sessions {
   /**
-   * @param {GetSessionsOptions} [options]
+   * @param {SessionsParams} [params]
    * @param {IntoConfig} [config]
    */
-  constructor(options, config) {
-    this.options = options;
+  constructor(params, config) {
+    this.params = params;
     this.config = new Config(config);
   }
 
@@ -429,7 +436,7 @@ export class Sessions {
    * @returns {FetchArgs}
    */
   fetchArgs() {
-    return buildArgs('sessions', this.options, this.config.baseUrl);
+    return buildArgs('sessions', this.params, this.config.baseUrl);
   }
 
   /**
