@@ -249,12 +249,12 @@
 /**
  * An action taken on a {@link Bill}.
  * @typedef {Object} Action
- * @property {string} Text
- * @property {Chamber} Chamber
- * @property {string} [JrnDate]
- * @property {string} [JrnPage]
- * @property {string} [Code]
- * @property {string} [Seq]
+ * @property {string} Text eg 'HSS RPT CS(HSS) 2DP 3NR'
+ * @property {Chamber} Chamber eg 'H'
+ * @property {yyyymmdd} [JrnDate] eg '2011-03-16'
+ * @property {string} [JrnPage] eg '00481'
+ * @property {string} [Code] eg '002'
+ * @property {string} [Seq] eg '0120'
  * @property {boolean} [LinkActive]
  */
 
@@ -265,9 +265,9 @@
  * @property {string} Title eg 'An Act relating to the registration fee for noncommercial trailers and to the motor vehicle tax for trailers.'
  * @property {BillCode} Name eg 'HB 10'
  * @property {string} [VersionLetter] eg 'A'
- * @property {string} [IntroDate] eg '2011-01-18'
- * @property {string | null} [PassedHouse] eg '2011-01-25'
- * @property {string | null} [PassedSenate] eg '2011-01-25'
+ * @property {yyyymmdd} [IntroDate] eg '2011-01-18'
+ * @property {yyyymmdd | null} [PassedHouse] eg '2011-01-25'
+ * @property {yyyymmdd | null} [PassedSenate] eg '2011-01-25'
  * @property {string} [WorkOrder] eg '27-LS0091'
  */
 
@@ -317,7 +317,7 @@
 
 /** 
  * @typedef {Object} Bill 
- * @property {Object[]} [Documents]
+ * @property {[]} [Documents] appears to always be an empty array??
  * @property {boolean} [PartialVeto]
  * @property {boolean} [Vetoed]
  * @property {Committee} [CurrentCommittee]
