@@ -70,7 +70,7 @@ async function fetchVotesForMember(memberCode) {
   /** @type {import('./api.js').Vote[]} */
   // @ts-ignore  this thinks the type is BasicMember, but it's FullMember
   let votes = members[0].Votes;
-  votes = votes.filter((vote) => vote.Bill !== null);
+  // votes = votes.filter((vote) => vote.Bill !== null);
   return votes;
 }
 
@@ -82,9 +82,11 @@ async function main() {
   for (const member of prunedMembers) {
     console.error(`${member.FormalName} (${member.District})`);
   }
-  const voteFetches = prunedMembers.slice(0, 3).map((member) => fetchVotesForMember(member.Code));
+  const voteFetches = prunedMembers.map((member) => fetchVotesForMember(member.Code));
 
   let allVotes = [];
+  // I think we get errors if we try to fetch too many votes at once
+  // TODO: add limiting on the number of concurrent fetches
   for (const result of await Promise.all(voteFetches)) {
     allVotes.push(...result);
   }

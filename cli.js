@@ -1,16 +1,22 @@
 // @ts-check
-import { Bills, Members, Sessions, buildArgs} from './api.js';
+import { Bills, Members, Sessions} from './api.js';
+
+/** @type {import('./api.js').IntoConfig} */
+const config = {
+  logger: 'DEBUG',
+};
 
 async function bills() {
   const results = new Bills({
-    range: '10',
+    range: '20',
     queries: {
+      // Documents: {},
       // actions: {},
-      // bills : {},
+      // bills : {onfloor: true},
       // fiscalnotes: {},
-      sponsors: {
-        district: '13',
-      },
+      // sponsors: {
+      //   district: '13',
+      // },
       // subjects: {},
       // versions: {},
       // votes: {},
@@ -21,16 +27,17 @@ async function bills() {
 
 async function members() {
   const results = new Members({
-    range: '1',
+    session: 33,
+    // range: '10',
     queries: {
-      // members: {IsActive: false},
+      // members: {firstname: 'je*'},
       // committees: {},
       bills: {
-        bill: '*115',
+        bill: 'hb 228',
       },
       // votes: {},
     },
-  });
+  }, config);
   return await results.fetch();
 }
 async function sessions() {
@@ -50,6 +57,7 @@ async function main() {
   const results = await bills();
   // const results = await members();
   // const results = await sessions();
+  console.error(results.length);
   const jsonResults = JSON.stringify(results, null, 2);
   console.log(jsonResults);
 }
