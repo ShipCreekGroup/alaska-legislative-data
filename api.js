@@ -380,16 +380,36 @@ export async function webFetch(args) {
  * @property {function(any): void} debug
  * */
 
+
+/** @typedef {'ERROR' | 'WARN' | 'INFO' | 'DEBUG'} LogLevel */
 /**
  * A logger that logs everything to console.error, such that it can be piped to stdout.
+ * @param {Logger | LogLevel} [level='ERROR'] - The level of the logger.
  * @returns {Logger}
  */
-export function defaultLogger() {
+export function makeLogger(level) {
+  if (!level) {
+    level = 'ERROR';
+  }
+  if (typeof level !== 'string') {
+    return level;
+  }
+  const levels = {
+    ERROR: 0,
+    WARN: 1,
+    INFO: 2,
+    DEBUG: 3,
+  }
+  function log(thisLevel, threshold, ...args) {
+    if (levels[thisLevel] >= levels[threshold]) {
+      console.error(`${new Date().toISOString()} ${thisLevel}:`, ...args);
+    }
+  }
   return {
-    error: (...args) => console.error(`${new Date().toISOString()} ERROR:`, ...args),
-    warn: (...args) => console.error(`${new Date().toISOString()} WARN:`, ...args),
-    info: (...args) => console.error(`${new Date().toISOString()} INFO:`, ...args),
-    debug: (...args) => console.error(`${new Date().toISOString()} DEBUG:`, ...args),
+    error: (...args) => log('ERROR', level, ...args),
+    warn: (...args) => log('WARN', level, ...args),
+    info: (...args) => log('INFO', level, ...args),
+    debug: (...args) => log('DEBUG', level, ...args),
   };
 }
 
@@ -400,7 +420,7 @@ export function defaultLogger() {
  *   This is useful if you are in eg a Google Apps Script environment where
  *   the web standard fetch API is not available, and you need to use the
  *   Google Apps Script UrlFetch API instead.
- * @property {Logger} [logger] - Where this library will log errors and warnings.
+ * @property {Logger | LogLevel} [logger] - Where this library will log errors and warnings.
  */
 
 /**
@@ -417,7 +437,7 @@ export class Config {
     this.baseUrl = config.baseUrl || 'https://www.akleg.gov/publicservice/basis';
     this.baseUrl = this.baseUrl.replace(/\/$/, ''); // Remove trailing slash if present
     this.fetcher = config.fetcher || webFetch;
-    this.logger = config.logger || defaultLogger();
+    this.logger = makeLogger(config.logger);
   }
 }
 
@@ -705,6 +725,8 @@ async function _fetch(args, config) {
  */
 async function _data(args, config) {
   args = {...args, method: 'GET'};
+  config.logger.debug("args:");
+  config.logger.debug(args);
   const response = await _fetch(args, config);
 
   let parsed;
@@ -712,8 +734,6 @@ async function _data(args, config) {
     parsed = JSON.parse(response.payload);
   } catch (e) {
     config.logger.error("error parsing response payload.");
-    config.logger.error("args:");
-    config.logger.error(args);
     config.logger.error("response:");
     config.logger.error(response);
     throw e;
@@ -728,6 +748,8 @@ async function _data(args, config) {
  */
 async function _count(args, config) {
   args = { ...args, method: 'HEAD' };
+  console.debug("args:");
+  console.debug(args);
   const response = await _fetch(args, config);
   const header = response.headers['x-alaska-query-count'];
   if (!header) {
@@ -739,8 +761,6 @@ async function _count(args, config) {
     return Number(header);
   } catch (e) {
     console.error("error parsing x-alaska-query-count header to Number.");
-    console.error("args:");
-    console.error(args);
     console.error("header:");
     console.error(header);
     throw e;
