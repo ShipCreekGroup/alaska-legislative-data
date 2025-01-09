@@ -389,7 +389,7 @@ export function defaultLogger() {
     error: (...args) => console.error(`${new Date().toISOString()} ERROR:`, ...args),
     warn: (...args) => console.error(`${new Date().toISOString()} WARN:`, ...args),
     info: (...args) => console.error(`${new Date().toISOString()} INFO:`, ...args),
-    debug: (...args) => null,
+    debug: (...args) => console.error(`${new Date().toISOString()} DEBUG:`, ...args),
   };
 }
 
@@ -685,6 +685,19 @@ export function buildArgs(section, params, baseUrl) {
   return {url, headers};
 }
 
+async function _fetch(args, config) {
+  args = {...args, method: 'GET'};
+  try {
+    return await config.fetcher(args);
+  } catch (e) {
+    config.logger.error("error fetching data with args:");
+    config.logger.error(args);
+    config.logger.error("resulting error:");
+    config.logger.error(e);
+    throw e;
+  }
+}
+
 /**
  * @param {FetchArgs} args
  * @param {Config} config
@@ -692,13 +705,17 @@ export function buildArgs(section, params, baseUrl) {
  */
 async function _data(args, config) {
   args = {...args, method: 'GET'};
-  config.logger.debug(args);
-  const response = await config.fetcher(args);
+  const response = await _fetch(args, config);
+
   let parsed;
   try {
     parsed = JSON.parse(response.payload);
   } catch (e) {
-    config.logger.error(response.payload);
+    config.logger.error("error parsing response payload.");
+    config.logger.error("args:");
+    config.logger.error(args);
+    config.logger.error("response:");
+    config.logger.error(response);
     throw e;
   }
   return parsed.Basis;
@@ -711,9 +728,23 @@ async function _data(args, config) {
  */
 async function _count(args, config) {
   args = { ...args, method: 'HEAD' };
-  config.logger.debug(args);
-  const response = await config.fetcher(args);
-  return Number(response.headers['x-alaska-query-count']);
+  const response = await _fetch(args, config);
+  const header = response.headers['x-alaska-query-count'];
+  if (!header) {
+    console.error("no x-alaska-query-count header found for args:");
+    console.error(args);
+    throw new Error("no x-alaska-query-count header found");
+  }
+  try {
+    return Number(header);
+  } catch (e) {
+    console.error("error parsing x-alaska-query-count header to Number.");
+    console.error("args:");
+    console.error(args);
+    console.error("header:");
+    console.error(header);
+    throw e;
+  }
 }
 
 /**
