@@ -75,9 +75,10 @@ async function fetchVotesForMember(memberCode) {
 }
 
 async function main() {
-  const allMembers = await new Members({session: 33}).fetch();
-  console.error(allMembers.length);
-  const prunedMembers = allMembers.map(simplifyMember);
+  let members = await new Members({session: 33}).fetch();
+  members = members.slice(0,10);
+  console.error(members.length);
+  const prunedMembers = members.map(simplifyMember);
   prunedMembers.sort(sortByDistrict);
   for (const member of prunedMembers) {
     console.error(`${member.FormalName} (${member.District})`);
