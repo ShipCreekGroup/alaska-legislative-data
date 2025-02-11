@@ -1,10 +1,14 @@
 import json
+from collections.abc import Iterable
 from pathlib import Path
+from typing import Literal, TypeAlias
 
 from alaska_legislative_api import _low
 
+Cache: TypeAlias = bool | Literal["previous-sessions"]
 
-def scrape(directory: str | Path, *, use_cache: bool = True) -> None:
+
+def scrape(directory: str | Path, *, cache: Cache = "previous-sessions") -> None:
     """
     Scrape the Alaska Legislative API data and save it to the specified directory.
 
@@ -13,20 +17,20 @@ def scrape(directory: str | Path, *, use_cache: bool = True) -> None:
     """
     d = Path(directory)
     sessions_path = d / "sessions.json"
-    if not use_cache or not sessions_path.exists():
+    if not cache or not sessions_path.exists():
         sessions = scrape_sessions()
         sessions_path.parent.mkdir(parents=True, exist_ok=True)
         sessions_path.write_text(_low.json.dumps(sessions, indent=4))
     else:
         sessions = json.loads(sessions_path.read_text())
 
-    session_numbers = [s["Number"] for s in sessions]
+    session_numbers = [int(s["Number"]) for s in sessions]
 
     members_path = d / "members"
-    scrape_members(session_numbers, members_path, use_cache)
+    scrape_members(session_numbers, members_path, cache)
 
 
-def scrape_sessions(d: Path, cache) -> list[dict]:
+def scrape_sessions() -> list[dict]:
     """
     Get the list of available sessions.
 
@@ -61,16 +65,17 @@ def scrape_sessions(d: Path, cache) -> list[dict]:
         except ValueError as e:
             if "Invalid Session Number" in str(e):
                 break
+        s = {**s, "Number": int(s["Number"])}
         sessions.append(s)
         entered_range = True
     return sessions
 
 
-def scrape_members(sessions: list[int], d: Path, use_cache) -> list[dict]:
+def scrape_members(sessions: list[int], d: Path, cache) -> list[dict]:
     result = []
     for session_number in sessions:
         p = d / f"members_{session_number}.json"
-        if not use_cache or not p.exists():
+        if _need_refresh(session_number, sessions, cache, p):
             members = scrape_members_of_session(session_number)
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text(_low.json.dumps(members, indent=4))
@@ -86,3 +91,18 @@ def scrape_members_of_session(session_number: int) -> list[dict]:
     except _low.DataUnimplementedError:
         return []
     return [{**member, "Session": session_number} for member in m]
+
+
+def _is_latest(session, sessions) -> bool:
+    return int(session) == max(int(s) for s in sessions)
+
+
+def _need_refresh(session: int, sessions: Iterable[int], cache: Cache, path: Path):
+    if not cache:
+        return True
+    if not path.exists():
+        return True
+    if cache is True:
+        return False
+    assert cache == "previous-sessions"
+    return _is_latest(session, sessions)
