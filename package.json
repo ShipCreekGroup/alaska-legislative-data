@@ -1,6 +1,6 @@
 {
 	"name": "alaska-legislative-api",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"author": "Nick Crews <n.crews@shipcreekgroup.com>",
 	"license": "MIT",
 	"description": "A TypeScript client for the Alaska Legislative API (https://www.akleg.gov/Apptester.html)",
