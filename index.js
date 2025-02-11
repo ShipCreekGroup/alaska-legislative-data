@@ -741,6 +741,8 @@ async function _data(args, config) {
     parsed = JSON.parse(response.payload);
   } catch (e) {
     config.logger.error("error parsing response payload.");
+    config.logger.error("args:");
+    config.logger.error(args);
     config.logger.error("response:");
     config.logger.error(response);
     throw e;
@@ -768,6 +770,8 @@ async function _count(args, config) {
     return Number(header);
   } catch (e) {
     console.error("error parsing x-alaska-query-count header to Number.");
+    console.error("args:");
+    console.error(args);
     console.error("header:");
     console.error(header);
     throw e;
