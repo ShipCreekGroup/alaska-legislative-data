@@ -402,10 +402,10 @@ export function makeLogger(level) {
     return level;
   }
   const levels = {
-    ERROR: 0,
-    WARN: 1,
-    INFO: 2,
-    DEBUG: 3,
+    DEBUG: 0,
+    INFO: 1,
+    WARN: 2,
+    ERROR: 3,
   }
   function log(thisLevel, threshold, ...args) {
     if (levels[thisLevel] >= levels[threshold]) {
