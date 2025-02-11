@@ -211,12 +211,12 @@
 
 /**
  * A {@link Member} with all their memberships and sponsorships.
- * @typedef {BasicMember} FullMember
- * @extends {BasicMember}
+ * @typedef {Object} FullMemberProperties
  * @property {Membership[]} [CommitteeMemberships]
  * @property {Membership[]} [PastCommitteeMemberships]
  * @property {Bill[]} [BillSponsorships]
  * @property {Vote[]} [Votes]
+ * @typedef {BasicMember & FullMemberProperties} FullMember
  * */
 
 /** 
@@ -260,8 +260,7 @@
 
 /**
  * A version of a {@link Bill}.
- * @typedef {Document} Version
- * @extends {Document}
+ * @typedef {Object} VersionProperties
  * @property {string} Title eg 'An Act relating to the registration fee for noncommercial trailers and to the motor vehicle tax for trailers.'
  * @property {BillCode} Name eg 'HB 10'
  * @property {string} [VersionLetter] eg 'A'
@@ -269,16 +268,17 @@
  * @property {yyyymmdd | null} [PassedHouse] eg '2011-01-25'
  * @property {yyyymmdd | null} [PassedSenate] eg '2011-01-25'
  * @property {string} [WorkOrder] eg '27-LS0091'
+ * @typedef {Document & VersionProperties} Version
  */
 
 /**
- * @typedef {Document} FiscalNote
- * @extends {Document}
+ * @typedef {Object} FiscalNoteProperties
  * @property {string} Name eg 'Fiscal Note 1'
  * @property {string} Preparer eg 'Health & Social Services - Dept.'
  * @property {mmddyyyy} PublishedDate eg '03/16/2011'
  * @property {Chamber} Chamber eg 'H'
  * @property {string} FiscalImpact eg 'N'
+ * @typedef {Document & FiscalNoteProperties} FiscalNote
  */
 
 /**
@@ -366,9 +366,16 @@
  */
 export async function webFetch(args) {
   const response = await fetch(args.url, { headers: args.headers, method: args.method });
+  /** @type {Record<string, string>} */
+  const headers = {};
+  response.headers.forEach((value, key) => {
+    headers[key] = value;
+  });
+  // let headers
   return {
     payload: await response.text(),
-    headers: Object.fromEntries(response.headers.entries()),
+    // convert the headers object to a plain object
+    headers,
   };
 }
 
