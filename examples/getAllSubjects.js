@@ -3,7 +3,7 @@
 // Looks through all bills for the last 13 years and prints all unique subjects.
 //
 // Usage: node examples/getAllSubjects.js > subjects.txt
-import { Bills} from '../index.js';
+import { Bills } from '../index.js';
 
 async function getSubjectsForSession(session) {
   const allBills = await new Bills({session, queries:{subjects:{}}}).fetch();

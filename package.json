@@ -1,11 +1,11 @@
 {
 	"name": "alaska-legislative-api",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"author": "Nick Crews <n.crews@shipcreekgroup.com>",
 	"license": "MIT",
 	"description": "A TypeScript client for the Alaska Legislative API (https://www.akleg.gov/Apptester.html)",
 	"scripts": {
-		"build": "tsc"
+		"build": "rm -rf dist && tsc && cp index.js dist/index.js && cp README.md dist/README.md && cp LICENSE dist/LICENSE"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.17.0",
@@ -13,12 +13,9 @@
 		"globals": "^15.14.0",
 		"typescript": "^5.7.2"
 	},
-	"main": "index.js",
+	"main": "dist/index.js",
 	"files": [
-		"dist/",
-		"index.js",
-		"README.md",
-		"LICENSE"
+		"dist/"
 	],
 	"type": "module"
 }
