@@ -13,8 +13,11 @@
 		"globals": "^15.14.0",
 		"typescript": "^5.7.2"
 	},
+	"main": "index.js",
 	"files": [
-		"dist"
+		"index.js",
+		"README.md",
+		"LICENSE"
 	],
 	"type": "module"
 }
