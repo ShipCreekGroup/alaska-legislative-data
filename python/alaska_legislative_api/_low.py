@@ -84,12 +84,13 @@ def members(
     )["Members"]
 
 
-def sessions(
+def session(
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
     chamber: Literal["H", "S"] | None = None,
     range: slice | tuple[int | None, int | None] | None = None,
 ) -> dict:
+    """This doesn't follow the pattern and returns a single session."""
     return _make_request(
         "sessions",
         queries=queries,
