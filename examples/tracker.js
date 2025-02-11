@@ -1,5 +1,5 @@
 // @ts-check
-import { Bills, Members} from './api.js';
+import { Bills, Members} from '../index.js';
 
 function sortByDistrict(a, b) {
   return a.District.localeCompare(b.District);
@@ -67,7 +67,7 @@ async function fetchVotesForMember(memberCode) {
   };
   const members = await new Members({session: 33, queries}).fetch();
   
-  /** @type {import('./api.js').Vote[]} */
+  /** @type {import('../index.js').Vote[]} */
   // @ts-ignore  this thinks the type is BasicMember, but it's FullMember
   let votes = members[0].Votes;
   // votes = votes.filter((vote) => vote.Bill !== null);

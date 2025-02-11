@@ -1,7 +1,7 @@
 // @ts-check
-import { Bills, Members, Sessions} from './api.js';
+import { Bills, Members, Sessions} from '../index.js';
 
-/** @type {import('./api.js').IntoConfig} */
+/** @type {import('../index.js').IntoConfig} */
 const config = {
   logger: 'DEBUG',
 };
