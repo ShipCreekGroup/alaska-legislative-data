@@ -1,6 +1,8 @@
 // @ts-check
 // 
 // Looks through all bills for the last 13 years and prints all unique subjects.
+//
+// Usage: node examples/getAllSubjects.js > subjects.txt
 import { Bills} from '../index.js';
 
 async function getSubjectsForSession(session) {
