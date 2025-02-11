@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"description": "A TypeScript client for the Alaska Legislative API (https://www.akleg.gov/Apptester.html)",
 	"scripts": {
-		"example": "node cli.js"
+		"build": "tsc"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.17.0",
@@ -15,6 +15,7 @@
 	},
 	"main": "index.js",
 	"files": [
+		"dist/",
 		"index.js",
 		"README.md",
 		"LICENSE"
