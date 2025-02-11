@@ -1,0 +1,14 @@
+[project]
+name = "alaska-legislative-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "../README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "ibis-framework[duckdb]>=10.0.0",
+    "ipykernel>=6.29.5",
+]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
