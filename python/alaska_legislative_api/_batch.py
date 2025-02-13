@@ -68,8 +68,8 @@ def augmented_to_duckdb(
         conn = ibis.duckdb.connect(conn_or_path)
     else:
         conn = conn_or_path
-    conn.create_table("sessions", aug.sessions.to_pyarrow())
-    conn.create_table("people", aug.people.to_pyarrow())
-    conn.create_table("memberships", aug.members.to_pyarrow())
-    conn.create_table("bills", aug.bills.to_pyarrow())
-    conn.create_table("votes", aug.votes.to_pyarrow())
+    conn.create_table("sessions", aug.sessions.to_pyarrow(), overwrite=True)
+    conn.create_table("people", aug.people.to_pyarrow(), overwrite=True)
+    conn.create_table("memberships", aug.members.to_pyarrow(), overwrite=True)
+    conn.create_table("bills", aug.bills.to_pyarrow(), overwrite=True)
+    conn.create_table("votes", aug.votes.to_pyarrow(), overwrite=True)
