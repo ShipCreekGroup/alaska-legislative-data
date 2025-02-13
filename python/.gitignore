@@ -1,1 +1,8 @@
 .ak-leg-data
+.venv
+.pdm-build
+.python-version
+
+__pycache__
+*.pyc
+*.pyo

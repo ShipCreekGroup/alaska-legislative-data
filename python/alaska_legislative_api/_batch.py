@@ -60,7 +60,7 @@ def augmented_to_csvs(aug: _augment.AugmentedTables, dir: str | Path):
     dir.mkdir(exist_ok=True)
     aug.sessions.to_csv(dir / "sessions.csv")
     aug.people.to_csv(dir / "people.csv")
-    aug.members.to_csv(dir / "memberships.csv")
+    aug.members.to_csv(dir / "members.csv")
     aug.bills.to_csv(dir / "bills.csv")
     aug.votes.to_csv(dir / "votes.csv")
 
@@ -80,5 +80,7 @@ def augmented_to_duckdb(
 
 
 if __name__ == "__main__":
-    branch = sys.argv[1] or "scrape_and_push"
-    scrape_and_push(branch)
+    if len(sys.argv) != 2:
+        print("Usage: python -m alaska_legislative_api._batch BRANCH")
+        sys.exit(1)
+    scrape_and_push(sys.argv[1])
