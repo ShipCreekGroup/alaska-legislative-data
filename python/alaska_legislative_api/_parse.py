@@ -35,7 +35,7 @@ class ParsedTables:
         self.sessions.to_parquet(directory / "sessions.parquet")
 
 
-def parse_scraping(directory: str | Path) -> ParsedTables:
+def parse_scraped(directory: str | Path) -> ParsedTables:
     """Given a dir of raw json files from the API, parse them into ibis tables."""
     directory = Path(directory)
     members = ibis.read_json(directory / "members/*.json")
@@ -53,9 +53,13 @@ def parse_scraping(directory: str | Path) -> ParsedTables:
 
 def clean_members(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
+    t = t.rename(
+        SessionNumber="Session",
+        MemberCode="Code",
+    )
     schema = {
-        "Session": "int16",
-        "Code": "string",
+        "SessionNumber": "int16",
+        "MemberCode": "string",
         # "UID": "int64",  # always 0
         "LastName": "string",
         "MiddleName": "string",
@@ -84,13 +88,18 @@ def clean_members(t: ibis.Table) -> ibis.Table:
 def clean_votes(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
     t = t.mutate(VoteDate=t.VoteDate.nullif("-199- 0--0"))
+    t = t.rename(
+        BillNumber="Bill",
+        MemberCode="Member",
+        SessionNumber="Session",
+    )
     schema = {
-        "Session": "int16",
+        "SessionNumber": "int16",
         "VoteNum": "string",
-        "Member": "string",
+        "MemberCode": "string",
         "VoteDate": "date",
         "Vote": "string",
-        "Bill": "string",
+        "BillNumber": "string",
         # "MemberParty": "string",  # This is redundant, can be derived from Member
         # "MemberChamber": "string",  # This is redundant, can be derived from Member
         # "MemberName": "string",  # This is redundant, can be derived from Member
@@ -104,8 +113,11 @@ def clean_votes(t: ibis.Table) -> ibis.Table:
 def clean_bills(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
     t = t.mutate(StatusDate=_parse_StatusDate(t.StatusDate))
+    t = t.rename(
+        SessionNumber="Session",
+    )
     schema = {
-        "Session": "int16",
+        "SessionNumber": "int16",
         "BillNumber": "string",
         "BillName": "string",
         "Documents": "array<json>",
@@ -137,7 +149,7 @@ def clean_bills(t: ibis.Table) -> ibis.Table:
 
 def clean_sessions(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
-    t = t.rename(Session="Number")
+    t = t.rename(SessionNumber="Number")
 
     @ibis.udf.scalar.python(signature=(("string",), "date"))
     def parse_date(s: str) -> datetime.date:
@@ -157,7 +169,7 @@ def clean_sessions(t: ibis.Table) -> ibis.Table:
 
     t = t.mutate(SessionDates=t.SessionDates.map(fix_session_date))
     schema = {
-        "Session": "int16",
+        "SessionNumber": "int16",
         "Year": "int16",
         "SessionDates": "array<struct<ID: int64, Title: string, StartDate: date, EndDate: date>>",
         "Journals": "array<json>",
@@ -214,4 +226,4 @@ def _parse_StatusDate(s: ir.StringValue) -> ir.DateValue:
 
 
 if __name__ == "__main__":
-    parse_scraping(sys.argv[1]).to_parquets(sys.argv[2])
+    parse_scraped(sys.argv[1]).to_parquets(sys.argv[2])

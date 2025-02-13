@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import dataclasses
 import sys
 from pathlib import Path
@@ -33,7 +35,7 @@ class AugmentedTables:
         self.people.to_parquet(directory / "people.parquet")
 
     @classmethod
-    def from_parquets(cls, directory: str | Path) -> "AugmentedTables":
+    def from_parquets(cls, directory: str | Path) -> AugmentedTables:
         directory = Path(directory)
         members = ibis.read_parquet(directory / "members.parquet")
         bills = ibis.read_parquet(directory / "bills.parquet")
@@ -70,13 +72,13 @@ def augment_parsed(parsed: ParsedTables) -> AugmentedTables:
     So, the only way I could think of solving this is with a handwritten
     lookup table from (Session, Code) to PersonID.
     """
-    people = ibis.read_csv(_URL_PEOPLE).cache()
-    members_1_to_9 = ibis.read_csv(_URL_MEMBERS_1_TO_9).cache()
-    members_10_plus = ibis.read_csv(_URL_MEMBERS_10_PLUS).cache()
+    people = _read_gsheet(_URL_PEOPLE)
+    members_1_to_9 = _read_gsheet(_URL_MEMBERS_1_TO_9)
+    members_10_plus = _read_gsheet(_URL_MEMBERS_10_PLUS)
     members_with_person_id = parsed.members.left_join(
-        members_10_plus.select("Session", "Code", "PersonID"),
-        ["Session", "Code"],
-    ).drop("Session_right", "Code_right")
+        members_10_plus.select("SessionNumber", "MemberCode", "PersonID"),
+        ["SessionNumber", "MemberCode"],
+    ).drop("SessionNumber_right", "MemberCode_right")
     members_1_to_9 = members_1_to_9.select(members_with_person_id.columns).cast(
         members_with_person_id.schema()
     )
@@ -90,6 +92,10 @@ def augment_parsed(parsed: ParsedTables) -> AugmentedTables:
         sessions=parsed.sessions,
         people=people,
     )
+
+
+def _read_gsheet(url):
+    return ibis.read_csv(url, delim=",").cache()
 
 
 if __name__ == "__main__":
