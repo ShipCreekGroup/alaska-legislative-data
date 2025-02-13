@@ -17,6 +17,23 @@ class ParsedTables:
     def __repr__(self):
         return f"<ParsedTables members={self.members.count().execute()}, bills={self.bills.count().execute()}, votes={self.votes.count().execute()}, sessions={self.sessions.count().execute()}>"
 
+    @classmethod
+    def from_parquets(cls, directory: str | Path) -> "ParsedTables":
+        directory = Path(directory)
+        members = ibis.read_parquet(directory / "members.parquet")
+        bills = ibis.read_parquet(directory / "bills.parquet")
+        votes = ibis.read_parquet(directory / "votes.parquet")
+        sessions = ibis.read_parquet(directory / "sessions.parquet")
+        return cls(members, bills, votes, sessions)
+
+    def to_parquets(self, directory: str | Path):
+        directory = Path(directory)
+        directory.mkdir(parents=True, exist_ok=True)
+        self.members.to_parquet(directory / "members.parquet")
+        self.bills.to_parquet(directory / "bills.parquet")
+        self.votes.to_parquet(directory / "votes.parquet")
+        self.sessions.to_parquet(directory / "sessions.parquet")
+
 
 def parse_scraping(directory: str | Path) -> ParsedTables:
     """Given a dir of raw json files from the API, parse them into ibis tables."""
@@ -196,17 +213,5 @@ def _parse_StatusDate(s: ir.StringValue) -> ir.DateValue:
     return s.try_cast("date")
 
 
-def main(raw_dir: str | Path, out_dir: str | Path) -> ParsedTables:
-    """Parse the raw json files and write to a dir of parquet files."""
-    tables = parse_scraping(raw_dir)
-    out_dir = Path(out_dir)
-    out_dir.mkdir(exist_ok=True, parents=True)
-    tables.sessions.to_parquet(out_dir / "sessions.parquet")
-    tables.members.to_parquet(out_dir / "members.parquet")
-    tables.bills.to_parquet(out_dir / "bills.parquet")
-    tables.votes.to_parquet(out_dir / "votes.parquet")
-    return tables
-
-
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    parse_scraping(sys.argv[1]).to_parquets(sys.argv[2])
