@@ -91,6 +91,12 @@ def session(
     range: slice | tuple[int | None, int | None] | None = None,
 ) -> dict:
     """This doesn't follow the pattern and returns a single session."""
+    # for queries:
+    # eg include the Journals field with any journal entries from the house:
+    # Journals;chamber=H
+    #
+    # These are all the journal fields:
+    # chamber;date;startdate;enddate;page;startpage;endpage;fulltext
     return _make_request(
         "sessions",
         queries=queries,
