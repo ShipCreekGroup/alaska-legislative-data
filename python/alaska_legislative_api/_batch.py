@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 
 import ibis
@@ -7,15 +6,12 @@ from ibis import BaseBackend
 from alaska_legislative_api import _augment, _git, _parse, _scrape
 
 
-def scrape(
-    *,
-    working_directory: str | Path = "./ak-leg-data",
-) -> _augment.AugmentedTables:
+def process_batch(batch_dir: str | Path) -> _augment.AugmentedTables:
     """Scrape the API and augment the data with hand-curated data."""
-    working_directory = Path(working_directory)
-    dir_raw = working_directory / "raw"
-    dir_parsed = working_directory / "parsed"
-    dir_aug = working_directory / "augmented"
+    batch_dir = Path(batch_dir)
+    dir_raw = batch_dir / "raw"
+    dir_parsed = batch_dir / "parsed"
+    dir_aug = batch_dir / "augmented"
     if not dir_raw.exists():
         _scrape.scrape(dir_raw)
     if not dir_parsed.exists():
@@ -37,14 +33,14 @@ def export(aug: _augment.AugmentedTables, directory: str | Path):
 def scrape_and_push(
     branch: str,
     *,
-    working_directory: str | Path = "./ak-leg-data",
+    batch_dir: str | Path = "./.ak-leg-data",
     remote: str | None = None,
     commit_message: str = "Update data",
     tmp_git_dir: str | Path = None,
 ):
-    working_directory = Path(working_directory)
-    aug = scrape(working_directory=working_directory)
-    export_dir = working_directory / "export"
+    batch_dir = Path(batch_dir)
+    aug = process_batch(batch_dir=batch_dir)
+    export_dir = batch_dir / "export"
     export(aug, export_dir)
     _git.push_directory_to_github_branch(
         export_dir,
@@ -77,10 +73,3 @@ def augmented_to_duckdb(
     conn.create_table("memberships", aug.members.to_pyarrow())
     conn.create_table("bills", aug.bills.to_pyarrow())
     conn.create_table("votes", aug.votes.to_pyarrow())
-
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python -m alaska_legislative_api._batch BRANCH")
-        sys.exit(1)
-    scrape_and_push(sys.argv[1])
