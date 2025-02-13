@@ -1,7 +1,8 @@
 # Alaska Legislative API
 
 A typed javascript library for interacting with the Alaska Legislative API.
-SCG doesn't use this actively. This was our first attempt at accessing the API.
+SCG doesn't use this actively, use at your own risk.
+This was our first attempt at accessing the API.
 Now, we rely more on the python library to scrape the API in bulk, and then
 we access the cleaned data directly.
 

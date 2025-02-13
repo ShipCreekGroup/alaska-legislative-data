@@ -2,7 +2,7 @@
 name = "alaska-legislative-api"
 version = "0.1.0"
 description = "Add your description here"
-readme = "../README.md"
+readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "ibis-framework[duckdb]>=10.0.0",
