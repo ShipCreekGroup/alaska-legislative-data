@@ -22,4 +22,4 @@ jobs:
       - name: Install project
         run: uv sync
       - name: Scrape
-        run: uv run python -m alaska_legislative_api data_v1_latest
+        run: uv run python -m alaska_legislative_data data_v1_latest

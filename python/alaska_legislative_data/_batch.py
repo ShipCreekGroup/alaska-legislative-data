@@ -3,7 +3,7 @@ from pathlib import Path
 import ibis
 from ibis import BaseBackend
 
-from alaska_legislative_api import _augment, _git, _parse, _scrape
+from alaska_legislative_data import _augment, _git, _parse, _scrape
 
 
 def process_batch(batch_dir: str | Path) -> _augment.AugmentedTables:

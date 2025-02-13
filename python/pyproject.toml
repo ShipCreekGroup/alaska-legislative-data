@@ -1,5 +1,5 @@
 [project]
-name = "alaska-legislative-api"
+name = "alaska-legislative-data"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

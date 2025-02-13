@@ -3,7 +3,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Literal, TypeAlias, TypedDict
 
-from alaska_legislative_api import _low
+from alaska_legislative_data import _low
 
 Cache: TypeAlias = bool | Literal["previous-sessions"]
 

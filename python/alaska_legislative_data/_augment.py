@@ -6,7 +6,7 @@ from pathlib import Path
 
 import ibis
 
-from alaska_legislative_api._parse import ParsedTables
+from alaska_legislative_data._parse import ParsedTables
 
 # note the /pub ending and the format=csv query param
 _URL_PEOPLE = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBkr9cSna3m4_64VgdGN3PIP9BgFw4wLi3k0dQn5peGY-I3kqAPY8r77xHKl-KHm0rTuJVMy3I8Qml/pub?single=true&output=csv&gid=925126040"
