@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
+import logging
 import sys
 from pathlib import Path
 
@@ -8,10 +9,12 @@ import ibis
 
 from alaska_legislative_data._parse import ParsedTables
 
+logger = logging.getLogger(__name__)
+
 # note the /pub ending and the format=csv query param
-_URL_PEOPLE = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBkr9cSna3m4_64VgdGN3PIP9BgFw4wLi3k0dQn5peGY-I3kqAPY8r77xHKl-KHm0rTuJVMy3I8Qml/pub?single=true&output=csv&gid=925126040"
-_URL_MEMBERS_1_TO_9 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBkr9cSna3m4_64VgdGN3PIP9BgFw4wLi3k0dQn5peGY-I3kqAPY8r77xHKl-KHm0rTuJVMy3I8Qml/pub?single=true&output=csv&gid=49484443"
-_URL_MEMBERS_10_PLUS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBkr9cSna3m4_64VgdGN3PIP9BgFw4wLi3k0dQn5peGY-I3kqAPY8r77xHKl-KHm0rTuJVMy3I8Qml/pub?single=true&output=csv&gid=0"
+_URL_PEOPLE = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBkr9cSna3m4_64VgdGN3PIP9BgFw4wLi3k0dQn5peGY-I3kqAPY8r77xHKl-KHm0rTuJVMy3I8Qml/pub?output=csv&gid=925126040"
+_URL_MEMBERS_1_TO_9 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBkr9cSna3m4_64VgdGN3PIP9BgFw4wLi3k0dQn5peGY-I3kqAPY8r77xHKl-KHm0rTuJVMy3I8Qml/pub?output=csv&gid=49484443"
+_URL_MEMBERS_10_PLUS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBkr9cSna3m4_64VgdGN3PIP9BgFw4wLi3k0dQn5peGY-I3kqAPY8r77xHKl-KHm0rTuJVMy3I8Qml/pub?output=csv&gid=0"
 
 
 @dataclasses.dataclass
@@ -72,9 +75,11 @@ def augment_parsed(parsed: ParsedTables) -> AugmentedTables:
     So, the only way I could think of solving this is with a handwritten
     lookup table from (Session, Code) to PersonId.
     """
+    logger.info("Augmenting parsed tables with info from Google Sheets")
     people = _read_gsheet(_URL_PEOPLE)
     members_1_to_9 = _read_gsheet(_URL_MEMBERS_1_TO_9)
     members_10_plus = _read_gsheet(_URL_MEMBERS_10_PLUS)
+    logger.info("Done reading from from Google Sheets")
     members_with_person_id = parsed.members.left_join(
         members_10_plus.select("SessionNumber", "MemberCode", "PersonId"),
         ["SessionNumber", "MemberCode"],
