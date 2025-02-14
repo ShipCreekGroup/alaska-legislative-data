@@ -49,6 +49,10 @@ def push_directory_to_github_branch(
         _run_command("git add .")
         safe_commit_message = commit_message.replace('"', '\\"')
         _run_command(f'git commit -m "{safe_commit_message}"')
+        # Allow for large files? IDK if this is needed, I was running into this
+        # error when using my bad hotspot connection.
+        # https://stackoverflow.com/questions/59282476/error-rpc-failed-curl-92-http-2-stream-0-was-not-closed-cleanly-protocol-erro
+        _run_command("git config http.postBuffer 524288000")
         _run_command(f"git push --set-upstream origin --force {branch}")
 
 
