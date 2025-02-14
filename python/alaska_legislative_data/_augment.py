@@ -70,20 +70,23 @@ def augment_parsed(parsed: ParsedTables) -> AugmentedTables:
     Also, people's name can change, eg "Al" -> "Albert".
 
     So, the only way I could think of solving this is with a handwritten
-    lookup table from (Session, Code) to PersonID.
+    lookup table from (Session, Code) to PersonId.
     """
     people = _read_gsheet(_URL_PEOPLE)
     members_1_to_9 = _read_gsheet(_URL_MEMBERS_1_TO_9)
     members_10_plus = _read_gsheet(_URL_MEMBERS_10_PLUS)
     members_with_person_id = parsed.members.left_join(
-        members_10_plus.select("SessionNumber", "MemberCode", "PersonID"),
+        members_10_plus.select("SessionNumber", "MemberCode", "PersonId"),
         ["SessionNumber", "MemberCode"],
     ).drop("SessionNumber_right", "MemberCode_right")
     members_1_to_9 = members_1_to_9.select(members_with_person_id.columns).cast(
         members_with_person_id.schema()
     )
+    members_1_to_9 = members_1_to_9.anti_join(
+        members_with_person_id, ("SessionNumber", "PersonId")
+    )  # remove anyone from the 1-9 table who is in the 10+ table
     all_members = ibis.union(members_with_person_id, members_1_to_9)
-    all_members = all_members.relocate("PersonID")
+    all_members = all_members.relocate("PersonId")
     all_members = all_members.cache()
     return AugmentedTables(
         members=all_members,
