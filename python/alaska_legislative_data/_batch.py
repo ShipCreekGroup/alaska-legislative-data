@@ -47,7 +47,7 @@ def scrape_and_push(
         branch,
         remote=remote,
         commit_message=commit_message,
-        tmp_git_dir=tmp_git_dir,
+        tmp_git_dir=tmp_git_dir or batch_dir / "git",
     )
 
 
