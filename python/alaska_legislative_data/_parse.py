@@ -11,28 +11,28 @@ from ibis.expr import types as ir
 class ParsedTables:
     members: ibis.Table
     bills: ibis.Table
-    votes: ibis.Table
-    sessions: ibis.Table
+    choices: ibis.Table
+    legislatures: ibis.Table
 
     def __repr__(self):
-        return f"<ParsedTables members={self.members.count().execute()}, bills={self.bills.count().execute()}, votes={self.votes.count().execute()}, sessions={self.sessions.count().execute()}>"
+        return f"<ParsedTables members={self.members.count().execute()}, bills={self.bills.count().execute()}, choices={self.choices.count().execute()}, legislatures={self.legislatures.count().execute()}>"
 
     @classmethod
     def from_parquets(cls, directory: str | Path) -> "ParsedTables":
         directory = Path(directory)
         members = ibis.read_parquet(directory / "members.parquet")
         bills = ibis.read_parquet(directory / "bills.parquet")
-        votes = ibis.read_parquet(directory / "votes.parquet")
-        sessions = ibis.read_parquet(directory / "sessions.parquet")
-        return cls(members, bills, votes, sessions)
+        choices = ibis.read_parquet(directory / "choices.parquet")
+        legislatures = ibis.read_parquet(directory / "legislatures.parquet")
+        return cls(members, bills, choices, legislatures)
 
     def to_parquets(self, directory: str | Path):
         directory = Path(directory)
         directory.mkdir(parents=True, exist_ok=True)
         self.members.to_parquet(directory / "members.parquet")
         self.bills.to_parquet(directory / "bills.parquet")
-        self.votes.to_parquet(directory / "votes.parquet")
-        self.sessions.to_parquet(directory / "sessions.parquet")
+        self.choices.to_parquet(directory / "choices.parquet")
+        self.legislatures.to_parquet(directory / "legislatures.parquet")
 
 
 def parse_scraped(directory: str | Path) -> ParsedTables:
@@ -40,25 +40,25 @@ def parse_scraped(directory: str | Path) -> ParsedTables:
     directory = Path(directory)
     members = ibis.read_json(directory / "members/*.json")
     bills = ibis.read_json(directory / "bills/*.json")
-    votes = ibis.read_json(directory / "votes/*.json")
-    sessions = ibis.read_json(directory / "sessions.json")
+    choices = ibis.read_json(directory / "choices/*.json")
+    legislatures = ibis.read_json(directory / "legislatures.json")
 
     members = clean_members(members)
     bills = clean_bills(bills)
-    votes = clean_votes(votes)
-    sessions = clean_sessions(sessions)
+    choices = clean_choices(choices)
+    legislatures = clean_legislatures(legislatures)
 
-    return ParsedTables(members, bills, votes, sessions)
+    return ParsedTables(members, bills, choices, legislatures)
 
 
 def clean_members(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
     t = t.rename(
-        SessionNumber="Session",
+        LegislatureNumber="Session",
         MemberCode="Code",
     )
     schema = {
-        "SessionNumber": "int16",
+        "LegislatureNumber": "int16",
         "MemberCode": "string",
         # "UID": "int64",  # always 0
         "LastName": "string",
@@ -86,25 +86,27 @@ def clean_members(t: ibis.Table) -> ibis.Table:
     return t
 
 
-def clean_votes(t: ibis.Table) -> ibis.Table:
+def clean_choices(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
     t = t.mutate(VoteDate=t.VoteDate.nullif("-199- 0--0"))
     t = t.rename(
         BillNumber="Bill",
         MemberCode="Member",
-        SessionNumber="Session",
+        LegislatureNumber="Session",
+        Choice="Vote",
+        VoteTitle="Title",
     )
     schema = {
-        "SessionNumber": "int16",
+        "LegislatureNumber": "int16",
         "VoteNum": "string",
-        "MemberCode": "string",
         "VoteDate": "date",
-        "Vote": "string",
+        "VoteTitle": "string",
         "BillNumber": "string",
+        "MemberCode": "string",
+        "Choice": "string",
         # "MemberParty": "string",  # This is redundant, can be derived from Member
         # "MemberChamber": "string",  # This is redundant, can be derived from Member
         # "MemberName": "string",  # This is redundant, can be derived from Member
-        "Title": "string",
     }
     t = t.select(schema.keys())
     t = t.cast(schema)
@@ -116,10 +118,10 @@ def clean_bills(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
     t = t.mutate(StatusDate=_parse_StatusDate(t.StatusDate))
     t = t.rename(
-        SessionNumber="Session",
+        LegislatureNumber="Session",
     )
     schema = {
-        "SessionNumber": "int16",
+        "LegislatureNumber": "int16",
         "BillNumber": "string",
         "BillName": "string",
         "Documents": "array<json>",
@@ -150,9 +152,9 @@ def clean_bills(t: ibis.Table) -> ibis.Table:
     return t
 
 
-def clean_sessions(t: ibis.Table) -> ibis.Table:
+def clean_legislatures(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
-    t = t.rename(SessionNumber="Number")
+    t = t.rename(LegislatureNumber="Number")
 
     @ibis.udf.scalar.python(signature=(("string",), "date"))
     def parse_date(s: str) -> datetime.date:
@@ -172,7 +174,7 @@ def clean_sessions(t: ibis.Table) -> ibis.Table:
 
     t = t.mutate(SessionDates=t.SessionDates.map(fix_session_date))
     schema = {
-        "SessionNumber": "int16",
+        "LegislatureNumber": "int16",
         "Year": "int16",
         "SessionDates": "array<struct<ID: int64, Title: string, StartDate: date, EndDate: date>>",
         "Journals": "array<json>",
@@ -200,8 +202,8 @@ def _fix_strings(t: ibis.Table) -> ibis.Table:
 
 
 def _parse_StatusDate(s: ir.StringValue) -> ir.DateValue:
-    # For most sessions is a well formed YYYY-MM-DD string.
-    # But for sessions 12, 13,15, 16, 17, it is eg "Jul -10- 1".
+    # For most legislatures is a well formed YYYY-MM-DD string.
+    # But for legislatures 12, 13,15, 16, 17, it is eg "Jul -10- 1".
     # The "10" is a day of 1-31, and the " 1" is either " 1" (7900 times)
     # or " 2" (1 time). So IDK exactly what that represents,
     # possibly the session number?

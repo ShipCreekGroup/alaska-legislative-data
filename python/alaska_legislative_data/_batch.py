@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 import ibis
@@ -26,8 +27,10 @@ def process_batch(batch_dir: str | Path) -> _augment.AugmentedTables:
 
 def export(aug: _augment.AugmentedTables, directory: str | Path):
     directory = Path(directory)
+    if directory.exists():
+        shutil.rmtree(directory)
     augmented_to_csvs(aug, directory)
-    augmented_to_duckdb(aug, directory / "db.duckdb")
+    # augmented_to_duckdb(aug, directory / "db.duckdb")
 
 
 def scrape_and_push(
@@ -54,11 +57,12 @@ def scrape_and_push(
 def augmented_to_csvs(aug: _augment.AugmentedTables, dir: str | Path):
     dir = Path(dir)
     dir.mkdir(exist_ok=True)
-    aug.sessions.to_csv(dir / "sessions.csv")
+    aug.legislatures.to_csv(dir / "legislatures.csv")
     aug.people.to_csv(dir / "people.csv")
     aug.members.to_csv(dir / "members.csv")
     aug.bills.to_csv(dir / "bills.csv")
     aug.votes.to_csv(dir / "votes.csv")
+    aug.choices.to_csv(dir / "choices.csv")
 
 
 def augmented_to_duckdb(
@@ -68,8 +72,9 @@ def augmented_to_duckdb(
         conn = ibis.duckdb.connect(conn_or_path)
     else:
         conn = conn_or_path
-    conn.create_table("sessions", aug.sessions.to_pyarrow(), overwrite=True)
+    conn.create_table("legislatures", aug.legislatures.to_pyarrow(), overwrite=True)
     conn.create_table("people", aug.people.to_pyarrow(), overwrite=True)
     conn.create_table("memberships", aug.members.to_pyarrow(), overwrite=True)
     conn.create_table("bills", aug.bills.to_pyarrow(), overwrite=True)
     conn.create_table("votes", aug.votes.to_pyarrow(), overwrite=True)
+    conn.create_table("choices", aug.choices.to_pyarrow(), overwrite=True)
