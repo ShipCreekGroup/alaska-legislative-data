@@ -6,7 +6,7 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "alaska-legislative-api"
+name = "alaska-legislative-data"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
