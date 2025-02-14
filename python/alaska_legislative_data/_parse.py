@@ -82,6 +82,7 @@ def clean_members(t: ibis.Table) -> ibis.Table:
     }
     t = t.select(schema.keys())
     t = t.cast(schema)
+    t = t.distinct()
     return t
 
 
@@ -107,6 +108,7 @@ def clean_votes(t: ibis.Table) -> ibis.Table:
     }
     t = t.select(schema.keys())
     t = t.cast(schema)
+    t = t.distinct()
     return t
 
 
@@ -144,6 +146,7 @@ def clean_bills(t: ibis.Table) -> ibis.Table:
     }
     t = t.select(schema.keys())
     t = t.cast(schema)
+    t = t.distinct()
     return t
 
 
@@ -184,6 +187,7 @@ def clean_sessions(t: ibis.Table) -> ibis.Table:
     }
     t = t.select(schema.keys())
     t = t.cast(schema)
+    t = t.distinct()
     return t
 
 
