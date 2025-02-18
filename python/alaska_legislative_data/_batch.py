@@ -13,8 +13,7 @@ def process_batch(batch_dir: str | Path) -> _augment.AugmentedTables:
     dir_raw = batch_dir / "raw"
     dir_parsed = batch_dir / "parsed"
     dir_aug = batch_dir / "augmented"
-    if not dir_raw.exists():
-        _scrape.scrape(dir_raw)
+    _scrape.scrape(dir_raw)
     if not dir_parsed.exists():
         parsed = _parse.parse_scraped(dir_raw)
         parsed.to_parquets(dir_parsed)

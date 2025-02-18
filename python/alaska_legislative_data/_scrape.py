@@ -23,15 +23,11 @@ def scrape(directory: str | Path, *, cache: Cache = "previous-sessions") -> None
     d = Path(directory)
     legs = scrape_legislatures(d / "legislatures.json")
     leg_numbers = [int(s["LegislatureNumber"]) for s in legs]
-
-    members_path = d / "members"
-    members = scrape_members(leg_numbers, members_path, cache)
-
-    bills_path = d / "bills"
-    scrape_bills(leg_numbers, bills_path, cache)
-
-    votes_path = d / "votes"
-    asyncio.run(scrape_votes(members, votes_path, cache))
+    members = scrape_members(
+        legislature_numbers=leg_numbers, d=d / "members", cache=cache
+    )
+    scrape_bills(legislature_numbers=leg_numbers, d=d / "bills", cache=cache)
+    scrape_votes(members=members, d=d / "votes", cache=cache)
 
 
 def scrape_legislatures(
@@ -97,7 +93,7 @@ assert _estimate_max_leg_num(2026) == 34, _estimate_max_leg_num(2026)
 
 
 def scrape_members(
-    legislature_numbers: list[int], d: Path | str, cache: Cache = False
+    *, legislature_numbers: list[int], d: Path | str, cache: Cache = False
 ) -> list[dict]:
     d = Path(d)
     tasks = []
