@@ -1,9 +1,14 @@
+import asyncio
+import datetime
 import json
+import logging
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Literal, TypeAlias, TypedDict
 
 from alaska_legislative_data import _low
+
+logger = logging.getLogger(__name__)
 
 Cache: TypeAlias = bool | Literal["previous-sessions"]
 
@@ -16,165 +21,155 @@ def scrape(directory: str | Path, *, cache: Cache = "previous-sessions") -> None
         directory (str): The directory where the scraped data will be saved.
     """
     d = Path(directory)
-    sessions_path = d / "sessions.json"
-    sessions = scrape_sessions(sessions_path, cache)
-
-    session_numbers = [int(s["Number"]) for s in sessions]
+    legs = scrape_legislatures(d / "legislatures.json")
+    leg_numbers = [int(s["LegislatureNumber"]) for s in legs]
 
     members_path = d / "members"
-    members = scrape_members(session_numbers, members_path, cache)
+    members = scrape_members(leg_numbers, members_path, cache)
 
     bills_path = d / "bills"
-    scrape_bills(session_numbers, bills_path, cache)
+    scrape_bills(leg_numbers, bills_path, cache)
 
     votes_path = d / "votes"
-    scrape_votes(members, votes_path, cache)
+    asyncio.run(scrape_votes(members, votes_path, cache))
 
 
-def scrape_sessions(p: Path, cache: Cache = True) -> list[dict]:
-    if not cache or not p.exists():
-        sessions = do_scrape_sessions()
-        p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(_low.json.dumps(sessions, indent=4))
-    else:
-        sessions = json.loads(p.read_text())
+def scrape_legislatures(
+    p: Path | str,
+    *,
+    legislature_numbers: list[int] | None = None,
+    cache: bool = False,
+) -> list[dict]:
+    p = Path(p)
+    if cache and p.exists():
+        return json.loads(p.read_text())
+    if legislature_numbers is None:
+        # +5 to be safe
+        legislature_numbers = range(1, _estimate_max_leg_num() + 5)
+    sessions = _do_scrape_legs(legislature_numbers)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(sessions, indent=4))
     return sessions
 
 
-def do_scrape_sessions() -> list[dict]:
-    """
-    Get the list of available sessions.
-
-    Returns:
-        list[int]: A list of available session numbers.
-    """
-    session_number = 0
-    entered_range = False
-    sessions = []
-    while True:
-        session_number += 1
-        try:
-            s = _low.session(
-                queries=[
-                    # "laws",
-                    # "journals",  # this makes each response too large
-                    # "sponsors",
-                    "locations",
-                    "subjects",
-                    "requestors",
-                    "stats",
-                    "housestatus",
-                    "senatestatus",
-                ],
-                session=session_number,
-            )
-        except _low.DataUnimplementedError:
-            if not entered_range:
-                continue
-            else:
-                break
-        except ValueError as e:
-            if "Invalid Session Number" in str(e):
-                break
-        s = {**s, "Number": int(s["Number"])}
-        sessions.append(s)
-        entered_range = True
+def _do_scrape_legs(leg_nums: list[int]) -> list[dict]:
+    tasks = [_do_scrape_leg(n) for n in leg_nums]
+    sessions = asyncio.run(asyncio.gather(*tasks))
+    sessions = [s for s in sessions if s is not None]
     return sessions
 
 
-def scrape_members(sessions: list[int], d: Path, cache) -> list[dict]:
-    result = []
-    for session_number in sessions:
-        p = d / f"members_{session_number}.json"
-        if _need_refresh(session_number, sessions, cache, p):
-            try:
-                members = scrape_members_of_session(session_number)
-            except _low.DataUnimplementedError:
-                # TODO: do something so we don't continually try re-scraping
-                continue
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(_low.json.dumps(members, indent=4))
+async def _do_scrape_leg(leg_num: int) -> dict | None:
+    try:
+        s = await _low.session(
+            queries=[
+                # "laws",
+                # "journals",  # this makes each response too large
+                # "sponsors",
+                "locations",
+                "subjects",
+                "requestors",
+                "stats",
+                "housestatus",
+                "senatestatus",
+            ],
+            session=leg_num,
+        )
+    except _low.DataUnimplementedError:
+        return None
+    s = {**s, "LegislatureNumber": int(s["Number"])}
+    del s["Number"]
+    return s
+
+
+def _estimate_max_leg_num(current_year: int | None = None):
+    if current_year is None:
+        current_year = datetime.datetime.now().year
+    return (current_year - 2023) // 2 + 33
+
+
+assert _estimate_max_leg_num(2021) == 32, _estimate_max_leg_num(2021)
+assert _estimate_max_leg_num(2022) == 32, _estimate_max_leg_num(2022)
+assert _estimate_max_leg_num(2023) == 33, _estimate_max_leg_num(2023)
+assert _estimate_max_leg_num(2024) == 33, _estimate_max_leg_num(2024)
+assert _estimate_max_leg_num(2025) == 34, _estimate_max_leg_num(2025)
+assert _estimate_max_leg_num(2026) == 34, _estimate_max_leg_num(2026)
+
+
+def scrape_members(
+    legislature_numbers: list[int], d: Path | str, cache: Cache = False
+) -> list[dict]:
+    d = Path(d)
+    tasks = []
+    cached_results = []
+    for leg_num in legislature_numbers:
+        p = d / f"members_{leg_num}.json"
+        if _need_refresh(leg_num, legislature_numbers, cache, p):
+            tasks.append(_scrape_members_of_leg(leg_num, p))
         else:
-            members = json.loads(p.read_text())
-        result.extend(members)
-    return result
+            cached_results.append(json.loads(p.read_text()))
+    results = asyncio.run(asyncio.gather(*tasks))
+    results = [r for r in results if r is not None]
+    results.extend(cached_results)
+    flattened = []
+    for r in results:
+        flattened.extend(r)
+    return flattened
 
 
-def scrape_members_of_session(session_number: int) -> list[dict]:
-    m = _low.members(session=session_number)
-    return [{**member, "Session": session_number} for member in m]
+async def _scrape_members_of_leg(legislature_number: int, p: Path) -> list[dict] | None:
+    try:
+        m = await _low.members(session=legislature_number)
+    except _low.DataUnimplementedError:
+        # TODO: do something so we don't continually try re-scraping
+        return None
+    members = [{**member, "LegislatureNumber": legislature_number} for member in m]
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(members, indent=4))
+    return members
 
 
-def scrape_bills(sessions: list[int], d: Path, cache) -> list[dict]:
-    result = []
-    for session_number in sessions:
-        p = d / f"bills_{session_number}.json"
-        if _need_refresh(session_number, sessions, cache, p):
-            try:
-                bills = scrape_bills_of_session(session_number)
-            except _low.DataUnimplementedError:
-                # TODO: do something so we don't continually try re-scraping
-                continue
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(_low.json.dumps(bills, indent=4))
+def scrape_bills(
+    *, legislature_numbers: list[int], d: Path | str, cache: Cache = False
+) -> list[dict]:
+    d = Path(d)
+    tasks = []
+    cached_results = []
+    for leg_num in legislature_numbers:
+        p = d / f"bills_{leg_num}.json"
+        if _need_refresh(leg_num, legislature_numbers, cache, p):
+            tasks.append(scrape_bills_of_legislature(leg_num, p))
         else:
-            bills = json.loads(p.read_text())
-        result.extend(bills)
-    return result
+            cached_results.append(json.loads(p.read_text()))
+    results = asyncio.run(asyncio.gather(*tasks))
+    results = [r for r in results if r is not None]
+    results.extend(cached_results)
+    flattened = []
+    for r in results:
+        flattened.extend(r)
+    return flattened
 
 
-def scrape_bills_of_session(session_number: int) -> list[dict]:
-    b = _low.bills(
-        queries=[
-            "Subjects",
-            # "Actions",  # this makes each response too large
-        ],
-        session=session_number,
-    )
-    return [{**bill, "Session": session_number} for bill in b]
+async def scrape_bills_of_legislature(
+    legislature_number: int, p: Path
+) -> list[dict] | None:
+    try:
+        b = await _low.bills(
+            queries=[
+                "Subjects",
+                # "Actions",  # this makes each response too large
+            ],
+            session=legislature_number,
+        )
+    except _low.DataUnimplementedError:
+        # TODO: do something so we don't continually try re-scraping
+        return None
+    bills = [{**bill, "LegislatureNumber": legislature_number} for bill in b]
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(_low.json.dumps(bills, indent=4))
+    return bills
 
 
-# "Code": "ADE",
-# "UID": 0,
-# "LastName": "Anderson",
-# "MiddleName": "",
-# "FirstName": "Tom",
-# "FormalName": "Representative Tom Anderson",
-# "ShortName": "Anderson       ",
-# "SessionContact": {
-#     "tollFree": null,
-#     "Street": null,
-#     "Room": null,
-#     "City": null,
-#     "State": null,
-#     "Zip": null,
-#     "Phone": null,
-#     "Fax": null,
-#     "POBox": null
-# },
-# "InterimContact": {
-#     "tollFree": null,
-#     "Street": null,
-#     "Room": null,
-#     "City": null,
-#     "State": null,
-#     "Zip": null,
-#     "Phone": null,
-#     "Fax": null,
-#     "POBox": null
-# },
-# "Chamber": "H",
-# "District": "19",
-# "Seat": " ",
-# "Party": "R",
-# "Phone": "4654939",
-# "EMail": "Representative.Tom.Anderson@akleg.gov",
-# "Building": "CAPITOL",
-# "Room": "432",
-# "Comment": "",
-# "IsActive": true,
-# "IsMajority": true,
-# "Session": 23
 class Member(TypedDict):
     Session: int
     Code: str
@@ -199,42 +194,51 @@ class Member(TypedDict):
     IsMajority: bool
 
 
-def scrape_votes(members: list[Member], d: Path, cache) -> list[dict]:
-    result = []
-    sessions = {m["Session"] for m in members}
-    for m in members:
-        session = m["Session"]
-        code = m["Code"]
-        p = d / f"votes_{session}_{code}.json"
-        if _need_refresh(session, sessions, cache, p):
-            try:
-                votes = scrape_votes_of(session, code)
-            except _low.DataUnimplementedError:
-                # TODO: do something so we don't continually try re-scraping
-                continue
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(_low.json.dumps(votes, indent=4))
+def scrape_votes(
+    *, members: list[Member], d: Path | str, cache: Cache = False
+) -> list[dict]:
+    d = Path(d)
+    results = []
+    leg_nums = {m["LegislatureNumber"] for m in members}
+    for leg_num in leg_nums:
+        member_codes = [m["Code"] for m in members if m["LegislatureNumber"] == leg_num]
+        p = d / f"votes_{leg_num}.json"
+        if _need_refresh(leg_num, leg_nums, cache, p):
+            results.extend(scrape_votes_of_legislature(leg_num, member_codes, p))
         else:
-            votes = json.loads(p.read_text())
-        result.extend(votes)
-    return result
+            results.extend(json.loads(p.read_text()))
+    return results
 
 
-def scrape_votes_of(
-    session_number: int, member_code: str
-) -> tuple[list[dict], list[dict]]:
-    mems = _low.members(
-        session=session_number,
-        queries=[
-            f"members;code={member_code}",
-            "Votes",
-            "Bills",
-        ],
-    )
+def scrape_votes_of_legislature(
+    leg_number: int, member_codes: list[str], p: Path
+) -> list[dict] | None:
+    tasks = [_scrape_votes_of(leg_number, code) for code in member_codes]
+    votes = asyncio.run(asyncio.gather(*tasks))
+    votes = [v for v in votes if v is not None]
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(_low.json.dumps(votes, indent=4))
+    return votes
+
+
+async def _scrape_votes_of(
+    leg_num: int, member_code: str
+) -> tuple[list[dict], list[dict]] | None:
+    try:
+        mems = await _low.members(
+            session=leg_num,
+            queries=[
+                f"members;code={member_code}",
+                "Votes",
+                "Bills",
+            ],
+        )
+    except _low.DataUnimplementedError:
+        return None
     votes = []
     for m in mems:
         votes.extend(m["Votes"])
-    votes = [{**v, "Session": session_number} for v in votes]
+    votes = [{**v, "LegislatureNumber": leg_num} for v in votes]
     return votes
 
 
@@ -242,7 +246,7 @@ def _is_latest(session, sessions) -> bool:
     return int(session) == max(int(s) for s in sessions)
 
 
-def _need_refresh(session: int, sessions: Iterable[int], cache: Cache, path: Path):
+def _need_refresh(leg_num: int, sessions: Iterable[int], cache: Cache, path: Path):
     if not cache:
         return True
     if not path.exists():
@@ -250,4 +254,4 @@ def _need_refresh(session: int, sessions: Iterable[int], cache: Cache, path: Pat
     if cache is True:
         return False
     assert cache == "previous-sessions"
-    return _is_latest(session, sessions)
+    return _is_latest(leg_num, sessions)

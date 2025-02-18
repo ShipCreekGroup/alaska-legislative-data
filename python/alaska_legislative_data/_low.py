@@ -1,9 +1,10 @@
-import gzip
+import asyncio
 import json
 import logging
 from collections.abc import Iterable
 from typing import Literal
-from urllib.request import Request, urlopen
+
+import httpx
 
 logger = logging.getLogger(__name__)
 
@@ -24,96 +25,108 @@ class DataUnimplementedError(ValueError):
     """
 
 
-def bills(
+async def bills(
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
     chamber: Literal["H", "S"] | None = None,
     range: slice | None = None,
 ) -> dict:
-    return _make_request(
-        "bills",
-        queries=queries,
-        session=session,
-        chamber=chamber,
-        range=range,
+    return (
+        await _make_request(
+            "bills",
+            queries=queries,
+            session=session,
+            chamber=chamber,
+            range=range,
+        )
     )["Bills"]
 
 
-def committees(
+async def committees(
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
     chamber: Literal["H", "S"] | None = None,
     range: slice | None = None,
 ) -> dict:
-    return _make_request(
-        "committees",
-        queries=queries,
-        session=session,
-        chamber=chamber,
-        range=range,
+    return (
+        await _make_request(
+            "committees",
+            queries=queries,
+            session=session,
+            chamber=chamber,
+            range=range,
+        )
     )["Committees"]
 
 
-def meetings(
+async def meetings(
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
     chamber: Literal["H", "S"] | None = None,
     range: slice | tuple[int | None, int | None] | None = None,
 ) -> dict:
-    return _make_request(
-        "meetings",
-        queries=queries,
-        session=session,
-        chamber=chamber,
-        range=range,
+    return (
+        await _make_request(
+            "meetings",
+            queries=queries,
+            session=session,
+            chamber=chamber,
+            range=range,
+        )
     )["Meetings"]
 
 
-def members(
+async def members(
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
     chamber: Literal["H", "S"] | None = None,
     range: slice | tuple[int | None, int | None] | None = None,
 ) -> dict:
-    return _make_request(
-        "members",
-        queries=queries,
-        session=session,
-        chamber=chamber,
-        range=range,
+    return (
+        await _make_request(
+            "members",
+            queries=queries,
+            session=session,
+            chamber=chamber,
+            range=range,
+        )
     )["Members"]
 
 
-def session(
+async def session(
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
     chamber: Literal["H", "S"] | None = None,
     range: slice | tuple[int | None, int | None] | None = None,
 ) -> dict:
     """This doesn't follow the pattern and returns a single session."""
-    # for queries:
-    # eg include the Journals field with any journal entries from the house:
-    # Journals;chamber=H
-    #
-    # These are all the journal fields:
-    # chamber;date;startdate;enddate;page;startpage;endpage;fulltext
-    return _make_request(
+    result = await _make_request(
         "sessions",
         queries=queries,
         session=session,
         chamber=chamber,
         range=range,
-    )["Session"]  # It is NOT "Sessions"
+    )
+    return result["Session"]  # It is NOT "Sessions"
 
 
-def _make_request(
+def make_client() -> httpx.AsyncClient:
+    timeout = httpx.Timeout(20.0, pool=20.0)
+    limits = httpx.Limits(max_keepalive_connections=None, max_connections=1000)
+    return httpx.AsyncClient(timeout=timeout, limits=limits, follow_redirects=True)
+
+
+async def _make_request(
     endpoint: str,
     *,
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
     chamber: Literal["H", "S"] | None = None,
     range: slice | tuple[int | None, int | None] | None = None,
+    client: httpx.AsyncClient | None = None,
 ) -> dict:
+    if client is None:
+        client = make_client()
     url = f"https://www.akleg.gov/publicservice/basis/{endpoint}?minifyresult=false&json=true"
     if session is not None:
         url += f"&session={session}"
@@ -129,14 +142,40 @@ def _make_request(
         headers["X-Alaska-Legislature-Basis-Query"] = ",".join(queries)
     if range:
         headers["X-Alaska-Query-ResultRange"] = _range_str(range)
-    logger.debug(f"Requesting {url} with headers {headers}")
-    req = Request(url=url, headers=headers)
-    with urlopen(req) as response:
-        if response.info().get("Content-Encoding") == "gzip":
-            with gzip.GzipFile(fileobj=response) as uncompressed:
-                return _parse(uncompressed.read().decode("utf-8"))
-        else:
-            return _parse(response.read().decode("utf-8"))
+    logger.info(f"Requesting {url} with headers {headers}")
+
+    async with client:
+
+        async def f():
+            response = await client.get(url, headers=headers)
+            response.raise_for_status()
+            return _parse(response.text)
+
+        try:
+            return await _with_retries(f, max_retries=3)
+        except Exception as e:
+            logger.error(f"Failed to get {url} with headers {headers}: {e!r}")
+            raise
+
+
+async def _with_retries(f, *, max_retries: int):
+    for i in range(max_retries):
+        try:
+            return await f()
+        except DataUnimplementedError as e:
+            raise e
+        except ValueError as e:
+            if "Invalid Session Number" in str(e):
+                raise DataUnimplementedError(str(e)) from e
+            raise
+        except Exception as e:
+            logger.warning(f"Retrying {i + 1}/{max_retries} after error: {e!r}")
+            if i == max_retries - 1:
+                raise RuntimeError(f"Failed {max_retries} times") from e
+            else:
+                # exponential backoff
+                # 0.5, 1, 2, 4, 8
+                await asyncio.sleep(0.5 * 2**i)
 
 
 def _parse(raw: str) -> dict:
@@ -150,9 +189,6 @@ def _parse(raw: str) -> dict:
 
 
 def _range_str(range: slice | tuple[int | None, int | None]) -> str:
-    #  *  - '10' to get the first 10 results
-    # *  - '10..20' to get results 10 through 20
-    # *  - '..30' to get the last 30 results
     if not isinstance(range, (slice, tuple)):
         raise ValueError("Invalid range: {range}")
     if not isinstance(range, slice):
