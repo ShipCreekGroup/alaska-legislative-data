@@ -40,8 +40,7 @@ def scrape_legislatures(
     if cache and p.exists():
         return json.loads(p.read_text())
     if legislature_numbers is None:
-        # +5 to be safe
-        legislature_numbers = range(1, _estimate_max_leg_num() + 5)
+        legislature_numbers = range(1, _estimate_max_leg_num() + 2)  # +2 to be safe
     sessions = _do_scrape_legs(legislature_numbers)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(sessions, indent=4))
@@ -209,8 +208,14 @@ def scrape_votes(
 def scrape_votes_of_legislature(
     leg_number: int, member_codes: list[str], p: Path
 ) -> list[dict] | None:
+    if leg_number <= 18:
+        # These are not digitized.
+        return []
     tasks = [_scrape_votes_of(leg_number, code) for code in member_codes]
-    votes = asyncio.run(asyncio.gather(*tasks))
+    votes = []
+    for chunk in _chunks(tasks, 25):
+        chunk_votes = asyncio.run(asyncio.gather(*chunk))
+        votes.extend(chunk_votes)
     votes = [v for v in votes if v is not None]
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(_low.json.dumps(votes, indent=4))
@@ -251,3 +256,8 @@ def _need_refresh(leg_num: int, sessions: Iterable[int], cache: Cache, path: Pat
         return False
     assert cache == "previous-sessions"
     return _is_latest(leg_num, sessions)
+
+
+def _chunks(list_, n: int):
+    for i in range(0, len(list_), n):
+        yield list_[i : i + n]

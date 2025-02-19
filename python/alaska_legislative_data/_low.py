@@ -25,6 +25,13 @@ class DataUnimplementedError(ValueError):
     """
 
 
+class ServerError(RuntimeError):
+    """Exception when the server returns an error."""
+
+    def __init__(self, response: str, url: str, headers: dict) -> None:
+        super().__init__(f"Server error for {url} with headers {headers}: {response}")
+
+
 async def bills(
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
@@ -82,15 +89,18 @@ async def members(
     chamber: Literal["H", "S"] | None = None,
     range: slice | tuple[int | None, int | None] | None = None,
 ) -> dict:
-    return (
-        await _make_request(
-            "members",
-            queries=queries,
-            session=session,
-            chamber=chamber,
-            range=range,
+    if session <= 9:
+        raise DataUnimplementedError(
+            "Invalid Session Number: The data is not available for this session"
         )
-    )["Members"]
+    resp = await _make_request(
+        "members",
+        queries=queries,
+        session=session,
+        chamber=chamber,
+        range=range,
+    )
+    return resp["Members"]
 
 
 async def session(
@@ -149,26 +159,26 @@ async def _make_request(
         async def f():
             response = await client.get(url, headers=headers)
             response.raise_for_status()
-            return _parse(response.text)
+            return _parse(url, headers, response.text)
 
         try:
-            return await _with_retries(f, max_retries=3)
+            return await _with_retries(
+                f, max_retries=3, exception_classes=(httpx.HTTPError,)
+            )
+        except DataUnimplementedError:
+            raise
+        except ServerError:
+            raise
         except Exception as e:
             logger.error(f"Failed to get {url} with headers {headers}: {e!r}")
             raise
 
 
-async def _with_retries(f, *, max_retries: int):
+async def _with_retries(f, *, max_retries: int, exception_classes=(Exception,)):
     for i in range(max_retries):
         try:
             return await f()
-        except DataUnimplementedError as e:
-            raise e
-        except ValueError as e:
-            if "Invalid Session Number" in str(e):
-                raise DataUnimplementedError(str(e)) from e
-            raise
-        except Exception as e:
+        except exception_classes as e:
             logger.warning(f"Retrying {i + 1}/{max_retries} after error: {e!r}")
             if i == max_retries - 1:
                 raise RuntimeError(f"Failed {max_retries} times") from e
@@ -178,12 +188,14 @@ async def _with_retries(f, *, max_retries: int):
                 await asyncio.sleep(0.5 * 2**i)
 
 
-def _parse(raw: str) -> dict:
+def _parse(url: str, headers: dict, raw: str) -> dict:
     try:
         d = json.loads(raw)
     except json.JSONDecodeError as e:
+        if "Invalid Session Number" in str(e):
+            raise DataUnimplementedError(str(e)) from e
         if "<Code>FaultException</Code>" in raw:
-            raise DataUnimplementedError(raw) from e
+            raise ServerError(raw, url, headers) from e
         raise ValueError(f"Invalid JSON: {raw}") from e
     return d["Basis"]
 
