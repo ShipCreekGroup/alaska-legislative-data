@@ -121,7 +121,7 @@ async def session(
 
 
 def make_client() -> httpx.AsyncClient:
-    timeout = httpx.Timeout(20.0, pool=20.0)
+    timeout = httpx.Timeout(30.0, pool=30.0)
     limits = httpx.Limits(max_keepalive_connections=None, max_connections=1000)
     return httpx.AsyncClient(timeout=timeout, limits=limits, follow_redirects=True)
 
