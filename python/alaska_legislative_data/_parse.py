@@ -7,6 +7,8 @@ import ibis
 from ibis import _
 from ibis.expr import types as ir
 
+from alaska_legislative_data import _db
+
 
 @dataclasses.dataclass
 class ParsedTables:
@@ -47,7 +49,7 @@ def parse_scraped(directory: str | Path) -> ParsedTables:
     members = clean_members(members)
     bills = clean_bills(bills)
     choices = clean_choices(choices)
-    legislatures = clean_legislatures(legislatures)
+    legislatures = clean_and_split_legislatures_into_sessions(legislatures)
 
     return ParsedTables(members, bills, choices, legislatures)
 
@@ -92,7 +94,6 @@ def clean_choices(t: ibis.Table) -> ibis.Table:
     t = t.rename(
         BillNumber="Bill",
         MemberCode="Member",
-        LegislatureNumber="Session",
         Choice="Vote",
         VoteTitle="Title",
     )
@@ -117,9 +118,6 @@ def clean_choices(t: ibis.Table) -> ibis.Table:
 def clean_bills(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
     t = t.mutate(StatusDate=_parse_StatusDate(t.StatusDate))
-    t = t.rename(
-        LegislatureNumber="Session",
-    )
     schema = {
         "LegislatureNumber": "int16",
         "BillNumber": "string",
@@ -163,9 +161,10 @@ def clean_bills(t: ibis.Table) -> ibis.Table:
     return t
 
 
-def clean_legislatures(t: ibis.Table) -> ibis.Table:
+def clean_and_split_legislatures_into_sessions(
+    t: ibis.Table,
+) -> tuple[_db.LegislatureTable, _db.LegislatureSessionTable]:
     t = _fix_strings(t)
-    t = t.rename(LegislatureNumber="Number")
 
     @ibis.udf.scalar.python(signature=(("string",), "date"))
     def parse_date(s: str) -> datetime.date:
@@ -173,35 +172,38 @@ def clean_legislatures(t: ibis.Table) -> ibis.Table:
         n_millis = int(s[6:-2])
         return datetime.date.fromtimestamp(n_millis / 1000)
 
-    def fix_session_date(sd: ir.StructValue) -> ir.StructValue:
-        return ibis.struct(
-            {
-                "ID": sd.ID,
-                "Title": sd.Title,
-                "StartDate": parse_date(sd.StartDate),
-                "EndDate": parse_date(sd.EndDate),
-            }
-        )
+    def expand_session(sd: ir.StructValue) -> dict:
+        return {
+            "LegislatureSessionCode": sd.ID,
+            "LegislatureSessionTitle": sd.Title,
+            "LegislatureSessionStartDate": parse_date(sd.StartDate),
+            "LegislatureSessionEndDate": parse_date(sd.EndDate),
+        }
 
-    t = t.mutate(SessionDates=t.SessionDates.map(fix_session_date))
-    schema = {
-        "LegislatureNumber": "int16",
-        "Year": "int16",
-        "SessionDates": "array<struct<ID: int64, Title: string, StartDate: date, EndDate: date>>",
-        "Journals": "array<json>",
-        # "Laws": "json",         # The rest of these fields are always null,
-        # "Locations": "json",    # I think because is the union of all the schemas for
-        # "Subjects": "json",     # bills, meetings, etc
-        # "Requestors": "json",   # So let's just ignore them for now.
-        # "Sponsors": "json",
-        # "Stats": "json",
-        # "HouseStatus": "json",
-        # "SenateStatus": "json",
-    }
-    t = t.select(schema.keys())
-    t = t.cast(schema)
-    t = t.distinct()
-    return t
+    sessions = t.select(
+        LegislatureNumber=_.LegislatureNumber,
+        **expand_session(t.SessionDates.unnest()),
+        # SessionDates=t.SessionDates.map(expand_session),
+    )
+    sessions = sessions.mutate(
+        LegislatureSessionId=_.LegislatureNumber.cast(str)
+        + ":"
+        + _.LegislatureSessionCode.cast(str)
+    )
+    leg = t.select(
+        LegislatureNumber=_.LegislatureNumber,
+        LegislatureStartYear=_.Year.cast("int16"),
+        LegislatureEndYear=_.Year.cast("int16") + 1,
+    )
+    sessions = sessions.select(_db.LegislatureSessionSchema.ibis_schema().keys()).cast(
+        _db.LegislatureSessionSchema.ibis_schema()
+    )
+    leg = leg.select(_db.LegislatureSchema.ibis_schema().keys()).cast(
+        _db.LegislatureSchema.ibis_schema()
+    )
+    leg = leg.order_by(_.LegislatureNumber)
+    sessions = sessions.order_by(_.LegislatureSessionStartDate)
+    return leg, sessions
 
 
 def _fix_strings(t: ibis.Table) -> ibis.Table:

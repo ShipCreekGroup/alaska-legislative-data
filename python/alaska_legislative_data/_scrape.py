@@ -20,7 +20,7 @@ def scrape(directory: str | Path, *, cache: Cache = "previous-sessions") -> None
         directory (str): The directory where the scraped data will be saved.
     """
     d = Path(directory)
-    legs = scrape_legislatures(d / "legislatures.json")
+    legs = scrape_legislatures_and_sessions(d / "legislatures.json")
     leg_numbers = [int(s["LegislatureNumber"]) for s in legs]
     members = scrape_members(
         legislature_numbers=leg_numbers, d=d / "members", cache=cache
@@ -29,32 +29,24 @@ def scrape(directory: str | Path, *, cache: Cache = "previous-sessions") -> None
     scrape_votes(members=members, d=d / "votes", cache=cache)
 
 
-def scrape_legislatures(
-    p: Path | str,
-    *,
+def scrape_legislatures_and_sessions(
     legislature_numbers: list[int] | None = None,
-    cache: bool = False,
 ) -> list[dict]:
-    p = Path(p)
-    if cache and p.exists():
-        return json.loads(p.read_text())
     if legislature_numbers is None:
         legislature_numbers = _gen_leg_numbers()
-    sessions = _do_scrape_legs(legislature_numbers)
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(sessions, indent=4))
-    return sessions
+
+    async def main() -> list[dict]:
+        tasks = [_do_scrape_leg(n) for n in legislature_numbers]
+        sessions = await asyncio.gather(*tasks)
+        sessions = [s for s in sessions if s is not None]
+        return sessions
+
+    leg_and_sessions = asyncio.run(main())
+    return leg_and_sessions
 
 
 def _gen_leg_numbers() -> list[int]:
     return list(range(1, _util.current_leg_num_approx() + 2))  # +2 to be safe
-
-
-def _do_scrape_legs(leg_nums: list[int]) -> list[dict]:
-    tasks = [_do_scrape_leg(n) for n in leg_nums]
-    sessions = asyncio.run(asyncio.gather(*tasks))
-    sessions = [s for s in sessions if s is not None]
-    return sessions
 
 
 async def _do_scrape_leg(leg_num: int) -> dict | None:

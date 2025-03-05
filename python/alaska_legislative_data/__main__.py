@@ -6,7 +6,7 @@ from alaska_legislative_data import _export, _ingest
 
 
 def main():
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     fire.Fire(
         {
             "ingest": _ingest.ingest_all,

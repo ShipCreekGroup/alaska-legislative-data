@@ -20,6 +20,43 @@ class TableSchema:
         return ibis.schema(schema_dict)
 
 
+class LegislatureSchema(TableSchema):
+    """"""
+
+    LegislatureNumber: Annotated[ir.IntegerColumn, LEGISLATURE_NUMBER_TYPE]
+    """eg 31 for the 31st legislature."""
+    LegislatureStartYear: Annotated[ir.IntegerColumn, "int16"]
+    """eg 2021 for the 31st legislature."""
+    LegislatureEndYear: Annotated[ir.IntegerColumn, "int16"]
+    """eg 2022 for the 31st legislature."""
+
+
+class LegislatureTable(ibis.Table, LegislatureSchema):
+    pass
+
+
+class LegislatureSessionSchema(TableSchema):
+    """A session of the Alaska legislature."""
+
+    LegislatureSessionId: Annotated[ir.StringColumn, "!string"]
+    """Of the form '{LegislatureNumber}:{LegislatureSessionCode}'."""
+    LegislatureNumber: Annotated[ir.IntegerColumn, LEGISLATURE_NUMBER_TYPE]
+    """eg 31 for the 31st legislature. Reference to the Legislature table."""
+    LegislatureSessionCode: Annotated[ir.StringColumn, "int8"]
+    """eg '10' for the first regular session, '20' for the second regular session,
+    '11' for the first special session, '21' for the second special session, etc."""
+    LegislatureSessionTitle: Annotated[ir.StringColumn, "string"]
+    """eg '1st Regular Session'"""
+    LegislatureSessionStartDate: Annotated[ir.DateColumn, "date"]
+    """eg '2021-01-19' for the first session of the 31st legislature."""
+    LegislatureSessionEndDate: Annotated[ir.DateColumn, "date"]
+    """eg '2021-05-19' for the first session of the 31st legislature."""
+
+
+class LegislatureSessionTable(ibis.Table, LegislatureSessionSchema):
+    pass
+
+
 class PersonSchema(TableSchema):
     """A person in the Alaska legislature. They may be shared between multiple Memberships."""
 
@@ -177,6 +214,16 @@ class Backend(DuckdbBackend):
         return getattr(self._db, name)
 
     @property
+    def Legislature(self) -> LegislatureTable:
+        """Table of legislatures. Each person may have multiple `LegislatureSessions`"""
+        return self.table("legislatures")
+
+    @property
+    def LegislatureSession(self) -> LegislatureSessionTable:
+        """Table of `LegislativeSession`s."""
+        return self.table("legislature_sessions")
+
+    @property
     def Person(self) -> PersonTable:
         """Table of people. Each person may have multiple `Member`s."""
         return self.table("people")
@@ -208,6 +255,12 @@ class Backend(DuckdbBackend):
 
     @classmethod
     def create_tables(cls, db: DuckdbBackend) -> None:
+        if "legislatures" not in db.tables:
+            db.create_table("legislatures", schema=LegislatureSchema.ibis_schema())
+        if "legislature_sessions" not in db.tables:
+            db.create_table(
+                "legislature_sessions", schema=LegislatureSessionSchema.ibis_schema()
+            )
         if "people" not in db.tables:
             db.create_table("people", schema=PersonSchema.ibis_schema())
         if "members" not in db.tables:

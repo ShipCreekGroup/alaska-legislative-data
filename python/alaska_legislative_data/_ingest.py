@@ -14,9 +14,57 @@ def ingest_all(
     members: ibis.Table | None = None,
     bills: ibis.Table | None = None,
 ):
+    ingest_legislatures_and_sessions(db)
     ingest_people(db, people=people)
     ingest_members(db, members=members)
     ingest_bills(db, new_bills=bills)
+
+
+def ingest_legislatures_and_sessions(
+    db: str | _db.Backend = _util.DEFAULT_DB_PATH,
+    legislatures: ibis.Table | None = None,
+    sessions: ibis.Table | None = None,
+):
+    db = _db.Backend(db)
+    if legislatures is None or sessions is None:
+        leg, sess = _scrape_missing_legislatures_and_sessions(db)
+        if legislatures is None:
+            legislatures = leg
+        if sessions is None:
+            sessions = sess
+
+    # avoid https://github.com/ibis-project/ibis/issues/10942
+    legislatures = ibis.memtable(
+        legislatures.to_pyarrow(), schema=legislatures.schema()
+    )
+    sessions = ibis.memtable(sessions.to_pyarrow(), schema=sessions.schema())
+
+    logger.info(f"Ingesting {legislatures.count().execute()} legislatures")
+    logger.info(f"Ingesting {sessions.count().execute()} sessions")
+
+    n_existing_legs = (
+        legislatures.semi_join(db.Legislature, "LegislatureNumber").count().execute()
+    )
+    new_legs = legislatures.anti_join(db.Legislature, "LegislatureNumber")
+    n_new_legs = new_legs.count().execute()
+    logger.info(f"Found {n_existing_legs} existing legislatures")
+    logger.info(f"Found {n_new_legs} new legislatures")
+    if n_new_legs > 0:
+        logger.info(f"Adding {n_new_legs} new legislatures")
+        db.insert("legislatures", new_legs)
+
+    n_existing_sess = (
+        sessions.semi_join(db.LegislatureSession, "LegislatureSessionId")
+        .count()
+        .execute()
+    )
+    new_sess = sessions.anti_join(db.LegislatureSession, "LegislatureSessionId")
+    n_new_sess = new_sess.count().execute()
+    logger.info(f"Found {n_existing_sess} existing sessions")
+    logger.info(f"Found {n_new_sess} new sessions")
+    if n_new_sess > 0:
+        logger.info(f"Adding {n_new_sess} new sessions")
+        db.insert("legislature_sessions", new_sess)
 
 
 def ingest_people(
@@ -28,7 +76,8 @@ def ingest_people(
     if people is None:
         people = _curated.read_people(backend=db)
 
-    people = people.cache()
+    # avoid https://github.com/ibis-project/ibis/issues/10942
+    people = ibis.memtable(people.to_pyarrow(), schema=people.schema())
     logger.info(f"Ingesting {people.count().execute()} people")
 
     only_new = db.Person.anti_join(people, "PersonId").to_pandas()
@@ -56,7 +105,8 @@ def ingest_members(
     if members is None:
         members = _curated.read_members(backend=db)
 
-    members = members.cache()
+    # avoid https://github.com/ibis-project/ibis/issues/10942
+    members = ibis.memtable(members.to_pyarrow(), schema=members.schema())
     logger.info(f"Ingesting {members.count().execute()} members")
     if "MemberId" not in members.columns:
         members = members.mutate(
@@ -93,7 +143,8 @@ def ingest_bills(
     if new_bills is None:
         new_bills = _scrape_missing_bills(existing_bills=db.Bill)
 
-    new_bills = new_bills.cache()
+    # avoid https://github.com/ibis-project/ibis/issues/10942
+    new_bills = ibis.memtable(new_bills.to_pyarrow(), schema=new_bills.schema())
     logger.info(f"Ingesting {new_bills.count().execute()} bills")
 
     n_existing_bills = new_bills.semi_join(db.Bill, "BillId").count().execute()
@@ -106,6 +157,31 @@ def ingest_bills(
         db.insert("bills", new_bills)
 
 
+def _scrape_missing_legislatures_and_sessions(
+    db: _db.Backend,
+) -> tuple[ibis.Table, ibis.Table]:
+    existing_legs = (
+        ibis.union(
+            db.Legislature.LegislatureNumber.as_table(),
+            db.LegislatureSession.LegislatureNumber.as_table(),
+        )
+        .distinct()
+        .LegislatureNumber
+    )
+    missing_leg_nums = _missing_leg_nums(
+        min_leg_num=12, existing_leg_nums=existing_legs
+    )
+    scraped_dicts = _scrape.scrape_legislatures_and_sessions(missing_leg_nums)
+    if not scraped_dicts:
+        # workaround for https://github.com/ibis-project/ibis/issues/10940
+        leg = db.Legislature.limit(0)
+        sess = db.LegislatureSession.limit(0)
+    else:
+        scraped_raw = ibis.memtable(scraped_dicts)
+        leg, sess = _parse.clean_and_split_legislatures_into_sessions(scraped_raw)
+    return leg, sess
+
+
 def _scrape_missing_bills(*, existing_bills: _db.BillTable) -> ibis.Table:
     """Scrape the bills for the legislatures that are missing bills."""
     missing_leg_nums = _missing_leg_nums(
@@ -115,11 +191,12 @@ def _scrape_missing_bills(*, existing_bills: _db.BillTable) -> ibis.Table:
     )
     logger.info(f"Scraping missing bills for {missing_leg_nums}")
     bill_dicts = _scrape.scrape_bills(legislature_numbers=missing_leg_nums)
-    if bill_dicts:
+    if not bill_dicts:
+        # workaround for https://github.com/ibis-project/ibis/issues/10940
+        bills = existing_bills.limit(0)
+    else:
         bills = ibis.memtable(bill_dicts)
         bills = _parse.clean_bills(bills)
-    else:
-        bills = existing_bills.limit(0)
     return bills
 
 

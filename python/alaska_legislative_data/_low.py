@@ -192,7 +192,7 @@ def _parse(url: str, headers: dict, raw: str) -> dict:
     try:
         d = json.loads(raw)
     except json.JSONDecodeError as e:
-        if "Invalid Session Number" in str(e):
+        if "Invalid Session Number" in raw:
             raise DataUnimplementedError(str(e)) from e
         if "<Code>FaultException</Code>" in raw:
             raise ServerError(raw, url, headers) from e
