@@ -1,0 +1,2150 @@
+LegislatureNumber,PersonId,MemberCode,Chamber,District,Party,IsMajority,IsActive,Comment,EMail,Phone,Building,Room
+1,John Rader:1,,H,,,,,,,,,
+1,Oral Freeman:1,,H,,,,,,,,,
+1,Russ Meekins:1,,H,,,,,,,,,
+1,Charles M Jones:1,,H,,,,,,,,,
+1,Allen Peterson:1,,H,,,,,,,,,
+1,Andrew Hope:1,,H,,,,,,,,,
+1,Axel Johnson:1,,H,,,,,,,,,
+1,Blanche McSmith:1,,H,,,,,,,,,
+1,Bob Giersdorf:1,,H,,,,,,,,,
+1,Bruce Kendall:1,,H,,,,,,,,,
+1,Charles Fagerstrom:1,,H,,,,,,,,,
+1,Charles Franz:1,,H,,,,,,,,,
+1,Donald Harris:1,,H,,,,,,,,,
+1,Dora Sweeney:1,,H,,,,,,,,,
+1,Douglas Gray:1,,H,,,,,,,,,
+1,Earl Hillstrand:1,,H,,,,,,,,,
+1,Frank Cashel:1,,H,,,,,,,,,
+1,Frank Chapados:1,,H,,,,,,,,,
+1,Grant Pearson:1,,H,,,,,,,,,
+1,Harold Hansen:1,,H,,,,,,,,,
+1,Helen Fischer:1,,H,,,,,,,,,
+1,Henry Haag:1,,H,,,,,,,,,
+1,J Roady:1,,H,,,,,,,,,
+1,James Fisher:1,,H,,,,,,,,,
+1,James Hoffman:1,,H,,,,,,,,,
+1,James Hurley:1,,H,,,,,,,,,
+1,James Norene:1,,H,,,,,,,,,
+1,Jay Hammond:1,,H,,,,,,,,,
+1,John Curtis:1,,H,,,,,,,,,
+1,John Hellenthal:1,,H,,,,,,,,,
+1,John Longworth:1,,H,,,,,,,,,
+1,John Nusunginya:1,,H,,,,,,,,,
+1,Morgan Reed:1,,H,,,,,,,,,
+1,Peter Deveau:1,,H,,,,,,,,,
+1,Peter Kalamarides:1,,H,,,,,,,,,
+1,R McCombe:1,,H,,,,,,,,,
+1,Richard Greuel:1,,H,,,,,,,,,
+1,Robert Blodgett:1,,H,,,,,,,,,
+1,Robert Sheldon:1,,H,,,,,,,,,
+1,Warren Taylor:1,,H,,,,,,,,,
+1,William Erwin:1,,H,,,,,,,,,
+1,Jack Coghill:1,,S,,,,,,,,,
+1,J Earl Cooper:1,,S,,,,,,,,,
+1,Alfred Owen:1,,S,,,,,,,,,
+1,B Logan:1,,S,,,,,,,,,
+1,Eben Hopson:1,,S,,,,,,,,,
+1,Edmund Orbeck:1,,S,,,,,,,,,
+1,Frank Peratrovich:1,,S,,,,,,,,,
+1,George McNabb:1,,S,,,,,,,,,
+1,Howard Bradshaw:1,,S,,,,,,,,,
+1,Hubert Gilbert:1,,S,,,,,,,,,
+1,Irene Ryan:1,,S,,,,,,,,,
+1,Irwin Metcalf:1,,S,,,,,,,,,
+1,Jack Weise:1,,S,,,,,,,,,
+1,James Nolan:1,,S,,,,,,,,,
+1,John McNees:1,,S,,,,,,,,,
+1,Lester Bronson:1,,S,,,,,,,,,
+1,Ralph Moody:1,,S,,,,,,,,,
+1,Robert McNealy:1,,S,,,,,,,,,
+1,Seaborn Buckalew:1,,S,,,,,,,,,
+1,Thomas Stewart:1,,S,,,,,,,,,
+1,W Smith:1,,S,,,,,,,,,
+1,William Beltz:1,,S,,,,,,,,,
+2,Jalmar Kerttula:2,,H,,,,,,,,,
+2,Leo Rhode:2,,H,,,,,,,,,
+2,Alfred Widmark:2,,H,,,,,,,,,
+2,Andrew Hope:1,,H,,,,,,,,,
+2,Arthur Harris:2,,H,,,,,,,,,
+2,Arthur Johnson:2,,H,,,,,,,,,
+2,Bennie Leonard:2,,H,,,,,,,,,
+2,Bruce Kendall:1,,H,,,,,,,,,
+2,C Binkley:2,,H,,,,,,,,,
+2,Donald Harris:1,,H,,,,,,,,,
+2,Dora Sweeney:1,,H,,,,,,,,,
+2,Edgar Baggen:2,,H,,,,,,,,,
+2,Forbes Baker:2,,H,,,,,,,,,
+2,Fr Llorente:2,,H,,,,,,,,,
+2,Frank Cashel:1,,H,,,,,,,,,
+2,Frank Chapados:1,,H,,,,,,,,,
+2,Gilbert Jarvela:2,,H,,,,,,,,,
+2,Grace Johnson:2,,H,,,,,,,,,
+2,Grant Pearson:1,,H,,,,,,,,,
+2,Harold Hansen:1,,H,,,,,,,,,
+2,Harold Strandberg:2,,H,,,,,,,,,
+2,Henry Pratt:2,,H,,,,,,,,,
+2,Jacob Stalker:2,,H,,,,,,,,,
+2,James Parsons:2,,H,,,,,,,,,
+2,Jay Hammond:1,,H,,,,,,,,,
+2,John Hellenthal:1,,H,,,,,,,,,
+2,John Longworth:1,,H,,,,,,,,,
+2,John Nusunginya:1,,H,,,,,,,,,
+2,Kenneth Garrison:2,,H,,,,,,,,,
+2,Marcus Jensen:2,,H,,,,,,,,,
+2,Morgan Reed:1,,H,,,,,,,,,
+2,Peter Deveau:1,,H,,,,,,,,,
+2,R Stratton:2,,H,,,,,,,,,
+2,Raymond Christiansen:2,,H,,,,,,,,,
+2,Robert Blodgett:1,,H,,,,,,,,,
+2,Robert Ditman:2,,H,,,,,,,,,
+2,Walter Kubley:2,,H,,,,,,,,,
+2,Warren Taylor:1,,H,,,,,,,,,
+2,William Boardman:2,,H,,,,,,,,,
+2,William Erwin:1,,H,,,,,,,,,
+2,William Sanders:2,,H,,,,,,,,,
+2,Jack Coghill:1,,S,,,,,,,,,
+2,Elton Engstrom Sr:2,,S,,,,,,,,,
+2,Alfred Owen:1,,S,,,,,,,,,
+2,B Logan:1,,S,,,,,,,,,
+2,Brad Phillips:2,,S,,,,,,,,,
+2,Eben Hopson:1,,S,,,,,,,,,
+2,Frank Peratrovich:1,,S,,,,,,,,,
+2,George McNabb:1,,S,,,,,,,,,
+2,Howard Bradshaw:1,,S,,,,,,,,,
+2,Howard Pollock:2,,S,,,,,,,,,
+2,Irwin Metcalf:1,,S,,,,,,,,,
+2,Jack Weise:1,,S,,,,,,,,,
+2,James Nolan:1,,S,,,,,,,,,
+2,John McNees:1,,S,,,,,,,,,
+2,Lester Bronson:1,,S,,,,,,,,,
+2,Paul Greimann:2,,S,,,,,,,,,
+2,Pearse Walsh:2,,S,,,,,,,,,
+2,Robert McNealy:1,,S,,,,,,,,,
+2,Vance Phillips:2,,S,,,,,,,,,
+2,W Smith:1,,S,,,,,,,,,
+3,Clem Tillion:3,,H,,,,,,,,,
+3,John Rader:1,,H,,,,,,,,,
+3,Joseph Josephson:3,,H,,,,,,,,,
+3,Arthur Harris:2,,H,,,,,,,,,
+3,Axel Johnson:1,,H,,,,,,,,,
+3,Bennie Leonard:2,,H,,,,,,,,,
+3,Bruce Kendall:1,,H,,,,,,,,,
+3,C Binkley:2,,H,,,,,,,,,
+3,Carl Lottsfeldt:3,,H,,,,,,,,,
+3,Charles Cole:3,,H,,,,,,,,,
+3,Dora Sweeney:1,,H,,,,,,,,,
+3,Earl Hillstrand:1,,H,,,,,,,,,
+3,Edgar Baggen:2,,H,,,,,,,,,
+3,Eugene Reid:3,,H,,,,,,,,,
+3,Forbes Baker:2,,H,,,,,,,,,
+3,Frank Cashel:1,,H,,,,,,,,,
+3,George Sullivan:3,,H,,,,,,,,,
+3,Gilbert Jarvela:2,,H,,,,,,,,,
+3,Grant Pearson:1,,H,,,,,,,,,
+3,Harold Strandberg:2,,H,,,,,,,,,
+3,Homer Moseley:3,,H,,,,,,,,,
+3,Jack White:3,,H,,,,,,,,,
+3,Jacob Stalker:2,,H,,,,,,,,,
+3,James Parsons:2,,H,,,,,,,,,
+3,Jay Hammond:1,,H,,,,,,,,,
+3,John Holm:3,,H,,,,,,,,,
+3,John Longworth:1,,H,,,,,,,,,
+3,Keith Miller:3,,H,,,,,,,,,
+3,Maurice Smith:3,,H,,,,,,,,,
+3,Mike Gravel:3,,H,,,,,,,,,
+3,Morgan Reed:1,,H,,,,,,,,,
+3,R McCombe:1,,H,,,,,,,,,
+3,Raymond Christiansen:2,,H,,,,,,,,,
+3,Robert Blodgett:1,,H,,,,,,,,,
+3,Robert Ditman:2,,H,,,,,,,,,
+3,Walter Kubley:2,,H,,,,,,,,,
+3,Warren Taylor:1,,H,,,,,,,,,
+3,William Boardman:2,,H,,,,,,,,,
+3,William Sanders:2,,H,,,,,,,,,
+3,William Whitehead:3,,H,,,,,,,,,
+3,William Wiggins:3,,H,,,,,,,,,
+3,Jack Coghill:1,,S,,,,,,,,,
+3,John Butrovich:3,,S,,,,,,,,,
+3,Neal Foster:3,,S,,,,,,,,,
+3,Alfred Owen:1,,S,,,,,,,,,
+3,Brad Phillips:2,,S,,,,,,,,,
+3,David Harrison:3,,S,,,,,,,,,
+3,Eben Hopson:1,,S,,,,,,,,,
+3,Frank Peratrovich:1,,S,,,,,,,,,
+3,Harold Hansen:1,,S,,,,,,,,,
+3,Howard Bradshaw:1,,S,,,,,,,,,
+3,James Nolan:1,,S,,,,,,,,,
+3,John Hall:3,,S,,,,,,,,,
+3,Lester Bronson:1,,S,,,,,,,,,
+3,Mildred Banfield:3,,S,,,,,,,,,
+3,Nicholas Begich:3,,S,,,,,,,,,
+3,Pearse Walsh:2,,S,,,,,,,,,
+3,Robert McNealy:1,,S,,,,,,,,,
+3,Vance Phillips:2,,S,,,,,,,,,
+3,W Smith:1,,S,,,,,,,,,
+3,Yule Kilcher:3,,S,,,,,,,,,
+4,Bill Ray:4,,H,,,,,,,,,
+4,Carl Moses:4,,H,,,,,,,,,
+4,Clem Tillion:3,,H,,,,,,,,,
+4,E Haugen:4,,H,,,,,,,,,
+4,Jalmar Kerttula:2,,H,,,,,,,,,
+4,John Rader:1,,H,,,,,,,,,
+4,Joseph Josephson:3,,H,,,,,,,,,
+4,Elton Engstrom Jr:4,,H,,,,,,,,,
+4,Axel Johnson:1,,H,,,,,,,,,
+4,Barry Jackson:4,,H,,,,,,,,,
+4,Bernard Carr:4,,H,,,,,,,,,
+4,Bill Poland:4,,H,,,,,,,,,
+4,Bruce Kendall:1,,H,,,,,,,,,
+4,Carl Brady:4,,H,,,,,,,,,
+4,Carl Lottsfeldt:3,,H,,,,,,,,,
+4,Charles Sassara:4,,H,,,,,,,,,
+4,Earl Hillstrand:1,,H,,,,,,,,,
+4,Edmund Orbeck:1,,H,,,,,,,,,
+4,Frank See:4,,H,,,,,,,,,
+4,Gene Guess:4,,H,,,,,,,,,
+4,Harold Strandberg:2,,H,,,,,,,,,
+4,Homer Moseley:3,,H,,,,,,,,,
+4,Irwin Metcalf:1,,H,,,,,,,,,
+4,Jacob Stalker:2,,H,,,,,,,,,
+4,John O'Connell:4,,H,,,,,,,,,
+4,Joseph McGill:4,,H,,,,,,,,,
+4,Lucille Pinkerton:4,,H,,,,,,,,,
+4,M Plotnick:4,,H,,,,,,,,,
+4,Mike Gravel:3,,H,,,,,,,,,
+4,Norbert Skinner:4,,H,,,,,,,,,
+4,R McCombe:1,,H,,,,,,,,,
+4,Raymond Christiansen:2,,H,,,,,,,,,
+4,Robert Ditman:2,,H,,,,,,,,,
+4,Robert Sheldon:1,,H,,,,,,,,,
+4,Sigurd Wold:4,,H,,,,,,,,,
+4,Ted Stevens:4,,H,,,,,,,,,
+4,Thomas Balone:4,,H,,,,,,,,,
+4,Walter LeFevre:4,,H,,,,,,,,,
+4,Warren Taylor:1,,H,,,,,,,,,
+4,William Boardman:2,,H,,,,,,,,,
+4,William Moran:4,,H,,,,,,,,,
+4,John Butrovich:3,,S,,,,,,,,,
+4,Neal Foster:3,,S,,,,,,,,,
+4,Robert Ziegler:4,,S,,,,,,,,,
+4,Alfred Owen:1,,S,,,,,,,,,
+4,Brad Phillips:2,,S,,,,,,,,,
+4,David Harrison:3,,S,,,,,,,,,
+4,Eben Hopson:1,,S,,,,,,,,,
+4,Frank Peratrovich:1,,S,,,,,,,,,
+4,Grant Pearson:1,,S,,,,,,,,,
+4,Harold Hansen:1,,S,,,,,,,,,
+4,Howard Bradshaw:1,,S,,,,,,,,,
+4,Howard Pollock:2,,S,,,,,,,,,
+4,James Nolan:1,,S,,,,,,,,,
+4,John Hall:3,,S,,,,,,,,,
+4,Nicholas Begich:3,,S,,,,,,,,,
+4,Pearse Walsh:2,,S,,,,,,,,,
+4,Richard Peter:4,,S,,,,,,,,,
+4,Robert Blodgett:1,,S,,,,,,,,,
+4,Robert McNealy:1,,S,,,,,,,,,
+4,Yule Kilcher:3,,S,,,,,,,,,
+5,Bill Ray:4,,H,,,,,,,,,
+5,Carl Moses:4,,H,,,,,,,,,
+5,Clem Tillion:3,,H,,,,,,,,,
+5,E Haugen:4,,H,,,,,,,,,
+5,George Hohman:5,,H,,,,,,,,,
+5,Jalmar Kerttula:2,,H,,,,,,,,,
+5,John Sackett:5,,H,,,,,,,,,
+5,Michael Beirne:5,,H,,,,,,,,,
+5,Milo Fritz:5,,H,,,,,,,,,
+5,Willie Hensley:5,,H,,,,,,,,,
+5,Charles Powell:5,,H,,,,,,,,,
+5,Charles Sassara:4,,H,,,,,,,,,
+5,Don Smith:5,,H,,,,,,,,,
+5,Donald Young:5,,H,,,,,,,,,
+5,Edmund Orbeck:1,,H,,,,,,,,,
+5,Frank Getman:5,,H,,,,,,,,,
+5,Frank See:4,,H,,,,,,,,,
+5,Gene Guess:4,,H,,,,,,,,,
+5,Harold Strandberg:2,,H,,,,,,,,,
+5,Irwin Metcalf:1,,H,,,,,,,,,
+5,Jack Simpson:5,,H,,,,,,,,,
+5,Jess Harris:5,,H,,,,,,,,,
+5,John Holm:3,,H,,,,,,,,,
+5,John Westdahl:5,,H,,,,,,,,,
+5,Joseph McGill:4,,H,,,,,,,,,
+5,Jules Wright:5,,H,,,,,,,,,
+5,Ken Brady:5,,H,,,,,,,,,
+5,M Moore:5,,H,,,,,,,,,
+5,Mike Bradner:5,,H,,,,,,,,,
+5,Mildred Banfield:3,,H,,,,,,,,,
+5,Moses Pauken:5,,H,,,,,,,,,
+5,Pete Cessnun:5,,H,,,,,,,,,
+5,R Borer:5,,H,,,,,,,,,
+5,Ted Stevens:4,,H,,,,,,,,,
+5,Terry Miller:5,,H,,,,,,,,,
+5,Thomas Balone:4,,H,,,,,,,,,
+5,Tom Fink:5,,H,,,,,,,,,
+5,Tury Anderson:5,,H,,,,,,,,,
+5,William Boardman:2,,H,,,,,,,,,
+5,William Moran:4,,H,,,,,,,,,
+5,William Wiggins:3,,H,,,,,,,,,
+5,John Butrovich:3,,S,,,,,,,,,
+5,Robert Ziegler:4,,S,,,,,,,,,
+5,Elton Engstrom Jr:4,,S,,,,,,,,,
+5,Bill Poland:4,,S,,,,,,,,,
+5,Brad Phillips:2,,S,,,,,,,,,
+5,Carl Brady:4,,S,,,,,,,,,
+5,Clyde Lewis:5,,S,,,,,,,,,
+5,Frank Harris:5,,S,,,,,,,,,
+5,Howard Bradshaw:1,,S,,,,,,,,,
+5,Jan Koslosky:5,,S,,,,,,,,,
+5,Jay Hammond:1,,S,,,,,,,,,
+5,Lowell Thomas:5,,S,,,,,,,,,
+5,Maurice Smith:3,,S,,,,,,,,,
+5,Nicholas Begich:3,,S,,,,,,,,,
+5,Paul Haggland:5,,S,,,,,,,,,
+5,Raymond Christiansen:2,,S,,,,,,,,,
+5,Robert Blodgett:1,,S,,,,,,,,,
+5,Vance Phillips:2,,S,,,,,,,,,
+5,W Palmer:5,,S,,,,,,,,,
+5,William Waugaman:5,,S,,,,,,,,,
+6,Bill Ray:4,,H,,,,,,,,,
+6,Carl Moses:4,,H,,,,,,,,,
+6,Chancy Croft:6,,H,,,,,,,,,
+6,Clem Tillion:3,,H,,,,,,,,,
+6,E Haugen:4,,H,,,,,,,,,
+6,George Hohman:5,,H,,,,,,,,,
+6,Jalmar Kerttula:2,,H,,,,,,,,,
+6,John Sackett:5,,H,,,,,,,,,
+6,Richard Eliason:6,,H,,,,,,,,,
+6,Willie Hensley:5,,H,,,,,,,,,
+6,Barry Jackson:4,,H,,,,,,,,,
+6,Charles Sassara:4,,H,,,,,,,,,
+6,Donald Young:5,,H,,,,,,,,,
+6,Earl Hillstrand:1,,H,,,,,,,,,
+6,Edmund Orbeck:1,,H,,,,,,,,,
+6,Eugene Miller:6,,H,,,,,,,,,
+6,Frank Peratrovich:1,,H,,,,,,,,,
+6,Gene Guess:4,,H,,,,,,,,,
+6,Genie Chance:6,,H,,,,,,,,,
+6,Helen Beirne:6,,H,,,,,,,,,
+6,Henry Reeves:6,,H,,,,,,,,,
+6,Irwin Metcalf:1,,H,,,,,,,,,
+6,Jess Harris:5,,H,,,,,,,,,
+6,John Holm:3,,H,,,,,,,,,
+6,John Schwamm:6,,H,,,,,,,,,
+6,John Sweet:6,,H,,,,,,,,,
+6,Joseph McGill:4,,H,,,,,,,,,
+6,Lester Bronson:1,,H,,,,,,,,,
+6,Mike Bradner:5,,H,,,,,,,,,
+6,Mildred Banfield:3,,H,,,,,,,,,
+6,Moses Pauken:5,,H,,,,,,,,,
+6,Peter Deveau:1,,H,,,,,,,,,
+6,R Borer:5,,H,,,,,,,,,
+6,Richard McVeigh:6,,H,,,,,,,,,
+6,Ron Rettig:6,,H,,,,,,,,,
+6,Stanley Cornelius:6,,H,,,,,,,,,
+6,Tom Fink:5,,H,,,,,,,,,
+6,Tury Anderson:5,,H,,,,,,,,,
+6,Wendell Kay:6,,H,,,,,,,,,
+6,William Boardman:2,,H,,,,,,,,,
+6,John Butrovich:3,,S,,,,,,,,,
+6,John Rader:1,,S,,,,,,,,,
+6,Joseph Josephson:3,,S,,,,,,,,,
+6,Kathryn Poland:6,,S,,,,,,,,,
+6,Robert Ziegler:4,,S,,,,,,,,,
+6,Elton Engstrom Jr:4,,S,,,,,,,,,
+6,Bill Poland:4,,S,,,,,,,,,
+6,Brad Phillips:2,,S,,,,,,,,,
+6,Clyde Lewis:5,,S,,,,,,,,,
+6,Edward Merdes:6,,S,,,,,,,,,
+6,Howard Bradshaw:1,,S,,,,,,,,,
+6,Jan Koslosky:5,,S,,,,,,,,,
+6,Jay Hammond:1,,S,,,,,,,,,
+6,Lowell Thomas:5,,S,,,,,,,,,
+6,Nicholas Begich:3,,S,,,,,,,,,
+6,Paul Haggland:5,,S,,,,,,,,,
+6,Raymond Christiansen:2,,S,,,,,,,,,
+6,Robert Blodgett:1,,S,,,,,,,,,
+6,Terry Miller:5,,S,,,,,,,,,
+6,Vance Phillips:2,,S,,,,,,,,,
+6,W Palmer:5,,S,,,,,,,,,
+7,Carl Moses:4,,H,,,,,,,,,
+7,Clem Tillion:3,,H,,,,,,,,,
+7,E Haugen:4,,H,,,,,,,,,
+7,Frank Ferguson:7,,H,,,,,,,,,
+7,George Hohman:5,,H,,,,,,,,,
+7,H Meland:7,,H,,,,,,,,,
+7,Jalmar Kerttula:2,,H,,,,,,,,,
+7,John Huber:7,,H,,,,,,,,,
+7,Keith Specking:7,,H,,,,,,,,,
+7,Leslie Swanson:7,,H,,,,,,,,,
+7,Mike Colletta:7,,H,,,,,,,,,
+7,Mike M Miller:7,,H,,,,,,,,,
+7,Richard Randolph:7,,H,,,,,,,,,
+7,Andrew Warwick:7,,H,,,,,,,,,
+7,Chuck Degnan:7,,H,,,,,,,,,
+7,Earl Hillstrand:1,,H,,,,,,,,,
+7,Edmund Orbeck:1,,H,,,,,,,,,
+7,Edward Barber:7,,H,,,,,,,,,
+7,Edward Flynn:7,,H,,,,,,,,,
+7,Edward Naughton:7,,H,,,,,,,,,
+7,Eugene Miller:6,,H,,,,,,,,,
+7,Frank Peratrovich:1,,H,,,,,,,,,
+7,Gene Guess:4,,H,,,,,,,,,
+7,Genie Chance:6,,H,,,,,,,,,
+7,Helen Fischer:1,,H,,,,,,,,,
+7,Jess Harris:5,,H,,,,,,,,,
+7,John Holm:3,,H,,,,,,,,,
+7,Joseph McGill:4,,H,,,,,,,,,
+7,Joshua Wright:7,,H,,,,,,,,,
+7,Martin Moore:7,,H,,,,,,,,,
+7,Marty Farrell:7,,H,,,,,,,,,
+7,Mike Bradner:5,,H,,,,,,,,,
+7,Mike Rose:7,,H,,,,,,,,,
+7,Mildred Banfield:3,,H,,,,,,,,,
+7,Morgan Reed:1,,H,,,,,,,,,
+7,Richard McVeigh:6,,H,,,,,,,,,
+7,Richard Whittaker:7,,H,,,,,,,,,
+7,Robert Ditman:2,,H,,,,,,,,,
+7,Tom Fink:5,,H,,,,,,,,,
+7,Willard Bowman:7,,H,,,,,,,,,
+7,William Moran:4,,H,,,,,,,,,
+7,Bill Ray:4,,S,,,,,,,,,
+7,Chancy Croft:6,,S,,,,,,,,,
+7,H Meland:7,,S,,,,,,,,,
+7,John Butrovich:3,,S,,,,,,,,,
+7,John Rader:1,,S,,,,,,,,,
+7,Joseph Josephson:3,,S,,,,,,,,,
+7,Kathryn Poland:6,,S,,,,,,,,,
+7,Robert Ziegler:4,,S,,,,,,,,,
+7,Willie Hensley:5,,S,,,,,,,,,
+7,Clifford Groh:7,,S,,,,,,,,,
+7,Clyde Lewis:5,,S,,,,,,,,,
+7,Donald Young:5,,S,,,,,,,,,
+7,Edward Merdes:6,,S,,,,,,,,,
+7,Howard Bradshaw:1,,S,,,,,,,,,
+7,Jan Koslosky:5,,S,,,,,,,,,
+7,Jay Hammond:1,,S,,,,,,,,,
+7,Lowell Thomas:5,,S,,,,,,,,,
+7,Raymond Christiansen:2,,S,,,,,,,,,
+7,Ron Rettig:6,,S,,,,,,,,,
+7,Terry Miller:5,,S,,,,,,,,,
+7,W Palmer:5,,S,,,,,,,,,
+8,Alfred Ose:8,,H,,,,,,,,,
+8,Clem Tillion:3,,H,,,,,,,,,
+8,E Haugen:4,,H,,,,,,,,,
+8,Frank Ferguson:7,,H,,,,,,,,,
+8,Glenn Hackney:8,,H,,,,,,,,,
+8,Hugh Malone:8,,H,,,,,,,,,
+8,John Huber:7,,H,,,,,,,,,
+8,Joseph Orsini:8,,H,,,,,,,,,
+8,Keith Specking:7,,H,,,,,,,,,
+8,Mike M Miller:7,,H,,,,,,,,,
+8,Milo Fritz:5,,H,,,,,,,,,
+8,Oral Freeman:1,,H,,,,,,,,,
+8,Phillip Guy:8,,H,,,,,,,,,
+8,Richard Eliason:6,,H,,,,,,,,,
+8,Richard Randolph:7,,H,,,,,,,,,
+8,Richard Urion:8,,H,,,,,,,,,
+8,Russ Meekins:1,,H,,,,,,,,,
+8,Terry Gardiner:8,,H,,,,,,,,,
+8,William Parker:8,,H,,,,,,,,,
+8,A Saylors:8,,H,,,,,,,,,
+8,Andrew Warwick:7,,H,,,,,,,,,
+8,Charles Wingrove:8,,H,,,,,,,,,
+8,Chuck Degnan:7,,H,,,,,,,,,
+8,Earl Hillstrand:1,,H,,,,,,,,,
+8,Edward Barber:7,,H,,,,,,,,,
+8,Edward Naughton:7,,H,,,,,,,,,
+8,Genie Chance:6,,H,,,,,,,,,
+8,Helen Beirne:6,,H,,,,,,,,,
+8,Helen Fischer:1,,H,,,,,,,,,
+8,I Wilson:8,,H,,,,,,,,,
+8,Jacob Laktonen:8,,H,,,,,,,,,
+8,Jo Miller:8,,H,,,,,,,,,
+8,Joseph McGill:4,,H,,,,,,,,,
+8,Lawrence Petersen:8,,H,,,,,,,,,
+8,Mike Bradner:5,,H,,,,,,,,,
+8,Mildred Banfield:3,,H,,,,,,,,,
+8,Richard McVeigh:6,,H,,,,,,,,,
+8,Robert Hartig:8,,H,,,,,,,,,
+8,Selwyn Carrol:8,,H,,,,,,,,,
+8,Tom Fink:5,,H,,,,,,,,,
+8,Willard Bowman:7,,H,,,,,,,,,
+8,Bill Ray:4,,S,,,,,,,,,
+8,Chancy Croft:6,,S,,,,,,,,,
+8,George Hohman:5,,S,,,,,,,,,
+8,H Meland:7,,S,,,,,,,,,
+8,Jalmar Kerttula:2,,S,,,,,,,,,
+8,John Butrovich:3,,S,,,,,,,,,
+8,John Rader:1,,S,,,,,,,,,
+8,John Sackett:5,,S,,,,,,,,,
+8,Kathryn Poland:6,,S,,,,,,,,,
+8,Robert Ziegler:4,,S,,,,,,,,,
+8,Willie Hensley:5,,S,,,,,,,,,
+8,Clifford Groh:7,,S,,,,,,,,,
+8,Clyde Lewis:5,,S,,,,,,,,,
+8,Donald Young:5,,S,,,,,,,,,
+8,George Silides:8,,S,,,,,,,,,
+8,Jess Harris:5,,S,,,,,,,,,
+8,Keith Miller:3,,S,,,,,,,,,
+8,Lowell Thomas:5,,S,,,,,,,,,
+8,Ron Rettig:6,,S,,,,,,,,,
+8,Terry Miller:5,,S,,,,,,,,,
+8,W Palmer:5,,S,,,,,,,,,
+9,Alfred Ose:8,,H,,,,,,,,,
+9,Alvin Osterback:9,,H,,,,,,,,,
+9,Bob Bradley:9,,H,,,,,,,,,
+9,Charles Parr:9,,H,,,,,,,,,
+9,Clark Gruening:9,,H,,,,,,,,,
+9,E Haugen:4,,H,,,,,,,,,
+9,Fred Brown:9,,H,,,,,,,,,
+9,Glenn Hackney:8,,H,,,,,,,,,
+9,Hugh Malone:8,,H,,,,,,,,,
+9,Jim Duncan:9,,H,,,,,,,,,
+9,Joseph McKinnon:9,,H,,,,,,,,,
+9,Keith Specking:7,,H,,,,,,,,,
+9,Leo Rhode:2,,H,,,,,,,,,
+9,Leslie Swanson:7,,H,,,,,,,,,
+9,Lisa Rudd:9,,H,,,,,,,,,
+9,Michael Beirne:5,,H,,,,,,,,,
+9,Mike M Miller:7,,H,,,,,,,,,
+9,Nels Anderson:9,,H,,,,,,,,,
+9,Oral Freeman:1,,H,,,,,,,,,
+9,Phillip Guy:8,,H,,,,,,,,,
+9,Richard Eliason:6,,H,,,,,,,,,
+9,Richard Urion:8,,H,,,,,,,,,
+9,Samuel Cotten:9,,H,,,,,,,,,
+9,Steve Cowper:9,,H,,,,,,,,,
+9,Terry Gardiner:8,,H,,,,,,,,,
+9,Thelma Buchholdt:9,,H,,,,,,,,,
+9,William Parker:8,,H,,,,,,,,,
+9,Brenda Itta:9,,H,,,,,,,,,
+9,Edmund Orbeck:1,,H,,,,,,,,,
+9,Edward Naughton:7,,H,,,,,,,,,
+9,H Hershberger:9,,H,,,,,,,,,
+9,Helen Beirne:6,,H,,,,,,,,,
+9,Helen Fischer:1,,H,,,,,,,,,
+9,James Huntington:9,,H,,,,,,,,,
+9,Kathryn Ostrosky:9,,H,,,,,,,,,
+9,Larry Davis:9,,H,,,,,,,,,
+9,Mike Bradner:5,,H,,,,,,,,,
+9,Ramona Kelley:9,,H,,,,,,,,,
+9,Susan Sullivan:9,,H,,,,,,,,,
+9,Theodore Smith:9,,H,,,,,,,,,
+9,Tim Wallis:9,,H,,,,,,,,,
+9,Tom Fink:5,,H,,,,,,,,,
+9,Willard Bowman:7,,H,,,,,,,,,
+9,Bill Ray:4,,S,,,,,,,,,
+9,Chancy Croft:6,,S,,,,,,,,,
+9,Clem Tillion:3,,S,,,,,,,,,
+9,Edward Willis:9,,S,,,,,,,,,
+9,Frank Ferguson:7,,S,,,,,,,,,
+9,George Hohman:5,,S,,,,,,,,,
+9,H Meland:7,,S,,,,,,,,,
+9,Jalmar Kerttula:2,,S,,,,,,,,,
+9,John Butrovich:3,,S,,,,,,,,,
+9,John Huber:7,,S,,,,,,,,,
+9,John Rader:1,,S,,,,,,,,,
+9,John Sackett:5,,S,,,,,,,,,
+9,Joseph Orsini:8,,S,,,,,,,,,
+9,Kathryn Poland:6,,S,,,,,,,,,
+9,Mike Colletta:7,,S,,,,,,,,,
+9,Patrick Rodey:9,,S,,,,,,,,,
+9,Robert Ziegler:4,,S,,,,,,,,,
+9,W E Bradley:9,,S,,,,,,,,,
+9,Genie Chance:6,,S,,,,,,,,,
+9,Terry Miller:5,,S,,,,,,,,,
+10,Oral Freeman:1,Fre,H,1,D,FALSE,TRUE,,Representative.Oral.Freeman@akleg.gov,,,
+10,Terry Gardiner:8,Gar,H,1,D,FALSE,TRUE,,Representative.Terry.Gardiner@akleg.gov,,,
+10,E Haugen:4,Hau,H,2,R,FALSE,TRUE,,Representative.E..Haugen@akleg.gov,,,
+10,Richard Eliason:6,Eli,H,3,R,FALSE,TRUE,,Representative.Richard.Eliason@akleg.gov,,,
+10,Jim Duncan:9,Dun,H,4,D,FALSE,TRUE,,Representative.Jim.Duncan@akleg.gov,,,
+10,Mike M Miller:7,MiM,H,4,D,FALSE,TRUE,,Representative.M..Miller@akleg.gov,,,
+10,Peter Lovseth:10,Lov,H,5,R,FALSE,TRUE,"""Appointed May 6, 1977 to fill the vacancy left by Keith Specking's resignation""",Representative.Peter.Lovseth@akleg.gov,,,
+10,Keith Specking:7,Spe,H,5,R,FALSE,FALSE,"""Resigned April 25, 1977""",Representative.Keith.Specking@akleg.gov,,,
+10,Alfred Ose:8,Ose,H,6,D,FALSE,TRUE,,Representative.Alfred.Ose@akleg.gov,,,
+10,Michael Beirne:5,Bei,H,7,R,FALSE,TRUE,,Representative.Michael.Beirne@akleg.gov,,,
+10,Clark Gruening:9,Gru,H,7,D,FALSE,TRUE,,Representative.Clark.Gruening@akleg.gov,,,
+10,Russ Meekins:1,Mee,H,7,D,FALSE,TRUE,,Representative.Russ.Meekins@akleg.gov,,,
+10,Bill Miles:10,MiB,H,7,D,FALSE,TRUE,,Representative.Bill.Miles@akleg.gov,,,
+10,Bob Bradley:9,BrB,H,8,D,FALSE,TRUE,,Representative.Bob.Bradley@akleg.gov,,,
+10,Samuel Cotten:9,Cot,H,8,D,FALSE,TRUE,,Representative.Samuel.Cotten@akleg.gov,,,
+10,Tim Kelly:10,Kel,H,8,R,FALSE,TRUE,,Representative.Tim.Kelly@akleg.gov,,,
+10,Randy Phillips:10,Phi,H,8,R,FALSE,TRUE,,Representative.Randy.Phillips@akleg.gov,,,
+10,Thelma Buchholdt:9,Buc,H,9,D,FALSE,TRUE,,Representative.Thelma.Buchholdt@akleg.gov,,,
+10,Joseph McKinnon:9,McK,H,9,D,FALSE,TRUE,,Representative.Joseph.McKinnon@akleg.gov,,,
+10,C Chatterton:10,Cha,H,10,R,FALSE,TRUE,,Representative.C..Chatterton@akleg.gov,,,
+10,Richard Urion:8,Uri,H,10,R,FALSE,TRUE,,Representative.Richard.Urion@akleg.gov,,,
+10,Kris Lethin:10,Let,H,11,R,FALSE,TRUE,,Representative.Kris.Lethin@akleg.gov,,,
+10,Lisa Rudd:9,Rud,H,11,D,FALSE,TRUE,,Representative.Lisa.Rudd@akleg.gov,,,
+10,Ed Dankworth:10,Dan,H,12,R,FALSE,TRUE,,Representative.Ed.Dankworth@akleg.gov,,,
+10,Joe Hayes:10,Hay,H,12,R,FALSE,TRUE,,Representative.Joe.Hayes@akleg.gov,,,
+10,Hugh Malone:8,Mal,H,13,D,FALSE,TRUE,Speaker of the House,Representative.Hugh.Malone@akleg.gov,,,
+10,Leo Rhode:2,Rho,H,13,R,FALSE,TRUE,,Representative.Leo.Rhode@akleg.gov,,,
+10,Merle Snider:10,Sni,H,14,D,FALSE,TRUE,,Representative.Merle.Snider@akleg.gov,,,
+10,Alvin Osterback:9,Ost,H,15,D,FALSE,TRUE,,Representative.Alvin.Osterback@akleg.gov,,,
+10,Nels Anderson:9,And,H,16,D,FALSE,TRUE,"""Martin Severson (D) was the interim appointee by the Governor to the House for the period of January 31, 1977 until March 11, 1977 pending the election recount between Joe McGill and Nels Anderson, Jr.  Nels A. Anderson, Jr. was sworn in on March 11, 1977.""",Representative.Nels.Anderson@akleg.gov,,,
+10,Phillip Guy:8,Guy,H,17,D,FALSE,TRUE,,Representative.Phillip.Guy@akleg.gov,,,
+10,William Akers:10,Ake,H,18,R,FALSE,TRUE,,Representative.William.Akers@akleg.gov,,,
+10,Leslie Swanson:7,Swa,H,19,D,FALSE,TRUE,,Representative.Leslie.Swanson@akleg.gov,,,
+10,Don Bennett:10,Ben,H,20,R,FALSE,TRUE,,Representative.Don.Bennett@akleg.gov,,,
+10,Fred Brown:9,Bro,H,20,D,FALSE,TRUE,,Representative.Fred.Brown@akleg.gov,,,
+10,Larry Carpenter:10,Car,H,20,R,FALSE,TRUE,,Representative.Larry.Carpenter@akleg.gov,,,
+10,Steve Cowper:9,Cow,H,20,D,FALSE,TRUE,,Representative.Steve.Cowper@akleg.gov,,,
+10,Charles Parr:9,Par,H,20,D,FALSE,TRUE,,Representative.Charles.Parr@akleg.gov,,,
+10,Sarah Smith:10,Smi,H,20,D,FALSE,TRUE,,Representative.Sarah.Smith@akleg.gov,,,
+10,Leo Schaeffer:10,Sch,H,21,D,FALSE,TRUE,,Representative.Leo.Schaeffer@akleg.gov,,,
+10,Alfred Nakak:10,Nak,H,22,D,FALSE,TRUE,,Representative.Alfred.Nakak@akleg.gov,,,
+10,Robert Ziegler:4,Zie,S,A,D,FALSE,TRUE,,Senator.Robert.Ziegler@akleg.gov,,,
+10,H Meland:7,Mel,S,B,D,FALSE,TRUE,,Senator.H..Meland@akleg.gov,,,
+10,Bill Ray:4,Ray,S,C,D,FALSE,TRUE,,Senator.Bill.Ray@akleg.gov,,,
+10,Jalmar Kerttula:2,Ker,S,D,D,FALSE,TRUE,,Senator.Jalmar.Kerttula@akleg.gov,,,
+10,Chancy Croft:6,Cro,S,E,D,FALSE,TRUE,,Senator.Chancy.Croft@akleg.gov,,,
+10,Bill Sumner:10,Sum,S,E,R,FALSE,TRUE,,Senator.Bill.Sumner@akleg.gov,,,
+10,W E Bradley:9,BrW,S,F,R,FALSE,TRUE,,Senator.W..Bradley@akleg.gov,,,
+10,Edward Willis:9,Wil,S,F,D,FALSE,TRUE,,Senator.Edward.Willis@akleg.gov,,,
+10,Patrick Rodey:9,Rod,S,G,D,FALSE,TRUE,,Senator.Patrick.Rodey@akleg.gov,,,
+10,Joseph Orsini:8,Ors,S,H,R,FALSE,TRUE,,Senator.Joseph.Orsini@akleg.gov,,,
+10,Mike Colletta:7,Col,S,I,R,FALSE,TRUE,,Senator.Mike.Colletta@akleg.gov,,,
+10,John Rader:1,Rad,S,J,D,FALSE,TRUE,Senate President,Senator.John.Rader@akleg.gov,,,
+10,Clem Tillion:3,Til,S,K,R,FALSE,TRUE,,Senator.Clem.Tillion@akleg.gov,,,
+10,Kathryn Poland:6,Pol,S,L,D,FALSE,TRUE,,Senator.Kathryn.Poland@akleg.gov,,,
+10,George Hohman:5,Hoh,S,M,D,FALSE,TRUE,,Senator.George.Hohman@akleg.gov,,,
+10,John Sackett:5,Sac,S,N,R,FALSE,TRUE,,Senator.John.Sackett@akleg.gov,,,
+10,John Butrovich:3,But,S,O,R,FALSE,TRUE,,Senator.John.Butrovich@akleg.gov,,,
+10,Glenn Hackney:8,Hac,S,O,R,FALSE,TRUE,,Senator.W..Hackney@akleg.gov,,,
+10,John Huber:7,Hub,S,O,D,FALSE,TRUE,,Senator.John.Huber@akleg.gov,,,
+10,Frank Ferguson:7,Fer,S,P,D,FALSE,TRUE,,Senator.Frank.Ferguson@akleg.gov,,,
+10,Alfred Nakak:10,,H,,,,,,,,,
+10,Alfred Ose:8,,H,,,,,,,,,
+10,Alvin Osterback:9,,H,,,,,,,,,
+10,Bill Miles:10,,H,,,,,,,,,
+10,Bob Bradley:9,,H,,,,,,,,,
+10,C Chatterton:10,,H,,,,,,,,,
+10,Charles Parr:9,,H,,,,,,,,,
+10,Clark Gruening:9,,H,,,,,,,,,
+10,Don Bennett:10,,H,,,,,,,,,
+10,E Haugen:4,,H,,,,,,,,,
+10,Ed Dankworth:10,,H,,,,,,,,,
+10,Fred Brown:9,,H,,,,,,,,,
+10,Hugh Malone:8,,H,,,,,,,,,
+10,Jim Duncan:9,,H,,,,,,,,,
+10,Joe Hayes:10,,H,,,,,,,,,
+10,Joseph McKinnon:9,,H,,,,,,,,,
+10,Keith Specking:7,,H,,,,,,,,,
+10,Kris Lethin:10,,H,,,,,,,,,
+10,Larry Carpenter:10,,H,,,,,,,,,
+10,Leo Rhode:2,,H,,,,,,,,,
+10,Leo Schaeffer:10,,H,,,,,,,,,
+10,Leslie Swanson:7,,H,,,,,,,,,
+10,Lisa Rudd:9,,H,,,,,,,,,
+10,Merle Snider:10,,H,,,,,,,,,
+10,Michael Beirne:5,,H,,,,,,,,,
+10,Mike M Miller:7,,H,,,,,,,,,
+10,Nels Anderson:9,,H,,,,,,,,,
+10,Oral Freeman:1,,H,,,,,,,,,
+10,Peter Lovseth:10,,H,,,,,,,,,
+10,Phillip Guy:8,,H,,,,,,,,,
+10,Randy Phillips:10,,H,,,,,,,,,
+10,Richard Eliason:6,,H,,,,,,,,,
+10,Richard Urion:8,,H,,,,,,,,,
+10,Russ Meekins:1,,H,,,,,,,,,
+10,Samuel Cotten:9,,H,,,,,,,,,
+10,Sarah Smith:10,,H,,,,,,,,,
+10,Steve Cowper:9,,H,,,,,,,,,
+10,Terry Gardiner:8,,H,,,,,,,,,
+10,Thelma Buchholdt:9,,H,,,,,,,,,
+10,Tim Kelly:10,,H,,,,,,,,,
+10,William Akers:10,,H,,,,,,,,,
+10,Bill Ray:4,,S,,,,,,,,,
+10,Bill Sumner:10,,S,,,,,,,,,
+10,Chancy Croft:6,,S,,,,,,,,,
+10,Clem Tillion:3,,S,,,,,,,,,
+10,Edward Willis:9,,S,,,,,,,,,
+10,Frank Ferguson:7,,S,,,,,,,,,
+10,George Hohman:5,,S,,,,,,,,,
+10,Glenn Hackney:8,,S,,,,,,,,,
+10,H Meland:7,,S,,,,,,,,,
+10,Jalmar Kerttula:2,,S,,,,,,,,,
+10,John Butrovich:3,,S,,,,,,,,,
+10,John Huber:7,,S,,,,,,,,,
+10,John Rader:1,,S,,,,,,,,,
+10,John Sackett:5,,S,,,,,,,,,
+10,Joseph Orsini:8,,S,,,,,,,,,
+10,Kathryn Poland:6,,S,,,,,,,,,
+10,Mike Colletta:7,,S,,,,,,,,,
+10,Patrick Rodey:9,,S,,,,,,,,,
+10,Robert Ziegler:4,,S,,,,,,,,,
+10,W E Bradley:9,,S,,,,,,,,,
+11,Oral Freeman:1,Fre,H,1,D,FALSE,TRUE,,Representative.Oral.Freeman@akleg.gov,,,
+11,Terry Gardiner:8,Gar,H,1,D,FALSE,TRUE,Speaker of the House,Representative.Terry.Gardiner@akleg.gov,,,
+11,E Haugen:4,Hau,H,2,R,FALSE,TRUE,,Representative.E..Haugen@akleg.gov,,,
+11,Richard Eliason:6,Eli,H,3,R,FALSE,TRUE,,Representative.Richard.Eliason@akleg.gov,,,
+11,Jim Duncan:9,Dun,H,4,D,FALSE,TRUE,,Representative.Jim.Duncan@akleg.gov,,,
+11,Mike M Miller:7,MiM,H,4,D,FALSE,TRUE,,Representative.M..Miller@akleg.gov,,,
+11,Margaret Branson:11,BrM,H,5,R,FALSE,TRUE,,Representative.Margaret.Branson@akleg.gov,,,
+11,Patrick Carney:11,Car,H,6,D,FALSE,TRUE,,Representative.Patrick.Carney@akleg.gov,,,
+11,Michael Beirne:5,Bei,H,7,R,FALSE,TRUE,,Representative.Michael.Beirne@akleg.gov,,,
+11,Russ Meekins:1,Mee,H,7,D,FALSE,TRUE,,Representative.Russ.Meekins@akleg.gov,,,
+11,Bill Miles:10,MiB,H,7,D,FALSE,FALSE,"""Resigned October 15, 1980""",Representative.Bill.Miles@akleg.gov,,,
+11,William Parker:8,PaW,H,7,D,FALSE,TRUE,,Representative.William.Parker@akleg.gov,,,
+11,Samuel Cotten:9,Cot,H,8,D,FALSE,TRUE,,Representative.Samuel.Cotten@akleg.gov,,,
+11,Rick Halford:11,Hal,H,8,R,FALSE,TRUE,,Representative.Richard.Halford@akleg.gov,,,
+11,Terry Martin:11,Mar,H,8,R,FALSE,TRUE,,Representative.Terry.Martin@akleg.gov,,,
+11,Randy Phillips:10,Phi,H,8,R,FALSE,TRUE,,Representative.Randy.Phillips@akleg.gov,,,
+11,Thelma Buchholdt:9,Buc,H,9,D,FALSE,TRUE,,Representative.Thelma.Buchholdt@akleg.gov,,,
+11,Joseph McKinnon:9,McK,H,9,D,FALSE,TRUE,,Representative.Joseph.McKinnon@akleg.gov,,,
+11,Ramona Barnes:11,Bar,H,10,R,FALSE,TRUE,,Representative.Ramona.Barnes@akleg.gov,,,
+11,C Chatterton:10,Cha,H,10,R,FALSE,TRUE,,Representative.C..Chatterton@akleg.gov,,,
+11,Ray Metcalfe:11,Met,H,11,R,FALSE,TRUE,,Representative.Ray.Metcalfe@akleg.gov,,,
+11,Joyce Munson:11,Mun,H,11,D,FALSE,TRUE,,Representative.Joyce.Munson@akleg.gov,,,
+11,Joe Hayes:10,Hay,H,12,R,FALSE,TRUE,,Representative.Joe.Hayes@akleg.gov,,,
+11,Joe Montgomery:11,Mon,H,12,R,FALSE,TRUE,,Representative.Joe.Montgomery@akleg.gov,,,
+11,Hugh Malone:8,Mal,H,13,D,FALSE,TRUE,,Representative.Hugh.Malone@akleg.gov,,,
+11,Patrick O'Connell:11,O'C,H,13,R,FALSE,TRUE,,Representative.Patrick.O'Connell@akleg.gov,,,
+11,Fred Zharoff:11,Zha,H,14,D,FALSE,TRUE,,Representative.Fred.Zharoff@akleg.gov,,,
+11,Alvin Osterback:9,Ost,H,15,D,FALSE,TRUE,,Representative.Alvin.Osterback@akleg.gov,,,
+11,Nels Anderson:9,And,H,16,D,FALSE,TRUE,,Representative.Nels.Anderson@akleg.gov,,,
+11,Phillip Guy:8,Guy,H,17,D,FALSE,TRUE,,Representative.Phillip.Guy@akleg.gov,,,
+11,Vernon Hurlbert:11,Hur,H,18,D,FALSE,TRUE,,Representative.Vernon.Hurlbert@akleg.gov,,,
+11,H Moss:11,Mos,H,19,D,FALSE,TRUE,,Representative.H..Moss@akleg.gov,,,
+11,Robert Bettisworth:11,Bet,H,20,R,FALSE,TRUE,,Representative.Robert.Bettisworth@akleg.gov,,,
+11,Fred Brown:9,Bro,H,20,D,FALSE,TRUE,,Representative.Fred.Brown@akleg.gov,,,
+11,Charles Parr:9,PaC,H,20,D,FALSE,TRUE,,Representative.Charles.Parr@akleg.gov,,,
+11,Richard Randolph:7,Ran,H,20,L,FALSE,TRUE,,Representative.Richard.Randolph@akleg.gov,,,
+11,Brian Rogers:11,Rog,H,20,D,FALSE,TRUE,,Representative.Brian.Rogers@akleg.gov,,,
+11,Sarah Smith:10,Smi,H,20,D,FALSE,TRUE,,Representative.Sarah.Smith@akleg.gov,,,
+11,Leo Schaeffer:10,Sch,H,21,D,FALSE,TRUE,,Representative.Leo.Schaeffer@akleg.gov,,,
+11,John Fuller:11,Ful,H,22,D,FALSE,TRUE,,Representative.John.Fuller@akleg.gov,,,
+11,Robert Ziegler:4,Zie,S,A,D,FALSE,TRUE,,Senator.Robert.Ziegler@akleg.gov,,,
+11,H Meland:7,Mel,S,B,D,FALSE,TRUE,,Senator.H..Meland@akleg.gov,,,
+11,Bill Ray:4,Ray,S,C,D,FALSE,TRUE,,Senator.Bill.Ray@akleg.gov,,,
+11,Jalmar Kerttula:2,Ker,S,D,D,FALSE,TRUE,,Senator.Jalmar.Kerttula@akleg.gov,,,
+11,Terry Stimson:11,Sti,S,E,D,FALSE,TRUE,,Senator.Terry.Stimson@akleg.gov,,,
+11,Bill Sumner:10,Sum,S,E,R,FALSE,TRUE,,Senator.Bill.Sumner@akleg.gov,,,
+11,W E Bradley:9,BrW,S,F,R,FALSE,TRUE,,Senator.W..Bradley@akleg.gov,,,
+11,Tim Kelly:10,Kel,S,F,R,FALSE,TRUE,,Senator.Tim.Kelly@akleg.gov,,,
+11,Patrick Rodey:9,Rod,S,G,D,FALSE,TRUE,,Senator.Patrick.Rodey@akleg.gov,,,
+11,Arliss Sturgulewski:11,Stu,S,H,R,FALSE,TRUE,,Senator.Arliss.Sturgulewski@akleg.gov,,,
+11,Mike Colletta:7,Col,S,I,R,FALSE,TRUE,,Senator.Mike.Colletta@akleg.gov,,,
+11,Ed Dankworth:10,Dan,S,J,R,FALSE,TRUE,,Senator.Ed.Dankworth@akleg.gov,,,
+11,Clem Tillion:3,Til,S,K,R,FALSE,TRUE,Senate President,Senator.Clem.Tillion@akleg.gov,,,
+11,Bob Mulcahy:11,Mul,S,L,R,FALSE,TRUE,,Senator.Bob.Mulcahy@akleg.gov,,,
+11,George Hohman:5,Hoh,S,M,D,FALSE,TRUE,,Senator.George.Hohman@akleg.gov,,,
+11,John Sackett:5,Sac,S,N,R,FALSE,TRUE,,Senator.John.Sackett@akleg.gov,,,
+11,Don Bennett:10,Ben,S,O,R,FALSE,TRUE,,Senator.Don.Bennett@akleg.gov,,,
+11,Bettye Fahrenkamp:11,Fah,S,O,D,FALSE,TRUE,,Senator.Bettye.Fahrenkamp@akleg.gov,,,
+11,Glenn Hackney:8,Hac,S,O,R,FALSE,TRUE,,Senator.W..Hackney@akleg.gov,,,
+11,Frank Ferguson:7,Fer,S,P,D,FALSE,TRUE,,Senator.Frank.Ferguson@akleg.gov,,,
+12,Oral Freeman:1,Fre,H,1,D,FALSE,TRUE,,Representative.Oral.Freeman@akleg.gov,,,
+12,Terry Gardiner:8,Gar,H,1,D,FALSE,TRUE,,Representative.Terry.Gardiner@akleg.gov,,,
+12,E Haugen:4,Hau,H,2,R,FALSE,TRUE,,Representative.E..Haugen@akleg.gov,,,
+12,Ben Grussendorf:12,Gru,H,3,D,FALSE,TRUE,,Representative.Ben.Grussendorf@akleg.gov,,,
+12,Jim Duncan:9,Dun,H,4,D,FALSE,TRUE,"""Speaker of the House through June 15, 1981""",Representative.Jim.Duncan@akleg.gov,,,
+12,Mike M Miller:7,Mil,H,4,D,FALSE,TRUE,,Representative.M..Miller@akleg.gov,,,
+12,Bette Cato:12,Cat,H,5,D,FALSE,TRUE,,Representative.Bette.Cato@akleg.gov,,,
+12,Patrick Carney:11,Car,H,6,D,FALSE,TRUE,,Representative.Patrick.Carney@akleg.gov,,,
+12,Michael Beirne:5,Bei,H,7,R,FALSE,TRUE,,Representative.Michael.Beirne@akleg.gov,,,
+12,Donald Clocksin:12,Clo,H,7,D,FALSE,TRUE,,Representative.Donald.Clocksin@akleg.gov,,,
+12,David Cuddy:12,Cud,H,7,R,FALSE,TRUE,,Representative.David.Cuddy@akleg.gov,,,
+12,Russ Meekins:1,Mee,H,7,D,FALSE,TRUE,,Representative.Russ.Meekins@akleg.gov,,,
+12,Samuel Cotten:9,Cot,H,8,D,FALSE,TRUE,,Representative.Samuel.Cotten@akleg.gov,,,
+12,Rick Halford:11,Hal,H,8,R,FALSE,TRUE,,Representative.Richard.Halford@akleg.gov,,,
+12,Terry Martin:11,Mar,H,8,R,FALSE,TRUE,,Representative.Terry.Martin@akleg.gov,,,
+12,Randy Phillips:10,Phi,H,8,R,FALSE,TRUE,,Representative.Randy.Phillips@akleg.gov,,,
+12,Mitchell Abood:12,Abo,H,9,R,FALSE,TRUE,,Representative.Mitchell.Abood@akleg.gov,,,
+12,Thelma Buchholdt:9,Buc,H,9,D,FALSE,TRUE,,Representative.Thelma.Buchholdt@akleg.gov,,,
+12,Charles Anderson:12,AnC,H,10,R,FALSE,TRUE,,Representative.Charles.Anderson@akleg.gov,,,
+12,Ramona Barnes:11,Bar,H,10,R,FALSE,TRUE,,Representative.Ramona.Barnes@akleg.gov,,,
+12,Bernard Bylsma:12,Byl,H,11,R,FALSE,TRUE,,Representative.Bernard.Bylsma@akleg.gov,,,
+12,Ray Metcalfe:11,Met,H,11,R,FALSE,TRUE,,Representative.Ray.Metcalfe@akleg.gov,,,
+12,Joe Hayes:10,Hay,H,12,R,FALSE,TRUE,Speaker of the House,Representative.Joe.Hayes@akleg.gov,,,
+12,Joe Montgomery:11,Mon,H,12,R,FALSE,TRUE,,Representative.Joe.Montgomery@akleg.gov,,,
+12,Hugh Malone:8,Mal,H,13,D,FALSE,TRUE,,Representative.Hugh.Malone@akleg.gov,,,
+12,Patrick O'Connell:11,O'C,H,13,R,FALSE,TRUE,,Representative.Patrick.O'Connell@akleg.gov,,,
+12,Fred Zharoff:11,Zha,H,14,D,FALSE,TRUE,,Representative.Fred.Zharoff@akleg.gov,,,
+12,Eric Sutcliffe:12,Sut,H,15,R,FALSE,TRUE,,Representative.Eric.Sutcliffe@akleg.gov,,,
+12,Joseph Chuckwuk:12,Chu,H,16,D,FALSE,TRUE,,Representative.Joseph.Chuckwuk@akleg.gov,,,
+12,Anthony Vaska:12,Vas,H,17,D,FALSE,TRUE,,Representative.Anthony.Vaska@akleg.gov,,,
+12,Vernon Hurlbert:11,Hur,H,18,D,FALSE,TRUE,,Representative.Vernon.Hurlbert@akleg.gov,,,
+12,H Moss:11,Mos,H,19,D,FALSE,TRUE,,Representative.H..Moss@akleg.gov,,,
+12,Robert Bettisworth:11,Bet,H,20,R,FALSE,TRUE,,Representative.Robert.Bettisworth@akleg.gov,,,
+12,Fred Brown:9,Bro,H,20,D,FALSE,TRUE,,Representative.Fred.Brown@akleg.gov,,,
+12,Ken Fanning:12,Fan,H,20,L,FALSE,TRUE,,Representative.Ken.Fanning@akleg.gov,,,
+12,Richard Randolph:7,Ran,H,20,L,FALSE,TRUE,,Representative.Richard.Randolph@akleg.gov,,,
+12,Brian Rogers:11,Rog,H,20,D,FALSE,TRUE,,Representative.Brian.Rogers@akleg.gov,,,
+12,Sarah Smith:10,Smi,H,20,D,FALSE,TRUE,,Representative.Sarah.Smith@akleg.gov,,,
+12,Albert Adams:12,Ada,H,21,D,FALSE,TRUE,,Representative.Albert.Adams@akleg.gov,,,
+12,John Fuller:11,Ful,H,22,D,FALSE,TRUE,,Representative.John.Fuller@akleg.gov,,,
+12,Robert Ziegler:4,Zie,S,A,D,FALSE,TRUE,,Senator.Robert.Ziegler@akleg.gov,,,
+12,Richard Eliason:6,Eli,S,B,R,FALSE,TRUE,,Senator.Richard.Eliason@akleg.gov,,,
+12,Bill Ray:4,Ray,S,C,D,FALSE,TRUE,,Senator.Bill.Ray@akleg.gov,,,
+12,Jalmar Kerttula:2,Ker,S,D,D,FALSE,TRUE,Senate President,Senator.Jalmar.Kerttula@akleg.gov,,,
+12,Victor Fischer:12,Fis,S,E,D,FALSE,TRUE,,Senator.Victor.Fischer@akleg.gov,,,
+12,Terry Stimson:11,Sti,S,E,D,FALSE,TRUE,,Senator.Terry.Stimson@akleg.gov,,,
+12,W E Bradley:9,Bra,S,F,R,FALSE,TRUE,,Senator.W..Bradley@akleg.gov,,,
+12,Tim Kelly:10,Kel,S,F,R,FALSE,TRUE,,Senator.Tim.Kelly@akleg.gov,,,
+12,Patrick Rodey:9,Rod,S,G,D,FALSE,TRUE,,Senator.Patrick.Rodey@akleg.gov,,,
+12,Arliss Sturgulewski:11,Stu,S,H,R,FALSE,TRUE,,Senator.Arliss.Sturgulewski@akleg.gov,,,
+12,Mike Colletta:7,Col,S,I,R,FALSE,TRUE,,Senator.Mike.Colletta@akleg.gov,,,
+12,Ed Dankworth:10,Dan,S,J,R,FALSE,TRUE,,Senator.Ed.Dankworth@akleg.gov,,,
+12,Donald Gilman:12,Gil,S,K,R,FALSE,TRUE,,Senator.Donald.Gilman@akleg.gov,,,
+12,Bob Mulcahy:11,Mul,S,L,R,FALSE,TRUE,,Senator.Bob.Mulcahy@akleg.gov,,,
+12,Nels Anderson:9,AnN,S,M,D,FALSE,TRUE,"""Appointed on March 2, 1982 to fill the vacancy left by George Hohman's expultion""",Senator.Nels.Anderson@akleg.gov,,,
+12,George Hohman:5,Hoh,S,M,D,FALSE,TRUE,"""Expelled on February 5, 1982""",Senator.George.Hohman@akleg.gov,,,
+12,John Sackett:5,Sac,S,N,R,FALSE,TRUE,,Senator.John.Sackett@akleg.gov,,,
+12,Don Bennett:10,Ben,S,O,R,FALSE,TRUE,,Senator.Don.Bennett@akleg.gov,,,
+12,Bettye Fahrenkamp:11,Fah,S,O,D,FALSE,TRUE,,Senator.Bettye.Fahrenkamp@akleg.gov,,,
+12,Charles Parr:9,Par,S,O,D,FALSE,TRUE,,Senator.Charles.Parr@akleg.gov,,,
+12,Frank Ferguson:7,Fer,S,P,D,FALSE,TRUE,,Senator.Frank.Ferguson@akleg.gov,,,
+13,Peter Goll:13,Gol,H,2,D,FALSE,TRUE,,Representative.Peter.Goll@akleg.gov,,,
+13,Ben Grussendorf:12,Gru,H,3,D,FALSE,TRUE,,Representative.Ben.Grussendorf@akleg.gov,,,
+13,Bette Cato:12,Cat,H,6,D,FALSE,TRUE,,Representative.Bette.Cato@akleg.gov,,,
+13,Mike Szymanski:13,Szy,H,7,D,FALSE,TRUE,,Representative.Mike.Szymanski@akleg.gov,,,
+13,Richard Shultz:13,Shu,H,17,R,FALSE,TRUE,,Representative.Richard.Shultz@akleg.gov,,,
+13,Mike W Miller:13,Mim,H,18,R,FALSE,TRUE,,Representative.Mike.Miller@akleg.gov,,,
+13,Mike Davis:13,Dav,H,19,D,FALSE,TRUE,,Representative.Mike.Davis@akleg.gov,,,
+13,Niilo Koponen:13,Kop,H,21,D,FALSE,TRUE,,Representative.Niilo.Koponen@akleg.gov,,,
+13,Albert Adams:12,Ada,H,22,D,FALSE,TRUE,,Representative.Albert.Adams@akleg.gov,,,
+13,John Fuller:11,Ful,H,23,D,FALSE,TRUE,,Representative.John.Fuller@akleg.gov,,,
+13,Vernon Hurlbert:11,Hur,H,24,D,FALSE,TRUE,,Representative.Vernon.Hurlbert@akleg.gov,,,
+13,Anthony Vaska:12,Vas,H,25,D,FALSE,TRUE,,Representative.Anthony.Vaska@akleg.gov,,,
+13,Adelheid Herrmann:13,Her,H,26,D,FALSE,TRUE,,Representative.Adelheid.Herrmann@akleg.gov,,,
+13,Fred Zharoff:11,Zha,H,27,D,FALSE,TRUE,,Representative.Fred.Zharoff@akleg.gov,,,
+13,Ron Wendte:13,Wen,H,1-A,D,FALSE,TRUE,,Representative.Ron.Wendte@akleg.gov,,,
+13,Jack McBride:13,McB,H,1-B,D,FALSE,TRUE,"""Died on April 16, 1984""",Representative.Jack.McBride@akleg.gov,,,
+13,John Sund:13,Sun,H,1-B,D,FALSE,TRUE,"""Appointed April 30, 1984 to fill the vacancy created by the death of Representative Jack McBride.""",Representative.John.Sund@akleg.gov,,,
+13,Charles Bussell:13,Bus,H,10-A,R,FALSE,TRUE,,Representative.Charles.Bussell@akleg.gov,,,
+13,John Lindauer:13,Lin,H,10-B,R,FALSE,TRUE,,Representative.John.Lindauer@akleg.gov,,,
+13,Mitchell Abood:12,Abo,H,11-A,R,FALSE,TRUE,,Representative.Mitchell.Abood@akleg.gov,,,
+13,Mae Tischer:13,Tis,H,11-B,R,FALSE,TRUE,,Representative.Mae.Tischer@akleg.gov,,,
+13,Rick Uehling:13,Ueh,H,12-A,R,FALSE,TRUE,,Representative.Rick.Uehling@akleg.gov,,,
+13,Donald Clocksin:12,Clo,H,12-B,D,FALSE,TRUE,,Representative.Donald.Clocksin@akleg.gov,,,
+13,Terry Martin:11,Mar,H,13-A,R,FALSE,TRUE,,Representative.Terry.Martin@akleg.gov,,,
+13,Jerry Ward:13,War,H,13-A,R,FALSE,TRUE,,Representative.Jerry.Ward@akleg.gov,,,
+13,Ramona Barnes:11,Bar,H,14-A,R,FALSE,TRUE,,Representative.Ramona.Barnes@akleg.gov,,,
+13,Walter Furnace:13,Fur,H,14-B,R,FALSE,TRUE,,Representative.Walter.Furnace@akleg.gov,,,
+13,John Liska:13,Lis,H,15-A,R,FALSE,TRUE,,Representative.John.Liska@akleg.gov,,,
+13,Randy Phillips:10,Phi,H,15-B,R,FALSE,TRUE,,Representative.Randy.Phillips@akleg.gov,,,
+13,Barbara Lacher:13,Lac,H,16-A,R,FALSE,TRUE,,Representative.Barbara.Lacher@akleg.gov,,,
+13,Ronald Larson:13,Lar,H,16-B,D,FALSE,TRUE,,Representative.Ronald.Larson@akleg.gov,,,
+13,Robert Bettisworth:11,Bet,H,20-A,R,FALSE,TRUE,,Representative.Robert.Bettisworth@akleg.gov,,,
+13,John Ringstad:13,Rin,H,20-B,R,FALSE,TRUE,,Representative.John.Ringstad@akleg.gov,,,
+13,Mike M Miller:7,Mil,H,4-A,D,FALSE,TRUE,,Representative.M..Miller@akleg.gov,,,
+13,Jim Duncan:9,Dun,H,4-B,D,FALSE,TRUE,,Representative.Jim.Duncan@akleg.gov,,,
+13,Hugh Malone:8,Mal,H,5-A,D,FALSE,TRUE,,Representative.Hugh.Malone@akleg.gov,,,
+13,Milo Fritz:5,Fri,H,5-B,R,FALSE,TRUE,,Representative.Milo.Fritz@akleg.gov,,,
+13,John Cowdery:13,Cow,H,8-A,R,FALSE,TRUE,,Representative.John.Cowdery@akleg.gov,,,
+13,Sam Pestinger:13,Pes,H,8-B,R,FALSE,TRUE,,Representative.Sam.Pestinger@akleg.gov,,,
+13,Joe Hayes:10,Hay,H,9-A,R,FALSE,TRUE,Speaker of the House,Representative.Joe.Hayes@akleg.gov,,,
+13,Joe Flood:13,Flo,H,9-B,D,FALSE,TRUE,,Representative.Joe.Flood@akleg.gov,,,
+13,Robert Ziegler:4,Zie,S,A,D,FALSE,TRUE,,Senator.Robert.Ziegler@akleg.gov,,,
+13,Richard Eliason:6,Eli,S,B,R,FALSE,TRUE,,Senator.Richard.Eliason@akleg.gov,,,
+13,Bill Ray:4,Ray,S,C,D,FALSE,TRUE,,Senator.Bill.Ray@akleg.gov,,,
+13,Paul Fischer:13,Fip,S,D-A,R,FALSE,TRUE,,Senator.Paul.Fischer@akleg.gov,,,
+13,Donald Gilman:12,Gil,S,D-B,R,FALSE,TRUE,,Senator.Donald.Gilman@akleg.gov,,,
+13,Fritz Pettyjohn:13,Pet,S,E-A,R,FALSE,TRUE,,Senator.Fritz.Pettyjohn@akleg.gov,,,
+13,Jan Faiks:13,Fai,S,E-B,R,FALSE,TRUE,,Senator.Jan.Faiks@akleg.gov,,,
+13,Arliss Sturgulewski:11,Stu,S,F-A,R,FALSE,TRUE,,Senator.Arliss.Sturgulewski@akleg.gov,,,
+13,Patrick Rodey:9,Rod,S,F-B,D,FALSE,TRUE,,Senator.Patrick.Rodey@akleg.gov,,,
+13,Joseph Josephson:3,Jos,S,G-A,D,FALSE,TRUE,,Senator.Joseph.Josephson@akleg.gov,,,
+13,Victor Fischer:12,Fiv,S,G-B,D,FALSE,TRUE,,Senator.Victor.Fischer@akleg.gov,,,
+13,Rick Halford:11,Hal,S,H-A,R,FALSE,TRUE,,Senator.Richard.Halford@akleg.gov,,,
+13,Tim Kelly:10,Kel,S,H-B,R,FALSE,TRUE,,Senator.Tim.Kelly@akleg.gov,,,
+13,Jalmar Kerttula:2,Ker,S,I,D,FALSE,TRUE,Senate President,Senator.Jalmar.Kerttula@akleg.gov,,,
+13,H Moss:11,Mos,S,J,D,FALSE,TRUE,,Senator.H..Moss@akleg.gov,,,
+13,Don Bennett:10,Ben,S,K-A,R,FALSE,TRUE,,Senator.Don.Bennett@akleg.gov,,,
+13,Bettye Fahrenkamp:11,Fah,S,K-B,D,FALSE,TRUE,,Senator.Bettye.Fahrenkamp@akleg.gov,,,
+13,Frank Ferguson:7,Fer,S,L,D,FALSE,TRUE,,Senator.Frank.Ferguson@akleg.gov,,,
+13,John Sackett:5,Sac,S,M,R,FALSE,TRUE,,Senator.John.Sackett@akleg.gov,,,
+13,Bob Mulcahy:11,Mul,S,N,R,FALSE,TRUE,,Senator.Bob.Mulcahy@akleg.gov,,,
+14,Peter Goll:13,Gol,H,2,D,FALSE,TRUE,,Representative.Peter.Goll@akleg.gov,,,
+14,Ben Grussendorf:12,Grs,H,3,D,FALSE,TRUE,Speaker of the House,Representative.Ben.Grussendorf@akleg.gov,,,
+14,Bette Cato:12,Cat,H,6,D,FALSE,TRUE,,Representative.Bette.Cato@akleg.gov,,,
+14,Mike Szymanski:13,Szy,H,7,D,FALSE,TRUE,,Representative.Mike.Szymanski@akleg.gov,,,
+14,Richard Shultz:13,Shu,H,17,R,FALSE,TRUE,,Representative.Richard.Shultz@akleg.gov,,,
+14,Mike W Miller:13,Mim,H,18,R,FALSE,TRUE,,Representative.Mike.W.M.W.Miller@akleg.gov,,,
+14,Mike Davis:13,Dav,H,19,D,FALSE,TRUE,,Representative.Mike.Davis@akleg.gov,,,
+14,Niilo Koponen:13,Kop,H,21,D,FALSE,TRUE,,Representative.Niilo.Koponen@akleg.gov,,,
+14,Albert Adams:12,Ada,H,22,D,FALSE,TRUE,,Representative.Albert.Adams@akleg.gov,,,
+14,John Fuller:11,Ful,H,23,D,FALSE,TRUE,,Representative.John.Fuller@akleg.gov,,,
+14,F Wallis:14,Wal,H,24,D,FALSE,TRUE,,Representative.F..Wallis@akleg.gov,,,
+14,Johne Binkley:14,Bin,H,25,R,FALSE,TRUE,,Representative.Johne.Binkley@akleg.gov,,,
+14,Adelheid Herrmann:13,Her,H,26,D,FALSE,TRUE,,Representative.Adelheid.Herrmann@akleg.gov,,,
+14,Dave Thompson:14,Tho,H,27,R,FALSE,TRUE,,Representative.Dave.Thompson@akleg.gov,,,
+14,Robin Taylor:14,Tay,H,1-A,R,FALSE,TRUE,,Representative.Robin.Taylor@akleg.gov,,,
+14,John Sund:13,Sun,H,1-B,D,FALSE,TRUE,,Representative.John.Sund@akleg.gov,,,
+14,Henry Boucher:14,Bou,H,10-A,D,FALSE,TRUE,,Representative.H..Boucher@akleg.gov,,,
+14,Virginia Collins:14,Col,H,10-B,R,FALSE,TRUE,,Representative.Virginia.Collins@akleg.gov,,,
+14,Roger Jenkins:14,Jen,H,11-A,R,FALSE,TRUE,,Representative.Roger.Jenkins@akleg.gov,,,
+14,Max Gruenberg:14,GrU,H,11-B,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,,,
+14,Rick Uehling:13,Ueh,H,12-A,R,FALSE,TRUE,,Representative.Rick.Uehling@akleg.gov,,,
+14,Donald Clocksin:12,Clo,H,12-B,D,FALSE,TRUE,,Representative.Donald.Clocksin@akleg.gov,,,
+14,Pat Pourchot:14,Pou,H,13-A,D,FALSE,TRUE,,Representative.Pat.Pourchot@akleg.gov,,,
+14,Terry Martin:11,Mat,H,13-B,R,FALSE,TRUE,,Representative.Terry.Martin@akleg.gov,,,
+14,Marco Pignalberi:14,Pig,H,14-A,R,FALSE,TRUE,,Representative.Marco.Pignalberi@akleg.gov,,,
+14,Walter Furnace:13,Fur,H,14-B,R,FALSE,TRUE,,Representative.Walter.Furnace@akleg.gov,,,
+14,Samuel Cotten:9,Cot,H,15-A,D,FALSE,TRUE,,Representative.Samuel.Cotten@akleg.gov,,,
+14,Randy Phillips:10,Phi,H,15-B,R,FALSE,TRUE,,Representative.Randy.Phillips@akleg.gov,,,
+14,Katie Hurley:14,Hur,H,16-A,D,FALSE,TRUE,,Representative.Katie.Hurley@akleg.gov,,,
+14,Ronald Larson:13,Lar,H,16-B,D,FALSE,TRUE,,Representative.Ronald.Larson@akleg.gov,,,
+14,Steve Frank:14,Fra,H,20-A,R,FALSE,TRUE,,Representative.Steve.Frank@akleg.gov,,,
+14,John Ringstad:13,Rin,H,20-B,R,FALSE,TRUE,,Representative.John.Ringstad@akleg.gov,,,
+14,Mike M Miller:7,Mil,H,4-A,D,FALSE,TRUE,,Representative.Michael.M.M.M.Miller@akleg.gov,,,
+14,Jim Duncan:9,Dun,H,4-B,D,FALSE,TRUE,,Representative.Jim.Duncan@akleg.gov,,,
+14,Mike Navarre:14,Nav,H,5-A,D,FALSE,TRUE,,Representative.Mike.Navarre@akleg.gov,,,
+14,Andre Marrou:14,Mar,H,5-B,L,FALSE,TRUE,,Representative.Andre.Marrou@akleg.gov,,,
+14,Fritz Pettyjohn:13,Pet,H,8-A,R,FALSE,TRUE,,Representative.Fritz.Pettyjohn@akleg.gov,,,
+14,Steve Rieger:14,Rie,H,8-B,R,FALSE,TRUE,,Representative.Steve.Rieger@akleg.gov,,,
+14,Drue Pearce:14,Pea,H,9-A,R,FALSE,TRUE,,Representative.Drue.Pearce@akleg.gov,,,
+14,Alyce Hanley:14,Han,H,9-B,R,FALSE,TRUE,,Representative.Alyce.Hanley@akleg.gov,,,
+14,Robert Ziegler:4,Zie,S,A,D,FALSE,TRUE,,Senator.Robert.Ziegler@akleg.gov,,,
+14,Richard Eliason:6,Eli,S,B,R,FALSE,TRUE,,Senator.Richard.Eliason@akleg.gov,,,
+14,Bill Ray:4,Ray,S,C,D,FALSE,TRUE,,Senator.Bill.Ray@akleg.gov,,,
+14,Paul Fischer:13,Fip,S,D,R,FALSE,TRUE,,Senator.Paul.Fischer.P@akleg.gov,,,
+14,Jalmar Kerttula:2,Ker,S,E-A,D,FALSE,TRUE,,Senator.Jalmar.Kerttula@akleg.gov,,,
+14,Edna DeVries:14,DeV,S,E-B,R,FALSE,TRUE,,Senator.Edna.DeVries@akleg.gov,,,
+14,Arliss Sturgulewski:11,Stu,S,F-A,R,FALSE,TRUE,,Senator.Arliss.Sturgulewski@akleg.gov,,,
+14,Jan Faiks:13,Fai,S,F-B,R,FALSE,TRUE,,Senator.Jan.Faiks@akleg.gov,,,
+14,Mitchell Abood:12,Abo,S,G-A,R,FALSE,TRUE,,Senator.Mitchell.Abood@akleg.gov,,,
+14,Patrick Rodey:9,Rod,S,G-B,D,FALSE,TRUE,,Senator.Patrick.Rodey@akleg.gov,,,
+14,Joseph Josephson:3,Jos,S,H-A,D,FALSE,TRUE,,Senator.Joseph.Josephson@akleg.gov,,,
+14,Victor Fischer:12,Fiv,S,H-B,D,FALSE,TRUE,,Senator.Victor.Fischer.V@akleg.gov,,,
+14,Rick Halford:11,Hal,S,I-A,R,FALSE,TRUE,,Senator.Richard.Halford@akleg.gov,,,
+14,Tim Kelly:10,Kel,S,I-B,R,FALSE,TRUE,,Senator.Tim.Kelly@akleg.gov,,,
+14,Jack Coghill:1,Cog,S,J,R,FALSE,TRUE,,"Senator.John.B..""Jack"".Coghill@akleg.gov",,,
+14,Don Bennett:10,Ben,S,K-A,R,FALSE,TRUE,Senate President,Senator.Don.Bennett@akleg.gov,,,
+14,Bettye Fahrenkamp:11,Fah,S,K-B,D,FALSE,TRUE,,Senator.Bettye.Fahrenkamp@akleg.gov,,,
+14,Frank Ferguson:7,Fer,S,L,D,FALSE,TRUE,,Senator.Frank.Ferguson@akleg.gov,,,
+14,John Sackett:5,Sac,S,M,R,FALSE,TRUE,,Senator.John.Sackett@akleg.gov,,,
+14,Fred Zharoff:11,Zha,S,N,D,FALSE,TRUE,,Senator.Fred.Zharoff@akleg.gov,,,
+15,Peter Goll:13,Gol,H,2,D,FALSE,TRUE,,Representative.Peter.Goll@akleg.gov,,,
+15,Ben Grussendorf:12,GrB,H,3,D,FALSE,TRUE,Speaker of the House,Representative.Ben.Grussendorf@akleg.gov,,,
+15,C Swackhammer:15,Swa,H,5,D,FALSE,TRUE,,Representative.C..Swackhammer@akleg.gov,,,
+15,Bette Cato:12,Cat,H,6,D,FALSE,TRUE,,Representative.Bette.Cato@akleg.gov,,,
+15,James Zawacki:15,Zaw,H,7,R,FALSE,TRUE,,Representative.James.Zawacki@akleg.gov,,,
+15,Richard Shultz:13,Shu,H,17,R,FALSE,TRUE,,Representative.Richard.Shultz@akleg.gov,,,
+15,Mike W Miller:13,Mil,H,18,R,FALSE,TRUE,,Representative.Mike.Miller@akleg.gov,,,
+15,Mike Davis:13,DaM,H,19,D,FALSE,TRUE,,Representative.Mike.Davis@akleg.gov,,,
+15,Niilo Koponen:13,Kop,H,21,D,FALSE,TRUE,,Representative.Niilo.Koponen@akleg.gov,,,
+15,Albert Adams:12,Ada,H,22,D,FALSE,TRUE,,Representative.Albert.Adams@akleg.gov,,,
+15,Henry Springer:15,Spr,H,23,D,FALSE,TRUE,,Representative.Henry.Springer@akleg.gov,,,
+15,F Wallis:14,Wal,H,24,D,FALSE,TRUE,,Representative.F..Wallis@akleg.gov,,,
+15,Lyman Hoffman:15,Hof,H,25,D,FALSE,TRUE,,Representative.Lyman.Hoffman@akleg.gov,,,
+15,Adelheid Herrmann:13,Her,H,26,D,FALSE,TRUE,,Representative.Adelheid.Herrmann@akleg.gov,,,
+15,Cliff Davidson:15,DaC,H,27,D,FALSE,TRUE,,Representative.Cliff.Davidson@akleg.gov,,,
+15,Robin Taylor:14,Tay,H,1-A,R,FALSE,TRUE,,Representative.Robin.Taylor@akleg.gov,,,
+15,John Sund:13,Sun,H,1-B,D,FALSE,TRUE,,Representative.John.Sund@akleg.gov,,,
+15,Henry Boucher:14,Bou,H,10-A,D,FALSE,TRUE,,Representative.H..Boucher@akleg.gov,,,
+15,Virginia Collins:14,Col,H,10-B,R,FALSE,TRUE,,Representative.Virginia.Collins@akleg.gov,,,
+15,Dave Donley:15,Don,H,11-A,D,FALSE,TRUE,,Representative.Dave.Donley@akleg.gov,,,
+15,Max Gruenberg:14,GrM,H,11-B,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,,,
+15,Kay Brown:15,Bro,H,12-A,D,FALSE,TRUE,,Representative.Kay.Brown@akleg.gov,,,
+15,Johnny Ellis:15,Ell,H,12-B,D,FALSE,TRUE,,Representative.Johnny.Ellis@akleg.gov,,,
+15,Pat Pourchot:14,Pou,H,13-A,D,FALSE,TRUE,,Representative.Pat.Pourchot@akleg.gov,,,
+15,Terry Martin:11,Mar,H,13-B,R,FALSE,TRUE,,Representative.Terry.Martin@akleg.gov,,,
+15,Ramona Barnes:11,Bar,H,14-A,R,FALSE,TRUE,,Representative.Ramona.Barnes@akleg.gov,,,
+15,Walter Furnace:13,Fur,H,14-B,R,FALSE,TRUE,,Representative.Walter.Furnace@akleg.gov,,,
+15,Samuel Cotten:9,Cot,H,15-A,D,FALSE,TRUE,,Representative.Samuel.Cotten@akleg.gov,,,
+15,Randy Phillips:10,Phi,H,15-B,R,FALSE,TRUE,,Representative.Randy.Phillips@akleg.gov,,,
+15,Ronald Larson:13,Lar,H,16-B,D,FALSE,TRUE,,Representative.Ronald.Larson@akleg.gov,,,
+15,Curt Menard:15,Men,H,16A,R,FALSE,TRUE,,Representative.Curt.Menard@akleg.gov,,,
+15,Steve Frank:14,Fra,H,20-A,R,FALSE,TRUE,,Representative.Steve.Frank@akleg.gov,,,
+15,Mark Boyer:15,Boy,H,20-B,D,FALSE,TRUE,,Representative.Mark.Boyer@akleg.gov,,,
+15,Bill Hudson:15,Hud,H,4-A,R,FALSE,TRUE,,Representative.Bill.Hudson@akleg.gov,,,
+15,Fran Ulmer:15,Ulm,H,4-B,D,FALSE,TRUE,,Representative.Fran.Ulmer@akleg.gov,,,
+15,Mike Navarre:14,Nav,H,5-A,D,FALSE,TRUE,,Representative.Mike.Navarre@akleg.gov,,,
+15,Fritz Pettyjohn:13,Pet,H,8-A,R,FALSE,TRUE,,Representative.Fritz.Pettyjohn@akleg.gov,,,
+15,Steve Rieger:14,Rie,H,8-B,R,FALSE,TRUE,,Representative.Steve.Rieger@akleg.gov,,,
+15,Drue Pearce:14,Pea,H,9-A,R,FALSE,TRUE,,Representative.Drue.Pearce@akleg.gov,,,
+15,Alyce Hanley:14,Han,H,9-B,R,FALSE,TRUE,,Representative.Alyce.Hanley@akleg.gov,,,
+15,Lloyd Jones:15,Jon,S,A,R,FALSE,TRUE,,Senator.Lloyd.Jones@akleg.gov,,,
+15,Richard Eliason:6,Eli,S,B,R,FALSE,TRUE,,Senator.Richard.Eliason@akleg.gov,,,
+15,Jim Duncan:9,Dun,S,C,D,FALSE,TRUE,,Senator.Jim.Duncan@akleg.gov,,,
+15,Paul Fischer:13,Fis,S,D,R,FALSE,TRUE,,Senator.Paul.Fischer@akleg.gov,,,
+15,Jalmar Kerttula:2,Ker,S,E-A,D,FALSE,TRUE,,Senator.Jalmar.Kerttula@akleg.gov,,,
+15,Mike Szymanski:13,Szy,S,E-B,D,FALSE,TRUE,,Senator.Mike.Szymanski@akleg.gov,,,
+15,Arliss Sturgulewski:11,Stu,S,F-A,R,FALSE,TRUE,,Senator.Arliss.Sturgulewski@akleg.gov,,,
+15,Jan Faiks:13,Fai,S,F-B,R,FALSE,TRUE,Senate President,Senator.Jan.Faiks@akleg.gov,,,
+15,Mitchell Abood:12,Abo,S,G-A,R,FALSE,TRUE,,Senator.Mitchell.Abood@akleg.gov,,,
+15,Patrick Rodey:9,Rod,S,G-B,D,FALSE,TRUE,,Senator.Patrick.Rodey@akleg.gov,,,
+15,Joseph Josephson:3,Jos,S,H-A,D,FALSE,TRUE,,Senator.Joseph.Josephson@akleg.gov,,,
+15,Rick Uehling:13,Ueh,S,H-B,R,FALSE,TRUE,,Senator.Rick.Uehling@akleg.gov,,,
+15,Rick Halford:11,Hal,S,I-A,R,FALSE,TRUE,,Senator.Richard.Halford@akleg.gov,,,
+15,Tim Kelly:10,Kel,S,I-B,R,FALSE,TRUE,,Senator.Tim.Kelly@akleg.gov,,,
+15,Jack Coghill:1,Cog,S,J,R,FALSE,TRUE,,"Senator.John.B..""Jack"".Coghill@akleg.gov",,,
+15,Don Bennett:10,Ben,S,K-A,R,FALSE,TRUE,"""Died on on August 30, 1987""",Senator.Don.Bennett@akleg.gov,,,
+15,Ken Fanning:12,Fan,S,K-A,R,FALSE,TRUE,"""Appointed on December 8, 1987 to fill the vacancy created by the death of Senator Don Bennett""",Senator.Ken.Fanning@akleg.gov,,,
+15,Bettye Fahrenkamp:11,Fah,S,K-B,D,FALSE,TRUE,,Senator.Bettye.Fahrenkamp@akleg.gov,,,
+15,Frank Ferguson:7,Fer,S,L,D,FALSE,FALSE,"""Resigned on December 18, 1986""",Senator.Frank.Ferguson@akleg.gov,,,
+15,Willie Hensley:5,Hen,S,L,D,FALSE,TRUE,"""Appointed January 20, 1987 to fill the vacancy left by resignation of Frank Ferguson.""",Senator.Willie.Hensley@akleg.gov,,,
+15,Johne Binkley:14,Bin,S,M,R,FALSE,TRUE,,Senator.Johne.Binkley@akleg.gov,,,
+15,Fred Zharoff:11,Zha,S,N,D,FALSE,TRUE,,Senator.Fred.Zharoff@akleg.gov,,,
+16,Peter Goll:13,GOL,H,2,D,FALSE,TRUE,,Representative.Peter.Goll@akleg.gov,,,
+16,Ben Grussendorf:12,GRS,H,3,D,FALSE,TRUE,,Representative.Ben.Grussendorf@akleg.gov,,,
+16,Bette Cato:12,CAT,H,6,D,FALSE,FALSE,"""Resigned December 31, 1989""",Representative.Bette.Cato@akleg.gov,,,
+16,Eugene Kubina:16,KUB,H,6,D,FALSE,TRUE,"""Appointed January 8, 1990 to fill the vacancy created by the resignation of Representative Bette M. Cato""",Representative.Eugene.Kubina@akleg.gov,,,
+16,James Zawacki:15,ZAW,H,7,R,FALSE,TRUE,,Representative.James.Zawacki@akleg.gov,,,
+16,Richard Shultz:13,SHU,H,17,R,FALSE,TRUE,"""Appointed to Senate December 28, 1990 to fill Senator Coghill's seat.""",Representative.Richard.Shultz@akleg.gov,,,
+16,Mike W Miller:13,MIL,H,18,R,FALSE,TRUE,,Representative.Mike.Miller@akleg.gov,,,
+16,Mike Davis:13,DAM,H,19,D,FALSE,TRUE,,Representative.Mike.Davis@akleg.gov,,,
+16,Niilo Koponen:13,KOP,H,21,D,FALSE,TRUE,,Representative.Niilo.Koponen@akleg.gov,,,
+16,Eileen MacLean:16,MAC,H,22,D,FALSE,TRUE,,Representative.Eileen.MacLean@akleg.gov,,,
+16,Richard Foster:16,FOS,H,23,D,FALSE,TRUE,,Representative.Richard.Foster@akleg.gov,,,
+16,F Wallis:14,WAL,H,24,D,FALSE,TRUE,,Representative.F..Wallis@akleg.gov,,,
+16,Lyman Hoffman:15,HOF,H,25,D,FALSE,TRUE,,Representative.Lyman.Hoffman@akleg.gov,,,
+16,George Jacko:16,JAC,H,26,D,FALSE,TRUE,,Representative.George.Jacko@akleg.gov,,,
+16,Cliff Davidson:15,DAV,H,27,D,FALSE,TRUE,,Representative.Cliff.Davidson@akleg.gov,,,
+16,Robin Taylor:14,TAY,H,1-A,R,FALSE,TRUE,,Representative.Robin.Taylor@akleg.gov,,,
+16,Cheri Davis:16,DAS,H,1-B,R,FALSE,TRUE,,Representative.Cheri.Davis@akleg.gov,,,
+16,Henry Boucher:14,BOU,H,10-A,D,FALSE,TRUE,,Representative.H..Boucher@akleg.gov,,,
+16,Virginia Collins:14,COL,H,10-B,R,FALSE,TRUE,,Representative.Virginia.Collins@akleg.gov,,,
+16,Dave Donley:15,DON,H,11-A,D,FALSE,TRUE,,Representative.Dave.Donley@akleg.gov,,,
+16,Max Gruenberg:14,GRU,H,11-B,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,,,
+16,Kay Brown:15,BRO,H,12-A,D,FALSE,TRUE,,Representative.Kay.Brown@akleg.gov,,,
+16,Johnny Ellis:15,ELL,H,12-B,D,FALSE,TRUE,,Representative.Johnny.Ellis@akleg.gov,,,
+16,David Finkelstein:16,FIN,H,13-A,D,FALSE,TRUE,"""Elected to fill the seat April 5, 1989 after a run-off""",Representative.David.Finkelstein@akleg.gov,,,
+16,Ann Spohnholz:16,SPO,H,13-A,,FALSE,TRUE,"""Appointed January 9, 1989 to fill Seat 13-A until a run-off election could be held. David Finkelstein was elected to fill the seat April 5, 1989""",Representative.Ann.Spohnholz@akleg.gov,,,
+16,Terry Martin:11,MAR,H,13-B,R,FALSE,TRUE,,Representative.Terry.Martin@akleg.gov,,,
+16,Ramona Barnes:11,BAR,H,14-A,R,FALSE,TRUE,,Representative.Ramona.Barnes@akleg.gov,,,
+16,Walter Furnace:13,FUR,H,14-B,R,FALSE,TRUE,,Representative.Walter.Furnace@akleg.gov,,,
+16,Samuel Cotten:9,COT,H,15-A,D,FALSE,TRUE,Speaker of the House,Representative.Samuel.Cotten@akleg.gov,,,
+16,Randy Phillips:10,PHI,H,15-B,R,FALSE,TRUE,,Representative.Randy.Phillips@akleg.gov,,,
+16,Curt Menard:15,MEN,H,16-A,D,FALSE,TRUE,,Representative.Curt.Menard@akleg.gov,,,
+16,Ronald Larson:13,LAR,H,16-B,D,FALSE,TRUE,,Representative.Ronald.Larson@akleg.gov,,,
+16,Bert Sharp:16,SHA,H,20-A,R,FALSE,TRUE,,Representative.Bert.Sharp@akleg.gov,,,
+16,Mark Boyer:15,BOY,H,20-B,D,FALSE,TRUE,,Representative.Mark.Boyer@akleg.gov,,,
+16,Bill Hudson:15,HUD,H,4-A,R,FALSE,TRUE,,Representative.Bill.Hudson@akleg.gov,,,
+16,Fran Ulmer:15,ULM,H,4-B,D,FALSE,TRUE,,Representative.Fran.Ulmer@akleg.gov,,,
+16,Mike Navarre:14,NAV,H,5-A,D,FALSE,TRUE,,Representative.Mike.Navarre@akleg.gov,,,
+16,Judith Salo:16,SAL,H,5-B,D,FALSE,TRUE,"""Appointed June 18, 1990 to fill the vacancy created by the resignation of Representative C.E. """"Swack"""" Swackhammer""",Representative.Judith.Salo@akleg.gov,,,
+16,C Swackhammer:15,SWA,H,5-B,D,FALSE,FALSE,"""Resigned June 1, 1990""",Representative.C..Swackhammer@akleg.gov,,,
+16,Fritz Pettyjohn:13,PET,H,8-A,R,FALSE,TRUE,,Representative.Fritz.Pettyjohn@akleg.gov,,,
+16,Steve Rieger:14,RIE,H,8-B,R,FALSE,TRUE,,Representative.Steve.Rieger@akleg.gov,,,
+16,Loren Leman:16,LEM,H,9-A,R,FALSE,TRUE,,Representative.Loren.Leman@akleg.gov,,,
+16,Alyce Hanley:14,HAN,H,9-B,R,FALSE,TRUE,,Representative.Alyce.Hanley@akleg.gov,,,
+16,Lloyd Jones:15,JON,S,A,R,FALSE,TRUE,,Senator.Lloyd.Jones@akleg.gov,,,
+16,Richard Eliason:6,ELI,S,B,R,FALSE,TRUE,,Senator.Richard.Eliason@akleg.gov,,,
+16,Jim Duncan:9,DUN,S,C,D,FALSE,TRUE,,Senator.Jim.Duncan@akleg.gov,,,
+16,Paul Fischer:13,FIS,S,D,R,FALSE,TRUE,,Senator.Paul.Fischer@akleg.gov,,,
+16,Jalmar Kerttula:2,KER,S,E-A,D,FALSE,TRUE,,Senator.Jalmar.Kerttula@akleg.gov,,,
+16,Mike Szymanski:13,SZY,S,E-B,D,FALSE,TRUE,,Senator.Mike.Szymanski@akleg.gov,,,
+16,Arliss Sturgulewski:11,STU,S,F-A,R,FALSE,TRUE,,Senator.Arliss.Sturgulewski@akleg.gov,,,
+16,Jan Faiks:13,FAI,S,F-B,R,FALSE,TRUE,,Senator.Jan.Faiks@akleg.gov,,,
+16,Drue Pearce:14,PEA,S,G-A,R,FALSE,TRUE,,Senator.Drue.Pearce@akleg.gov,,,
+16,Patrick Rodey:9,ROD,S,G-B,D,FALSE,TRUE,,Senator.Patrick.Rodey@akleg.gov,,,
+16,Pat Pourchot:14,POU,S,H-A,D,FALSE,TRUE,,Senator.Pat.Pourchot@akleg.gov,,,
+16,Rick Uehling:13,UEH,S,H-B,R,FALSE,TRUE,,Senator.Rick.Uehling@akleg.gov,,,
+16,Rick Halford:11,HAL,S,I-A,R,FALSE,TRUE,,Senator.Richard.Halford@akleg.gov,,,
+16,Tim Kelly:10,KEL,S,I-B,R,FALSE,TRUE,Senate President,Senator.Tim.Kelly@akleg.gov,,,
+16,John Coghill:16,COG,S,J,R,FALSE,FALSE,"""Resigned effective December 3, 1990 to become Lt. Governor""",Senator.John.Coghill@akleg.gov,,,
+16,Steve Frank:14,FRA,S,K-A,R,FALSE,TRUE,,Senator.Steve.Frank@akleg.gov,,,
+16,Bettye Fahrenkamp:11,FAH,S,K-B,D,FALSE,TRUE,,Senator.Bettye.Fahrenkamp@akleg.gov,,,
+16,Albert Adams:12,ADA,S,L,D,FALSE,TRUE,,Senator.Albert.Adams@akleg.gov,,,
+16,Johne Binkley:14,BIN,S,M,R,FALSE,TRUE,,Senator.Johne.Binkley@akleg.gov,,,
+16,Fred Zharoff:11,ZHA,S,N,D,FALSE,TRUE,,Senator.Fred.Zharoff@akleg.gov,,,
+17,Jerry Mackie:17,Mak,H,2,D,FALSE,TRUE,,Representative.Jerry.Mackie@akleg.gov,,,
+17,Ben Grussendorf:12,Gru,H,3,D,FALSE,TRUE,Speaker of the House,Representative.Ben.Grussendorf@akleg.gov,,,
+17,Eugene Kubina:16,Kub,H,6,D,FALSE,TRUE,,Representative.Eugene.Kubina@akleg.gov,,,
+17,James Zawacki:15,Zaw,H,7,R,FALSE,TRUE,,Representative.James.Zawacki@akleg.gov,,,
+17,John Gonzales:17,Gon,H,17,R,FALSE,TRUE,"""Appointed on January 16,  1991 to fill the vacancy created by Representative Shultz's appointment to the Senate""",Representative.John.Gonzales@akleg.gov,,,
+17,Mike W Miller:13,Mim,H,18,R,FALSE,TRUE,,Representative.Mike.Miller@akleg.gov,,,
+17,Tom Moyer:17,Moy,H,19,D,FALSE,TRUE,,Representative.Tom.Moyer@akleg.gov,,,
+17,Niilo Koponen:13,Kop,H,21,D,FALSE,TRUE,,Representative.Niilo.Koponen@akleg.gov,,,
+17,Eileen MacLean:16,Mac,H,22,D,FALSE,TRUE,,Representative.Eileen.MacLean@akleg.gov,,,
+17,Richard Foster:16,Fos,H,23,D,FALSE,TRUE,,Representative.Richard.Foster@akleg.gov,,,
+17,Georgianna Lincoln:17,Lin,H,24,R,FALSE,TRUE,,Representative.Georgianna.Lincoln@akleg.gov,,,
+17,Ivan Ivan:17,Iva,H,25,D,FALSE,TRUE,,Representative.Ivan.Ivan@akleg.gov,,,
+17,George Jacko:16,Jac,H,26,D,FALSE,TRUE,,Representative.George.Jacko@akleg.gov,,,
+17,Cliff Davidson:15,Dav,H,27,D,FALSE,TRUE,,Representative.Cliff.Davidson@akleg.gov,,,
+17,Carroll Fader:17,Fad,H,1-A,R,FALSE,TRUE,Appointed to fill the vacancy created by the appointment of Representative Taylor to the Senate,Representative.Carroll.Fader@akleg.gov,,,
+17,Robin Taylor:14,859,H,1-A,R,FALSE,TRUE,Appointed to fill vacancy in Senate left by Lloyd Jones's resignation.,Representative.Robin.Taylor@akleg.gov,,,
+17,Cheri Davis:16,Dac,H,1-B,R,FALSE,TRUE,,Representative.Cheri.Davis@akleg.gov,,,
+17,Larry Baker:17,Bak,H,10-A,R,FALSE,TRUE,,Representative.Larry.Baker@akleg.gov,,,
+17,Kevin Parnell:17,Par,H,10-B,D,FALSE,TRUE,,Representative.Kevin.Parnell@akleg.gov,,,
+17,Dave Donley:15,Don,H,11-A,D,FALSE,TRUE,,Representative.Dave.Donley@akleg.gov,,,
+17,Max Gruenberg:14,Gre,H,11-B,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,,,
+17,Kay Brown:15,Bro,H,12-A,D,FALSE,TRUE,,Representative.Kay.Brown@akleg.gov,,,
+17,Johnny Ellis:15,Ell,H,12-B,D,FALSE,TRUE,,Representative.Johnny.Ellis@akleg.gov,,,
+17,David Finkelstein:16,Fin,H,13-A,D,FALSE,TRUE,,Representative.David.Finkelstein@akleg.gov,,,
+17,Terry Martin:11,Mar,H,13-B,R,FALSE,TRUE,,Representative.Terry.Martin@akleg.gov,,,
+17,Ramona Barnes:11,Bar,H,14-A,R,FALSE,TRUE,,Representative.Ramona.Barnes@akleg.gov,,,
+17,Bettye Davis:17,Dab,H,14-B,D,FALSE,TRUE,,Representative.Bettye.Davis@akleg.gov,,,
+17,Mary Miller:17,Mil,H,15-A,R,FALSE,TRUE,,Representative.Mary.Miller@akleg.gov,,,
+17,Randy Phillips:10,Phr,H,15-B,R,FALSE,TRUE,,Representative.Randy.Phillips@akleg.gov,,,
+17,Patrick Carney:11,Car,H,16-A,D,FALSE,TRUE,,Representative.Patrick.Carney@akleg.gov,,,
+17,Ronald Larson:13,Lar,H,16-B,D,FALSE,TRUE,,Representative.Ronald.Larson@akleg.gov,,,
+17,Bert Sharp:16,Sha,H,20-A,R,FALSE,TRUE,,Representative.Bert.Sharp@akleg.gov,,,
+17,Mark Boyer:15,Boy,H,20-B,D,FALSE,TRUE,,Representative.Mark.Boyer@akleg.gov,,,
+17,Bill Hudson:15,Hud,H,4-A,R,FALSE,TRUE,,Representative.Bill.Hudson@akleg.gov,,,
+17,Fran Ulmer:15,Ulm,H,4-B,D,FALSE,TRUE,,Representative.Fran.Ulmer@akleg.gov,,,
+17,Mike Navarre:14,Nav,H,5-A,D,FALSE,TRUE,,Representative.Mike.Navarre@akleg.gov,,,
+17,Gail Phillips:17,Phg,H,5-B,R,FALSE,TRUE,,Representative.Gail.Phillips@akleg.gov,,,
+17,Betty Bruckman:17,Bru,H,8-A,D,FALSE,TRUE,,Representative.Betty.Bruckman@akleg.gov,,,
+17,Dave Choquette:17,Cho,H,8-B,R,FALSE,TRUE,,Representative.Dave.Choquette@akleg.gov,,,
+17,Loren Leman:16,Lem,H,9-A,R,FALSE,TRUE,,Representative.Loren.Leman@akleg.gov,,,
+17,Mark Hanley:17,Han,H,9-B,R,FALSE,TRUE,,Representative.Mark.Hanley@akleg.gov,,,
+17,Lloyd Jones:15,Jon,S,A,R,FALSE,FALSE,"""Resigned June 1, 1992.""",Senator.Lloyd.Jones@akleg.gov,,,
+17,Robin Taylor:14,TAY,S,A,R,FALSE,TRUE,Appointed to fill vacancy left by Lloyd Jones's resignation.,Senator.Robin.Taylor@akleg.gov,,,
+17,Richard Eliason:6,Eli,S,B,R,FALSE,TRUE,Senate President,Senator.Richard.Eliason@akleg.gov,,,
+17,Jim Duncan:9,Dun,S,C,D,FALSE,TRUE,,Senator.Jim.Duncan@akleg.gov,,,
+17,Paul Fischer:13,Fis,S,D,R,FALSE,TRUE,,Senator.Paul.Fischer@akleg.gov,,,
+17,Jalmar Kerttula:2,Ker,S,E-A,D,FALSE,TRUE,,Senator.Jalmar.Kerttula@akleg.gov,,,
+17,Curt Menard:15,Men,S,E-B,D,FALSE,TRUE,,Senator.Curt.Menard@akleg.gov,,,
+17,Arliss Sturgulewski:11,Stu,S,F-A,R,FALSE,TRUE,,Senator.Arliss.Sturgulewski@akleg.gov,,,
+17,Virginia Collins:14,Col,S,F-B,R,FALSE,TRUE,,Senator.Virginia.Collins@akleg.gov,,,
+17,Drue Pearce:14,Pea,S,G-A,R,FALSE,TRUE,,Senator.Drue.Pearce@akleg.gov,,,
+17,Patrick Rodey:9,Rod,S,G-B,D,FALSE,TRUE,,Senator.Patrick.Rodey@akleg.gov,,,
+17,Pat Pourchot:14,Pou,S,H-A,D,FALSE,TRUE,,Senator.Pat.Pourchot@akleg.gov,,,
+17,Rick Uehling:13,Ueh,S,H-B,R,FALSE,TRUE,,Senator.Rick.Uehling@akleg.gov,,,
+17,Rick Halford:11,Hal,S,I-A,R,FALSE,TRUE,,Senator.Richard.Halford@akleg.gov,,,
+17,Samuel Cotten:9,Cot,S,I-B,D,FALSE,TRUE,,Senator.Samuel.Cotten@akleg.gov,,,
+17,Richard Shultz:13,Shu,S,J,R,FALSE,TRUE,"""Appointed to the Senate December 28, 1990 to fill Senator Coghill's vacancy""",Senator.Richard.Shultz@akleg.gov,,,
+17,Steve Frank:14,Fra,S,K-A,R,FALSE,TRUE,,Senator.Steve.Frank@akleg.gov,,,
+17,Shirley Craft:17,Cra,S,K-B,D,FALSE,TRUE,"""Appointed August 23, 1991 to fill the vacancy created by the death of Senator Bettye M. Fahrenkamp of Fairbanks on August 12, 1991""",Senator.Shirley.Craft@akleg.gov,,,
+17,Bettye Fahrenkamp:11,Fah,S,K-B,D,FALSE,TRUE,"""Died on August 12, 1991""",Senator.Bettye.Fahrenkamp@akleg.gov,,,
+17,Albert Adams:12,Ada,S,L,D,FALSE,TRUE,,Senator.Albert.Adams@akleg.gov,,,
+17,Lyman Hoffman:15,Hof,S,M,D,FALSE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,,,
+17,Fred Zharoff:11,Zha,S,N,D,FALSE,TRUE,,Senator.Fred.Zharoff@akleg.gov,,,
+18,Bill Williams:18,WLL,H,1,D,FALSE,TRUE,,Representative.William.Williams@akleg.gov,,,
+18,Ben Grussendorf:12,GRS,H,2,D,FALSE,TRUE,,Representative.Ben.Grussendorf@akleg.gov,,,
+18,Fran Ulmer:15,ULM,H,3,D,FALSE,TRUE,Minority Leader,Representative.Fran.Ulmer@akleg.gov,,,
+18,Bill Hudson:15,HUD,H,4,R,TRUE,TRUE,,Representative.Bill.Hudson@akleg.gov,,,
+18,Jerry Mackie:17,MAC,H,5,D,FALSE,TRUE,,Representative.Jerry.Mackie@akleg.gov,,,
+18,Cliff Davidson:15,DAI,H,6,D,FALSE,TRUE,,Representative.Cliff.Davidson@akleg.gov,,,
+18,Gail Phillips:17,PHG,H,7,R,TRUE,TRUE,Majority Leader,Representative.Gail.Phillips@akleg.gov,,,
+18,Gary Davis:18,DVG,H,8,R,TRUE,TRUE,,Representative.Gary.G.Davis@akleg.gov,,,
+18,Mike Navarre:14,NAV,H,9,D,FALSE,TRUE,,Representative.Mike.Navarre@akleg.gov,,,
+18,Joe Green:18,GRN,H,10,R,TRUE,TRUE,,Representative.Joseph.Green@akleg.gov,,,
+18,Jim Nordlund:18,NOR,H,11,D,FALSE,TRUE,,Representative.Jim.Nordlund@akleg.gov,,,
+18,Mark Hanley:17,HAN,H,12,R,TRUE,TRUE,,Representative.Mark.Hanley@akleg.gov,,,
+18,Cynthia Toohey:18,TOH,H,13,R,TRUE,TRUE,,Representative.Cynthia.Toohey@akleg.gov,,,
+18,Terry Martin:11,MAR,H,14,R,TRUE,TRUE,,Representative.Terry.Martin@akleg.gov,,,
+18,Kay Brown:15,BRO,H,15,D,FALSE,TRUE,,Representative.Kay.Brown@akleg.gov,,,
+18,David Finkelstein:16,FIK,H,16,D,FALSE,TRUE,,Representative.David.Finkelstein@akleg.gov,,,
+18,Sean Parnell:18,PAR,H,17,R,TRUE,TRUE,,Representative.Sean.Parnell@akleg.gov,,,
+18,Con Bunde:18,BUN,H,18,R,TRUE,TRUE,,Representative.Con.Bunde@akleg.gov,,,
+18,Jerry Sanders:18,SAN,H,19,R,TRUE,TRUE,,Representative.Jerry.Sanders@akleg.gov,,,
+18,Brian Porter:18,POR,H,20,R,TRUE,TRUE,,Representative.Brian.Porter@akleg.gov,,,
+18,Bettye Davis:17,DVB,H,21,D,FALSE,TRUE,Minority Whip,Representative.Bettye.B.Davis@akleg.gov,,,
+18,Ramona Barnes:11,BAR,H,22,R,TRUE,TRUE,Speaker of the House,Representative.Ramona.Barnes@akleg.gov,,CAPITOL,
+18,Eldon Mulder:18,MUL,H,23,R,TRUE,TRUE,,Representative.Eldon.Mulder@akleg.gov,,,
+18,Pete Kott:18,KOT,H,24,R,TRUE,TRUE,,Representative.Pete.Kott@akleg.gov,,,
+18,Edward Willis:9,WLS,H,25,I,FALSE,TRUE,,Representative.Edward.Willis@akleg.gov,,,
+18,Patrick Carney:11,CAR,H,26,D,FALSE,TRUE,,Representative.Patrick.Carney@akleg.gov,,,
+18,Ronald Larson:13,LAR,H,27,D,FALSE,TRUE,,Representative.Ronald.Larson@akleg.gov,,,
+18,Curt Menard:15,MND,H,28,D,FALSE,TRUE,,Representative.Curt.Menard@akleg.gov,,,
+18,John Davies:18,DAV,H,29,D,FALSE,TRUE,,Representative.John.Davies@akleg.gov,,,
+18,Tom Brice:18,BRI,H,30,D,FALSE,TRUE,,Representative.Tom.Brice@akleg.gov,,,
+18,Joe Sitton:18,STT,H,31,D,FALSE,TRUE,,Representative.Joe.Sitton@akleg.gov,,,
+18,Al Vezey:18,VEZ,H,32,R,TRUE,TRUE,,Representative.Al.Vezey@akleg.gov,,,
+18,Gene Therriault:18,THR,H,33,R,TRUE,TRUE,,Representative.Gene.Therriault@akleg.gov,,,
+18,Jeannette James:18,JAM,H,34,R,TRUE,TRUE,,Representative.Jeannette.James@akleg.gov,,,
+18,Harley Olberg:18,OLB,H,35,R,TRUE,TRUE,,Representative.Harley.Olberg@akleg.gov,,,
+18,Irene Nicholia:18,NIC,H,36,D,FALSE,TRUE,,Representative.Irene.Nicholia@akleg.gov,,,
+18,Eileen MacLean:16,MAL,H,37,D,FALSE,TRUE,,Representative.Eileen.MacLean@akleg.gov,,,
+18,Richard Foster:16,FOS,H,38,D,FALSE,TRUE,Majority Whip,Representative.Richard.Foster@akleg.gov,,,
+18,Lyman Hoffman:15,HOF,H,39,D,FALSE,TRUE,,Representative.Lyman.Hoffman@akleg.gov,,,
+18,Carl Moses:4,MOS,H,40,D,FALSE,TRUE,,Representative.Carl.Moses@akleg.gov,,,
+18,Robin Taylor:14,TAY,S,A,R,TRUE,TRUE,,Senator.Robin.Taylor@akleg.gov,9074653873,CAPITOL,30
+18,Jim Duncan:9,DUN,S,B,D,FALSE,TRUE,,Senator.Jim.Duncan@akleg.gov,9074654766,CAPITOL,119
+18,Fred Zharoff:11,ZHA,S,C,D,FALSE,TRUE,,Senator.Fred.Zharoff@akleg.gov,9074653473,CAPITOL,121
+18,Suzanne Little:18,LIT,S,D,D,FALSE,TRUE,,Senator.Suzanne.Little@akleg.gov,9074652828,CAPITOL,7
+18,Judith Salo:16,SAL,S,E,D,FALSE,TRUE,,Senator.Judith.Salo@akleg.gov,9074654940,CAPITOL,504
+18,Drue Pearce:14,PEA,S,F,R,TRUE,TRUE,,Senator.Drue.Pearce@akleg.gov,9074654993,CAPITOL,508
+18,Loren Leman:16,LEM,S,G,R,TRUE,TRUE,,Senator.Loren.Leman@akleg.gov,9074653711,CAPITOL,113
+18,Johnny Ellis:15,ELL,S,H,D,FALSE,TRUE,,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,9
+18,Steve Rieger:14,RIE,S,I,R,TRUE,TRUE,,Senator.Steve.Rieger@akleg.gov,9074653879,CAPITOL,516
+18,Dave Donley:15,DON,S,J,D,FALSE,TRUE,,Senator.Dave.Donley@akleg.gov,9074653892,CAPITOL,11
+18,Tim Kelly:10,KEL,S,K,R,TRUE,TRUE,,Senator.Tim.Kelly@akleg.gov,9074653822,CAPITOL,101
+18,Randy Phillips:10,PHI,S,L,R,TRUE,TRUE,,Senator.Randy.Phillips@akleg.gov,9074654949,CAPITOL,103
+18,Rick Halford:11,HAL,S,M,R,TRUE,TRUE,Senate President,Senator.Richard.Halford@akleg.gov,9074654958,CAPITOL,111
+18,Jalmar Kerttula:2,KER,S,N,D,FALSE,TRUE,,Senator.Jalmar.Kerttula@akleg.gov,9074652828,CAPITOL,427
+18,Steve Frank:14,FRA,S,O,R,TRUE,TRUE,,Senator.Steve.Frank@akleg.gov,9074653709,CAPITOL,518
+18,Bert Sharp:16,SHA,S,P,R,TRUE,TRUE,,Senator.Bert.Sharp@akleg.gov,9074653004,CAPITOL,514
+18,Mike W Miller:13,MIL,S,Q,R,TRUE,TRUE,,Senator.Mike.W.Miller@akleg.gov,9074654976,CAPITOL,423
+18,Georgianna Lincoln:17,LIN,S,R,D,FALSE,TRUE,,Senator.Georgianna.Lincoln@akleg.gov,9074653732,CAPITOL,510
+18,Albert Adams:12,ADA,S,S,D,FALSE,TRUE,,Senator.Albert.Adams@akleg.gov,9074653707,CAPITOL,417
+18,George Jacko:16,JAC,S,T,D,FALSE,TRUE,,Senator.George.Jacko@akleg.gov,9074654942,CAPITOL,125
+19,Bill Williams:18,WIL,H,1,D,FALSE,TRUE,,Representative.William.Williams@akleg.gov,9074653424,CAP,128
+19,Ben Grussendorf:12,GRS,H,2,D,FALSE,TRUE,,Representative.Ben.Grussendorf@akleg.gov,9074653824,CAP,415
+19,Kim Elton:19,ELT,H,3,D,FALSE,TRUE,,Representative.Kim.Elton@akleg.gov,9074654947,CAP,112
+19,Caren Robinson:19,ROB,H,4,D,FALSE,TRUE,,Representative.Caren.Robinson@akleg.gov,9074653744,CAP,114
+19,Jerry Mackie:17,MAK,H,5,D,FALSE,TRUE,,Representative.Jerry.Mackie@akleg.gov,9074654925,CAP,404
+19,Alan Austerman:19,AUS,H,6,R,TRUE,TRUE,,Representative.Alan.Austerman@akleg.gov,9074652487,CAP,434
+19,Gail Phillips:17,PHG,H,7,R,TRUE,TRUE,,Representative.Gail.Phillips@akleg.gov,9074652689,CAP,208
+19,Gary Davis:18,DAG,H,8,R,TRUE,TRUE,,Representative.Gary.G.Davis@akleg.gov,9074652893,CAP,420
+19,Mike Navarre:14,NAV,H,9,D,FALSE,TRUE,,Representative.Mike.Navarre@akleg.gov,9074653779,CAP,521
+19,Joe Green:18,GRN,H,10,R,TRUE,TRUE,,Representative.Joseph.Green@akleg.gov,9074654931,CAP,24
+19,Norman Rokeberg:19,ROK,H,11,R,TRUE,TRUE,,Representative.Norman.Rokeberg@akleg.gov,9074654968,CAP,110
+19,Mark Hanley:17,HAN,H,12,R,TRUE,TRUE,,Representative.Mark.Hanley@akleg.gov,9074654939,CAP,507
+19,Cynthia Toohey:18,TOH,H,13,R,TRUE,TRUE,,Representative.Cynthia.Toohey@akleg.gov,9074654919,CAP,104
+19,Terry Martin:11,MAR,H,14,R,TRUE,TRUE,,Representative.Terry.Martin@akleg.gov,9074653783,CAP,502
+19,Kay Brown:15,BRO,H,15,D,FALSE,TRUE,,Representative.Kay.Brown@akleg.gov,9074654998,CAP,517
+19,David Finkelstein:16,FIK,H,16,D,FALSE,TRUE,,Representative.David.Finkelstein@akleg.gov,9074652435,CAP,424
+19,Sean Parnell:18,PAR,H,17,R,TRUE,TRUE,,Representative.Sean.Parnell@akleg.gov,9074652995,CAP,515
+19,Con Bunde:18,BUN,H,18,R,TRUE,TRUE,,Representative.Con.Bunde@akleg.gov,9074654843,CAP,108
+19,Jerry Sanders:18,SAN,H,19,R,TRUE,TRUE,,Representative.Jerry.Sanders@akleg.gov,9074654945,CAP,414
+19,Brian Porter:18,POR,H,20,R,TRUE,TRUE,,Representative.Brian.Porter@akleg.gov,9074654930,CAP,118
+19,Bettye Davis:17,DAB,H,21,D,FALSE,TRUE,,Representative.Bettye.B.Davis@akleg.gov,9074653875,CAP,430
+19,Ramona Barnes:11,BAR,H,22,R,TRUE,TRUE,,Representative.Ramona.Barnes@akleg.gov,9074653438,CAP,403
+19,Eldon Mulder:18,MUL,H,23,R,TRUE,TRUE,,Representative.Eldon.Mulder@akleg.gov,9074652647,CAP,411
+19,Pete Kott:18,KOT,H,24,R,TRUE,TRUE,,Representative.Pete.Kott@akleg.gov,9074653777,CAP,432
+19,Edward Willis:9,WLS,H,25,I,FALSE,TRUE,,Representative.Edward.Willis@akleg.gov,9074652199,CAP,400
+19,Vic Kohring:19,KOR,H,26,R,TRUE,TRUE,,Representative.Vic.Kohring@akleg.gov,9074652186,CAP,428
+19,Scott Ogan:19,OGA,H,27,R,TRUE,TRUE,,Representative.Scott.Ogan@akleg.gov,9074653878,CAP,409
+19,Beverly Masek:19,MAS,H,28,R,TRUE,TRUE,,Representative.Beverly.Masek@akleg.gov,9074652679,CAP,418
+19,John Davies:18,DAV,H,29,D,FALSE,TRUE,,Representative.John.Davies@akleg.gov,9074654457,CAP,422
+19,Tom Brice:18,BRI,H,30,D,FALSE,TRUE,,Representative.Tom.Brice@akleg.gov,9074653466,CAP,426
+19,Pete Kelly:19,KLL,H,31,R,TRUE,TRUE,,Representative.Pete.Kelly@akleg.gov,9074652327,CAP,513
+19,Al Vezey:18,VEZ,H,32,R,TRUE,TRUE,,Representative.Al.Vezey@akleg.gov,9074653719,CAP,216
+19,Gene Therriault:18,THR,H,33,R,TRUE,TRUE,,Representative.Gene.Therriault@akleg.gov,9074654797,CAP,421
+19,Jeannette James:18,JAM,H,34,R,TRUE,TRUE,,Representative.Jeannette.James@akleg.gov,9074653743,CAP,102
+19,Eugene Kubina:16,KUB,H,35,D,FALSE,TRUE,,Representative.Eugene.Kubina@akleg.gov,9074654859,CAP,406
+19,Irene Nicholia:18,NIC,H,36,D,FALSE,TRUE,,Representative.Irene.Nicholia@akleg.gov,9074654527,CAP,501
+19,Don Long:19,LNG,H,37,D,FALSE,TRUE,"Appointed; January 12, 1996",Representative.Don.Long@akleg.gov,9074654833,CAP,405
+19,Eileen MacLean:16,MAC,H,37,D,FALSE,FALSE,"Resigned; January 12, 1996",Representative.Eileen.Maclean@akleg.gov,9074650000,,
+19,Richard Foster:16,FOS,H,38,D,FALSE,TRUE,,Representative.Richard.Foster@akleg.gov,9074653789,CAP,410
+19,Ivan Ivan:17,IVA,H,39,D,FALSE,TRUE,,Representative.Ivan.Ivan@akleg.gov,9074654942,CAP,503
+19,Carl Moses:4,MOS,H,40,D,FALSE,TRUE,,Representative.Carl.Moses@akleg.gov,9074654451,CAP,204
+19,Robin Taylor:14,TAY,S,A,R,TRUE,TRUE,,Senator.Robin.Taylor@akleg.gov,9074653873,CAPITOL,30
+19,Jim Duncan:9,DUN,S,B,D,FALSE,TRUE,Minority Leader,Senator.Jim.Duncan@akleg.gov,9074654766,CAPITOL,119
+19,Fred Zharoff:11,ZHA,S,C,D,FALSE,TRUE,,Senator.Fred.Zharoff@akleg.gov,9074653473,CAPITOL,121
+19,John Torgerson:19,TOR,S,D,R,TRUE,TRUE,,Senator.John.Torgerson@akleg.gov,9074652828,CAPITOL,427
+19,Judith Salo:16,SAL,S,E,D,FALSE,TRUE,,Senator.Judith.Salo@akleg.gov,9074654940,CAPITOL,504
+19,Drue Pearce:14,PEA,S,F,R,TRUE,TRUE,President of the Senate,Senator.Drue.Pearce@akleg.gov,9074653755,CAPITOL,111
+19,Loren Leman:16,LEM,S,G,R,TRUE,TRUE,,Senator.Loren.Leman@akleg.gov,9074652095,CAPITOL,113
+19,Johnny Ellis:15,ELL,S,H,D,FALSE,TRUE,,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,9
+19,Steve Rieger:14,RIE,S,I,R,TRUE,TRUE,,Senator.Steve.Rieger@akleg.gov,9074653879,CAPITOL,516
+19,Dave Donley:15,DON,S,J,D,FALSE,TRUE,,Senator.Dave.Donley@akleg.gov,9074653892,CAPITOL,11
+19,Tim Kelly:10,KEL,S,K,R,TRUE,TRUE,,Senator.Tim.Kelly@akleg.gov,9074653822,CAPITOL,101
+19,Randy Phillips:10,PHI,S,L,R,TRUE,TRUE,,Senator.Randy.R.Phillips@akleg.gov,9074654949,CAPITOL,103
+19,Rick Halford:11,HAL,S,M,R,TRUE,TRUE,Majority Leader,Senator.Richard.Halford@akleg.gov,9074654958,CAPITOL,508
+19,Lyda Green:19,GRE,S,N,R,TRUE,TRUE,,Senator.Lyda.Green@akleg.gov,9074656600,CAPITOL,423
+19,Steve Frank:14,FRA,S,O,R,TRUE,TRUE,,Senator.Steve.Frank@akleg.gov,9074653709,CAPITOL,518
+19,Bert Sharp:16,SHA,S,P,R,TRUE,TRUE,,Senator.Bert.Sharp@akleg.gov,9074653004,CAPITOL,514
+19,Mike W Miller:13,MIL,S,Q,R,TRUE,TRUE,,Senator.Mike.W.Miller@akleg.gov,9074654976,CAPITOL,125
+19,Georgianna Lincoln:17,LIN,S,R,D,FALSE,TRUE,,Senator.Georgianna.Lincoln@akleg.gov,9074653732,CAPITOL,510
+19,Albert Adams:12,ADA,S,S,D,FALSE,TRUE,,Senator.Albert.Adams@akleg.gov,9074653707,CAPITOL,417
+19,Lyman Hoffman:15,HOF,S,T,D,FALSE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,7
+20,Bill Williams:18,WIL,H,1,D,FALSE,TRUE,,Representative.William.Williams@akleg.gov,9074653424,CAPITOL,424
+20,Ben Grussendorf:12,GRS,H,2,D,FALSE,TRUE,,Representative.Ben.Grussendorf@akleg.gov,9074653824,CAPITOL,415
+20,Kim Elton:19,ELT,H,3,D,FALSE,TRUE,,Representative.Kim.Elton@akleg.gov,9074654947,CAPITOL,400
+20,Bill Hudson:15,HUD,H,4,R,TRUE,TRUE,,Representative.Bill.Hudson@akleg.gov,9074653744,CAPITOL,108
+20,Albert Kookesh:20,KOS,H,5,D,FALSE,TRUE,,Representative.Albert.Kookesh@akleg.gov,9074653473,CAPITOL,114
+20,Alan Austerman:19,AUS,H,6,R,TRUE,TRUE,,Representative.Alan.Austerman@akleg.gov,9074652487,CAPITOL,434
+20,Gail Phillips:17,PHG,H,7,R,TRUE,TRUE,Speaker of the House,Representative.Gail.Phillips@akleg.gov,9074652689,CAPITOL,208
+20,Gary Davis:18,DAG,H,8,R,TRUE,TRUE,,Representative.Gary.Davis@akleg.gov,9074652693,CAPITOL,513
+20,Mark Hodgins:20,HOD,H,9,R,TRUE,TRUE,,Representative.Mark.Hodgins@akleg.gov,9074653779,CAPITOL,110
+20,Joe Green:18,GRN,H,10,R,TRUE,TRUE,,Representative.Joseph.Green@akleg.gov,9074654931,CAPITOL,118
+20,Norman Rokeberg:19,ROK,H,11,R,TRUE,TRUE,,Representative.Norman.Rokeberg@akleg.gov,9074654968,CAPITOL,24
+20,Mark Hanley:17,HAN,H,12,R,TRUE,TRUE,,Representative.Mark.Hanley@akleg.gov,9074654939,CAPITOL,507
+20,Ethan Berkowitz:20,BER,H,13,D,FALSE,TRUE,,Representative.Ethan.Berkowitz@akleg.gov,9074654919,CAPITOL,406
+20,Terry Martin:11,MAR,H,14,R,TRUE,TRUE,,Representative.Terry.Martin@akleg.gov,9074653783,CAPITOL,502
+20,Eric Croft:20,CRO,H,15,D,FALSE,TRUE,,Representative.Eric.Croft@akleg.gov,9074654998,CAPITOL,430
+20,Allen Kemplen:20,KEM,H,16,D,FALSE,TRUE,,Representative.Allen.Kemplen@akleg.gov,9074652435,CAPITOL,112
+20,John Cowdery:13,CWD,H,17,R,TRUE,TRUE,,Representative.John.Cowdery@akleg.gov,9074653879,CAPITOL,416
+20,Con Bunde:18,BUN,H,18,R,TRUE,TRUE,,Representative.Con.Bunde@akleg.gov,9074654843,CAPITOL,104
+20,Jerry Sanders:18,SAN,H,19,R,TRUE,TRUE,,Representative.Jerry.Sanders@akleg.gov,9074654945,CAPITOL,414
+20,Brian Porter:18,POR,H,20,R,TRUE,TRUE,House Majority Leader,Representative.Brian.Porter@akleg.gov,9074654930,CAPITOL,216
+20,Joe Ryan:20,RYA,H,21,R,TRUE,TRUE,,Representative.Joe.Ryan@akleg.gov,9074653875,CAPITOL,420
+20,Ramona Barnes:11,BAR,H,22,R,TRUE,TRUE,,Representative.Ramona.Barnes@akleg.gov,9074653438,CAPITOL,403
+20,Eldon Mulder:18,MUL,H,23,R,TRUE,TRUE,,Representative.Eldon.Mulder@akleg.gov,9074652647,CAPITOL,501
+20,Pete Kott:18,KOT,H,24,R,TRUE,TRUE,,Representative.Pete.Kott@akleg.gov,9074653777,CAPITOL,204
+20,Fred Dyson:20,DYS,H,25,R,TRUE,TRUE,,Representative.Fred.Dyson@akleg.gov,9074652199,CAPITOL,428
+20,Vic Kohring:19,KOR,H,26,R,TRUE,TRUE,,Representative.Vic.Kohring@akleg.gov,9074652186,CAPITOL,421
+20,Scott Ogan:19,OGA,H,27,R,TRUE,TRUE,,Representative.Scott.Ogan@akleg.gov,9074653878,CAPITOL,128
+20,Beverly Masek:19,MAS,H,28,R,TRUE,TRUE,,Representative.Beverly.Masek@akleg.gov,9074652679,CAPITOL,432
+20,John Davies:18,DAV,H,29,D,FALSE,TRUE,,Representative.John.Davies@akleg.gov,9074654457,CAPITOL,422
+20,Tom Brice:18,BRI,H,30,D,FALSE,TRUE,,Representative.Tom.Brice@akleg.gov,9074653466,CAPITOL,426
+20,Pete Kelly:19,KLL,H,31,R,TRUE,TRUE,,Representative.Pete.Kelly@akleg.gov,9074652327,CAPIT0L,411
+20,Al Vezey:18,VEZ,H,32,R,TRUE,TRUE,,Representative.Al.Vezey@akleg.gov,9074653719,CAPITOL,13
+20,Gene Therriault:18,THR,H,33,R,TRUE,TRUE,,Representative.Gene.Therriault@akleg.gov,9074654797,CAPITOL,511
+20,Jeannette James:18,JAM,H,34,R,TRUE,TRUE,,Representative.Jeanette.James@akleg.gov,9074653743,CAPITOL,102
+20,Eugene Kubina:16,KUB,H,35,D,FALSE,TRUE,House Minority Leader,Representative.Eugene.Kubina@akleg.gov,9074654859,CAPITOL,404
+20,Irene Nicholia:18,NIC,H,36,D,FALSE,TRUE,,Representative.Irene.Nicholia@akleg.gov,9074654527,CAPITOL,409
+20,Reggie Joule:20,JLE,H,37,D,FALSE,TRUE,,Representative.Reggie.Joule@akleg.gov,9074654833,CAPITOL,405
+20,Richard Foster:16,FOS,H,38,D,FALSE,TRUE,House Majority Whip,Representative.Richard.Foster@akleg.gov,9074653789,CAPITOL,410
+20,Ivan Ivan:17,IVA,H,39,D,FALSE,TRUE,,Representative.Ivan.Ivan@akleg.gov,9074654942,CAPITOL,418
+20,Carl Moses:4,MOS,H,40,D,FALSE,TRUE,,Representative.Carl.Moses@akleg.gov,9074654451,CAPITOL,521
+20,Robin Taylor:14,TAY,S,A,R,TRUE,TRUE,Senate Majority Leader,Senator.Robin.Taylor@akleg.gov,9074653873,CAPITOL,30
+20,Jim Duncan:9,DUN,S,B,D,FALSE,TRUE,Senate Minority Leader,Senator.Jim.Duncan@akleg.gov,9074654766,CAPITOL,119
+20,Jerry Mackie:17,MAK,S,C,D,FALSE,TRUE,,Senator.Jerry.Mackie@akleg.gov,9074654925,CAPITOL,427
+20,John Torgerson:19,TOR,S,D,R,TRUE,TRUE,,Senator.John.Torgerson@akleg.gov,9074652828,CAPITOL,514
+20,Jerry Ward:13,WAR,S,E,R,TRUE,TRUE,,Senator.Jerry.Ward@akleg.gov,9074654940,CAPITOL,423
+20,Drue Pearce:14,PEA,S,F,R,TRUE,TRUE,,Senator.Drue.Pearce@akleg.gov,9074654993,CAPITOL,518
+20,Loren Leman:16,LEM,S,G,R,TRUE,TRUE,,Senator.Loren.Leman@akleg.gov,9074653844,CAPITOL,113
+20,Johnny Ellis:15,ELL,S,H,D,FALSE,TRUE,,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,9
+20,Sean Parnell:18,PAR,S,I,R,TRUE,TRUE,,Senator.Sean.Parnell@akleg.gov,9074652995,CAPITOL,504
+20,Dave Donley:15,DON,S,J,R,TRUE,TRUE,,Senator.Dave.Donley@akleg.gov,9074653892,CAPITOL,508
+20,Tim Kelly:10,KEL,S,K,R,TRUE,TRUE,,Senator.Tim.Kelly@akleg.gov,9074653822,CAPITOL,3822
+20,Randy Phillips:10,PHI,S,L,R,TRUE,TRUE,,Senator.Randy.Phillips@akleg.gov,9074654949,CAPITOL,103
+20,Rick Halford:11,HAL,S,M,R,TRUE,TRUE,,Senator.Richard.Halford@akleg.gov,9074654958,CAPITOL,121
+20,Lyda Green:19,GRE,S,N,R,TRUE,TRUE,,Senator.Lyda.Green@akleg.gov,9074656600,CAPITOL,125
+20,Gary Wilken:20,WLK,S,O,R,TRUE,TRUE,,Senator.Gary.Wilken@akleg.gov,9074653709,CAPITOL,510
+20,Bert Sharp:16,SHA,S,P,R,TRUE,TRUE,,Senator.Bert.Sharp@akleg.gov,9074653004,CAPITOL,516
+20,Mike W Miller:13,MIL,S,Q,R,TRUE,TRUE,Senate President,Senator.Mike.W.Miller@akleg.gov,9074654976,CAPITOL,107
+20,Georgianna Lincoln:17,LIN,S,R,D,FALSE,TRUE,,Senator.Georgianna.Lincoln@akleg.gov,9074653732,CAPITOL,11
+20,Albert Adams:12,ADA,S,S,D,FALSE,TRUE,,Senator.Albert.Adams@akleg.gov,9074653707,CAPITOL,417
+20,Lyman Hoffman:15,HOF,S,T,D,FALSE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,7
+21,Bill Williams:18,WIL,H,1,R,TRUE,TRUE,,Representative.Bill.Williams@akleg.gov,9074654654,CAPITOL,502
+21,Ben Grussendorf:12,GRS,H,2,D,FALSE,TRUE,,Representative.Ben.Grussendorf@akleg.gov,9074653824,CAPITOL,415
+21,Beth Kerttula:21,KER,H,3,D,FALSE,TRUE,,Representative.Beth.Kerttula@akleg.gov,9074652327,CAPIT0L,411
+21,Bill Hudson:15,HUD,H,4,R,TRUE,TRUE,,Representative.Bill.Hudson@akleg.gov,9074653744,CAPITOL,108
+21,Albert Kookesh:20,KOS,H,5,D,FALSE,TRUE,,Representative.Albert.Kookesh@akleg.gov,9074653473,CAPITOL,114
+21,Alan Austerman:19,AUS,H,6,R,TRUE,TRUE,,Representative.Alan.Austerman@akleg.gov,9074654230,CAPITOL,434
+21,Gail Phillips:17,PHG,H,7,R,TRUE,TRUE,,Representative.Gail.Phillips@akleg.gov,9074652689,CAPITOL,208
+21,Gary Davis:18,DAG,H,8,R,TRUE,TRUE,,Representative.Gary.Davis@akleg.gov,9074652693,CAPITOL,513
+21,Hal Smalley:21,SML,H,9,D,FALSE,TRUE,,Representative.Hal.Smalley@akleg.gov,9074654945,CAPITOL,414
+21,Joe Green:18,GRN,H,10,R,TRUE,TRUE,House Majority Leader,Representative.Joe.Green@akleg.gov,9074654931,CAPITOL,118
+21,Norman Rokeberg:19,ROK,H,11,R,TRUE,TRUE,,Representative.Norman.Rokeberg@akleg.gov,9074654968,CAPITOL,24
+21,Andrew Halcro:21,HAC,H,12,R,TRUE,TRUE,,Representative.Andrew.Halcro@akleg.gov,9074654939,CAPITOL,507
+21,Ethan Berkowitz:20,BER,H,13,D,FALSE,TRUE,House Minority Leader,Representative.Ethan.Berkowitz@akleg.gov,9074654919,CAPITOL,406
+21,Lisa Murkowski:21,MUR,H,14,R,TRUE,TRUE,,Representative.Lisa.Murkowski@akleg.gov,9074653783,CAPITOL,406
+21,Eric Croft:20,CRO,H,15,D,FALSE,TRUE,,Representative.Eric.Croft@akleg.gov,9074654998,CAPITOL,400
+21,Allen Kemplen:20,KEM,H,16,D,FALSE,TRUE,,Representative.Allen.Kemplen@akleg.gov,9074652435,CAPITOL,112
+21,John Cowdery:13,COY,H,17,R,TRUE,TRUE,,Representative.John.Cowdery@akleg.gov,9074653879,CAPITOL,416
+21,Con Bunde:18,BUN,H,18,R,TRUE,TRUE,,Representative.Con.Bunde@akleg.gov,9074654843,CAPITOL,104
+21,Jerry Sanders:18,SAN,H,19,R,TRUE,TRUE,,Representative.Jerry.Sanders@akleg.gov,9074654945,CAPITOL,414
+21,Brian Porter:18,POR,H,20,R,TRUE,TRUE,Speaker of the House,Representative.Brian.Porter@akleg.gov,9074654930,CAPITOL,216
+21,Sharon Cissna:21,CIS,H,21,D,FALSE,TRUE,,Representative.Sharon.Cissna@akleg.gov,9074653875,CAPITOL,430
+21,Ramona Barnes:11,BAR,H,22,R,TRUE,TRUE,,Representative.Ramona.Barnes@akleg.gov,9074656643,CAPITOL,403
+21,Eldon Mulder:18,MUL,H,23,R,TRUE,TRUE,,Representative.Eldon.Mulder@akleg.gov,9074652647,CAPITOL,501
+21,Pete Kott:18,KOT,H,24,R,TRUE,TRUE,,Representative.Pete.Kott@akleg.gov,9074653777,CAPITOL,204
+21,Fred Dyson:20,DYS,H,25,R,TRUE,TRUE,,Representative.Fred.Dyson@akleg.gov,9074652199,CAPITOL,428
+21,Vic Kohring:19,KOH,H,26,R,TRUE,TRUE,,Representative.Vic.Kohring@akleg.gov,9074652186,CAPITOL,421
+21,Scott Ogan:19,OGA,H,27,R,TRUE,TRUE,,Representative.Scott.Ogan@akleg.gov,9074653878,CAPITOL,128
+21,Beverly Masek:19,MAS,H,28,R,TRUE,TRUE,,Representative.Beverly.Masek@akleg.gov,9074652679,CAPITOL,432
+21,John Davies:18,DAV,H,29,D,FALSE,TRUE,,Representative.John.Davies@akleg.gov,9074654457,CAPITOL,422
+21,Tom Brice:18,BRI,H,30,D,FALSE,TRUE,,Representative.Tom.Brice@akleg.gov,9074653466,CAPITOL,426
+21,Jim Whitaker:21,WHI,H,31,R,TRUE,TRUE,,Representative.Jim.Whitaker@akleg.gov,9074653719,CAPITOL,13
+21,John Coghill:16,COG,H,32,R,TRUE,TRUE,,Representative.John.Coghill@akleg.gov,9074654998,CAPITOL,430
+21,Gene Therriault:18,THR,H,33,R,TRUE,TRUE,,Representative.Gene.Therriault@akleg.gov,9074654797,CAPITOL,511
+21,Jeannette James:18,JAM,H,34,R,TRUE,TRUE,,Representative.Jeannette.James@akleg.gov,9074653743,CAPITOL,102
+21,John Harris:21,HAR,H,35,R,TRUE,TRUE,,Representative.John.Harris@akleg.gov,9074653779,CAPITOL,110
+21,Carl Morgan:21,MOR,H,36,R,TRUE,TRUE,,Representative.Carl.Morgan@akleg.gov,9074654527,CAPITOL,409
+21,Reggie Joule:20,JOU,H,37,D,FALSE,TRUE,,Representative.Reggie.Joule@akleg.gov,9074654833,CAPITOL,405
+21,Richard Foster:16,FOS,H,38,D,FALSE,TRUE,,Representative.Richard.Foster@akleg.gov,9074653789,CAPITOL,410
+21,Mary Kapsner:21,KAP,H,39,D,FALSE,TRUE,,Representative.Mary.Kapsner@akleg.gov,9074654945,CAPITOL,414
+21,Carl Moses:4,MOS,H,40,D,FALSE,TRUE,,Representative.Carl.Moses@akleg.gov,9074654451,CAPITOL,521
+21,Robin Taylor:14,TAY,S,A,R,TRUE,TRUE,,Senator.Robin.Taylor@akleg.gov,9074653873,CAPITOL,30
+21,Kim Elton:19,ELT,S,B,D,FALSE,TRUE,,Senator.Kim.Elton@akleg.gov,9074654947,CAPITOL,504
+21,Jerry Mackie:17,MAK,S,C,R,TRUE,TRUE,Majority Leader,Senator.Jerry.Mackie@akleg.gov,9074654925,CAPITOL,427
+21,John Torgerson:19,TOR,S,D,R,TRUE,TRUE,,Senator.John.Torgerson@akleg.gov,9074652828,CAPITOL,516
+21,Jerry Ward:13,WAR,S,E,R,TRUE,TRUE,,Senator.Jerry.Ward@akleg.gov,9074654940,CAPITOL,423
+21,Drue Pearce:14,PEA,S,F,R,TRUE,TRUE,President,Senator.Drue.Pearce@akleg.gov,9074654993,CAPITOL,111
+21,Loren Leman:16,LEM,S,G,R,TRUE,TRUE,,Senator.Loren.Leman@akleg.gov,9074652095,CAPITOL,113
+21,Johnny Ellis:15,ELL,S,H,D,FALSE,TRUE,Minority Leader,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,9
+21,Sean Parnell:18,PAR,S,I,R,TRUE,TRUE,,Senator.Sean.Parnell@akleg.gov,9074652995,CAPITOL,518
+21,Dave Donley:15,DON,S,J,R,TRUE,TRUE,,Senator.Dave.Donley@akleg.gov,9074653892,CAPITOL,508
+21,Tim Kelly:10,KET,S,K,R,TRUE,TRUE,,Senator.Tim.Kelly.Tim@akleg.gov,9074653822,CAPITOL,101
+21,Randy Phillips:10,PHI,S,L,R,TRUE,TRUE,,Senator.Randy.Phillips@akleg.gov,9074654949,CAPITOL,103
+21,Rick Halford:11,HAL,S,M,R,TRUE,TRUE,,Senator.Rick.Halford@akleg.gov,9074654958,CAPITOL,121
+21,Lyda Green:19,GRE,S,N,R,TRUE,TRUE,,Senator.Lyda.Green@akleg.gov,9074656600,CAPITOL,125
+21,Gary Wilken:20,WLK,S,O,R,TRUE,TRUE,,Senator.Gary.Wilken@akleg.gov,9074653709,CAPITOL,514
+21,Pete Kelly:19,KEP,S,P,R,TRUE,TRUE,,Senator.Pete.Kelly.Pete@akleg.gov,9074652327,CAPITOL,510
+21,Mike W Miller:13,MIL,S,Q,R,TRUE,TRUE,,Senator.Mike.Miller@akleg.gov,9074654976,CAPITOL,119
+21,Georgianna Lincoln:17,LIN,S,R,D,FALSE,TRUE,,Senator.Georgianna.Lincoln@akleg.gov,9074653732,CAPITOL,11
+21,Albert Adams:12,ADA,S,S,D,FALSE,TRUE,,Senator.Al.Adams@akleg.gov,9074653707,CAPITOL,417
+21,Lyman Hoffman:15,HOF,S,T,D,FALSE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,7
+22,Bill Williams:18,WIL,H,1,R,TRUE,TRUE,,Representative.Bill.Williams@akleg.gov,9074653424,CAPITOL,511
+22,Peggy Wilson:22,WLS,H,2,R,TRUE,TRUE,,Representative.Peggy.Wilson@akleg.gov,9074653824,CAPITOL,409
+22,Beth Kerttula:21,KER,H,3,D,FALSE,TRUE,,Representative.Beth.Kerttula@akleg.gov,9074654766,CAPIT0L,430
+22,Bill Hudson:15,HUD,H,4,R,TRUE,TRUE,,Representative.Bill.Hudson@akleg.gov,9074653744,CAPITOL,502
+22,Albert Kookesh:20,KOS,H,5,D,FALSE,TRUE,,Representative.Albert.Kookesh@akleg.gov,9074653473,CAPITOL,114
+22,Gary Stevens:22,STV,H,6,R,TRUE,TRUE,,Representative.Gary.Stevens@akleg.gov,9074654925,CAPITOL,428
+22,Drew Scalzi:22,SCL,H,7,R,TRUE,TRUE,,Representative.Drew.Scalzi@akleg.gov,9074652689,CAPITOL,13
+22,Ken Lancaster:22,LNC,H,8,R,TRUE,TRUE,,Representative.Ken.Lancaster@akleg.gov,9074652693,CAPITOL,421
+22,Mike Chenault:22,CHE,H,9,R,TRUE,TRUE,,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,432
+22,Joe Green:18,GRN,H,10,R,TRUE,TRUE,,Representative.Joe.Green@akleg.gov,9074654931,CAPITOL,403
+22,Norman Rokeberg:19,ROK,H,11,R,TRUE,TRUE,,Representative.Norman.Rokeberg@akleg.gov,9074654968,CAPITOL,118
+22,Andrew Halcro:21,HAC,H,12,R,TRUE,TRUE,,Representative.Andrew.Halcro@akleg.gov,9074654939,CAPITOL,414
+22,Ethan Berkowitz:20,BER,H,13,D,FALSE,TRUE,House Minority Leader,Representative.Ethan.Berkowitz@akleg.gov,9074654919,CAPITOL,404
+22,Lisa Murkowski:21,MUR,H,14,R,TRUE,TRUE,,Representative.Lisa.Murkowski@akleg.gov,9074653783,CAPITOL,408
+22,Eric Croft:20,CRO,H,15,D,FALSE,TRUE,,Representative.Eric.Croft@akleg.gov,9074654998,CAPITOL,400
+22,Gretchen Guess:22,GUE,H,16,D,FALSE,TRUE,,Representative.Gretchen.Guess@akleg.gov,9074652435,CAPITOL,112
+22,Lesil McGuire:22,MCG,H,17,R,TRUE,TRUE,,Representative.Lesil.McGuire@akleg.gov,9074652995,CAPITOL,418
+22,Con Bunde:18,BUN,H,18,R,TRUE,TRUE,,Representative.Con.Bunde@akleg.gov,9074654843,CAPITOL,501
+22,Kevin Meyer:22,MEY,H,19,R,TRUE,TRUE,,Representative.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,110
+22,Brian Porter:18,POR,H,20,R,TRUE,TRUE,Speaker of the House,Representative.Brian.Porter@akleg.gov,9074654930,CAPITOL,208
+22,Sharon Cissna:21,CIS,H,21,D,FALSE,TRUE,,Representative.Sharon.Cissna@akleg.gov,9074653875,CAPITOL,420
+22,Harry Crawford:22,CRF,H,22,D,FALSE,TRUE,,Representative.Harry.Crawford@akleg.gov,9074653438,CAPITOL,426
+22,Eldon Mulder:18,MUL,H,23,R,TRUE,TRUE,,Representative.Eldon.Mulder@akleg.gov,9074652647,CAPITOL,507
+22,Pete Kott:18,KOT,H,24,R,TRUE,TRUE,,Representative.Pete.Kott@akleg.gov,9074653777,CAPITOL,204
+22,Fred Dyson:20,DYS,H,25,R,TRUE,TRUE,,Representative.Fred.Dyson@akleg.gov,9074652199,CAPITOL,104
+22,Vic Kohring:19,KOH,H,26,R,TRUE,TRUE,,Representative.Vic.Kohring@akleg.gov,9074652186,CAPITOL,24
+22,Scott Ogan:19,OGA,H,27,R,TRUE,TRUE,,Representative.Scott.Ogan@akleg.gov,9074653878,CAPITOL,108
+22,Beverly Masek:19,MAS,H,28,R,TRUE,TRUE,,Representative.Beverly.Masek@akleg.gov,9074652679,CAPITOL,128
+22,John Davies:18,DAV,H,29,D,FALSE,TRUE,,Representative.John.Davies@akleg.gov,9074654457,CAPITOL,415
+22,Joe Hayes:10,HAY,H,30,D,FALSE,TRUE,,Representative.Joe.Hayes@akleg.gov,9074653466,CAPITOL,422
+22,Jim Whitaker:21,WHI,H,31,R,TRUE,TRUE,,Representative.Jim.Whitaker@akleg.gov,9074653004,CAPITOL,411
+22,John Coghill:16,COG,H,32,R,TRUE,TRUE,,Representative.John.Coghill@akleg.gov,9074653719,CAPITOL,102
+22,Hugh Fate:22,FHT,H,33,R,TRUE,TRUE,,Representative.Hugh.Fate@akleg.gov,9074654976,CAPITOL,416
+22,Jeannette James:18,JAM,H,34,R,TRUE,TRUE,House Majority Leader,Representative.Jeannette.James@akleg.gov,9074653743,CAPITOL,214
+22,John Harris:21,HAR,H,35,R,TRUE,TRUE,,Representative.John.Harris@akleg.gov,9074654859,CAPITOL,513
+22,Carl Morgan:21,MOR,H,36,R,TRUE,TRUE,,Representative.Carl.Morgan@akleg.gov,9074654527,CAPITOL,434
+22,Reggie Joule:20,JOU,H,37,D,FALSE,TRUE,House Minority Whip,Representative.Reggie.Joule@akleg.gov,9074654833,CAPITOL,405
+22,Richard Foster:16,FOS,H,38,D,FALSE,TRUE,House Majority Whip,Representative.Richard.Foster@akleg.gov,9074653789,CAPITOL,410
+22,Mary Kapsner:21,KAP,H,39,D,FALSE,TRUE,,Representative.Mary.Kapsner@akleg.gov,9074654942,CAPITOL,424
+22,Carl Moses:4,MOS,H,40,D,FALSE,TRUE,,Representative.Carl.Moses@akleg.gov,9074654451,CAPITOL,500
+22,Robin Taylor:14,TAY,S,A,R,TRUE,TRUE,,Senator.Robin.Taylor@akleg.gov,9074653873,CAPITOL,30
+22,Kim Elton:19,ELT,S,B,D,FALSE,TRUE,,Senator.Kim.Elton@akleg.gov,9074654947,CAPITOL,115
+22,Alan Austerman:19,AUS,S,C,R,TRUE,TRUE,,Senator.Alan.Austerman@akleg.gov,9074652487,CAPITOL,417
+22,John Torgerson:19,TOR,S,D,R,TRUE,TRUE,,Senator.John.Torgerson@akleg.gov,9074652828,CAPITOL,427
+22,Jerry Ward:13,WAR,S,E,R,TRUE,TRUE,,Senator.Jerry.Ward@akleg.gov,9074654940,CAPITOL,423
+22,Drue Pearce:14,PEA,S,F,R,TRUE,FALSE,"Resigned; June 18, 2001",Senator.Drue.Pearce@akleg.gov,9074654993,CAPITOL,119
+22,Ben Stevens:22,STE,S,F,R,TRUE,TRUE,"Confirmed; August 6, 2001",Senator.Ben.Stevens@akleg.gov,9074654993,CAPITOL,119
+22,Loren Leman:16,LEM,S,G,R,TRUE,TRUE,Majority Leader,Senator.Loren.Leman@akleg.gov,9074652095,CAPITOL,516
+22,Johnny Ellis:15,ELL,S,H,D,FALSE,TRUE,Minority Leader,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,9
+22,John Cowdery:13,COY,S,I,R,TRUE,TRUE,,Senator.John.Cowdery@akleg.gov,9074653879,CAPITOL,101
+22,Dave Donley:15,DON,S,J,R,TRUE,TRUE,,Senator.Dave.Donley@akleg.gov,9074653892,CAPITOL,506
+22,Bettye Davis:17,DAB,S,K,D,FALSE,TRUE,,Senator.Bettye.Davis@akleg.gov,9074653822,CAPITOL,504
+22,Randy Phillips:10,PHI,S,L,R,TRUE,TRUE,,Senator.Randy.Phillips@akleg.gov,9074654949,CAPITOL,103
+22,Rick Halford:11,HAL,S,M,R,TRUE,TRUE,President,Senator.Rick.Halford@akleg.gov,9074654958,CAPITOL,111
+22,Lyda Green:19,GRE,S,N,R,TRUE,TRUE,,Senator.Lyda.Green@akleg.gov,9074656600,CAPITOL,125
+22,Gary Wilken:20,WLK,S,O,R,TRUE,TRUE,,Senator.Gary.Wilken@akleg.gov,9074653709,CAPITOL,514
+22,Pete Kelly:19,KEP,S,P,R,TRUE,TRUE,,Senator.Pete.Kelly@akleg.gov,9074652327,CAPITOL,518
+22,Gene Therriault:18,THR,S,Q,R,TRUE,TRUE,,Senator.Gene.Therriault@akleg.gov,9074654797,CAPITOL,121
+22,Georgianna Lincoln:17,LIN,S,R,D,FALSE,TRUE,,Senator.Georgianna.Lincoln@akleg.gov,9074653732,CAPITOL,11
+22,Donald Olson:22,OLS,S,S,D,FALSE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,510
+22,Lyman Hoffman:15,HOF,S,T,D,FALSE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,7
+23,Bill Williams:18,WIL,H,1,R,TRUE,TRUE,,Representative.Bill.Williams@akleg.gov,9074653424,CAPITOL,515
+23,Peggy Wilson:22,WLS,H,2,R,TRUE,TRUE,,Representative.Peggy.Wilson@akleg.gov,9074653824,CAPITOL,104
+23,Beth Kerttula:21,KER,H,3,D,FALSE,TRUE,House Minority Whip,Representative.Beth.Kerttula@akleg.gov,9074654766,CAPIT0L,430
+23,Bruce Weyhrauch:23,WEH,H,4,R,TRUE,TRUE,,Representative.Bruce.Weyhrauch@akleg.gov,9074653744,CAPITOL,102
+23,Albert Kookesh:20,KOS,H,5,D,FALSE,TRUE,,Representative.Albert.Kookesh@akleg.gov,9074653473,CAPITOL,114
+23,Carl Morgan:21,MOR,H,6,R,TRUE,TRUE,,Representative.Carl.Morgan@akleg.gov,9074654527,CAPITOL,408
+23,Hugh Fate:22,FHT,H,7,R,TRUE,TRUE,,Representative.Hugh.Fate@akleg.gov,9074654976,CAPITOL,128
+23,David Guttenberg:23,GTT,H,8,D,FALSE,TRUE,,Representative.David.Guttenberg@akleg.gov,9074654457,CAPITOL,13
+23,Jim Holm:23,HOL,H,9,R,TRUE,TRUE,,Representative.Jim.Holm@akleg.gov,9074653466,CAPITOL,110
+23,Nick Stepovich:23,STP,H,10,R,TRUE,TRUE,"Oath taken December 4, 2003",Representative.Nick.Stepovich@akleg.gov,9074653004,CAPITOL,110
+23,Jim Whitaker:21,WHI,H,10,R,TRUE,FALSE,"Resigned; October 27, 2003",Representative.Jim.Whitaker@akleg.gov,9074653004,CAPITOL,501
+23,John Coghill:16,COG,H,11,R,TRUE,TRUE,House Majority Leader,Representative.John.Coghill@akleg.gov,9074653719,CAPITOL,204
+23,John Harris:21,HAR,H,12,R,TRUE,TRUE,,Representative.John.Harris@akleg.gov,9074654859,CAPITOL,507
+23,Carl Gatto:23,GAT,H,13,R,TRUE,TRUE,,Representative.Carl.Gatto@akleg.gov,9074653743,CAPITOL,411
+23,Vic Kohring:19,KOH,H,14,R,TRUE,TRUE,,Representative.Vic.Kohring@akleg.gov,9074652186,CAPITOL,24
+23,Beverly Masek:19,MAS,H,15,R,TRUE,TRUE,,Representative.Beverly.Masek@akleg.gov,9074652679,CAPITOL,403
+23,Bill Stoltze:23,STZ,H,16,R,TRUE,TRUE,,Representative.Bill.Stoltze@akleg.gov,9074654958,CAPITOL,421
+23,Pete Kott:18,KOT,H,17,R,TRUE,TRUE,Speaker of the House,Representative.Pete.Kott@akleg.gov,9074653777,CAPITOL,208
+23,Nancy Dahlstrom:23,DAL,H,18,R,TRUE,TRUE,,Representative.Nancy.Dahlstrom@akleg.gov,9074653783,CAPITOL,108
+23,Tom Anderson:23,ADE,H,19,R,TRUE,TRUE,,Representative.Tom.Anderson@akleg.gov,9074654939,CAPITOL,432
+23,Max Gruenberg:14,GRU,H,20,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,9074654940,CAPITOL,112
+23,Harry Crawford:22,CRF,H,21,D,FALSE,TRUE,,Representative.Harry.Crawford@akleg.gov,9074653438,CAPITOL,426
+23,Sharon Cissna:21,CIS,H,22,D,FALSE,TRUE,,Representative.Sharon.Cissna@akleg.gov,9074653875,CAPITOL,420
+23,Les Gara:23,GAR,H,23,D,FALSE,TRUE,,Representative.Les.Gara@akleg.gov,9074652647,CAPITOL,422
+23,Cheryll Heinze:23,HEZ,H,24,R,TRUE,TRUE,,Representative.Cheryll.Heinze@akleg.gov,9074654930,CAPITOL,416
+23,Eric Croft:20,CRO,H,25,D,FALSE,TRUE,,Representative.Eric.Croft@akleg.gov,9074654998,CAPITOL,400
+23,Ethan Berkowitz:20,BER,H,26,D,FALSE,TRUE,House Minority Leader,Representative.Ethan.Berkowitz@akleg.gov,9074654919,CAPITOL,404
+23,Norman Rokeberg:19,ROK,H,27,R,TRUE,TRUE,,Representative.Norman.Rokeberg@akleg.gov,9074654968,CAPITOL,214
+23,Lesil McGuire:22,MCG,H,28,R,TRUE,TRUE,,Representative.Lesil.McGuire@akleg.gov,9074652995,CAPITOL,118
+23,Ralph Samuels:23,SAL,H,29,R,TRUE,TRUE,,Representative.Ralph.Samuels@akleg.gov,9074652095,CAPITOL,412
+23,Kevin Meyer:22,MEY,H,30,R,TRUE,TRUE,,Representative.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,513
+23,Bob Lynn:23,LYN,H,31,R,TRUE,TRUE,,Representative.Bob.Lynn@akleg.gov,9074654931,CAPITOL,415
+23,Mike Hawker:23,HAW,H,32,R,TRUE,TRUE,,Representative.Mike.Hawker@akleg.gov,9074654949,CAPITOL,434
+23,Kelly Wolf:23,WOL,H,33,R,TRUE,TRUE,,Representative.Kelly.Wolf@akleg.gov,9074652693,CAPITOL,418
+23,Mike Chenault:22,CHE,H,34,R,TRUE,TRUE,,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,502
+23,Paul Seaton:23,SAN,H,35,R,TRUE,TRUE,,Representative.Paul.Seaton@akleg.gov,9074652689,CAPITOL,428
+23,Dan Ogg:23,OGG,H,36,R,TRUE,TRUE,"Oath taken March 19, 2003",Representative.Dan.Ogg@akleg.gov,9074652487,CAPITOL,409
+23,Gary Stevens:22,STV,H,36,R,TRUE,FALSE,"Resigned; February 20,2003",Representative.Gary.Stevens@akleg.gov,9074654654,CAPITOL,502
+23,Carl Moses:4,MOS,H,37,D,FALSE,TRUE,,Representative.Carl.Moses@akleg.gov,9074654451,CAPITOL,500
+23,Mary Kapsner:21,KAP,H,38,D,FALSE,TRUE,,Representative.Mary.Kapsner@akleg.gov,9074654942,CAPITOL,424
+23,Richard Foster:16,FOS,H,39,D,FALSE,TRUE,House Majority Whip,Representative.Richard.Foster@akleg.gov,9074653789,CAPITOL,410
+23,Reggie Joule:20,JOU,H,40,D,FALSE,TRUE,,Representative.Reggie.Joule@akleg.gov,9074654833,CAPITOL,405
+23,Bert Stedman:23,SMN,S,A,R,TRUE,TRUE,"Oath taken November 20, 2003",Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,30
+23,Robin Taylor:14,TAY,S,A,R,TRUE,FALSE,Resigned; midnight 9/14/03,Senator.Robin.Taylor@akleg.gov,9074653873,CAPITOL,30
+23,Kim Elton:19,ELT,S,B,D,FALSE,TRUE,,Senator.Kim.Elton@akleg.gov,9074654947,CAPITOL,115
+23,Georgianna Lincoln:17,LIN,S,C,D,FALSE,TRUE,,Senator.Georgianna.Lincoln@akleg.gov,9074653732,CAPITOL,11
+23,Ralph Seekins:23,SEK,S,D,R,TRUE,TRUE,,Senator.Ralph.Seekins@akleg.gov,9074652327,CAPITOL,125
+23,Gary Wilken:20,WLK,S,E,R,TRUE,TRUE,,Senator.Gary.Wilken@akleg.gov,9074653709,CAPITOL,518
+23,Gene Therriault:18,THR,S,F,R,TRUE,TRUE,Senate President,Senator.Gene.Therriault@akleg.gov,9074654797,CAPITOL,111
+23,Lyda Green:19,GRE,S,G,R,TRUE,TRUE,,Senator.Lyda.Green@akleg.gov,9074656600,CAPITOL,516
+23,Charlie Huggins:23,HUG,S,H,R,TRUE,TRUE,"Appointed; September 24, 2004",Senator.Charlie.Huggins@akleg.gov,,,
+23,Scott Ogan:19,OGA,S,H,R,TRUE,FALSE,"Resigned; 4:30 pm, 8/25/04",Senator.Scott.Ogan@akleg.gov,9074653878,CAPITOL,103
+23,Fred Dyson:20,DYS,S,I,R,TRUE,TRUE,,Senator.Fred.Dyson@akleg.gov,9074652199,CAPITOL,121
+23,Gretchen Guess:22,GUE,S,J,D,FALSE,TRUE,,Senator.Gretchen.Guess@akleg.gov,9074652435,CAPITOL,423
+23,Bettye Davis:17,DAB,S,K,D,FALSE,TRUE,,Senator.Bettye.Davis@akleg.gov,9074653822,CAPITOL,7
+23,Johnny Ellis:15,ELL,S,L,D,FALSE,TRUE,Senate Minority Leader,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,9
+23,Hollis French:23,FRE,S,M,D,FALSE,TRUE,,Senator.Hollis.French@akleg.gov,9074653892,CAPITOL,504
+23,Ben Stevens:22,STE,S,N,R,TRUE,TRUE,Senate Majority Leader,Senator.Ben.Stevens.B@akleg.gov,9074654993,CAPITOL,119
+23,John Cowdery:13,COY,S,O,R,TRUE,TRUE,,Senator.John.Cowdery@akleg.gov,9074653879,CAPITOL,101
+23,Con Bunde:18,BUN,S,P,R,TRUE,TRUE,,Senator.Con.Bunde@akleg.gov,9074654843,CAPITOL,506
+23,Thomas Wagoner:23,WAG,S,Q,R,TRUE,TRUE,,Senator.Thomas.Wagoner@akleg.gov,9074652828,CAPITOL,427
+23,Alan Austerman:19,AUS,S,R,R,TRUE,FALSE,"Resigned;  February 10, 2003",Senator.Alan.Austerman@akleg.gov,9074652487,CAPITOL,417
+23,Gary Stevens:22,STG,S,R,R,TRUE,TRUE,"Oath taken February 21, 2003",Senator.Gary.Stevens.G@akleg.gov,9074654925,CAPITOL,417
+23,Lyman Hoffman:15,HOF,S,S,D,FALSE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,514
+23,Donald Olson:22,OLS,S,T,D,FALSE,TRUE,,Senator.Donny.Olson@akleg.gov,9074653707,CAPITOL,510
+24,Jim Elkins:24,ELN,H,1,R,TRUE,TRUE,,Representative.Jim.Elkins@akleg.gov,9074653424,CAPITOL,416
+24,Peggy Wilson:22,WLS,H,2,R,TRUE,TRUE,,Representative.Peggy.Wilson@akleg.gov,9074653824,CAPITOL,108
+24,Beth Kerttula:21,KER,H,3,D,FALSE,TRUE,House Minority Whip,Representative.Beth.Kerttula@akleg.gov,9074654766,CAPIT0L,430
+24,Bruce Weyhrauch:23,WEH,H,4,R,TRUE,TRUE,,Representative.Bruce.Weyhrauch@akleg.gov,9074653744,CAPITOL,421
+24,Bill Thomas:24,THM,H,5,R,TRUE,TRUE,,Representative.Bill.Thomas@akleg.gov,9074653732,CAPITOL,438
+24,Woodie Salmon:24,SAE,H,6,D,FALSE,TRUE,,Representative.Woodie.Salmon@akleg.gov,9074654527,CAPITOL,114
+24,Mike Kelly:24,KEL,H,7,R,TRUE,TRUE,,Representative.Mike.Kelly@akleg.gov,9074654976,CAPITOL,434
+24,David Guttenberg:23,GTT,H,8,D,FALSE,TRUE,,Representative.David.Guttenberg@akleg.gov,9074654457,CAPITOL,13
+24,Jim Holm:23,HOL,H,9,R,TRUE,TRUE,,Representative.Jim.Holm@akleg.gov,9074653466,CAPITOL,513
+24,Jay Ramras:24,RAR,H,10,R,TRUE,TRUE,,Representative.Jay.Ramras@akleg.gov,9074653004,CAPITOL,104
+24,John Coghill:16,COG,H,11,R,TRUE,TRUE,House Majority Leader,Representative.John.Coghill@akleg.gov,9074653719,CAPITOL,204
+24,John Harris:21,HAR,H,12,R,TRUE,TRUE,Speaker of the House,Representative.John.Harris@akleg.gov,9074654859,CAPITOL,208
+24,Carl Gatto:23,GAT,H,13,R,TRUE,TRUE,,Representative.Carl.Gatto@akleg.gov,9074653743,CAPITOL,411
+24,Vic Kohring:19,KOH,H,14,R,TRUE,TRUE,,Representative.Vic.Kohring@akleg.gov,9074652186,CAPITOL,24A
+24,Mark Neuman:24,NEU,H,15,R,TRUE,TRUE,,Representative.Mark.Neuman@akleg.gov,9074652679,CAPITOL,432
+24,Bill Stoltze:23,STZ,H,16,R,TRUE,TRUE,,Representative.Bill.Stoltze@akleg.gov,9074654958,CAPITOL,501
+24,Pete Kott:18,KOT,H,17,R,TRUE,TRUE,,Representative.Pete.Kott@akleg.gov,9074653777,CAPITOL,403
+24,Nancy Dahlstrom:23,DAL,H,18,R,TRUE,TRUE,,Representative.Nancy.Dahlstrom@akleg.gov,9074653783,CAPITOL,409
+24,Tom Anderson:23,ADE,H,19,R,TRUE,TRUE,,Representative.Tom.Anderson@akleg.gov,9074654939,CAPITOL,408
+24,Max Gruenberg:14,GRU,H,20,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,9074654940,CAPITOL,112
+24,Harry Crawford:22,CRF,H,21,D,FALSE,TRUE,,Representative.Harry.Crawford@akleg.gov,9074653438,CAPITOL,426
+24,Sharon Cissna:21,CIS,H,22,D,FALSE,TRUE,,Representative.Sharon.Cissna@akleg.gov,9074653875,CAPITOL,420
+24,Les Gara:23,GAR,H,23,D,FALSE,TRUE,,Representative.Les.Gara@akleg.gov,9074652647,CAPITOL,418
+24,Berta Gardner:24,GAS,H,24,D,FALSE,TRUE,,Representative.Berta.Gardner@akleg.gov,9074654930,CAPITOL,422
+24,Eric Croft:20,CRO,H,25,D,FALSE,TRUE,,Representative.Eric.Croft@akleg.gov,9074654998,CAPITOL,400
+24,Ethan Berkowitz:20,BER,H,26,D,FALSE,TRUE,House Minority Leader,Representative.Ethan.Berkowitz@akleg.gov,9074654919,CAPITOL,404
+24,Norman Rokeberg:19,ROK,H,27,R,TRUE,TRUE,,Representative.Norman.Rokeberg@akleg.gov,9074654968,CAPITOL,214
+24,Lesil McGuire:22,MCG,H,28,R,TRUE,TRUE,,Representative.Lesil.McGuire@akleg.gov,9074652995,CAPITOL,118
+24,Ralph Samuels:23,SAL,H,29,R,TRUE,TRUE,,Representative.Ralph.Samuels@akleg.gov,9074652095,CAPITOL,126
+24,Kevin Meyer:22,MEY,H,30,R,TRUE,TRUE,,Representative.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,515
+24,Bob Lynn:23,LYN,H,31,R,TRUE,TRUE,,Representative.Bob.Lynn@akleg.gov,9074654931,CAPITOL,415
+24,Mike Hawker:23,HAW,H,32,R,TRUE,TRUE,,Representative.Mike.Hawker@akleg.gov,9074654949,CAPITOL,502
+24,Kurt Olson:24,OLL,H,33,R,TRUE,TRUE,,Representative.Kurt.Olson@akleg.gov,9074652693,CAPITOL,110
+24,Mike Chenault:22,CHE,H,34,R,TRUE,TRUE,,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,505
+24,Paul Seaton:23,SAN,H,35,R,TRUE,TRUE,,Representative.Paul.Seaton@akleg.gov,9074652689,CAPITOL,102
+24,Gabrielle LeDoux:24,LEU,H,36,R,TRUE,TRUE,,Representative.Gabrielle.LeDoux@akleg.gov,9074652487,CAPITOL,412
+24,Carl Moses:4,MOS,H,37,D,FALSE,TRUE,,Representative.Carl.Moses@akleg.gov,9074654451,CAPITOL,500
+24,Mary Kapsner:21,KAP,H,38,D,FALSE,TRUE,,Representative.Mary.Kapsner@akleg.gov,9074654942,CAPITOL,424
+24,Richard Foster:16,FOS,H,39,D,FALSE,TRUE,House Majority Whip,Representative.Richard.Foster@akleg.gov,9074653789,CAPITOL,410
+24,Reggie Joule:20,JOU,H,40,D,FALSE,TRUE,,Representative.Reggie.Joule@akleg.gov,9074654833,CAPITOL,405
+24,Bert Stedman:23,SMN,S,A,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,30
+24,Kim Elton:19,ELT,S,B,D,FALSE,TRUE,,Senator.Kim.Elton@akleg.gov,9074654947,CAPITOL,115
+24,Albert Kookesh:20,KOS,S,C,D,FALSE,TRUE,,Senator.Albert.Kookesh@akleg.gov,9074653473,CAPITOL,7
+24,Ralph Seekins:23,SEK,S,D,R,TRUE,TRUE,,Senator.Ralph.Seekins@akleg.gov,9074652327,CAPITOL,125
+24,Gary Wilken:20,WLK,S,E,R,TRUE,TRUE,,Senator.Gary.Wilken@akleg.gov,9074653709,CAPITOL,518
+24,Gene Therriault:18,THR,S,F,R,TRUE,TRUE,,Senator.Gene.Therriault@akleg.gov,9074654797,CAPITOL,119
+24,Lyda Green:19,GRE,S,G,R,TRUE,TRUE,,Senator.Lyda.Green@akleg.gov,9074656600,CAPITOL,516
+24,Charlie Huggins:23,HUG,S,H,R,TRUE,TRUE,,Senator.Charlie.Huggins@akleg.gov,9074653878,CAPITOL,417
+24,Fred Dyson:20,DYS,S,I,R,TRUE,TRUE,,Senator.Fred.Dyson@akleg.gov,9074652199,CAPITOL,121
+24,Gretchen Guess:22,GUE,S,J,D,FALSE,TRUE,,Senator.Gretchen.Guess@akleg.gov,9074652435,CAPITOL,423
+24,Bettye Davis:17,DAB,S,K,D,FALSE,TRUE,,Senator.Bettye.Davis@akleg.gov,9074653822,CAPITOL,11
+24,Johnny Ellis:15,ELL,S,L,D,FALSE,TRUE,Senate Minority Leader,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,9
+24,Hollis French:23,FRE,S,M,D,FALSE,TRUE,,Senator.Hollis.French@akleg.gov,9074653892,CAPITOL,504
+24,Ben Stevens:22,STE,S,N,R,TRUE,TRUE,Senate President,Senator.Ben.Stevens.B@akleg.gov,9074654993,CAPITOL,111
+24,John Cowdery:13,COY,S,O,R,TRUE,TRUE,,Senator.John.Cowdery@akleg.gov,9074653879,CAPITOL,101
+24,Con Bunde:18,BUN,S,P,R,TRUE,TRUE,,Senator.Con.Bunde@akleg.gov,9074654843,CAPITOL,506
+24,Thomas Wagoner:23,WAG,S,Q,R,TRUE,TRUE,,Senator.Thomas.Wagoner@akleg.gov,9074652828,CAPITOL,427
+24,Gary Stevens:22,STG,S,R,R,TRUE,TRUE,Senate Majority Leader,Senator.Gary.Stevens.G@akleg.gov,9074654925,CAPITOL,103
+24,Lyman Hoffman:15,HOF,S,S,D,FALSE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,514
+24,Donald Olson:22,OLS,S,T,D,FALSE,TRUE,,Senator.Donny.Olson@akleg.gov,9074653707,CAPITOL,510
+25,Kyle Johansen:25,JHA,H,1,R,TRUE,TRUE,,Representative.Kyle.Johansen@akleg.gov,9074653424,CAPITOL,13
+25,Peggy Wilson:22,WLS,H,2,R,TRUE,TRUE,,Representative.Peggy.Wilson@akleg.gov,9074653824,CAPITOL,403
+25,Beth Kerttula:21,KER,H,3,D,FALSE,TRUE,House Minority Leader,Representative.Beth.Kerttula@akleg.gov,9074654766,CAPIT0L,404
+25,Andrea Doll:25,DLL,H,4,D,FALSE,TRUE,,Representative.Andrea.Doll@akleg.gov,9074653744,CAPITOL,426
+25,Bill Thomas:24,THM,H,5,R,TRUE,TRUE,,Representative.Bill.Thomas@akleg.gov,9074653732,CAPITOL,434
+25,Woodie Salmon:24,SAE,H,6,D,FALSE,TRUE,,Representative.Woodie.Salmon@akleg.gov,9074654527,CAPITOL,114
+25,Mike Kelly:24,KEL,H,7,R,TRUE,TRUE,,Representative.Mike.Kelly@akleg.gov,9074654976,CAPITOL,513
+25,David Guttenberg:23,GTT,H,8,D,FALSE,TRUE,House Minority Whip,Representative.David.Guttenberg@akleg.gov,9074654457,CAPITOL,13
+25,Scott Kawasaki:25,KAW,H,9,D,FALSE,TRUE,,Representative.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,428
+25,Jay Ramras:24,RAR,H,10,R,TRUE,TRUE,,Representative.Jay.Ramras@akleg.gov,9074653004,CAPITOL,118
+25,John Coghill:16,COG,H,11,R,TRUE,TRUE,,Representative.John.Coghill@akleg.gov,9074653719,CAPITOL,214
+25,John Harris:21,HAR,H,12,R,TRUE,TRUE,Speaker of the House,Representative.John.Harris@akleg.gov,9074654859,CAPITOL,208
+25,Carl Gatto:23,GAT,H,13,R,TRUE,TRUE,,Representative.Carl.Gatto@akleg.gov,9074653743,CAPITOL,108
+25,Wes Keller:25,KEE,H,14,R,TRUE,TRUE,"Oath taken July 27, 2007",Representative.Wes.Keller@akleg.gov,9074652186,CAPITOL,24
+25,Vic Kohring:19,KOH,H,14,R,TRUE,FALSE,"Resigned; July 19, 2007",Representative.Vic.Kohring@akleg.gov,9074652186,CAPITOL,24A
+25,Mark Neuman:24,NEU,H,15,R,TRUE,TRUE,,Representative.Mark.Neuman@akleg.gov,9074652679,CAPITOL,432
+25,Bill Stoltze:23,STZ,H,16,R,TRUE,TRUE,,Representative.Bill.Stoltze@akleg.gov,9074654958,CAPITOL,501
+25,Anna Fairclough:25,FAI,H,17,R,TRUE,TRUE,,Representative.Anna.Fairclough@akleg.gov,9074653777,CAPITOL,411
+25,Nancy Dahlstrom:23,DAL,H,18,R,TRUE,TRUE,,Representative.Nancy.Dahlstrom@akleg.gov,9074653783,CAPITOL,409
+25,Bob Roses:25,ROS,H,19,R,TRUE,TRUE,,Representative.Bob.Roses@akleg.gov,9074654939,CAPITOL,416
+25,Max Gruenberg:14,GRU,H,20,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,9074654940,CAPITOL,110
+25,Harry Crawford:22,CRF,H,21,D,FALSE,TRUE,,Representative.Harry.Crawford@akleg.gov,9074653438,CAPITOL,400
+25,Sharon Cissna:21,CIS,H,22,D,FALSE,TRUE,,Representative.Sharon.Cissna@akleg.gov,9074653875,CAPITOL,420
+25,Les Gara:23,GAR,H,23,D,FALSE,TRUE,,Representative.Les.Gara@akleg.gov,9074652647,CAPITOL,500
+25,Berta Gardner:24,GAS,H,24,D,FALSE,TRUE,,Representative.Berta.Gardner@akleg.gov,9074654930,CAPITOL,422
+25,Mike Doogan:25,DOO,H,25,D,FALSE,TRUE,,Representative.Mike.Doogan@akleg.gov,9074654998,CAPITOL,112
+25,Lindsey Holmes:25,HOL,H,26,D,FALSE,TRUE,,Representative.Lindsey.Holmes@akleg.gov,9074654919,CAPITOL,405
+25,Bob Buch:25,BUC,H,27,D,FALSE,TRUE,,"Representative.Robert.L..""Bob"".Buch@akleg.gov",9074654968,CAPITOL,430
+25,Craig Johnson:25,JHN,H,28,R,TRUE,TRUE,,Representative.Craig.Johnson@akleg.gov,9074654993,CAPITOL,126
+25,Ralph Samuels:23,SAL,H,29,R,TRUE,TRUE,House Majority Leader,Representative.Ralph.Samuels@akleg.gov,9074652095,CAPITOL,204
+25,Kevin Meyer:22,MEY,H,30,R,TRUE,TRUE,,Representative.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,515
+25,Bob Lynn:23,LYN,H,31,R,TRUE,TRUE,,Representative.Bob.Lynn@akleg.gov,9074654931,CAPITOL,104
+25,Mike Hawker:23,HAW,H,32,R,TRUE,TRUE,,Representative.Mike.Hawker@akleg.gov,9074654949,CAPITOL,502
+25,Kurt Olson:24,OLL,H,33,R,TRUE,TRUE,,Representative.Kurt.Olson@akleg.gov,9074652693,CAPITOL,408
+25,Mike Chenault:22,CHE,H,34,R,TRUE,TRUE,,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,505
+25,Paul Seaton:23,SAN,H,35,R,TRUE,TRUE,,Representative.Paul.Seaton@akleg.gov,9074652689,CAPITOL,102
+25,Gabrielle LeDoux:24,LEU,H,36,R,TRUE,TRUE,,Representative.Gabrielle.LeDoux@akleg.gov,9074652487,CAPITOL,412
+25,Bryce Edgmon:25,EDG,H,37,D,FALSE,TRUE,,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,424
+25,Mary Nelson:25,NEL,H,38,D,FALSE,TRUE,Formerly Kapsner,Representative.Mary.Nelson@akleg.gov,9074654942,CAPITOL,415
+25,Richard Foster:16,FOS,H,39,D,TRUE,TRUE,House Majority Whip,Representative.Richard.Foster@akleg.gov,9074653789,CAPITOL,410
+25,Reggie Joule:20,JOU,H,40,D,FALSE,TRUE,,Representative.Reggie.Joule@akleg.gov,9074654833,CAPITOL,421
+25,Bert Stedman:23,SMN,S,A,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,516
+25,Kim Elton:19,ELT,S,B,D,TRUE,TRUE,,Senator.Kim.Elton@akleg.gov,9074654947,CAPITOL,506
+25,Albert Kookesh:20,KOS,S,C,D,TRUE,TRUE,,Senator.Albert.Kookesh@akleg.gov,9074653473,CAPITOL,11
+25,Joe Thomas:25,THS,S,D,D,TRUE,TRUE,,Senator.Joe.Thomas@akleg.gov,9074652327,CAPITOL,510
+25,Gary Wilken:20,WLK,S,E,R,FALSE,TRUE,,Senator.Gary.Wilken@akleg.gov,9074653709,CAPITOL,7
+25,Gene Therriault:18,THR,S,F,R,FALSE,TRUE,Senate Minority Leader,Senator.Gene.Therriault@akleg.gov,9074654797,CAPITOL,427
+25,Lyda Green:19,GRE,S,G,R,TRUE,TRUE,President of the Senate,Senator.Lyda.Green@akleg.gov,9074656600,CAPITOL,111
+25,Charlie Huggins:23,HUG,S,H,R,TRUE,TRUE,Senate Majority Whip,Senator.Charlie.Huggins@akleg.gov,9074653878,CAPITOL,119
+25,Fred Dyson:20,DYS,S,I,R,FALSE,TRUE,,Senator.Fred.Dyson@akleg.gov,9074652199,CAPITOL,121
+25,Bill Wielechowski:25,WIE,S,J,D,TRUE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,115
+25,Bettye Davis:17,DAB,S,K,D,TRUE,TRUE,,Senator.Bettye.Davis@akleg.gov,9074653822,CAPITOL,30
+25,Johnny Ellis:15,ELL,S,L,D,TRUE,TRUE,Senate Majority Leader,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,9
+25,Hollis French:23,FRE,S,M,D,TRUE,TRUE,,Senator.Hollis.French@akleg.gov,9074653892,CAPITOL,417
+25,Lesil McGuire:22,MCG,S,N,R,TRUE,TRUE,,Senator.Lesil.McGuire@akleg.gov,9074652995,CAPITOL,125
+25,John Cowdery:13,COY,S,O,R,TRUE,TRUE,,Senator.John.Cowdery@akleg.gov,9074653879,CAPITOL,101
+25,Con Bunde:18,BUN,S,P,R,FALSE,TRUE,,Senator.Con.Bunde@akleg.gov,9074654843,CAPITOL,504
+25,Thomas Wagoner:23,WAG,S,Q,R,FALSE,TRUE,,Senator.Thomas.Wagoner@akleg.gov,9074652828,CAPITOL,423
+25,Gary Stevens:22,STG,S,R,R,TRUE,TRUE,,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,103
+25,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,518
+25,Donald Olson:22,OLS,S,T,D,TRUE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,514
+26,Kyle Johansen:25,JHA,H,1,R,TRUE,TRUE,House Majority Leader,Representative.Kyle.Johansen@akleg.gov,9074653424,CAPITOL,204
+26,Peggy Wilson:22,WLS,H,2,R,TRUE,TRUE,,Representative.Peggy.P.Wilson@akleg.gov,9074653824,CAPITOL,406
+26,Beth Kerttula:21,KER,H,3,D,FALSE,TRUE,House Minority Leader,Representative.Beth.Kerttula@akleg.gov,9074654766,CAPIT0L,404
+26,Cathy Muñoz:26,MUN,H,4,R,TRUE,TRUE,,Representative.Cathy.Engstrom.Munoz@akleg.gov,9074653744,CAPITOL,409
+26,Bill Thomas:24,THM,H,5,R,TRUE,TRUE,,Representative.Bill.Thomas@akleg.gov,9074653732,CAPITOL,501
+26,Woodie Salmon:24,SAE,H,6,D,FALSE,TRUE,,Representative.Woodie.Salmon@akleg.gov,9074654527,CAPITOL,114
+26,Mike Kelly:24,KEL,H,7,R,TRUE,TRUE,,Representative.Mike.Kelly@akleg.gov,9074654976,CAPITOL,513
+26,David Guttenberg:23,GTT,H,8,D,FALSE,TRUE,House Minority Whip,Representative.David.Guttenberg@akleg.gov,9074654457,CAPITOL,418
+26,Scott Kawasaki:25,KAW,H,9,D,FALSE,TRUE,,Representative.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,428
+26,Jay Ramras:24,RAR,H,10,R,TRUE,TRUE,,Representative.Jay.Ramras@akleg.gov,9074653004,CAPITOL,118
+26,John Coghill:16,COG,H,11,R,TRUE,FALSE,"Resigned; October 27, 2009",Representative.John.Coghill@akleg.gov,9074653719,CAPITOL,214
+26,Tammie Wilson:26,WLT,H,11,R,TRUE,TRUE,"Oath taken December 2, 2009",Representative.Tammie.T.Wilson@akleg.gov,9074654797,415,
+26,John Harris:21,HAR,H,12,R,TRUE,TRUE,,Representative.John.Harris@akleg.gov,9074654859,CAPITOL,403
+26,Carl Gatto:23,GAT,H,13,R,TRUE,TRUE,,Representative.Carl.Gatto@akleg.gov,9074653743,CAPITOL,108
+26,Wes Keller:25,KEE,H,14,R,TRUE,TRUE,,Representative.Wes.Keller@akleg.gov,9074652186,CAPITOL,13
+26,Mark Neuman:24,NEU,H,15,R,TRUE,TRUE,,Representative.Mark.Neuman@akleg.gov,9074652679,CAPITOL,432
+26,Bill Stoltze:23,STZ,H,16,R,TRUE,TRUE,,Representative.Bill.Stoltze@akleg.gov,9074654958,CAPITOL,515
+26,Anna Fairclough:25,FAI,H,17,R,TRUE,TRUE,,Representative.Anna.Fairclough@akleg.gov,9074653777,CAPITOL,421
+26,Nancy Dahlstrom:23,DAL,H,18,R,TRUE,FALSE,"Resigned; May 31, 2010",Representative.Nancy.Dahlstrom@akleg.gov,9074653783,CAPITOL,216
+26,Pete Petersen:26,PEJ,H,19,D,FALSE,TRUE,,Representative.Pete.Petersen@akleg.gov,9074654939,CAPITOL,422
+26,Max Gruenberg:14,GRU,H,20,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,9074654940,CAPITOL,110
+26,Harry Crawford:22,CRF,H,21,D,FALSE,TRUE,,Representative.Harry.Crawford@akleg.gov,9074653438,CAPITOL,400
+26,Sharon Cissna:21,CIS,H,22,D,FALSE,TRUE,,Representative.Sharon.Cissna@akleg.gov,9074653875,CAPITOL,420
+26,Les Gara:23,GAR,H,23,D,FALSE,TRUE,,Representative.Les.Gara@akleg.gov,9074652647,CAPITOL,500
+26,Berta Gardner:24,GAS,H,24,D,FALSE,TRUE,,Representative.Berta.Gardner@akleg.gov,9074654930,CAPITOL,424
+26,Mike Doogan:25,DOO,H,25,D,FALSE,TRUE,,Representative.Mike.Doogan@akleg.gov,9074654998,CAPITOL,112
+26,Lindsey Holmes:25,HOL,H,26,D,FALSE,TRUE,,Representative.Lindsey.Holmes@akleg.gov,9074654919,CAPITOL,405
+26,Bob Buch:25,BUC,H,27,D,FALSE,TRUE,,"Representative.Robert.L..""Bob"".Buch@akleg.gov",9074654968,CAPITOL,430
+26,Craig Johnson:25,JHN,H,28,R,TRUE,TRUE,,Representative.Craig.Johnson@akleg.gov,9074654993,CAPITOL,126
+26,Chris Tuck:26,TUC,H,29,D,FALSE,TRUE,,Representative.Chris.Tuck@akleg.gov,9074652095,CAPITOL,426
+26,Charisse Millett:26,MIL,H,30,R,TRUE,TRUE,,Representative.Charisse.Millett@akleg.gov,9074653879,CAPITOL,412
+26,Bob Lynn:23,LYN,H,31,R,TRUE,TRUE,,Representative.Bob.Lynn@akleg.gov,9074654931,CAPITOL,104
+26,Mike Hawker:23,HAW,H,32,R,TRUE,TRUE,,Representative.Mike.Hawker@akleg.gov,9074654949,CAPITOL,505
+26,Kurt Olson:24,OLL,H,33,R,TRUE,TRUE,,Representative.Kurt.Olson@akleg.gov,9074652693,CAPITOL,24
+26,Mike Chenault:22,CHE,H,34,R,TRUE,TRUE,Speaker of the House,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,208
+26,Paul Seaton:23,SAN,H,35,R,TRUE,TRUE,,Representative.Paul.Seaton@akleg.gov,9074652689,CAPITOL,102
+26,Alan Austerman:19,AUS,H,36,R,TRUE,TRUE,House Majority Whip,Representative.Alan.Austerman@akleg.gov,9074652487,CAPITOL,502
+26,Bryce Edgmon:25,EDG,H,37,D,TRUE,TRUE,,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,416
+26,Bob Herron:26,HEO,H,38,D,TRUE,TRUE,,Representative.Bob.Herron@akleg.gov,9074654942,CAPITOL,411
+26,Neal Foster:26,FON,H,39,D,FALSE,TRUE,"Oath taken November 16, 2009",Representative.Neal.N.Foster@akleg.gov,9074653242,CAPITOL,434
+26,Richard Foster:16,FOS,H,39,D,TRUE,FALSE,"Deceased; October 13, 2009",Representative.Richard.R.Foster@akleg.gov,9074653789,CAPITOL,410
+26,Reggie Joule:20,JOU,H,40,D,TRUE,TRUE,,Representative.Reggie.Joule@akleg.gov,9074654833,CAPITOL,410
+26,Bert Stedman:23,SMN,S,A,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,516
+26,Dennis Egan:26,EGA,S,B,D,TRUE,TRUE,"Oath taken April 19, 2009",Senator.Dennis.Egan@akleg.gov,9074654947,CAPITOL,510
+26,Kim Elton:19,ELT,S,B,D,TRUE,FALSE,Resigned; 5:00pm 3/2/09,Senator.Kim.Elton@akleg.gov,9074654947,CAPITOL,506
+26,Albert Kookesh:20,KOS,S,C,D,TRUE,TRUE,,Senator.Albert.Kookesh@akleg.gov,9074653473,CAPITOL,11
+26,Joe Thomas:25,THS,S,D,D,TRUE,TRUE,,Senator.Joe.Thomas@akleg.gov,9074652327,CAPITOL,514
+26,Joe Paskvan:26,PSK,S,E,D,TRUE,TRUE,,Senator.Joe.Paskvan@akleg.gov,9074653709,CAPITOL,7
+26,John Coghill:16,CGL,S,F,R,FALSE,TRUE,"Oath taken October 27, 2009",Senator.John.Coghill@akleg.gov,9074653719,CAPITOL,504
+26,Gene Therriault:18,THR,S,F,R,FALSE,FALSE,Resigned; 5:00 pm  9/13/09,Senator.Gene.Therriault@akleg.gov,9074654797,CAPITOL,427
+26,Linda Menard:26,MER,S,G,R,TRUE,TRUE,,Senator.Linda.Menard@akleg.gov,9074656600,CAPITOL,9
+26,Charlie Huggins:23,HUG,S,H,R,TRUE,TRUE,Senate Majority Whip,Senator.Charlie.Huggins@akleg.gov,9074653878,CAPITOL,119
+26,Fred Dyson:20,DYS,S,I,R,FALSE,TRUE,,Senator.Fred.Dyson@akleg.gov,9074652199,CAPITOL,121
+26,Bill Wielechowski:25,WIE,S,J,D,TRUE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,115
+26,Bettye Davis:17,DAB,S,K,D,TRUE,TRUE,,Senator.Bettye.Davis@akleg.gov,9074653822,CAPITOL,30
+26,Johnny Ellis:15,ELL,S,L,D,TRUE,TRUE,Senate Majority Leader,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,103
+26,Hollis French:23,FRE,S,M,D,TRUE,TRUE,,Senator.Hollis.French@akleg.gov,9074653892,CAPITOL,417
+26,Lesil McGuire:22,MCG,S,N,R,TRUE,TRUE,,Senator.Lesil.McGuire@akleg.gov,9074652995,CAPITOL,125
+26,Kevin Meyer:22,MEY,S,O,R,TRUE,TRUE,,Senator.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,101
+26,Con Bunde:18,BUN,S,P,R,FALSE,TRUE,Senate Minority Leader,Senator.Con.Bunde@akleg.gov,9074654843,CAPITOL,423
+26,Thomas Wagoner:23,WAG,S,Q,R,FALSE,TRUE,,Senator.Thomas.Wagoner@akleg.gov,9074652828,CAPITOL,427
+26,Gary Stevens:22,STG,S,R,R,TRUE,TRUE,Senate President,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,111
+26,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,518
+26,Donald Olson:22,OLS,S,T,D,TRUE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,506
+27,Kyle Johansen:25,JHA,H,1,R,TRUE,TRUE,,Representative.Kyle.Johansen@akleg.gov,9074653424,CAPITOL,114
+27,Peggy Wilson:22,WLS,H,2,R,TRUE,TRUE,House Majority Whip,Representative.Peggy.P.Wilson@akleg.gov,9074653824,CAPITOL,406
+27,Beth Kerttula:21,KER,H,3,D,FALSE,TRUE,House Minority Leader,Representative.Beth.Kerttula@akleg.gov,9074654766,CAPIT0L,404
+27,Cathy Muñoz:26,MUN,H,4,R,TRUE,TRUE,,Representative.Cathy.Engstrom.Munoz@akleg.gov,9074653744,CAPITOL,403
+27,Bill Thomas:24,THM,H,5,R,TRUE,TRUE,,Representative.Bill.Thomas@akleg.gov,9074653732,CAPITOL,505
+27,Alan Dick:27,DIC,H,6,R,TRUE,TRUE,,Representative.Alan.Dick@akleg.gov,9074654527,CAPITOL,104
+27,Bob Miller:27,MIE,H,7,D,FALSE,TRUE,,Representative.Bob.Miller@akleg.gov,9074654976,CAPITOL,112
+27,David Guttenberg:23,GTT,H,8,D,FALSE,TRUE,,Representative.David.Guttenberg@akleg.gov,9074654457,CAPITOL,418
+27,Scott Kawasaki:25,KAW,H,9,D,FALSE,TRUE,,Representative.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,430
+27,Steve Thompson:27,THP,H,10,R,TRUE,TRUE,,Representative.Steve.Thompson@akleg.gov,9074653004,CAPITOL,428
+27,Tammie Wilson:26,WLT,H,11,R,TRUE,TRUE,,Representative.Tammie.T.Wilson@akleg.gov,9074654797,CAPITOL,415
+27,Eric Feige:27,FEI,H,12,R,TRUE,TRUE,,Representative.Eric.Feige@akleg.gov,9074654859,CAPITOL,126
+27,Carl Gatto:23,GAT,H,13,R,TRUE,FALSE,"Deceased; April 10, 2012",Representative.Carl.Gatto@akleg.gov,9074653743,CAPITOL,118
+27,Shelley Hughes:27,HUS,H,13,R,TRUE,TRUE,"Oath taken May 11, 2012",Representative.Shelley.Hughes@akleg.gov,,,
+27,Wes Keller:25,KEE,H,14,R,TRUE,TRUE,,Representative.Wes.Keller@akleg.gov,9074652186,CAPITOL,432
+27,Mark Neuman:24,NEU,H,15,R,TRUE,TRUE,,Representative.Mark.Neuman@akleg.gov,9074652679,CAPITOL,513
+27,Bill Stoltze:23,STZ,H,16,R,TRUE,TRUE,,Representative.Bill.Stoltze@akleg.gov,9074654958,CAPITOL,515
+27,Anna Fairclough:25,FAI,H,17,R,TRUE,TRUE,,Representative.Anna.Fairclough@akleg.gov,9074653777,CAPITOL,501
+27,Dan Saddler:27,SAD,H,18,R,TRUE,TRUE,,Representative.Dan.Saddler@akleg.gov,9074653783,CAPITOL,409
+27,Pete Petersen:26,PEJ,H,19,D,FALSE,TRUE,,Representative.Pete.Petersen@akleg.gov,9074654939,CAPITOL,422
+27,Max Gruenberg:14,GRU,H,20,D,FALSE,TRUE,,Representative.Max.Gruenberg@akleg.gov,9074654940,CAPITOL,110
+27,Lance Pruitt:27,PRU,H,21,R,TRUE,TRUE,,Representative.Lance.Pruitt@akleg.gov,9074653438,CAPITOL,421
+27,Sharon Cissna:21,CIS,H,22,D,FALSE,TRUE,,Representative.Sharon.Cissna@akleg.gov,9074653875,CAPITOL,420
+27,Les Gara:23,GAR,H,23,D,FALSE,TRUE,,Representative.Les.Gara@akleg.gov,9074652647,CAPITOL,500
+27,Berta Gardner:24,GAS,H,24,D,FALSE,TRUE,House Minority Whip,Representative.Berta.Gardner@akleg.gov,9074654930,CAPITOL,424
+27,Mike Doogan:25,DOO,H,25,D,FALSE,TRUE,,Representative.Mike.Doogan@akleg.gov,9074654998,CAPITOL,400
+27,Lindsey Holmes:25,HOL,H,26,D,FALSE,TRUE,,Representative.Lindsey.Holmes@akleg.gov,9074654919,CAPITOL,405
+27,Mia Costello:27,COS,H,27,R,TRUE,TRUE,,Representative.Mia.Costello@akleg.gov,9074654968,CAPITOL,412
+27,Craig Johnson:25,JHN,H,28,R,TRUE,TRUE,,Representative.Craig.Johnson@akleg.gov,9074654993,CAPITOL,216
+27,Chris Tuck:26,TUC,H,29,D,FALSE,TRUE,,Representative.Chris.Tuck@akleg.gov,9074652095,CAPITOL,426
+27,Charisse Millett:26,MIL,H,30,R,TRUE,TRUE,,Representative.Charisse.Millett@akleg.gov,9074653879,CAPITOL,13
+27,Bob Lynn:23,LYN,H,31,R,TRUE,TRUE,,Representative.Bob.Lynn@akleg.gov,9074654931,CAPITOL,108
+27,Mike Hawker:23,HAW,H,32,R,TRUE,TRUE,,Representative.Mike.Hawker@akleg.gov,9074654949,CAPITOL,502
+27,Kurt Olson:24,OLL,H,33,R,TRUE,TRUE,,Representative.Kurt.Olson@akleg.gov,9074652693,CAPITOL,24
+27,Mike Chenault:22,CHE,H,34,R,TRUE,TRUE,Speaker of the House,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,208
+27,Paul Seaton:23,SAN,H,35,R,TRUE,TRUE,,Representative.Paul.Seaton@akleg.gov,9074652689,CAPITOL,102
+27,Alan Austerman:19,AUS,H,36,R,TRUE,TRUE,House Majority Leader,Representative.Alan.Austerman@akleg.gov,9074652487,CAPITOL,204
+27,Bryce Edgmon:25,EDG,H,37,D,TRUE,TRUE,,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,416
+27,Bob Herron:26,HEO,H,38,D,TRUE,TRUE,,Representative.Bob.Herron@akleg.gov,9074654942,CAPITOL,411
+27,Neal Foster:26,FON,H,39,D,TRUE,TRUE,,Representative.Neal.Foster@akleg.gov,9074653789,CAPITOL,434
+27,Reggie Joule:20,JOU,H,40,D,TRUE,FALSE,"Resigned; October 8, 2012",Representative.Reggie.Joule@akleg.gov,9074654833,CAPITOL,410
+27,Bert Stedman:23,SMN,S,A,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,516
+27,Dennis Egan:26,EGA,S,B,D,TRUE,TRUE,,Senator.Dennis.Egan@akleg.gov,9074654947,CAPITOL,510
+27,Albert Kookesh:20,KOS,S,C,D,TRUE,TRUE,,Senator.Albert.Kookesh@akleg.gov,9074653473,CAPITOL,11
+27,Joe Thomas:25,THS,S,D,D,TRUE,TRUE,,Senator.Joe.Thomas@akleg.gov,9074652327,CAPITOL,514
+27,Joe Paskvan:26,PSK,S,E,D,TRUE,TRUE,,Senator.Joe.Paskvan@akleg.gov,9074653709,CAPITOL,115
+27,John Coghill:16,CGL,S,F,R,FALSE,TRUE,Senate Minority Leader (2012),Senator.John.Coghill@akleg.gov,9074653719,CAPITOL,504
+27,Linda Menard:26,MER,S,G,R,TRUE,TRUE,,Senator.Linda.Menard@akleg.gov,9074656600,CAPITOL,9
+27,Charlie Huggins:23,HUG,S,H,R,FALSE,TRUE,Senate Minority Leader (2011),Senator.Charlie.Huggins@akleg.gov,9074653878,CAPITOL,423
+27,Fred Dyson:20,DYS,S,I,R,FALSE,TRUE,,Senator.Fred.Dyson@akleg.gov,9074652199,CAPITOL,121
+27,Bill Wielechowski:25,WIE,S,J,D,TRUE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,101
+27,Bettye Davis:17,DAB,S,K,D,TRUE,TRUE,,Senator.Bettye.Davis@akleg.gov,9074653822,CAPITOL,30
+27,Johnny Ellis:15,ELL,S,L,D,TRUE,TRUE,,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,119
+27,Hollis French:23,FRE,S,M,D,TRUE,TRUE,,Senator.Hollis.French@akleg.gov,9074653892,CAPITOL,417
+27,Lesil McGuire:22,MCG,S,N,R,TRUE,TRUE,,Senator.Lesil.McGuire@akleg.gov,9074652995,CAPITOL,125
+27,Kevin Meyer:22,MEY,S,O,R,TRUE,TRUE,Senate Majority Leader,Senator.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,103
+27,Cathy Giessel:27,GIE,S,P,R,FALSE,TRUE,,Senator.Cathy.Giessel@akleg.gov,9074654843,CAPITOL,7
+27,Thomas Wagoner:23,WAG,S,Q,R,TRUE,TRUE,,Senator.Thomas.Wagoner@akleg.gov,9074652828,CAPITOL,427
+27,Gary Stevens:22,STG,S,R,R,TRUE,TRUE,Senate President,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,111
+27,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,518
+27,Donald Olson:22,OLS,S,T,D,TRUE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,508
+28,Doug Isaacson:28,ISN,H,1,R,TRUE,TRUE,,Representative.Doug.Isaacson@akleg.gov,9074654527,CAPITOL,13
+28,Tammie Wilson:26,WLT,H,2,R,TRUE,TRUE,,Representative.Tammie.T.Wilson@akleg.gov,9074654797,CAPITOL,412
+28,Steve Thompson:27,THP,H,3,R,TRUE,TRUE,,Representative.Steve.Thompson@akleg.gov,9074653004,CAPITOL,500
+28,Scott Kawasaki:25,KAW,H,4,D,FALSE,TRUE,,Representative.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,405
+28,Pete Higgins:28,HIG,H,5,R,TRUE,TRUE,,Representative.Pete.Higgins@akleg.gov,9074654976,CAPITOL,424
+28,Eric Feige:27,FEI,H,6,R,TRUE,TRUE,,Representative.Eric.Feige@akleg.gov,9074654859,CAPITOL,126
+28,Wes Keller:25,KEE,H,7,R,TRUE,TRUE,,Representative.Wes.Keller@akleg.gov,9074652186,CAPITOL,118
+28,Shelley Hughes:27,HUS,H,8,R,TRUE,TRUE,,Representative.Shelley.Hughes@akleg.gov,9074653743,CAPITOL,409
+28,Lynn Gattis:28,GAT,H,9,R,TRUE,TRUE,,Representative.Lynn.Gattis@akleg.gov,9074654833,CAPITOL,420
+28,Mark Neuman:24,NEU,H,10,R,TRUE,TRUE,,Representative.Mark.Neuman@akleg.gov,9074652679,CAPITOL,513
+28,Bill Stoltze:23,STZ,H,11,R,TRUE,TRUE,,Representative.Bill.Stoltze@akleg.gov,9074654958,CAPITOL,515
+28,Dan Saddler:27,SAD,H,12,R,TRUE,TRUE,,Representative.Dan.Saddler@akleg.gov,9074653783,CAPITOL,104
+28,Gabrielle LeDoux:24,LEU,H,13,R,TRUE,TRUE,,Representative.Gabrielle.LeDoux@akleg.gov,9074654998,CAPITOL,416
+28,Max Gruenberg:14,GRU,H,14,D,FALSE,TRUE,House Minority Whip,Representative.Max.Gruenberg@akleg.gov,9074654940,CAPITOL,110
+28,Andy Josephson:28,JOS,H,15,D,FALSE,TRUE,,Representative.Andy.Josephson@akleg.gov,9074654939,CAPITOL,430
+28,Harriet Drummond:28,DRU,H,16,D,FALSE,TRUE,,Representative.Harriet.Drummond@akleg.gov,9074653875,CAPITOL,112
+28,Geran Tarr:28,TAR,H,17,D,FALSE,TRUE,,Representative.Geran.Tarr@akleg.gov,9074653424,CAPITOL,114
+28,Les Gara:23,GAR,H,18,D,FALSE,TRUE,,Representative.Les.Gara@akleg.gov,9074652647,CAPITOL,400
+28,Lindsey Holmes:25,HOL,H,19,R,TRUE,TRUE,,Representative.Lindsey.Holmes@akleg.gov,9074654919,CAPITOL,415
+28,Mia Costello:27,COS,H,20,R,TRUE,TRUE,,Representative.Mia.Costello@akleg.gov,9074654968,CAPITOL,501
+28,Craig Johnson:25,JHN,H,21,R,TRUE,TRUE,,Representative.Craig.Johnson@akleg.gov,9074654993,CAPITOL,216
+28,Chris Tuck:26,TUC,H,22,D,FALSE,TRUE,House Minority Leader,Representative.Chris.Tuck@akleg.gov,9074652095,CAPITOL,404
+28,Bob Lynn:23,LYN,H,23,R,TRUE,TRUE,,Representative.Bob.Lynn@akleg.gov,9074654931,CAPITOL,108
+28,Charisse Millett:26,MIL,H,24,R,TRUE,TRUE,,Representative.Charisse.Millett@akleg.gov,9074653879,CAPITOL,403
+28,Lance Pruitt:27,PRU,H,25,R,TRUE,TRUE,House Majority Leader,Representative.Lance.Pruitt@akleg.gov,9074653438,CAPITOL,204
+28,Lora Reinbold:28,REI,H,26,R,TRUE,TRUE,,Representative.Lora.Reinbold@akleg.gov,9074653822,CAPITOL,432
+28,Mike Hawker:23,HAW,H,27,R,TRUE,TRUE,,Representative.Mike.Hawker@akleg.gov,9074654949,CAPITOL,502
+28,Mike Chenault:22,CHE,H,28,R,TRUE,TRUE,Speaker of the House,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,208
+28,Kurt Olson:24,OLL,H,29,R,TRUE,TRUE,,Representative.Kurt.Olson@akleg.gov,9074652693,CAPITOL,24
+28,Paul Seaton:23,SAN,H,30,R,TRUE,TRUE,,Representative.Paul.Seaton@akleg.gov,9074652689,CAPITOL,102
+28,Cathy Muñoz:26,MUN,H,31,R,TRUE,TRUE,,Representative.Cathy.Engstrom.Munoz@akleg.gov,9074653744,CAPITOL,421
+28,Beth Kerttula:21,KER,H,32,D,FALSE,FALSE,"Resigned January 24, 2014",Representative.Beth.Kerttula@akleg.gov,9074654766,CAPIT0L,404
+28,Sam Kito:28,KIO,H,32,D,FALSE,TRUE,"Oath taken February 26, 2014",Representative.Sam.Kito.III@akleg.gov,9074654766,CAPITOL,422
+28,Peggy Wilson:22,WLS,H,33,R,TRUE,TRUE,House Majority Whip,Representative.Peggy.P.Wilson@akleg.gov,9074653824,CAPITOL,406
+28,Jonathan Kreiss-Tomkins:28,KRE,H,34,D,FALSE,TRUE,,Representative.Jonathan.Kreiss-Tomkins@akleg.gov,9074653732,CAPITOL,426
+28,Alan Austerman:19,AUS,H,35,R,TRUE,TRUE,,Representative.Alan.Austerman@akleg.gov,9074652487,CAPITOL,505
+28,Bryce Edgmon:25,EDG,H,36,D,TRUE,TRUE,,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,410
+28,Bob Herron:26,HEO,H,37,D,TRUE,TRUE,,Representative.Bob.Herron@akleg.gov,9074654942,CAPITOL,411
+28,David Guttenberg:23,GTT,H,38,D,FALSE,TRUE,"Oath taken January 22, 2013",Representative.David.Guttenberg@akleg.gov,9074654457,CAPITOL,418
+28,Neal Foster:26,FON,H,39,D,TRUE,TRUE,,Representative.Neal.Foster@akleg.gov,9074653789,CAPITOL,434
+28,Benjamin Nageak:28,NAG,H,40,D,TRUE,TRUE,,Representative.Benjamin.Nageak@akleg.gov,9074653473,CAPITOL,428
+28,John Coghill:16,CGL,S,A,R,TRUE,TRUE,Senate Majority Leader,Senator.John.Coghill@akleg.gov,9074653719,CAPITOL,119
+28,Pete Kelly:19,KEP,S,B,R,TRUE,TRUE,,Senator.Pete.Kelly@akleg.gov,9074653709,CAPITOL,516
+28,Click Bishop:28,BIS,S,C,R,TRUE,TRUE,,Senator.Click.Bishop@akleg.gov,9074652327,CAPITOL,115
+28,Mike Dunleavy:28,DNL,S,D,R,TRUE,TRUE,,Senator.Mike.Dunleavy@akleg.gov,9074656600,CAPITOL,510
+28,Charlie Huggins:23,HUG,S,E,R,TRUE,TRUE,Senate President,Senator.Charlie.Huggins@akleg.gov,9074653878,CAPITOL,111
+28,Fred Dyson:20,DYS,S,F,R,TRUE,TRUE,,Senator.Fred.Dyson@akleg.gov,9074652199,CAPITOL,121
+28,Bill Wielechowski:25,WIE,S,G,D,FALSE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,419
+28,Berta Gardner:24,GAN,S,H,D,FALSE,TRUE,,Senator.Berta.Gardner@akleg.gov,9074654930,CAPITOL,417
+28,Johnny Ellis:15,ELL,S,I,D,FALSE,TRUE,Senate Minority Leader (2013),Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,7
+28,Hollis French:23,FRE,S,J,D,FALSE,TRUE,Senate Minority Leader (2014),Senator.Hollis.French@akleg.gov,9074653892,CAPITOL,504
+28,Lesil McGuire:22,MCG,S,K,R,TRUE,TRUE,,Senator.Lesil.McGuire@akleg.gov,9074652995,CAPITOL,103
+28,Kevin Meyer:22,MEY,S,L,R,TRUE,TRUE,,Senator.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,518
+28,Anna Fairclough:25,FAI,S,M,R,TRUE,TRUE,,Senator.Anna.Fairclough@akleg.gov,9074653777,CAPITOL,514
+28,Cathy Giessel:27,GIE,S,N,R,TRUE,TRUE,,Senator.Cathy.Giessel@akleg.gov,9074654843,CAPITOL,427
+28,Peter Micciche:28,MHE,S,O,R,TRUE,TRUE,,Senator.Peter.Micciche@akleg.gov,9074652828,CAPITOL,125
+28,Dennis Egan:26,EGA,S,P,D,TRUE,TRUE,,Senator.Dennis.Egan@akleg.gov,9074654947,CAPITOL,9
+28,Bert Stedman:23,SMN,S,Q,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,30
+28,Gary Stevens:22,STG,S,R,R,TRUE,TRUE,,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,423
+28,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,11
+28,Donald Olson:22,OLS,S,T,D,TRUE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,508
+29,Scott Kawasaki:25,KAW,H,1,D,FALSE,TRUE,,Representative.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,418
+29,Steve Thompson:27,THP,H,2,R,TRUE,TRUE,,Representative.Steve.Thompson@akleg.gov,9074653004,CAPITOL,515
+29,Tammie Wilson:26,WLT,H,3,R,TRUE,TRUE,,Representative.Tammie.Wilson@akleg.gov,9074654797,CAPITOL,412
+29,David Guttenberg:23,GTT,H,4,D,FALSE,TRUE,,Representative.David.Guttenberg@akleg.gov,9074654457,CAPITOL,415
+29,Adam Wool:29,WOO,H,5,D,FALSE,TRUE,,Representative.Adam.Wool@akleg.gov,9074654976,CAPITOL,420
+29,Dave Talerico:29,TAL,H,6,R,TRUE,TRUE,,Representative.David.Talerico@akleg.gov,9074654527,CAPITOL,104
+29,Lynn Gattis:28,GAT,H,7,R,TRUE,TRUE,,Representative.Lynn.Gattis@akleg.gov,9074654833,CAPITOL,500
+29,Mark Neuman:24,NEU,H,8,R,TRUE,TRUE,,Representative.Mark.Neuman@akleg.gov,9074652679,CAPITOL,505
+29,Jim Colver:29,COV,H,9,R,TRUE,TRUE,,Representative.Jim.Colver@akleg.gov,9074654859,CAPITOL,424
+29,Wes Keller:25,KEE,H,10,R,TRUE,TRUE,,Representative.Wes.Keller@akleg.gov,9074652186,CAPITOL,403
+29,Shelley Hughes:27,HUS,H,11,R,TRUE,TRUE,,Representative.Shelley.Hughes@akleg.gov,9074653743,CAPITOL,13
+29,Cathy Tilton:29,TLT,H,12,R,TRUE,TRUE,,Representative.Cathy.Tilton@akleg.gov,9074652199,CAPITOL,411
+29,Dan Saddler:27,SAD,H,13,R,TRUE,TRUE,,Representative.Dan.Saddler@akleg.gov,9074653783,CAPITOL,513
+29,Lora Reinbold:28,REI,H,14,R,TRUE,TRUE,,Representative.Lora.Reinbold@akleg.gov,9074653822,CAPITOL,428
+29,Gabrielle LeDoux:24,LEU,H,15,R,TRUE,TRUE,,Representative.Gabrielle.LeDoux@akleg.gov,9074654998,CAPITOL,118
+29,Max Gruenberg:14,GRU,H,16,D,FALSE,FALSE,"Deceased February 14, 2016",Representative.Max.Gruenberg@akleg.gov,907465,CAPITOL,110
+29,Ivy Spohnholz:29,SPN,H,16,D,FALSE,TRUE,"Oath Taken March 10, 2016",Representative.Ivy.Spohnholz@akleg.gov,9074654940,CAPITOL,110
+29,Andy Josephson:28,JOS,H,17,D,FALSE,TRUE,,Representative.Andy.Josephson@akleg.gov,9074654939,CAPITOL,430
+29,Harriet Drummond:28,DRU,H,18,D,FALSE,TRUE,,Representative.Harriet.Drummond@akleg.gov,9074653875,CAPITOL,112
+29,Geran Tarr:28,TAR,H,19,D,FALSE,TRUE,,Representative.Geran.Tarr@akleg.gov,9074653424,CAPITOL,409
+29,Les Gara:23,GAR,H,20,D,FALSE,TRUE,,Representative.Les.Gara@akleg.gov,9074652647,CAPITOL,400
+29,Matt Claman:29,CLA,H,21,D,FALSE,TRUE,,Representative.Matt.Claman@akleg.gov,9074654919,CAPITOL,405
+29,Liz Vazquez:29,VAQ,H,22,R,TRUE,TRUE,,Representative.Liz.Vazquez@akleg.gov,9074653892,CAPITOL,432
+29,Chris Tuck:26,TUC,H,23,D,FALSE,TRUE,House Minority Leader,Representative.Chris.Tuck@akleg.gov,9074652095,CAPITOL,404
+29,Craig Johnson:25,JHN,H,24,R,TRUE,TRUE,,Representative.Craig.Johnson@akleg.gov,9074654993,CAPITOL,216
+29,Charisse Millett:26,MIL,H,25,R,TRUE,TRUE,House Majority Leader,Representative.Charisse.Millett@akleg.gov,9074653879,CAPITOL,204
+29,Bob Lynn:23,LYN,H,26,R,TRUE,TRUE,,Representative.Bob.Lynn@akleg.gov,9074654931,CAPITOL,108
+29,Lance Pruitt:27,PRU,H,27,R,TRUE,TRUE,,Representative.Lance.Pruitt@akleg.gov,9074653438,CAPITOL,421
+29,Mike Hawker:23,HAW,H,28,R,TRUE,TRUE,,Representative.Mike.Hawker@akleg.gov,9074654949,CAPITOL,502
+29,Mike Chenault:22,CHE,H,29,R,TRUE,TRUE,Speaker of the House,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,208
+29,Kurt Olson:24,OLL,H,30,R,TRUE,TRUE,,Representative.Kurt.Olson@akleg.gov,9074652693,CAPITOL,24
+29,Paul Seaton:23,SAN,H,31,R,TRUE,TRUE,,Representative.Paul.Seaton@akleg.gov,9074652689,CAPITOL,102
+29,Louise Stutes:29,STS,H,32,R,TRUE,TRUE,,Representative.Louise.Stutes@akleg.gov,9074652487,CAPITOL,416
+29,Sam Kito:28,KIO,H,33,D,FALSE,TRUE,House Minority Whip,Representative.Sam.Kito@akleg.gov,9074654766,CAPITOL,422
+29,Cathy Muñoz:26,MUN,H,34,R,TRUE,TRUE,,Representative.Cathy.Munoz@akleg.gov,9074653744,CAPITOL,501
+29,Jonathan Kreiss-Tomkins:28,KRE,H,35,D,FALSE,TRUE,,Representative.Jonathan.Kreiss-Tomkins@akleg.gov,9074653732,CAPITOL,426
+29,Dan Ortiz:29,ORT,H,36,N,FALSE,TRUE,,Representative.Dan.Ortiz@akleg.gov,9074653824,CAPITOL,114
+29,Bryce Edgmon:25,EDG,H,37,D,TRUE,TRUE,,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,410
+29,Bob Herron:26,HEO,H,38,D,TRUE,TRUE,House Majority Whip,Representative.Bob.Herron@akleg.gov,9074654942,CAPITOL,408
+29,Neal Foster:26,FON,H,39,D,TRUE,TRUE,,Representative.Neal.Foster@akleg.gov,9074653789,CAPITOL,434
+29,Benjamin Nageak:28,NAG,H,40,D,TRUE,TRUE,,Representative.Benjamin.Nageak@akleg.gov,9074653473,CAPITOL,126
+29,Pete Kelly:19,KEP,S,A,R,TRUE,TRUE,,Senator.Pete.Kelly@akleg.gov,9074653709,CAPITOL,518
+29,John Coghill:16,CGL,S,B,R,TRUE,TRUE,Senate Majority Leader,Senator.John.Coghill@akleg.gov,9074653719,CAPITOL,119
+29,Click Bishop:28,BIS,S,C,R,TRUE,TRUE,,Senator.Click.Bishop@akleg.gov,9074652327,CAPITOL,115
+29,Charlie Huggins:23,HUG,S,D,R,TRUE,TRUE,,Senator.Charlie.Huggins@akleg.gov,9074653878,CAPITOL,103
+29,Mike Dunleavy:28,DNL,S,E,R,TRUE,TRUE,,Senator.Mike.Dunleavy@akleg.gov,9074656600,CAPITOL,11
+29,Bill Stoltze:23,STZ,S,F,R,TRUE,TRUE,,Senator.Bill.Stoltze@akleg.gov,9074654958,CAPITOL,125
+29,Anna MacKinnon:29,MAI,S,G,R,TRUE,TRUE,,Senator.Anna.MacKinnon@akleg.gov,9074653777,CAPITOL,516
+29,Bill Wielechowski:25,WIE,S,H,D,FALSE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,419
+29,Berta Gardner:24,GAN,S,I,D,FALSE,TRUE,Senate Minority Leader,Senator.Berta.Gardner@akleg.gov,9074654930,CAPITOL,9
+29,Johnny Ellis:15,ELL,S,J,D,FALSE,TRUE,,Senator.Johnny.Ellis@akleg.gov,9074653704,CAPITOL,7
+29,Mia Costello:27,COS,S,K,R,TRUE,TRUE,,Senator.Mia.Costello@akleg.gov,9074654968,CAPITOL,510
+29,Lesil McGuire:22,MCG,S,L,R,TRUE,TRUE,,Senator.Lesil.McGuire@akleg.gov,9074652995,CAPITOL,121
+29,Kevin Meyer:22,MEY,S,M,R,TRUE,TRUE,Senate President,Senator.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,111
+29,Cathy Giessel:27,GIE,S,N,R,TRUE,TRUE,,Senator.Cathy.Giessel@akleg.gov,9074654843,CAPITOL,427
+29,Peter Micciche:28,MHE,S,O,R,TRUE,TRUE,,Senator.Peter.Micciche@akleg.gov,9074652828,CAPITOL,514
+29,Gary Stevens:22,STG,S,P,R,TRUE,TRUE,,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,429
+29,Dennis Egan:26,EGA,S,Q,D,FALSE,TRUE,,Senator.Dennis.Egan@akleg.gov,9074654947,CAPITOL,417
+29,Bert Stedman:23,SMN,S,R,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,30
+29,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,508
+29,Donald Olson:22,OLS,S,T,D,TRUE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,504
+30,Scott Kawasaki:25,KAW,H,1,D,TRUE,TRUE,,Representative.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,502
+30,Steve Thompson:27,THP,H,2,R,FALSE,TRUE,,Representative.Steve.Thompson@akleg.gov,9074653004,CAPITOL,500
+30,Tammie Wilson:26,WLT,H,3,R,FALSE,TRUE,,Representative.Tammie.Wilson@akleg.gov,9074654797,CAPITOL,422
+30,David Guttenberg:23,GTT,H,4,D,TRUE,TRUE,,Representative.David.Guttenberg@akleg.gov,9074654457,CAPITOL,501
+30,Adam Wool:29,WOO,H,5,D,TRUE,TRUE,,Representative.Adam.Wool@akleg.gov,9074654976,CAPITOL,412
+30,Dave Talerico:29,TAL,H,6,R,FALSE,TRUE,,Representative.David.Talerico@akleg.gov,9074654527,CAPITOL,110
+30,Colleen Sullivan-Leonard:30,SUL,H,7,R,FALSE,TRUE,,Representative.Colleen.Sullivan-Leonard@akleg.gov,9074654833,CAPITOL,420
+30,Mark Neuman:24,NEU,H,8,R,FALSE,TRUE,,Representative.Mark.Neuman@akleg.gov,9074652679,CAPITOL,104
+30,George Rauscher:30,RAU,H,9,R,FALSE,TRUE,,Representative.George.Rauscher@akleg.gov,9074654859,CAPITOL,426
+30,David Eastman:30,EAS,H,10,R,FALSE,TRUE,,Representative.David.Eastman@akleg.gov,9074652186,CAPITOL,114
+30,DeLena Johnson:30,JHS,H,11,R,FALSE,TRUE,,Representative.DeLena.Johnson@akleg.gov,9074654958,CAPITOL,405
+30,Cathy Tilton:29,TLT,H,12,R,FALSE,TRUE,,Representative.Cathy.Tilton@akleg.gov,9074652199,CAPITOL,400
+30,Dan Saddler:27,SAD,H,13,R,FALSE,FALSE,"Resigned December 7, 2018",Representative.Dan.Saddler@akleg.gov,907465,,
+30,Lora Reinbold:28,REI,H,14,R,FALSE,TRUE,,Representative.Lora.Reinbold@akleg.gov,9074653822,CAPITOL,409
+30,Gabrielle LeDoux:24,LEU,H,15,R,TRUE,TRUE,,Representative.Gabrielle.LeDoux@akleg.gov,9074654998,CAPITOL,216
+30,Ivy Spohnholz:29,SPN,H,16,D,TRUE,TRUE,,Representative.Ivy.Spohnholz@akleg.gov,9074654940,CAPITOL,421
+30,Andy Josephson:28,JOS,H,17,D,TRUE,TRUE,,Representative.Andy.Josephson@akleg.gov,9074654939,CAPITOL,102
+30,Harriet Drummond:28,DRU,H,18,D,TRUE,TRUE,,Representative.Harriet.Drummond@akleg.gov,9074653875,CAPITOL,108
+30,Geran Tarr:28,TAR,H,19,D,TRUE,TRUE,,Representative.Geran.Tarr@akleg.gov,9074653424,CAPITOL,126
+30,Les Gara:23,GAR,H,20,D,TRUE,TRUE,,Representative.Les.Gara@akleg.gov,9074652647,CAPITOL,511
+30,Matt Claman:29,CLA,H,21,D,TRUE,TRUE,,Representative.Matt.Claman@akleg.gov,9074654919,CAPITOL,118
+30,Jason Grenn:30,GRN,H,22,N,TRUE,TRUE,,Representative.Jason.Grenn@akleg.gov,9074653892,CAPITOL,418
+30,Chris Tuck:26,TUC,H,23,D,TRUE,TRUE,House Majority Leader,Representative.Chris.Tuck@akleg.gov,9074652095,CAPITOL,204
+30,Chuck Kopp:30,KOP,H,24,R,FALSE,TRUE,,Representative.Chuck.Kopp@akleg.gov,9074654993,CAPITOL,13
+30,Charisse Millett:26,MIL,H,25,R,FALSE,TRUE,House Minority Leader,Representative.Charisse.Millett@akleg.gov,9074653879,CAPITOL,404
+30,Chris Birch:30,BIR,H,26,R,FALSE,TRUE,,Representative.Chris.Birch@akleg.gov,9074654931,CAPITOL,112
+30,Lance Pruitt:27,PRU,H,27,R,FALSE,TRUE,,Representative.Lance.Pruitt@akleg.gov,9074653438,CAPITOL,415
+30,Jennifer Johnston:30,JHT,H,28,R,FALSE,TRUE,,Representative.Jennifer.Johnston@akleg.gov,9074654949,CAPITOL,430
+30,Mike Chenault:22,CHE,H,29,R,FALSE,TRUE,House Minority Whip,Representative.Mike.Chenault@akleg.gov,9074653779,CAPITOL,434
+30,Gary Knopp:30,KNO,H,30,R,FALSE,TRUE,,Representative.Gary.Knopp@akleg.gov,9074652693,CAPITOL,424
+30,Paul Seaton:23,SAN,H,31,R,TRUE,TRUE,,Representative.Paul.Seaton@akleg.gov,9074652689,CAPITOL,505
+30,Louise Stutes:29,STS,H,32,R,TRUE,TRUE,House Majority Whip,Representative.Louise.Stutes@akleg.gov,9074652487,CAPITOL,406
+30,Sam Kito:28,KIO,H,33,D,TRUE,TRUE,,Representative.Sam.Kito@akleg.gov,9074654766,CAPITOL,403
+30,Justin Parish:30,PAI,H,34,D,TRUE,TRUE,,Representative.Justin.Parish@akleg.gov,9074653744,CAPITOL,24
+30,Jonathan Kreiss-Tomkins:28,KRE,H,35,D,TRUE,TRUE,,Representative.Jonathan.Kreiss-Tomkins@akleg.gov,9074653732,CAPITOL,411
+30,Dan Ortiz:29,ORT,H,36,N,TRUE,TRUE,,Representative.Dan.Ortiz@akleg.gov,9074653824,CAPITOL,513
+30,Bryce Edgmon:25,EDG,H,37,D,TRUE,TRUE,Speaker of the House,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,208
+30,Zach Fansler:30,FAN,H,38,D,TRUE,FALSE,"Resigned February 12, 2018",Representative.Zach.Fansler@akleg.gov,9074654942,CAPITOL,416
+30,Tiffany Zulkosky:30,ZUL,H,38,D,TRUE,TRUE,"Oath Taken March 9, 2018",Representative.Tiffany.Zulkosky@akleg.gov,,CAPITOL,416
+30,Neal Foster:26,FON,H,39,D,TRUE,TRUE,,Representative.Neal.Foster@akleg.gov,9074653789,CAPITOL,410
+30,John Lincoln:30,LIC,H,40,D,TRUE,TRUE,"Oath Taken January 31, 2018",Representative.John.Lincoln@akleg.gov,9074653473,CAPITOL,432
+30,Dean Westlake:30,WES,H,40,D,TRUE,FALSE,"Resigned December 25, 2017",Representative.Dean.Westlake@akleg.gov,,,
+30,Pete Kelly:19,KEP,S,A,R,TRUE,TRUE,Senate President,Senator.Pete.Kelly@akleg.gov,9074653709,CAPITOL,111
+30,John Coghill:16,CGL,S,B,R,TRUE,TRUE,,Senator.John.Coghill@akleg.gov,9074653719,CAPITOL,119
+30,Click Bishop:28,BIS,S,C,R,TRUE,TRUE,,Senator.Click.Bishop@akleg.gov,9074652327,CAPITOL,121
+30,David Wilson:30,WLN,S,D,R,TRUE,TRUE,,Senator.David.Wilson@akleg.gov,9074653878,CAPITOL,115
+30,Mike Dunleavy:28,DNL,S,E,R,FALSE,FALSE,"Resigned January 15, 2018",Senator.Mike.Dunleavy@akleg.gov,9074656600,CAPITOL,11
+30,Mike Shower:30,SHO,S,E,R,FALSE,TRUE,"Oath Taken February 26, 2018",Senator.Mike.Shower@akleg.gov,9074656600,CAPITOL,417
+30,Shelley Hughes:27,HUS,S,F,R,FALSE,TRUE,,Senator.Shelley.Hughes@akleg.gov,9074653743,CAPITOL,125
+30,Anna MacKinnon:29,MAI,S,G,R,TRUE,TRUE,,Senator.Anna.MacKinnon@akleg.gov,9074653777,CAPITOL,516
+30,Bill Wielechowski:25,WIE,S,H,D,FALSE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,7
+30,Berta Gardner:24,GAN,S,I,D,FALSE,TRUE,Senate Minority Leader,Senator.Berta.Gardner@akleg.gov,9074654930,CAPITOL,11
+30,Tom Begich:30,BCH,S,J,D,FALSE,TRUE,,Senator.Tom.Begich@akleg.gov,9074653704,CAPITOL,419
+30,Mia Costello:27,COS,S,K,R,TRUE,TRUE,,Senator.Mia.Costello@akleg.gov,9074654968,CAPITOL,504
+30,Natasha von Imhof:30,VON,S,L,R,TRUE,TRUE,,Senator.Natasha.vonImhof@akleg.gov,9074652995,CAPITOL,514
+30,Kevin Meyer:22,MEY,S,M,R,TRUE,TRUE,,Senator.Kevin.Meyer@akleg.gov,9074654945,CAPITOL,103
+30,Cathy Giessel:27,GIE,S,N,R,TRUE,TRUE,,Senator.Cathy.Giessel@akleg.gov,9074654843,CAPITOL,427
+30,Peter Micciche:28,MHE,S,O,R,TRUE,TRUE,Senate Majority Leader,Senator.Peter.Micciche@akleg.gov,9074652828,CAPITOL,508
+30,Gary Stevens:22,STG,S,P,R,TRUE,TRUE,,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,429
+30,Dennis Egan:26,EGA,S,Q,D,FALSE,TRUE,,Senator.Dennis.Egan@akleg.gov,9074654947,CAPITOL,9
+30,Bert Stedman:23,SMN,S,R,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,30
+30,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,518
+30,Donald Olson:22,OLS,S,T,D,FALSE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,510
+31,Bart LeBon:31,LEB,H,1,R,TRUE,TRUE,,Representative.Bart.LeBon@akleg.gov,9074653709,CAPITOL,418
+31,Steve Thompson:27,THP,H,2,R,TRUE,TRUE,House Majority Leader,Representative.Steve.Thompson@akleg.gov,9074653004,CAPITOL,204
+31,Mike Prax:31,PRA,H,3,R,FALSE,TRUE,"Oath Taken February 24, 2020",Representative.Mike.Prax@akleg.gov,9074654797,CAPITOL,114
+31,Tammie Wilson:,WLT,H,3,R,FALSE,FALSE,"Resigned January 25, 2020",Representative.Tammie.Wilson@akleg.gov,,CAPITOL,
+31,Grier Hopkins:31,HPK,H,4,D,TRUE,TRUE,,Representative.Grier.Hopkins@akleg.gov,9074654457,CAPITOL,409
+31,Adam Wool:29,WOO,H,5,D,TRUE,TRUE,,Representative.Adam.Wool@akleg.gov,9074654976,CAPITOL,501
+31,Dave Talerico:29,TAL,H,6,R,FALSE,TRUE,,Representative.Dave.Talerico@akleg.gov,9074654527,CAPITOL,104
+31,Colleen Sullivan-Leonard:30,SUL,H,7,R,FALSE,TRUE,,Representative.Colleen.Sullivan-Leonard@akleg.gov,9074654833,CAPITOL,420
+31,Mark Neuman:24,NEU,H,8,R,FALSE,TRUE,,Representative.Mark.Neuman@akleg.gov,9074652679,CAPITOL,434
+31,George Rauscher:30,RAU,H,9,R,FALSE,TRUE,,Representative.George.Rauscher@akleg.gov,9074654859,CAPITOL,426
+31,David Eastman:30,EAS,H,10,R,FALSE,TRUE,,Representative.David.Eastman@akleg.gov,9074652186,CAPITOL,422
+31,DeLena Johnson:30,JHS,H,11,R,FALSE,TRUE,House Minority Whip,Representative.DeLena.Johnson@akleg.gov,9074654958,CAPITOL,405
+31,Cathy Tilton:29,TLT,H,12,R,FALSE,TRUE,,Representative.Cathy.Tilton@akleg.gov,9074652199,CAPITOL,415
+31,Sharon Jackson:31,JAK,H,13,R,FALSE,TRUE,"Oath Taken January 17, 2019",Representative.Sharon.Jackson@akleg.gov,9074653783,CAPITOL,428
+31,Kelly Merrick:31,MRR,H,14,R,FALSE,TRUE,,Representative.Kelly.Merrick@akleg.gov,9074653777,CAPITOL,500
+31,Gabrielle LeDoux:24,LEU,H,15,R,FALSE,TRUE,,Representative.Gabrielle.LeDoux@akleg.gov,9074654998,CAPITOL,13
+31,Ivy Spohnholz:29,SPN,H,16,D,TRUE,TRUE,,Representative.Ivy.Spohnholz@akleg.gov,9074654940,CAPITOL,421
+31,Andy Josephson:28,JOS,H,17,D,TRUE,TRUE,,Representative.Andy.Josephson@akleg.gov,9074654939,CAPITOL,502
+31,Harriet Drummond:28,DRU,H,18,D,TRUE,TRUE,,Representative.Harriet.Drummond@akleg.gov,9074653875,CAPITOL,108
+31,Geran Tarr:28,TAR,H,19,D,TRUE,TRUE,,Representative.Geran.Tarr@akleg.gov,9074653424,CAPITOL,128
+31,Zack Fields:31,FIE,H,20,D,TRUE,TRUE,,Representative.Zack.Fields@akleg.gov,9074652647,CAPITOL,412
+31,Matt Claman:29,CLA,H,21,D,TRUE,TRUE,,Representative.Matt.Claman@akleg.gov,9074654919,CAPITOL,118
+31,Sara Rasmussen:31,RAS,H,22,R,FALSE,TRUE,,Representative.Sara.Rasmussen@akleg.gov,9074653892,CAPITOL,430
+31,Chris Tuck:26,TUC,H,23,D,TRUE,TRUE,,Representative.Chris.Tuck@akleg.gov,9074652095,CAPITOL,24
+31,Chuck Kopp:30,KOP,H,24,R,TRUE,TRUE,,Representative.Chuck.Kopp@akleg.gov,9074654993,CAPITOL,216
+31,Mel Gillis:31,GIL,H,25,R,FALSE,TRUE,"Oath Taken December 02, 2019",Representative.Mel.Gillis@akleg.gov,9074654391,CAPITOL,110
+31,Joshua Revak:31,REA,H,25,R,FALSE,FALSE,"Resigned November 2, 2019",Representative.Josh.Revak@akleg.gov,,CAPITOL,
+31,Laddie Shaw:31,SHW,H,26,R,FALSE,TRUE,,Representative.Laddie.Shaw@akleg.gov,9074654945,CAPITOL,112
+31,Lance Pruitt:27,PRU,H,27,R,FALSE,TRUE,House Minority Leader,Representative.Lance.Pruitt@akleg.gov,9074653438,CAPITOL,404
+31,Jennifer Johnston:30,JHT,H,28,R,TRUE,TRUE,,Representative.Jennifer.Johnston@akleg.gov,9074654949,CAPITOL,511
+31,Ben Carpenter:31,CAE,H,29,R,FALSE,TRUE,,Representative.Ben.Carpenter@akleg.gov,9074653779,CAPITOL,400
+31,Gary Knopp:30,KNO,H,30,R,TRUE,FALSE,"Deceased July 31, 2020",Representative.Gary.Knopp@akleg.gov,9074652693,CAPITOL,410
+31,Sarah Vance:31,VAN,H,31,R,FALSE,TRUE,,Representative.Sarah.Vance@akleg.gov,9074652689,CAPITOL,424
+31,Louise Stutes:29,STS,H,32,R,TRUE,TRUE,House Majority Whip,Representative.Louise.Stutes@akleg.gov,9074652487,CAPITOL,406
+31,Sara Hannan:31,HNN,H,33,D,TRUE,TRUE,,Representative.Sara.Hannan@akleg.gov,9074654766,CAPITOL,432
+31,Andi Story:31,STO,H,34,D,TRUE,TRUE,,Representative.Andi.Story@akleg.gov,9074653744,CAPITOL,403
+31,Jonathan Kreiss-Tomkins:28,KRE,H,35,D,TRUE,TRUE,,Representative.Jonathan.Kreiss-Tomkins@akleg.gov,9074653732,CAPITOL,411
+31,Dan Ortiz:29,ORT,H,36,N,TRUE,TRUE,,Representative.Dan.Ortiz@akleg.gov,9074653824,CAPITOL,513
+31,Bryce Edgmon:25,EDG,H,37,N,TRUE,TRUE,Speaker of the House,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,208
+31,Tiffany Zulkosky:30,ZUL,H,38,D,TRUE,TRUE,,Representative.Tiffany.Zulkosky@akleg.gov,9074654942,CAPITOL,416
+31,Neal Foster:26,FON,H,39,D,TRUE,TRUE,,Representative.Neal.Foster@akleg.gov,9074653789,CAPITOL,505
+31,John Lincoln:30,LIC,H,40,N,TRUE,TRUE,,Representative.John.Lincoln@akleg.gov,9074653473,CAPITOL,102
+31,Scott Kawasaki:25,KAW,S,A,D,FALSE,TRUE,,Senator.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,7
+31,John Coghill:16,CGL,S,B,R,TRUE,TRUE,,Senator.John.Coghill@akleg.gov,9074653719,CAPITOL,103
+31,Click Bishop:28,BIS,S,C,R,TRUE,TRUE,,Senator.Click.Bishop@akleg.gov,9074652327,CAPITOL,121
+31,David Wilson:30,WLN,S,D,R,TRUE,TRUE,,Senator.David.Wilson@akleg.gov,9074653878,CAPITOL,115
+31,Mike Shower:30,SHO,S,E,R,TRUE,TRUE,,Senator.Mike.Shower@akleg.gov,9074656600,CAPITOL,510
+31,Shelley Hughes:27,HUS,S,F,R,TRUE,TRUE,,Senator.Shelley.Hughes@akleg.gov,9074653743,CAPITOL,30
+31,Lora Reinbold:28,REI,S,G,R,TRUE,TRUE,,Senator.Lora.Reinbold@akleg.gov,9074653822,CAPITOL,427
+31,Bill Wielechowski:25,WIE,S,H,D,FALSE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,9
+31,Elvi Gray-Jackson:31,GRA,S,I,D,FALSE,TRUE,,Senator.Elvi.Gray-Jackson@akleg.gov,9074654930,CAPITOL,417
+31,Tom Begich:30,BCH,S,J,D,FALSE,TRUE,Senate Minority Leader,Senator.Tom.Begich@akleg.gov,9074653704,CAPITOL,11
+31,Mia Costello:27,COS,S,K,R,TRUE,TRUE,Majority Leader 1/15 - 7/8/19,Senator.Mia.Costello@akleg.gov,9074654968,CAPITOL,119
+31,Natasha von Imhof:30,VON,S,L,R,TRUE,TRUE,,Senator.Natasha.vonImhof@akleg.gov,9074652995,CAPITOL,516
+31,Chris Birch:30,BIR,S,M,R,TRUE,FALSE,"Deceased August 7, 2019",Senator.Chris.Birch@akleg.gov,,CAPITOL,125
+31,Joshua Revak:31,RVK,S,M,R,TRUE,TRUE,"Oath Taken November 02, 2019",Senator.Joshua.Revak@akleg.gov,9074653879,CAPITOL,125
+31,Cathy Giessel:27,GIE,S,N,R,TRUE,TRUE,Senate President,Senator.Cathy.Giessel@akleg.gov,9074654843,CAPITOL,111
+31,Peter Micciche:28,MHE,S,O,R,TRUE,TRUE,,Senator.Peter.Micciche@akleg.gov,9074652828,CAPITOL,504
+31,Gary Stevens:22,STG,S,P,R,TRUE,TRUE,,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,429
+31,Jesse Kiehl:31,KIE,S,Q,D,FALSE,TRUE,,Senator.Jesse.Kiehl@akleg.gov,9074654947,CAPITOL,419
+31,Bert Stedman:23,SMN,S,R,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,518
+31,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,Majority Leader Effective 7/9,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,508
+31,Donald Olson:22,OLS,S,T,D,FALSE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,514
+32,Bart LeBon:31,LEB,H,1,R,FALSE,TRUE,,Representative.Bart.LeBon@akleg.gov,9074653709,CAPITOL,415
+32,Steve Thompson:27,THP,H,2,R,FALSE,TRUE,,Representative.Steve.Thompson@akleg.gov,9074653004,CAPITOL,432
+32,Mike Prax:31,PRA,H,3,R,FALSE,TRUE,,Representative.Mike.Prax@akleg.gov,9074654797,CAPITOL,114
+32,Grier Hopkins:31,HPK,H,4,D,TRUE,TRUE,,Representative.Grier.Hopkins@akleg.gov,9074654457,CAPITOL,434
+32,Adam Wool:29,WOO,H,5,D,TRUE,TRUE,,Representative.Adam.Wool@akleg.gov,9074654976,CAPITOL,501
+32,Mike Cronk:32,CRN,H,6,R,FALSE,TRUE,,Representative.Mike.Cronk@akleg.gov,9074654527,CAPITOL,112
+32,Christopher Kurka:32,KUR,H,7,R,FALSE,TRUE,,Representative.Christopher.Kurka@akleg.gov,9074654833,CAPITOL,420
+32,Kevin McCabe:32,MCA,H,8,R,FALSE,TRUE,,Representative.Kevin.McCabe@akleg.gov,9074652679,CAPITOL,430
+32,George Rauscher:30,RAU,H,9,R,FALSE,TRUE,,Representative.George.Rauscher@akleg.gov,9074654859,CAPITOL,412
+32,David Eastman:30,EAS,H,10,R,FALSE,TRUE,,Representative.David.Eastman@akleg.gov,9074652186,CAPITOL,422
+32,DeLena Johnson:30,JHS,H,11,R,FALSE,TRUE,,Representative.DeLena.Johnson@akleg.gov,9074654958,CAPITOL,500
+32,Cathy Tilton:29,TLT,H,12,R,FALSE,TRUE,Minority Leader,Representative.Cathy.Tilton@akleg.gov,9074652199,CAPITOL,404
+32,Ken McCarty:32,MCC,H,13,R,FALSE,TRUE,,Representative.Ken.McCarty@akleg.gov,9074653873,CAPITOL,428
+32,Kelly Merrick:31,MRR,H,14,R,TRUE,TRUE,,Representative.Kelly.Merrick@akleg.gov,9074653777,CAPITOL,511
+32,David Nelson:32,NED,H,15,R,FALSE,TRUE,,Representative.David.Nelson@akleg.gov,9074654998,CAPITOL,13
+32,Ivy Spohnholz:29,SPN,H,16,D,TRUE,TRUE,,Representative.Ivy.Spohnholz@akleg.gov,9074654940,CAPITOL,406
+32,Andy Josephson:28,JOS,H,17,D,TRUE,TRUE,,Representative.Andy.Josephson@akleg.gov,9074654939,CAPITOL,502
+32,Harriet Drummond:28,DRU,H,18,D,TRUE,TRUE,,Representative.Harriet.Drummond@akleg.gov,9074653875,CAPITOL,108
+32,Geran Tarr:28,TAR,H,19,D,TRUE,TRUE,,Representative.Geran.Tarr@akleg.gov,9074653424,CAPITOL,128
+32,Zack Fields:31,FIE,H,20,D,TRUE,TRUE,,Representative.Zack.Fields@akleg.gov,9074652647,CAPITOL,24
+32,Matt Claman:29,CLA,H,21,D,TRUE,TRUE,,Representative.Matt.Claman@akleg.gov,9074654919,CAPITOL,118
+32,Sara Rasmussen:31,RAS,H,22,R,FALSE,TRUE,,Representative.Sara.Rasmussen@akleg.gov,9074653892,CAPITOL,418
+32,Chris Tuck:26,TUC,H,23,D,TRUE,TRUE,Majority Leader,Representative.Chris.Tuck@akleg.gov,9074652095,CAPITOL,216
+32,Tom McKay:32,MCK,H,24,R,FALSE,TRUE,,Representative.Tom.McKay@akleg.gov,9074654993,CAPITOL,110
+32,Calvin Schrage:32,SCG,H,25,N,TRUE,TRUE,,Representative.Calvin.Schrage@akleg.gov,9074654931,CAPITOL,104
+32,Laddie Shaw:31,SHW,H,26,R,FALSE,TRUE,,Representative.Laddie.Shaw@akleg.gov,9074654945,CAPITOL,426
+32,Liz Snyder:32,SNY,H,27,D,TRUE,TRUE,,Representative.Liz.Snyder@akleg.gov,9074653438,CAPITOL,421
+32,James Kaufman:32,KAU,H,28,R,FALSE,TRUE,,Representative.James.Kaufman@akleg.gov,9074654949,CAPITOL,405
+32,Ben Carpenter:31,CAE,H,29,R,FALSE,TRUE,,Representative.Ben.Carpenter@akleg.gov,9074653779,CAPITOL,400
+32,Ronald Gillham:32,GIH,H,30,R,FALSE,TRUE,,Representative.Ronald.Gillham@akleg.gov,9074652693,CAPITOL,409
+32,Sarah Vance:31,VAN,H,31,R,FALSE,TRUE,,Representative.Sarah.Vance@akleg.gov,9074652689,CAPITOL,424
+32,Louise Stutes:29,STS,H,32,R,TRUE,TRUE,Speaker,Representative.Louise.Stutes@akleg.gov,9074652487,CAPITOL,208
+32,Sara Hannan:31,HNN,H,33,D,TRUE,TRUE,,Representative.Sara.Hannan@akleg.gov,9074654766,CAPITOL,204
+32,Andi Story:31,STO,H,34,D,TRUE,TRUE,,Representative.Andi.Story@akleg.gov,9074653744,CAPITOL,403
+32,Jonathan Kreiss-Tomkins:28,KRE,H,35,D,TRUE,TRUE,,Representative.Jonathan.Kreiss-Tomkins@akleg.gov,9074653732,CAPITOL,411
+32,Dan Ortiz:29,ORT,H,36,N,TRUE,TRUE,,Representative.Dan.Ortiz@akleg.gov,9074653824,CAPITOL,513
+32,Bryce Edgmon:25,EDG,H,37,N,TRUE,TRUE,,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,410
+32,Tiffany Zulkosky:30,ZUL,H,38,D,TRUE,TRUE,,Representative.Tiffany.Zulkosky@akleg.gov,9074654942,CAPITOL,416
+32,Neal Foster:26,FON,H,39,D,TRUE,TRUE,,Representative.Neal.Foster@akleg.gov,9074653789,CAPITOL,505
+32,Josiah Patkotak:32,PKT,H,40,N,TRUE,TRUE,,Representative.Josiah.Patkotak@akleg.gov,9074653473,CAPITOL,102
+32,Scott Kawasaki:25,KAW,S,A,D,FALSE,TRUE,,Senator.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,7
+32,Robert Myers:32,MYE,S,B,R,TRUE,TRUE,,Senator.Robert.Myers@akleg.gov,9074653719,Capitol,510
+32,Click Bishop:28,BIS,S,C,R,TRUE,TRUE,,Senator.Click.Bishop@akleg.gov,9074652327,CAPITOL,516
+32,David Wilson:30,WLN,S,D,R,TRUE,TRUE,,Senator.David.Wilson@akleg.gov,9074653878,CAPITOL,121
+32,Mike Shower:30,SHO,S,E,R,TRUE,TRUE,,Senator.Mike.Shower@akleg.gov,9074656600,CAPITOL,429
+32,Shelley Hughes:27,HUS,S,F,R,TRUE,TRUE,Majority Leader,Senator.Shelley.Hughes@akleg.gov,9074653743,CAPITOL,30
+32,Lora Reinbold:28,REI,S,G,R,TRUE,TRUE,,Senator.Lora.Reinbold@akleg.gov,9074653822,CAPITOL,427
+32,Bill Wielechowski:25,WIE,S,H,D,FALSE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,9
+32,Elvi Gray-Jackson:31,GRA,S,I,D,FALSE,TRUE,,Senator.Elvi.Gray-Jackson@akleg.gov,9074654930,CAPITOL,417
+32,Tom Begich:30,BCH,S,J,D,FALSE,TRUE,Minority Leader,Senator.Tom.Begich@akleg.gov,9074653704,CAPITOL,11
+32,Mia Costello:27,COS,S,K,R,TRUE,TRUE,,Senator.Mia.Costello@akleg.gov,9074654968,CAPITOL,119
+32,Natasha von Imhof:30,VON,S,L,R,TRUE,TRUE,,Senator.Natasha.vonImhof@akleg.gov,9074652995,CAPITOL,504
+32,Joshua Revak:31,RVK,S,M,R,TRUE,TRUE,,Senator.Joshua.Revak@akleg.gov,9074653879,CAPITOL,125
+32,Roger Holland:32,HLD,S,N,R,TRUE,TRUE,,Senator.Roger.Holland@akleg.gov,9074654843,,115
+32,Peter Micciche:28,MHE,S,O,R,TRUE,TRUE,Senate President,Senator.Peter.Micciche@akleg.gov,9074652828,CAPITOL,111
+32,Gary Stevens:22,STG,S,P,R,TRUE,TRUE,,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,103
+32,Jesse Kiehl:31,KIE,S,Q,D,FALSE,TRUE,,Senator.Jesse.Kiehl@akleg.gov,9074654947,CAPITOL,419
+32,Bert Stedman:23,SMN,S,R,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,518
+32,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,508
+32,Donald Olson:22,OLS,S,T,D,FALSE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,514
+33,Dan Ortiz:29,ORT,H,1,N,FALSE,TRUE,,Representative.Dan.Ortiz@akleg.gov,9074653824,CAPITOL,500
+33,Rebecca Himschoot:33,HMS,H,2,N,FALSE,TRUE,,Representative.Rebecca.Himschoot@akleg.gov,9074653732,CAPITOL,409
+33,Andi Story:31,STO,H,3,D,FALSE,TRUE,,Representative.Andi.Story@akleg.gov,9074653744,CAPITOL,426
+33,Sara Hannan:31,HNN,H,4,D,FALSE,TRUE,,Representative.Sara.Hannan@akleg.gov,9074654766,CAPITOL,400
+33,Louise Stutes:29,STS,H,5,R,FALSE,TRUE,,Representative.Louise.Stutes@akleg.gov,9074652487,CAPITOL,110
+33,Sarah Vance:31,VAN,H,6,R,TRUE,TRUE,,Representative.Sarah.Vance@akleg.gov,9074652689,CAPITOL,116
+33,Justin Ruffridge:33,RUF,H,7,R,TRUE,TRUE,,Representative.Justin.Ruffridge@akleg.gov,9074652693,CAPITOL,104
+33,Ben Carpenter:31,CAE,H,8,R,TRUE,TRUE,,Representative.Ben.Carpenter@akleg.gov,9074653779,CAPITOL,24
+33,Laddie Shaw:31,SHW,H,9,R,TRUE,TRUE,,Representative.Laddie.Shaw@akleg.gov,9074654945,CAPITOL,403
+33,Craig Johnson:25,JHN,H,10,R,TRUE,TRUE,,Representative.Craig.Johnson@akleg.gov,9074653892,CAPITOL,216
+33,Julie Coulombe:33,COU,H,11,R,TRUE,TRUE,,Representative.Julie.Coulombe@akleg.gov,9074653879,CAPITOL,502
+33,Calvin Schrage:32,SCG,H,12,N,FALSE,TRUE,Minority Leader,Representative.Calvin.Schrage@akleg.gov,9074654931,CAPITOL,404
+33,Andy Josephson:28,JOS,H,13,D,FALSE,TRUE,,Representative.Andy.Josephson@akleg.gov,9074654939,CAPITOL,432
+33,Alyse Galvin:33,GAL,H,14,N,FALSE,TRUE,,Representative.Alyse.Galvin@akleg.gov,9074653875,CAPITOL,405
+33,Tom McKay:32,MCK,H,15,R,TRUE,TRUE,,Representative.Tom.McKay@akleg.gov,9074654993,CAPITOL,128
+33,Jennie Armstrong:33,ARJ,H,16,D,FALSE,TRUE,,Representative.Jennie.Armstrong@akleg.gov,9074654968,CAPITOL,422
+33,Zack Fields:31,FIE,H,17,D,FALSE,TRUE,,Representative.Zack.Fields@akleg.gov,9074652647,CAPITOL,13
+33,Cliff Groh:33,GRO,H,18,D,FALSE,TRUE,,Representative.Cliff.Groh@akleg.gov,9074654998,CAPITOL,430
+33,Genevieve Mina:33,MNA,H,19,D,FALSE,TRUE,,Representative.Genevieve.Mina@akleg.gov,9074653424,CAPITOL,420
+33,Andrew Gray:33,GRY,H,20,D,FALSE,TRUE,,Representative.Andrew.Gray@akleg.gov,9074654940,CAPITOL,434
+33,Donna Mears:33,MEA,H,21,D,FALSE,TRUE,,Representative.Donna.Mears@akleg.gov,9074653438,CAPITOL,112
+33,Stanley Wright:33,WRG,H,22,R,TRUE,TRUE,,Representative.Stanley.Wright@akleg.gov,9074652095,CAPITOL,412
+33,Jamie Allard:33,ALR,H,23,R,TRUE,TRUE,,Representative.Jamie.Allard@akleg.gov,9074652995,CAPITOL,415
+33,Dan Saddler:27,SAD,H,24,R,TRUE,TRUE,Majority Leader,Representative.Dan.Saddler@akleg.gov,9074653783,CAPITOL,204
+33,DeLena Johnson:30,JHS,H,25,R,TRUE,TRUE,,Representative.DeLena.Johnson@akleg.gov,9074654958,CAPITOL,505
+33,Cathy Tilton:29,TLT,H,26,R,TRUE,TRUE,Speaker,Representative.Cathy.Tilton@akleg.gov,9074652199,CAPITOL,208
+33,David Eastman:30,EAS,H,27,R,FALSE,TRUE,,Representative.David.Eastman@akleg.gov,9074652186,CAPITOL,114
+33,Jesse Sumner:33,SUJ,H,28,R,TRUE,TRUE,,Representative.Jesse.Sumner@akleg.gov,9074654833,CAPITOL,421
+33,George Rauscher:30,RAU,H,29,R,TRUE,TRUE,,Representative.George.Rauscher@akleg.gov,9074654859,CAPITOL,406
+33,Kevin McCabe:32,MCA,H,30,R,TRUE,TRUE,,Representative.Kevin.McCabe@akleg.gov,9074652679,CAPITOL,102
+33,Maxine Dibert:33,DIB,H,31,D,FALSE,TRUE,,Representative.Maxine.Dibert@akleg.gov,9074652138,CAPITOL,424
+33,Will Stapp:33,SPP,H,32,R,TRUE,TRUE,,Representative.Will.Stapp@akleg.gov,9074653004,CAPITOL,513
+33,Mike Prax:31,PRA,H,33,R,TRUE,TRUE,,Representative.Mike.Prax@akleg.gov,9074654797,CAPITOL,108
+33,Frank Tomaszewski:33,TMZ,H,34,R,TRUE,TRUE,,Representative.Frank.Tomaszewski@akleg.gov,9074654457,CAPITOL,501
+33,Ashley Carrick:33,CAI,H,35,D,FALSE,TRUE,,Representative.Ashley.Carrick@akleg.gov,9074654976,CAPITOL,428
+33,Mike Cronk:32,CRN,H,36,R,TRUE,TRUE,,Representative.Mike.Cronk@akleg.gov,9074654527,CAPITOL,418
+33,Bryce Edgmon:25,EDG,H,37,N,TRUE,TRUE,,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,410
+33,CJ McCormick:33,MCO,H,38,D,TRUE,TRUE,,Representative.CJ.McCormick@akleg.gov,9074654942,CAPITOL,416
+33,Neal Foster:26,FON,H,39,D,TRUE,TRUE,,Representative.Neal.Foster@akleg.gov,9074653789,CAPITOL,511
+33,Thomas Baker:33,BAK,H,40,R,TRUE,TRUE,"Oath Taken November 13, 2023",Representative.Thomas.Baker@akleg.gov,9074653473,CAPITOL,411
+33,Josiah Patkotak:32,PKT,H,40,N,TRUE,FALSE,"Resigned October 10, 2023",Representative.Josiah.Patkotak@akleg.gov,9074653473,CAPITOL,411
+33,Bert Stedman:23,SMN,S,A,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,518
+33,Jesse Kiehl:31,KIE,S,B,D,TRUE,TRUE,,Senator.Jesse.Kiehl@akleg.gov,9074654947,CAPITOL,514
+33,Gary Stevens:22,STG,S,C,R,TRUE,TRUE,Senate President,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,111
+33,Jesse Bjorkman:33,BJK,S,D,R,TRUE,TRUE,,Senator.Jesse.Bjorkman@akleg.gov,9074652828,CAPITOL,9
+33,Cathy Giessel:27,GIE,S,E,R,TRUE,TRUE,Majority Leader,Senator.Cathy.Giessel@akleg.gov,9074654843,CAPITOL,427
+33,James Kaufman:32,KAU,S,F,R,TRUE,TRUE,,Senator.James.Kaufman@akleg.gov,9074654949,CAPITOL,115
+33,Elvi Gray-Jackson:31,GRA,S,G,D,TRUE,TRUE,,Senator.Elvi.Gray-Jackson@akleg.gov,9074654930,CAPITOL,30
+33,Matt Claman:29,CLA,S,H,D,TRUE,TRUE,,Senator.Matt.Claman@akleg.gov,9074654919,CAPITOL,429
+33,Löki Tobin:33,TOB,S,I,D,TRUE,TRUE,,Senator.Loki.Tobin@akleg.gov,9074653704,CAPITOL,11
+33,Forrest Dunbar:33,DNB,S,J,D,TRUE,TRUE,,Senator.Forrest.Dunbar@akleg.gov,9074656944,CAPITOL,125
+33,Bill Wielechowski:25,WIE,S,K,D,TRUE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,103
+33,Kelly Merrick:31,MRR,S,L,R,TRUE,TRUE,,Senator.Kelly.Merrick@akleg.gov,9074653777,CAPITOL,510
+33,Shelley Hughes:27,HUS,S,M,R,FALSE,TRUE,,Senator.Shelley.Hughes@akleg.gov,9074653743,CAPITOL,7
+33,David Wilson:30,WLN,S,N,R,TRUE,TRUE,,Senator.David.Wilson@akleg.gov,9074653878,CAPITOL,121
+33,Mike Shower:30,SHO,S,O,R,FALSE,TRUE,,Senator.Mike.Shower@akleg.gov,9074656600,CAPITOL,419
+33,Scott Kawasaki:25,KAW,S,P,D,TRUE,TRUE,,Senator.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,119
+33,Robert Myers:32,MYE,S,Q,R,FALSE,TRUE,,Senator.Robert.Myers@akleg.gov,9074653719,CAPITOL,417
+33,Click Bishop:28,BIS,S,R,R,TRUE,TRUE,,Senator.Click.Bishop@akleg.gov,9074652327,CAPITOL,504
+33,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,516
+33,Donald Olson:22,OLS,S,T,D,TRUE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,508
+34,Jeremy Bynum:34,BYN,H,1,R,FALSE,TRUE,,Representative.Jeremy.Bynum@akleg.gov,9074653824,CAPITOL,400
+34,Rebecca Himschoot:33,HMS,H,2,N,TRUE,TRUE,,Representative.Rebecca.Himschoot@akleg.gov,9074653732,CAPITOL,411
+34,Andi Story:31,STO,H,3,D,TRUE,TRUE,,Representative.Andi.Story@akleg.gov,9074653744,CAPITOL,403
+34,Sara Hannan:31,HNN,H,4,D,TRUE,TRUE,,Representative.Sara.Hannan@akleg.gov,9074654766,CAPITOL,501
+34,Louise Stutes:29,STS,H,5,R,TRUE,TRUE,,Representative.Louise.Stutes@akleg.gov,9074652487,CAPITOL,216
+34,Sarah Vance:31,VAN,H,6,R,FALSE,TRUE,,Representative.Sarah.Vance@akleg.gov,9074652689,CAPITOL,114
+34,Justin Ruffridge:33,RUF,H,7,R,FALSE,TRUE,,Representative.Justin.Ruffridge@akleg.gov,9074652693,CAPITOL,424
+34,Bill Elam:34,ELA,H,8,R,FALSE,TRUE,,Representative.Bill.Elam@akleg.gov,9074653779,CAPITOL,422
+34,Ky Holland:34,HLA,H,9,N,TRUE,TRUE,,Representative.Ky.Holland@akleg.gov,9074654945,CAPITOL,418
+34,Chuck Kopp:30,KOP,H,10,R,TRUE,TRUE,Majority Leader,Representative.Chuck.Kopp@akleg.gov,9074653892,CAPITOL,204
+34,Julie Coulombe:33,COU,H,11,R,FALSE,TRUE,,Representative.Julie.Coulombe@akleg.gov,9074653879,CAPITOL,420
+34,Calvin Schrage:32,SCG,H,12,N,TRUE,TRUE,,Representative.Calvin.Schrage@akleg.gov,9074654931,CAPITOL,410
+34,Andy Josephson:28,JOS,H,13,D,TRUE,TRUE,,Representative.Andy.Josephson@akleg.gov,9074654939,CAPITOL,505
+34,Alyse Galvin:33,GAL,H,14,N,TRUE,TRUE,,Representative.Alyse.Galvin@akleg.gov,9074653875,CAPITOL,502
+34,Mia Costello:27,COS,H,15,R,FALSE,TRUE,Minority Leader,Representative.Mia.Costello@akleg.gov,9074654993,CAPITOL,404
+34,Carolyn Hall:34,HLL,H,16,D,TRUE,TRUE,,Representative.Carolyn.Hall@akleg.gov,9074654968,CAPITOL,434
+34,Zack Fields:31,FIE,H,17,D,TRUE,TRUE,,Representative.Zack.Fields@akleg.gov,9074652647,CAPITOL,24
+34,David Nelson:32,NED,H,18,R,FALSE,TRUE,,Representative.David.Nelson@akleg.gov,9074654998,CAPITOL,426
+34,Genevieve Mina:33,MNA,H,19,D,TRUE,TRUE,,Representative.Genevieve.Mina@akleg.gov,9074653424,CAPITOL,416
+34,Andrew Gray:33,GRY,H,20,D,TRUE,TRUE,,Representative.Andrew.Gray@akleg.gov,9074654940,CAPITOL,118
+34,Donna Mears:33,MEA,H,21,D,TRUE,TRUE,,Representative.Donna.Mears@akleg.gov,9074653438,CAPITOL,102
+34,Ted Eischeid:34,EIS,H,22,D,TRUE,TRUE,,Representative.Ted.Eischeid@akleg.gov,9074652095,CAPITOL,412
+34,Jamie Allard:33,ALR,H,23,R,FALSE,TRUE,,Representative.Jamie.Allard@akleg.gov,9074652995,CAPITOL,415
+34,Dan Saddler:27,SAD,H,24,R,FALSE,TRUE,,Representative.Dan.Saddler@akleg.gov,9074653783,CAPITOL,104
+34,DeLena Johnson:30,JHS,H,25,R,FALSE,TRUE,,Representative.DeLena.Johnson@akleg.gov,9074654958,CAPITOL,432
+34,Cathy Tilton:29,TLT,H,26,R,FALSE,TRUE,,Representative.Cathy.Tilton@akleg.gov,9074652199,CAPITOL,421
+34,Jubilee Underwood:34,UND,H,27,R,FALSE,TRUE,,Representative.Jubilee.Underwood@akleg.gov,9074652186,CAPITOL,112
+34,Elexie Moore:34,MOO,H,28,R,FALSE,TRUE,,Representative.Elexie.Moore@akleg.gov,9074654833,CAPITOL,430
+34,George Rauscher:30,RAU,H,29,R,FALSE,TRUE,,Representative.George.Rauscher@akleg.gov,9074654859,CAPITOL,110
+34,Kevin McCabe:32,MCA,H,30,R,FALSE,TRUE,,Representative.Kevin.McCabe@akleg.gov,9074652679,CAPITOL,13
+34,Maxine Dibert:33,DIB,H,31,D,TRUE,TRUE,,Representative.Maxine.Dibert@akleg.gov,9074652138,CAPITOL,128
+34,Will Stapp:33,SPP,H,32,R,FALSE,TRUE,,Representative.Will.Stapp@akleg.gov,9074653004,CAPITOL,500
+34,Mike Prax:31,PRA,H,33,R,FALSE,TRUE,,Representative.Mike.Prax@akleg.gov,9074654797,CAPITOL,428
+34,Frank Tomaszewski:33,TMZ,H,34,R,FALSE,TRUE,,Representative.Frank.Tomaszewski@akleg.gov,9074654457,CAPITOL,405
+34,Ashley Carrick:33,CAI,H,35,D,TRUE,TRUE,,Representative.Ashley.Carrick@akleg.gov,9074654976,CAPITOL,406
+34,Rebecca Schwanke:34,SCW,H,36,R,FALSE,TRUE,,Representative.Rebecca.Schwanke@akleg.gov,9074652327,CAPITOL,409
+34,Bryce Edgmon:25,EDG,H,37,N,TRUE,TRUE,Speaker,Representative.Bryce.Edgmon@akleg.gov,9074654451,CAPITOL,208
+34,Nellie Jimmie:34,JIM,H,38,D,TRUE,TRUE,,Representative.Nellie.Unangiq.Jimmie@akleg.gov,9074654942,CAPITOL,513
+34,Neal Foster:26,FON,H,39,D,TRUE,TRUE,,Representative.Neal.Foster@akleg.gov,9074653789,CAPITOL,511
+34,Robyn Burke:34,BUR,H,40,D,TRUE,TRUE,,Representative.Robyn.Burke@akleg.gov,9074653473,CAPITOL,108
+34,Bert Stedman:23,SMN,S,A,R,TRUE,TRUE,,Senator.Bert.Stedman@akleg.gov,9074653873,CAPITOL,516
+34,Jesse Kiehl:31,KIE,S,B,D,TRUE,TRUE,,Senator.Jesse.Kiehl@akleg.gov,9074654947,CAPITOL,514
+34,Gary Stevens:22,STG,S,C,R,TRUE,TRUE,Senate President,Senator.Gary.Stevens@akleg.gov,9074654925,CAPITOL,111
+34,Jesse Bjorkman:33,BJK,S,D,R,TRUE,TRUE,,Senator.Jesse.Bjorkman@akleg.gov,9074652828,CAPITOL,427
+34,Cathy Giessel:27,GIE,S,E,R,TRUE,TRUE,Majority Leader,Senator.Cathy.Giessel@akleg.gov,9074654843,CAPITOL,121
+34,James Kaufman:32,KAU,S,F,R,FALSE,TRUE,,Senator.James.Kaufman@akleg.gov,9074654949,CAPITOL,510
+34,Elvi Gray-Jackson:31,GRA,S,G,D,TRUE,TRUE,,Senator.Elvi.Gray-Jackson@akleg.gov,9074654930,CAPITOL,30
+34,Matt Claman:29,CLA,S,H,D,TRUE,TRUE,,Senator.Matt.Claman@akleg.gov,9074654919,CAPITOL,429
+34,Löki Tobin:33,TOB,S,I,D,TRUE,TRUE,,Senator.Loki.Tobin@akleg.gov,9074653704,CAPITOL,115
+34,Forrest Dunbar:33,DNB,S,J,D,TRUE,TRUE,,Senator.Forrest.Dunbar@akleg.gov,9074656944,CAPITOL,125
+34,Bill Wielechowski:25,WIE,S,K,D,TRUE,TRUE,,Senator.Bill.Wielechowski@akleg.gov,9074652435,CAPITOL,103
+34,Kelly Merrick:31,MRR,S,L,R,TRUE,TRUE,,Senator.Kelly.Merrick@akleg.gov,9074653777,CAPITOL,504
+34,Shelley Hughes:27,HUS,S,M,R,FALSE,TRUE,,Senator.Shelley.Hughes@akleg.gov,9074653743,CAPITOL,11
+34,Robert Yundt:34,YUN,S,N,R,FALSE,TRUE,,Senator.Robert.Yundt@akleg.gov,,CAPITOL,417
+34,Mike Shower:30,SHO,S,O,R,FALSE,TRUE,Minority Leader,Senator.Mike.Shower@akleg.gov,9074656600,CAPITOL,9
+34,Scott Kawasaki:25,KAW,S,P,D,TRUE,TRUE,,Senator.Scott.Kawasaki@akleg.gov,9074653466,CAPITOL,119
+34,Robert Myers:32,MYE,S,Q,R,FALSE,TRUE,,Senator.Robert.Myers@akleg.gov,9074653719,CAPITOL,7
+34,Mike Cronk:32,CRN,S,R,R,FALSE,TRUE,,Senator.Mike.Cronk@akleg.gov,9074654527,CAPITOL,419
+34,Lyman Hoffman:15,HOF,S,S,D,TRUE,TRUE,,Senator.Lyman.Hoffman@akleg.gov,9074654453,CAPITOL,518
+34,Donald Olson:22,OLS,S,T,D,TRUE,TRUE,,Senator.Donald.Olson@akleg.gov,9074653707,CAPITOL,508

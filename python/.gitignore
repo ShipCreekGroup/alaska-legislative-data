@@ -6,3 +6,6 @@
 __pycache__
 *.pyc
 *.pyo
+
+ak_leg.duckdb
+ak_leg.duckdb.wal

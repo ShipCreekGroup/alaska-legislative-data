@@ -1,15 +1,19 @@
 import logging
-import sys
 
-from alaska_legislative_data import _batch
+import fire
+
+from alaska_legislative_data import _export, _ingest
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python -m alaska_legislative_data BRANCH")
-        sys.exit(1)
     logging.basicConfig(level=logging.DEBUG)
-    _batch.scrape_and_push(sys.argv[1])
+    fire.Fire(
+        {
+            "ingest": _ingest.ingest_all,
+            "export": _export.export,
+            "push": _export.push,
+        }
+    )
 
 
 if __name__ == "__main__":

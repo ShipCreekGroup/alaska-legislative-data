@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version < '3.12'",
@@ -10,6 +11,7 @@ name = "alaska-legislative-data"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "fire" },
     { name = "httpx" },
     { name = "ibis-framework", extra = ["duckdb"] },
     { name = "ipykernel" },
@@ -18,6 +20,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "fire", specifier = ">=0.7.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "ibis-framework", extras = ["duckdb"], specifier = ">=10.0.0" },
     { name = "ipykernel", specifier = ">=6.29.5" },
@@ -210,6 +213,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/91/50/a9d80c47ff289c611
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7b/8f/c4d9bafc34ad7ad5d8dc16dd1347ee0e507a52c3adb6bfa8887e1c6a26ba/executing-2.2.0-py2.py3-none-any.whl", hash = "sha256:11387150cad388d62750327a53d3339fad4888b39a6fe233c3afbb54ecffd3aa", size = 26702 },
 ]
+
+[[package]]
+name = "fire"
+version = "0.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "termcolor" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6b/b6/82c7e601d6d3c3278c40b7bd35e17e82aa227f050aa9f66cb7b7fce29471/fire-0.7.0.tar.gz", hash = "sha256:961550f07936eaf65ad1dc8360f2b2bf8408fad46abbfa4d2a3794f8d2a95cdf", size = 87189 }
 
 [[package]]
 name = "h11"
@@ -837,6 +849,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/28/e3/55dcc2cfbc3ca9c29519eb6884dd1415ecb53b0e934862d3559ddcb7e20b/stack_data-0.6.3.tar.gz", hash = "sha256:836a778de4fec4dcd1dcd89ed8abff8a221f58308462e1c4aa2a3cf30148f0b9", size = 44707 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f1/7b/ce1eafaf1a76852e2ec9b22edecf1daa58175c090266e9f6c64afcd81d91/stack_data-0.6.3-py3-none-any.whl", hash = "sha256:d5558e0c25a4cb0853cddad3d77da9891a08cb85dd9f9f91b9f8cd66e511e695", size = 24521 },
+]
+
+[[package]]
+name = "termcolor"
+version = "2.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/37/72/88311445fd44c455c7d553e61f95412cf89054308a1aa2434ab835075fc5/termcolor-2.5.0.tar.gz", hash = "sha256:998d8d27da6d48442e8e1f016119076b690d962507531df4890fcd2db2ef8a6f", size = 13057 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7f/be/df630c387a0a054815d60be6a97eb4e8f17385d5d6fe660e1c02750062b4/termcolor-2.5.0-py3-none-any.whl", hash = "sha256:37b17b5fc1e604945c2642c872a3764b5d547a48009871aea3edd3afa180afb8", size = 7755 },
 ]
 
 [[package]]

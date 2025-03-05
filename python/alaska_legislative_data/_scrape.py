@@ -1,12 +1,11 @@
 import asyncio
-import datetime
 import json
 import logging
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Literal, TypeAlias, TypedDict
 
-from alaska_legislative_data import _low
+from alaska_legislative_data import _low, _util
 
 logger = logging.getLogger(__name__)
 
@@ -40,11 +39,15 @@ def scrape_legislatures(
     if cache and p.exists():
         return json.loads(p.read_text())
     if legislature_numbers is None:
-        legislature_numbers = range(1, _estimate_max_leg_num() + 2)  # +2 to be safe
+        legislature_numbers = _gen_leg_numbers()
     sessions = _do_scrape_legs(legislature_numbers)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(sessions, indent=4))
     return sessions
+
+
+def _gen_leg_numbers() -> list[int]:
+    return list(range(1, _util.current_leg_num_approx() + 2))  # +2 to be safe
 
 
 def _do_scrape_legs(leg_nums: list[int]) -> list[dict]:
@@ -77,77 +80,50 @@ async def _do_scrape_leg(leg_num: int) -> dict | None:
     return s
 
 
-def _estimate_max_leg_num(current_year: int | None = None):
-    if current_year is None:
-        current_year = datetime.datetime.now().year
-    return (current_year - 2023) // 2 + 33
+def scrape_members(legislature_numbers: list[int] | None = None) -> list[dict]:
+    if legislature_numbers is None:
+        legislature_numbers = _gen_leg_numbers()
 
+    async def main():
+        tasks = [_scrape_members_of_leg(n) for n in legislature_numbers]
+        return await asyncio.gather(*tasks)
 
-assert _estimate_max_leg_num(2021) == 32, _estimate_max_leg_num(2021)
-assert _estimate_max_leg_num(2022) == 32, _estimate_max_leg_num(2022)
-assert _estimate_max_leg_num(2023) == 33, _estimate_max_leg_num(2023)
-assert _estimate_max_leg_num(2024) == 33, _estimate_max_leg_num(2024)
-assert _estimate_max_leg_num(2025) == 34, _estimate_max_leg_num(2025)
-assert _estimate_max_leg_num(2026) == 34, _estimate_max_leg_num(2026)
-
-
-def scrape_members(
-    *, legislature_numbers: list[int], d: Path | str, cache: Cache = False
-) -> list[dict]:
-    d = Path(d)
-    tasks = []
-    cached_results = []
-    for leg_num in legislature_numbers:
-        p = d / f"members_{leg_num}.json"
-        if _need_refresh(leg_num, legislature_numbers, cache, p):
-            tasks.append(_scrape_members_of_leg(leg_num, p))
-        else:
-            cached_results.append(json.loads(p.read_text()))
-    results = asyncio.run(asyncio.gather(*tasks))
+    results = asyncio.run(main())
     results = [r for r in results if r is not None]
-    results.extend(cached_results)
     flattened = []
     for r in results:
         flattened.extend(r)
     return flattened
 
 
-async def _scrape_members_of_leg(legislature_number: int, p: Path) -> list[dict] | None:
+async def _scrape_members_of_leg(legislature_number: int) -> list[dict] | None:
     try:
         m = await _low.members(session=legislature_number)
     except _low.DataUnimplementedError:
         # TODO: do something so we don't continually try re-scraping
         return None
-    members = [{**member, "LegislatureNumber": legislature_number} for member in m]
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(members, indent=4))
-    return members
+    return [{**member, "LegislatureNumber": legislature_number} for member in m]
 
 
 def scrape_bills(
-    *, legislature_numbers: list[int], d: Path | str, cache: Cache = False
+    legislature_numbers: list[int] | None = None,
 ) -> list[dict]:
-    d = Path(d)
-    tasks = []
-    cached_results = []
-    for leg_num in legislature_numbers:
-        p = d / f"bills_{leg_num}.json"
-        if _need_refresh(leg_num, legislature_numbers, cache, p):
-            tasks.append(scrape_bills_of_legislature(leg_num, p))
-        else:
-            cached_results.append(json.loads(p.read_text()))
-    results = asyncio.run(asyncio.gather(*tasks))
+    if legislature_numbers is None:
+        legislature_numbers = _gen_leg_numbers()
+
+    async def main():
+        tasks = [scrape_bills_of_legislature(n) for n in legislature_numbers]
+        return await asyncio.gather(*tasks)
+
+    results = asyncio.run(main())
     results = [r for r in results if r is not None]
-    results.extend(cached_results)
     flattened = []
     for r in results:
         flattened.extend(r)
     return flattened
 
 
-async def scrape_bills_of_legislature(
-    legislature_number: int, p: Path
-) -> list[dict] | None:
+async def scrape_bills_of_legislature(legislature_number: int) -> list[dict] | None:
     try:
         b = await _low.bills(
             queries=[
@@ -160,8 +136,6 @@ async def scrape_bills_of_legislature(
         # TODO: do something so we don't continually try re-scraping
         return None
     bills = [{**bill, "LegislatureNumber": legislature_number} for bill in b]
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(_low.json.dumps(bills, indent=4))
     return bills
 
 

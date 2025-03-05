@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import ibis
+from ibis import _
 from ibis.expr import types as ir
 
 
@@ -54,7 +55,6 @@ def parse_scraped(directory: str | Path) -> ParsedTables:
 def clean_members(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
     t = t.rename(
-        LegislatureNumber="Session",
         MemberCode="Code",
     )
     schema = {
@@ -149,6 +149,17 @@ def clean_bills(t: ibis.Table) -> ibis.Table:
     t = t.select(schema.keys())
     t = t.cast(schema)
     t = t.distinct()
+    t = t.order_by("LegislatureNumber", "BillNumber")
+    t = t.cache()
+    assert t.LegislatureNumber.notnull().all().execute()
+    assert t.BillNumber.notnull().all().execute()
+    t = t.mutate(
+        # using session number and personId is inadequate, as there are some
+        # instances of a person being in both the Senate and House in the same
+        # session
+        BillId=_.LegislatureNumber.cast(str) + ":" + _.BillNumber,
+    ).relocate("BillId")
+    assert t.BillId.value_counts(name="n").n.max().execute() == 1
     return t
 
 
