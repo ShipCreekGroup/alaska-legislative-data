@@ -163,7 +163,10 @@ async def _make_request(
 
         try:
             return await _with_retries(
-                f, max_retries=3, exception_classes=(httpx.HTTPError,)
+                f,
+                max_retries=3,
+                # Sometimes the request fails with a ServerError but can succeed on retry
+                exception_classes=(httpx.HTTPError, ServerError),
             )
         except DataUnimplementedError:
             raise

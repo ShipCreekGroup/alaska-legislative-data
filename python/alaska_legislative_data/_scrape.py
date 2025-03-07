@@ -1,32 +1,9 @@
 import asyncio
-import json
 import logging
-from collections.abc import Iterable
-from pathlib import Path
-from typing import Literal, TypeAlias, TypedDict
 
 from alaska_legislative_data import _low, _util
 
 logger = logging.getLogger(__name__)
-
-Cache: TypeAlias = bool | Literal["previous-sessions"]
-
-
-def scrape(directory: str | Path, *, cache: Cache = "previous-sessions") -> None:
-    """
-    Scrape the Alaska Legislative API data and save it to the specified directory.
-
-    Args:
-        directory (str): The directory where the scraped data will be saved.
-    """
-    d = Path(directory)
-    legs = scrape_legislatures_and_sessions(d / "legislatures.json")
-    leg_numbers = [int(s["LegislatureNumber"]) for s in legs]
-    members = scrape_members(
-        legislature_numbers=leg_numbers, d=d / "members", cache=cache
-    )
-    scrape_bills(legislature_numbers=leg_numbers, d=d / "bills", cache=cache)
-    scrape_votes(members=members, d=d / "votes", cache=cache)
 
 
 def scrape_legislatures_and_sessions(
@@ -131,61 +108,20 @@ async def scrape_bills_of_legislature(legislature_number: int) -> list[dict] | N
     return bills
 
 
-class Member(TypedDict):
-    Session: int
-    Code: str
-    # UID: int
-    LastName: str
-    MiddleName: str
-    FirstName: str
-    FormalName: str
-    ShortName: str
-    # SessionContact: dict
-    # InterimContact: dict
-    Chamber: Literal["H", "S"]
-    District: str
-    Seat: str
-    Party: str
-    Phone: str
-    EMail: str
-    Building: str
-    Room: str
-    Comment: str
-    IsActive: bool
-    IsMajority: bool
+def scrape_votes(*, leg_num_and_member_codes: list[tuple[int, str]]) -> list[dict]:
+    async def main():
+        tasks = [_scrape_votes_of(*t) for t in leg_num_and_member_codes]
+        results = []
+        for chunk in _chunks(tasks, 25):
+            chunk_votes = await asyncio.gather(*chunk)
+            for v in chunk_votes:
+                if v is None:
+                    continue
+                results.extend(v)
+        return results
 
-
-def scrape_votes(
-    *, members: list[Member], d: Path | str, cache: Cache = False
-) -> list[dict]:
-    d = Path(d)
-    results = []
-    leg_nums = {m["LegislatureNumber"] for m in members}
-    for leg_num in leg_nums:
-        member_codes = [m["Code"] for m in members if m["LegislatureNumber"] == leg_num]
-        p = d / f"votes_{leg_num}.json"
-        if _need_refresh(leg_num, leg_nums, cache, p):
-            results.extend(scrape_votes_of_legislature(leg_num, member_codes, p))
-        else:
-            results.extend(json.loads(p.read_text()))
+    results = asyncio.run(main())
     return results
-
-
-def scrape_votes_of_legislature(
-    leg_number: int, member_codes: list[str], p: Path
-) -> list[dict] | None:
-    if leg_number <= 18:
-        # These are not digitized.
-        return []
-    tasks = [_scrape_votes_of(leg_number, code) for code in member_codes]
-    votes = []
-    for chunk in _chunks(tasks, 25):
-        chunk_votes = asyncio.run(asyncio.gather(*chunk))
-        votes.extend(chunk_votes)
-    votes = [v for v in votes if v is not None]
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(_low.json.dumps(votes, indent=4))
-    return votes
 
 
 async def _scrape_votes_of(
@@ -197,11 +133,15 @@ async def _scrape_votes_of(
             queries=[
                 f"members;code={member_code}",
                 "Votes",
-                "Bills",
+                # "Bills",  # this gets the bills they sponsored,
             ],
         )
     except _low.DataUnimplementedError:
         return None
+    except _low.ServerError:
+        if (leg_num, member_code) in KNOWN_FAILING_MEMBERS:
+            return None
+        raise
     votes = []
     for m in mems:
         votes.extend(m["Votes"])
@@ -209,21 +149,13 @@ async def _scrape_votes_of(
     return votes
 
 
-def _is_latest(session, sessions) -> bool:
-    return int(session) == max(int(s) for s in sessions)
-
-
-def _need_refresh(leg_num: int, sessions: Iterable[int], cache: Cache, path: Path):
-    if not cache:
-        return True
-    if not path.exists():
-        return True
-    if cache is True:
-        return False
-    assert cache == "previous-sessions"
-    return _is_latest(leg_num, sessions)
-
-
 def _chunks(list_, n: int):
     for i in range(0, len(list_), n):
         yield list_[i : i + n]
+
+
+KNOWN_FAILING_MEMBERS = [
+    (18, "GRS"),
+    (18, "HUD"),
+    (18, "DVG"),
+]

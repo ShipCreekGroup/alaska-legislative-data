@@ -21,5 +21,11 @@ jobs:
           version: "latest"
       - name: Install project
         run: uv sync
-      - name: Scrape
-        run: uv run python -m alaska_legislative_data data_v1_latest
+      - name: Fetch the current .duckdb file from the data_v1_latest branch
+        run: uv run python -m alaska_legislative_data fetch
+      - name: Ingest new data into the .duckdb file
+        run: uv run python -m alaska_legislative_data ingest
+      - name: Export to the /export directory
+        run: uv run python -m alaska_legislative_data export
+      - name: Push export/ to the data_v1_latest
+        run: uv run python -m alaska_legislative_data push

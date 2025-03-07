@@ -1,57 +1,10 @@
-import dataclasses
 import datetime
-import sys
-from pathlib import Path
 
 import ibis
 from ibis import _
 from ibis.expr import types as ir
 
 from alaska_legislative_data import _db
-
-
-@dataclasses.dataclass
-class ParsedTables:
-    members: ibis.Table
-    bills: ibis.Table
-    choices: ibis.Table
-    legislatures: ibis.Table
-
-    def __repr__(self):
-        return f"<ParsedTables members={self.members.count().execute()}, bills={self.bills.count().execute()}, choices={self.choices.count().execute()}, legislatures={self.legislatures.count().execute()}>"
-
-    @classmethod
-    def from_parquets(cls, directory: str | Path) -> "ParsedTables":
-        directory = Path(directory)
-        members = ibis.read_parquet(directory / "members.parquet")
-        bills = ibis.read_parquet(directory / "bills.parquet")
-        choices = ibis.read_parquet(directory / "choices.parquet")
-        legislatures = ibis.read_parquet(directory / "legislatures.parquet")
-        return cls(members, bills, choices, legislatures)
-
-    def to_parquets(self, directory: str | Path):
-        directory = Path(directory)
-        directory.mkdir(parents=True, exist_ok=True)
-        self.members.to_parquet(directory / "members.parquet")
-        self.bills.to_parquet(directory / "bills.parquet")
-        self.choices.to_parquet(directory / "choices.parquet")
-        self.legislatures.to_parquet(directory / "legislatures.parquet")
-
-
-def parse_scraped(directory: str | Path) -> ParsedTables:
-    """Given a dir of raw json files from the API, parse them into ibis tables."""
-    directory = Path(directory)
-    members = ibis.read_json(directory / "members/*.json")
-    bills = ibis.read_json(directory / "bills/*.json")
-    choices = ibis.read_json(directory / "choices/*.json")
-    legislatures = ibis.read_json(directory / "legislatures.json")
-
-    members = clean_members(members)
-    bills = clean_bills(bills)
-    choices = clean_choices(choices)
-    legislatures = clean_and_split_legislatures_into_sessions(legislatures)
-
-    return ParsedTables(members, bills, choices, legislatures)
 
 
 def clean_members(t: ibis.Table) -> ibis.Table:
@@ -90,7 +43,10 @@ def clean_members(t: ibis.Table) -> ibis.Table:
 
 def clean_choices(t: ibis.Table) -> ibis.Table:
     t = _fix_strings(t)
-    t = t.mutate(VoteDate=t.VoteDate.nullif("-199- 0--0"))
+    t = t.mutate(
+        VoteDate=t.VoteDate.nullif("-199- 0--0"),
+        VoteBillAmendmentNumber=_parse_amendment_numbers(t.Title),
+    )
     t = t.rename(
         BillNumber="Bill",
         MemberCode="Member",
@@ -103,6 +59,7 @@ def clean_choices(t: ibis.Table) -> ibis.Table:
         "VoteDate": "date",
         "VoteTitle": "string",
         "BillNumber": "string",
+        "VoteBillAmendmentNumber": "decimal(9, 1)",
         "MemberCode": "string",
         "Choice": "string",
         # "MemberParty": "string",  # This is redundant, can be derived from Member
@@ -244,5 +201,35 @@ def _parse_StatusDate(s: ir.StringValue) -> ir.DateValue:
     return s.try_cast("date")
 
 
-if __name__ == "__main__":
-    parse_scraped(sys.argv[1]).to_parquets(sys.argv[2])
+def _parse_amendment_numbers(vote_title: ibis.ir.StringValue) -> ibis.ir.DecimalValue:
+    # returning as a decimal means that sorting works, and we can split
+    # on "." to get the root and sub-amendment numbers.
+    # IDK, maybe we want to switch keeping the fields separate,
+    # but then that requires piping multiple fields through all downstream processing.
+    root = vote_title.re_extract(r"Amendment No. (\d+)$", 1).nullif("")
+    sub = vote_title.re_extract(r"Amendment No. (\d+) to Amendment No. \d+$", 1).nullif(
+        ""
+    )
+    implicit_sub1 = vote_title.re_search(r"Amendment to Amendment No. \d+").ifelse(
+        "1", "0"
+    )
+    sub = sub.fill_null(implicit_sub1)
+    return (root + "." + sub).cast("decimal(9, 1)")
+
+
+def _test_parse_amendment_numbers(inp, exp):
+    res = _parse_amendment_numbers(ibis.literal(inp, type="string")).execute()
+    # convert nan to None
+    if res != res:
+        res = None
+    if res is not None:
+        res = float(res)
+    assert res == exp, (exp, res)
+
+
+_test_parse_amendment_numbers("foo", None)
+_test_parse_amendment_numbers("Amendment No. 1", 1.0)
+_test_parse_amendment_numbers("Amendment No. 2", 2.0)
+_test_parse_amendment_numbers("Amendment No. 1 to Amendment No. 3", 3.1)
+_test_parse_amendment_numbers("Amendment No. 2 to Amendment No. 3", 3.2)
+_test_parse_amendment_numbers("Amendment to Amendment No. 3", 3.1)

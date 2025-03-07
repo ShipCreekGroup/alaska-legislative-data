@@ -2,7 +2,14 @@ import logging
 
 import ibis
 
-from alaska_legislative_data import _curated, _db, _parse, _scrape, _util
+from alaska_legislative_data import (
+    _curated,
+    _db,
+    _parse,
+    _scrape,
+    _split_choices,
+    _util,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -157,6 +164,46 @@ def ingest_bills(
         db.insert("bills", new_bills)
 
 
+def ingest_votes_and_choices(
+    db: str | _db.Backend = _util.DEFAULT_DB_PATH,
+    *,
+    votes: ibis.Table | None = None,
+    choices: ibis.Table | None = None,
+):
+    db = _db.Backend(db)
+    if votes is None or choices is None:
+        v, c = _scrape_missing_votes_and_choices(db)
+        if votes is None:
+            votes = v
+        if choices is None:
+            choices = c
+
+    # avoid https://github.com/ibis-project/ibis/issues/10942
+    votes = ibis.memtable(votes.to_pyarrow(), schema=votes.schema())
+    choices = ibis.memtable(choices.to_pyarrow(), schema=choices.schema())
+
+    logger.info(f"Ingesting {votes.count().execute()} votes")
+    logger.info(f"Ingesting {choices.count().execute()} choices")
+
+    n_existing_votes = votes.semi_join(db.Vote, "VoteId").count().execute()
+    new_votes = votes.anti_join(db.Vote, "VoteId")
+    n_new_votes = new_votes.count().execute()
+    logger.info(f"Found {n_existing_votes} existing votes")
+    logger.info(f"Found {n_new_votes} new votes")
+    if n_new_votes > 0:
+        logger.info(f"Adding {n_new_votes} new votes")
+        db.insert("votes", new_votes)
+
+    n_existing_choices = choices.semi_join(db.Choice, "ChoiceId").count().execute()
+    new_choices = choices.anti_join(db.Choice, "ChoiceId")
+    n_new_choices = new_choices.count().execute()
+    logger.info(f"Found {n_existing_choices} existing choices")
+    logger.info(f"Found {n_new_choices} new choices")
+    if n_new_choices > 0:
+        logger.info(f"Adding {n_new_choices} new choices")
+        db.insert("choices", new_choices)
+
+
 def _scrape_missing_legislatures_and_sessions(
     db: _db.Backend,
 ) -> tuple[ibis.Table, ibis.Table]:
@@ -200,14 +247,57 @@ def _scrape_missing_bills(*, existing_bills: _db.BillTable) -> ibis.Table:
     return bills
 
 
+def _votes_to_scrape(db: _db.Backend) -> list[tuple[int, str]]:
+    """Determine which LegNum, MemberCode pairs might be missing from the database."""
+    missing_leg_nums = _missing_leg_nums(
+        # the API doesn't have any data from the 18th legislature and before,
+        min_leg_num=19,
+        existing_leg_nums=db.Vote.LegislatureNumber,
+    )
+    results = []
+    for leg_num in missing_leg_nums:
+        member_codes = db.Member.filter(
+            db.Member.LegislatureNumber == leg_num
+        ).MemberCode
+        results.extend((leg_num, code) for code in member_codes.execute())
+    return results
+
+
+def _scrape_missing_votes_and_choices(
+    db: _db.Backend, *, votes_to_scrape: list[tuple[int, str]] | None = None
+) -> ibis.Table:
+    if votes_to_scrape is None:
+        votes_to_scrape = _votes_to_scrape(db)
+    logger.info(f"Scraping missing votes for {votes_to_scrape}")
+    dicts = _scrape.scrape_votes(leg_num_and_member_codes=votes_to_scrape)
+    if not dicts:
+        # workaround for https://github.com/ibis-project/ibis/issues/10940
+        votes = db.Vote.limit(0)
+        choices = db.Choice.limit(0)
+    else:
+        choices = ibis.memtable(dicts)
+        choices = _parse.clean_choices(choices)
+        votes, choices = _split_choices.split_choices(
+            choices_raw=choices, bills=db.Bill, members=db.Member
+        )
+    return votes, choices
+
+
 def _missing_leg_nums(
-    *, min_leg_num: int, existing_leg_nums: ibis.ir.IntegerColumn
+    *,
+    min_leg_num: int,
+    existing_leg_nums: ibis.ir.IntegerColumn,
 ) -> list[int]:
     """Determine which legislature numbers are missing from the database."""
     desired_nums = range(min_leg_num, _util.current_leg_num_approx() + 1)
     existing_nums = existing_leg_nums.name("num").as_table().distinct().num.execute()
     logger.info(f"Desired leg_nums: {sorted(desired_nums)}")
     logger.info(f"Existing leg_nums: {sorted(existing_nums)}")
-    missing_nums = sorted(set(desired_nums) - set(existing_nums))
-    logger.info(f"Missing leg_nums: {missing_nums}")
-    return missing_nums
+    missing_nums = set(desired_nums) - set(existing_nums)
+    # Always assume that we have a stale view of the latest legislature
+    if len(existing_nums):
+        latest = max(existing_nums)
+        missing_nums.add(latest)
+    missing_nums_list = sorted(missing_nums)
+    logger.info(f"Missing leg_nums: {missing_nums_list}")
+    return missing_nums_list

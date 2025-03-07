@@ -167,14 +167,26 @@ class BillTable(ibis.Table, BillSchema):
 class VoteSchema(TableSchema):
     VoteId: Annotated[ir.StringColumn, "!string"]
     LegislatureNumber: Annotated[ir.IntegerColumn, LEGISLATURE_NUMBER_TYPE]
-    VoteNum: Annotated[ir.StringColumn, "!string"]
-    """eg 'HR  132'"""
-    VoteDate: Annotated[ir.StringColumn, "!date"]
+    VoteChamber: Annotated[ir.StringColumn, "!string"]
+    """Eg 'H' or 'S'"""
+    VoteNumber: Annotated[ir.StringColumn, "!uint16"]
+    """eg '132'"""
+    VoteDate: Annotated[ir.StringColumn, "date"]
+    """This is very rarely null"""
     VoteTitle: Annotated[ir.StringColumn, "!string"]
     BillId: Annotated[ir.StringColumn, "string"]
     """Reference to the Bill table. Might be NULL, because some votes are not on bills.
     
     Eg the vote to confirm a judge."""
+    VoteBillAmendmentNumber: Annotated[ir.DecimalColumn, "decimal(9,1)"]
+    """If this vote is for an amendment of a bill, what is the amendment number?
+    
+    1.0 = first amendment
+    1.1 = 1st amendment to the first amendment
+    1.2 = 2nd amendment to the first amendment
+    2.0 = 2nd amendment
+    etc.
+    """
 
 
 class VoteTable(ibis.Table, VoteSchema):

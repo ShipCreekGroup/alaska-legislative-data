@@ -9,7 +9,17 @@ def split_choices(
     choices_raw = _add_member_id(choices_raw, members)
 
     choices_raw = choices_raw.mutate(
-        VoteId=_.LegislatureNumber.cast(str) + ":" + _.VoteNum
+        # VoteNum begins as eg "H0026"
+        # VoteCode=_.VoteNum,
+        VoteChamber=_.VoteNum[0],
+        VoteNumber=_.VoteNum[1:].cast("uint16"),
+    ).relocate("VoteChamber", after="LegislatureNumber")
+    choices_raw = choices_raw.mutate(
+        VoteId=_.LegislatureNumber.cast(str)
+        + ":"
+        + _.VoteChamber
+        + ":"
+        + _.VoteNumber.cast(str)
     )
     choices_raw = choices_raw.mutate(
         ChoiceId=_.VoteId + ":" + _.MemberId.re_replace(r"^\d+:", "")
@@ -19,13 +29,15 @@ def split_choices(
         choices_raw.select(
             "VoteId",
             "LegislatureNumber",
-            "VoteNum",
+            "VoteChamber",
+            "VoteNumber",
             "VoteDate",
             "VoteTitle",
             "BillId",
+            "VoteBillAmendmentNumber",
         )
         .distinct()
-        .order_by("VoteId")
+        .order_by("LegislatureNumber", "VoteChamber", "VoteNumber")
     )
     choices = (
         choices_raw.select(
