@@ -1,4 +1,8 @@
 # Alaska Legislative Data - Python Library
 
-Python library for bulk scraping the API. An example of the API can be found
-at https://akleg.willmuldoon.com/.
+Python library/scripts for bulk scraping the API.
+
+## to develop:
+
+From inside this dir:
+`uv sync`

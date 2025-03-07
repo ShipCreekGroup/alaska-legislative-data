@@ -9,9 +9,5 @@ This is composed of two subprojects:
 2. A python library for bulk scraping, parsing, and cleaning the API.
    This is in the [python](./python/) folder.
 
-We scrape and clean the data daily, and publish the results to the [`data_v1_latest` branch](https://github.com/ShipCreekGroup/alaska-legislative-data/tree/data_v1_latest).
-For example, you can download the csv's directly from
-`https://github.com/ShipCreekGroup/alaska-legislative-data/raw/refs/heads/data_v1_latest/votes.csv`.
-In google sheets, you can use
-`IMPORTDATA("https://github.com/ShipCreekGroup/alaska-legislative-data/raw/refs/heads/data_v1_latest/votes.csv", ",")`
-to get a daily-updated view of all the votes in the alaska legislature.
+We scrape and clean the data daily, and publish the results to the
+[releases page](https://github.com/ShipCreekGroup/alaska-legislative-data/releases).

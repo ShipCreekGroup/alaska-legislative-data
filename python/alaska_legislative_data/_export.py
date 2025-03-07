@@ -4,20 +4,7 @@ from pathlib import Path
 
 import ibis
 
-from alaska_legislative_data import _db, _git, _util
-
-
-def push(
-    directory: str | Path = "export/",
-    *,
-    remote: str
-    | None = "https://github.com/ShipCreekGroup/alaska-legislative-data.git",
-    branch: str = "data_v1_latest",
-    commit_message: str = "Update data",
-):
-    _git.push_directory_to_github_branch(
-        directory, branch, remote=remote, commit_message=commit_message
-    )
+from alaska_legislative_data import _db, _util
 
 
 def export(

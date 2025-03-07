@@ -16,7 +16,6 @@ def main():
             "fetch": fetch,
             "ingest": _ingest.ingest_all,
             "export": _export.export,
-            "push": _export.push,
         }
     )
 
