@@ -1,10 +1,13 @@
 import contextlib
+import logging
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 def push_directory_to_github_branch(
@@ -72,8 +75,11 @@ def _get_remote() -> str:
     return _run_command("git config --get remote.origin.url")
 
 
-def _run_command(command, cwd=None):
-    return subprocess.check_output(command, cwd=cwd, shell=True, text=True).strip()
+def _run_command(command, cwd=None, env=None):
+    logger.info(f"Running command: {command}")
+    return subprocess.check_output(
+        command, cwd=cwd, shell=True, text=True, env=None
+    ).strip()
 
 
 if __name__ == "__main__":

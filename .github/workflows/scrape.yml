@@ -28,4 +28,7 @@ jobs:
       - name: Export to the /export directory
         run: uv run python -m alaska_legislative_data export
       - name: Push export/ to the data_v1_latest
-        run: uv run python -m alaska_legislative_data push
+        run: |
+          git config --global user.email "nicholas.b.crews@gmail.com"
+          git config --global user.name "Nick Crews"
+          uv run python -m alaska_legislative_data push
