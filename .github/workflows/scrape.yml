@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   scrape:
-    name: Scrape and Publish
+    name: Scrape and Release
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -30,5 +30,7 @@ jobs:
         run: uv run python -m alaska_legislative_data ingest
       - name: Export to the /export directory
         run: uv run python -m alaska_legislative_data export
-      - name: publish a release
+      - name: Publish the /export directory to a GH release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: ./release.sh export
