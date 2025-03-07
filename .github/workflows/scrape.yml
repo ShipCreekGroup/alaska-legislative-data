@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: "37 2 * * *" # Run every day at 2:37 am
 
+permissions:
+  contents: write
+
 jobs:
   scrape:
     name: Scrape and Publish
