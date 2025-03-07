@@ -20,11 +20,14 @@ def ingest_all(
     people: ibis.Table | None = None,
     members: ibis.Table | None = None,
     bills: ibis.Table | None = None,
+    votes: ibis.Table | None = None,
+    choices: ibis.Table | None = None,
 ):
     ingest_legislatures_and_sessions(db)
     ingest_people(db, people=people)
     ingest_members(db, members=members)
     ingest_bills(db, new_bills=bills)
+    ingest_votes_and_choices(db, votes=votes, choices=choices)
 
 
 def ingest_legislatures_and_sessions(
