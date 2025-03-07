@@ -31,9 +31,9 @@ jobs:
       - name: Export to the /export directory
         run: uv run python -m alaska_legislative_data export
       - name: Push export/ to the data_v1_latest
+        uses: s0/git-publish-subdir-action@develop@ac113f6bfe8896e85a373534242c949a7ea74c98
         env:
+          REPO: git@github.com:ShipCreekGroup/alaska-legislative-data.git
+          BRANCH: data_v1_latest
+          FOLDER: export
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.email "nicholas.b.crews@gmail.com"
-          git config --global user.name "NickCrews"
-          uv run python -m alaska_legislative_data push
