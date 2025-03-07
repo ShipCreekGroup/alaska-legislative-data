@@ -45,9 +45,12 @@ def push_directory_to_github_branch(
     with _in_dir(tmp_git_dir):
         shutil.copytree(src=d, dst=tmp_git_dir, dirs_exist_ok=True)
         _run_command("git init")
-        _run_command(
-            f"git remote -v | grep -w origin || git remote add origin '{remote}'"
-        )
+        existing_remotes = _run_command("git remote -v")
+        if remote not in existing_remotes:
+            logger.info(f"Adding remote: {remote}")
+            _run_command(f"git remote add origin '{remote}'")
+        else:
+            logger.info(f"Remote already exists: {remote}")
         _run_command(f"git checkout -b {branch}")
         _run_command("git add .")
         safe_commit_message = commit_message.replace('"', '\\"')
@@ -55,7 +58,7 @@ def push_directory_to_github_branch(
         # Allow for large files? IDK if this is needed, I was running into this
         # error when using my bad hotspot connection.
         # https://stackoverflow.com/questions/59282476/error-rpc-failed-curl-92-http-2-stream-0-was-not-closed-cleanly-protocol-erro
-        _run_command("git config http.postBuffer 524288000")
+        # _run_command("git config http.postBuffer 524288000")
         _run_command(f"git push --set-upstream origin --force {branch}")
 
 
@@ -77,9 +80,11 @@ def _get_remote() -> str:
 
 def _run_command(command, cwd=None, env=None):
     logger.info(f"Running command: {command}")
-    return subprocess.check_output(
+    result = subprocess.check_output(
         command, cwd=cwd, shell=True, text=True, env=None
     ).strip()
+    logger.info(f"Result: {result}")
+    return result
 
 
 if __name__ == "__main__":

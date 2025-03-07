@@ -10,7 +10,8 @@ from alaska_legislative_data import _db, _git, _util
 def push(
     directory: str | Path = "export/",
     *,
-    remote: str | None = None,
+    remote: str
+    | None = "https://github.com/ShipCreekGroup/alaska-legislative-data.git",
     branch: str = "data_v1_latest",
     commit_message: str = "Update data",
 ):
