@@ -1,0 +1,381 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <p style="margin:20px;"><b>3/6/2025:</b>
+    We at Ship Creek Group took Will Muldoons/the AK Leg site and pulled it into
+    https://github.com/ShipCreekGroup/alaska-legislative-data.
+    See that GitHub repo for info on how to get cleaned bulk data,
+    code to do the scraping yourself,
+    or <a href="https://github.com/ShipCreekGroup/alaska-legislative-data/issues">file an issue</a> if you have questions or need help.
+    </p>
+    <p style="margin:20px;"><b>8/4/2024:</b>
+        <font color="red"> Note from Will Muldoon:</font> I borrowed this page from www.akleg.gov/Apptester.html and
+        made some modifications:<br></br>
+
+        It can send GET requests and display their output. I modified the page to be able to automagically save JSON
+        returns with structured filenames. <u>PLEASE</u> read the PDF below for an idea on the data structures and
+        allowable queries. If you stick to V1.4 and JSON headers, incorrect queries should timeout or fail. On V1.2 and
+        V1.0, You <b>
+            <font color="red"> CAN
+        </b></font> overwhelm the server and bring down BASIS and the akleg.gov website. You can also flood the server
+        and bring it down if you try to run several queries at once. This page is designed for running and saving one
+        query at a time.
+        <br></br>
+        If you have any questions on writing queries or getting large sets without worrying about breaking things,
+        please reach out. You can drag and drop JSON files into Tableau to convert them into tables if you aren't good
+        at parsing JSON returns or processing data at this scale. With the JSON returns, as long as you are querying the
+        same thing, but getting different items (Votes from members X and Y, or Bills from Session N and N+1), you can
+        "Union" them and view them as a unified set in Tableau Public. Microsoft Power BI has the ability to "join"
+        along with being able to union, which is probably more familiar for SQL/CSV nerds.
+        <br></br>
+        I'll be putting together How-To's on stuff I did (calculating votes, bills by subject/sponsor, joining all of
+        this into something coherent) over the coming months. I'll try and help when possible on specific asks, but it
+        isn't a high priority of mine.
+
+        -Wm.
+    </p>
+
+</head>
+
+<body>
+    <p style="margin:20px;"><b>4/25/2019:</b>
+        <font color="red"> New Update:</font> isactive=true is now a contraint for members to remove retired members
+    </p>
+
+    <p style="margin:20px;"><b>4/25/2019:</b>
+        <font color="red"> New Update:</font> Header Version 1.4 the structure of JSON objects have been simplified by
+        serializing directly from .NET data objects.
+    </p>
+    <p style="margin:20px;"><b>1/6/2021:</b>
+        <font color="red"> New Update:</font> Meeting queries that include a date constraint (either date=;startdate= or
+        enddate=), will calcluate the session paramater setting from the date, which allows meeting queries across
+        bienniums, but also eases the problem of querying meetings in early january (is a meeting on Jan 8th 2021 going
+        to be found in the 31st or the 32nd?). Let the service save you the trouble. Session paramater is still required
+        to be set.
+    </p>
+
+    <b> This page currently works with all browsers latest version<br>
+        Due to limitations it is known not to work in Internet Explorer 8 or less.</b><br><br>
+    This is a testing and demonstration of the web service described here:
+    <a href="https://www.akleg.gov/basis/BasisPublicServiceAPI.pdf">BasisPublicServiceAPI.pdf</a>
+    <br><br>
+
+
+
+
+
+
+
+
+    <div style="float:left;overflow:hidden;">
+        <form name="form1">
+            Method:<br>
+            <input type="radio" id="method" name="method" checked="" value="get">GET
+            <input type="radio" id="method" name="method" value="options">OPTIONS
+            <input type="radio" id="method" name="method" value="head">HEAD <font size="-2">Good for returning
+                counts,but no data</font>
+
+            <br>
+            <input type="radio" id="section" name="section" checked="" value="members" onclick="toggleMemberDropdown()">
+            Members
+            <input type="radio" id="section" name="section" value="bills"> Bills
+            <input type="radio" id="section" name="section" value="committees"> Committees
+            <input type="radio" id="section" name="section" value="sessions"> Sessions
+            <input type="radio" id="section" name="section" value="meetings"> Meetings
+            <input type="radio" id="section" name="section" value="documents"> Documents
+            <br>
+
+            <!-- Dropdown menu for selecting a member (district) -->
+            <div id="memberDropdown" style="display:none;">
+                District:
+                <select id="district" onchange="setMemberDropdownQuery()">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="36">36</option>
+                    <option value="37">37</option>
+                    <option value="38">38</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="H">H</option>
+                    <option value="I">I</option>
+                    <option value="J">J</option>
+                    <option value="K">K</option>
+                    <option value="L">L</option>
+                    <option value="M">M</option>
+                    <option value="N">N</option>
+                    <option value="O">O</option>
+                    <option value="P">P</option>
+                    <option value="Q">Q</option>
+                    <option value="R">R</option>
+                    <option value="S">S</option>
+                    <option value="T">T</option>
+                </select>
+                <br>
+            </div>
+
+
+            JSON Output <input type="checkbox" id="JSON" checked><br>
+            .Net Objects <input type="checkbox" id="dotnet"><br>
+            Chamber: <input type="radio" name="chamber" value="H">House <input type="radio" name="chamber"
+                value="S">Senate <input type="radio" name="chamber" checked="" value="">None<br>
+            Legislature: <select id="sessions">
+                <option value="34">34</option>
+                <option value="33">33</option>
+                <option value="32">32</option>
+                <option value="31">31</option>
+                <option value="30">30</option>
+                <option value="29">29</option>
+                <option value="28">28</option>
+                <option value="27">27</option>
+                <option value="26">26</option>
+                <option value="25">25</option>
+                <option value="24">24</option>
+                <option value="23">23</option>
+                <option value="22">22</option>
+                <option value="21">21</option>
+                <option value="20">20</option>
+                <option value="19">19</option>
+                <option value="18">18</option>
+            </select><br>
+            Header Version: <select id="Version">
+                <option value="1.0">1.0</option>
+                <option value="1.2">1.2</option>
+                <option value="1.4" selected="">1.4</option>
+            </select><br>
+            X-Alaska-Legislature-Basis-Query: <input type="text" id="query" name="query"><br>
+            X-Alaska-Legislature-Basis-Query: <input type="text" id="query2" name="query2"><br>
+            <input type="button" onclick="getResults();" name="go" value="go">
+        </form>
+    </div>
+
+    <script>
+        // Function to toggle the visibility of the member (district) dropdown menu
+        function toggleMemberDropdown() {
+            var memberDropdown = document.getElementById("memberDropdown");
+            var section = document.querySelector('input[name="section"]:checked').value;
+            if (section === "members") {
+                memberDropdown.style.display = "block";
+                setMemberDropdownQuery(); // Call function to set query when dropdown is visible
+            } else {
+                memberDropdown.style.display = "none";
+            }
+        }
+
+        // Function to set the query input based on the selected district
+        function setMemberDropdownQuery() {
+            var district = document.getElementById("district").value;
+            document.getElementById("query").value = "members;district=" + district;
+        }
+
+    </script>
+
+    <div style="float:left;margin-left:100px">
+
+        How do I?<br>
+        <input type="button" onclick="setQuery(1,&#39;bills;bill=hb  10&#39;,&#39;sponsors&#39;);"
+            value="Find who sponsored hb 10"><br>
+        <input type="button" onclick="setQuery(0,&#39;members;district=34&#39;,&#39;bills;&#39;);"
+            value="Find Bills Sponsored by Rep from district 34"><br>
+        <input type="button" onclick="setQuery(1,&#39;bills;subject=forestry&#39;,&#39;&#39;);"
+            value="Find Bills on Subject Forestry"><br>
+        <input type="button"
+            onclick="var currentDate=new Date();var month=currentDate.getMonth()+1;setQuery(4,&#39;meetings;date=&#39;+month+&#39;/&#39;+currentDate.getDate()+&#39;/&#39;+currentDate.getFullYear(),&#39;&#39;);"
+            value="Find Committee Meetings scheduled today"><br>
+        <input type="button"
+            onclick="var currentDate=new Date();var month=currentDate.getMonth()+1;setQuery(4,&#39;meetings;date=&#39;+month+&#39;/&#39;+currentDate.getDate()+&#39;/&#39;+currentDate.getFullYear(),&#39;meetings;details&#39;);"
+            value="Find Committee Meetings scheduled today with details"><br>
+
+        <input type="button" value="Get All Bills" onclick="setQuery(1,&#39;&#39;,&#39;&#39;);"><br>
+        <input type="button" value="Get All Fiscal Notes" onclick="setQuery(1,&#39;fiscalnotes&#39;,&#39;&#39;);"><br>
+        <br><br><br>
+        <button type="button" value="save" id="save" onclick="saveTextAsFile()"> Save Output</button>
+
+
+    </div>
+    <div style="clear:both"></div>
+
+    <pre id="header"></pre>
+    <pre id="results"></pre>
+
+
+    <div id="json"></div>
+</body>
+
+
+
+
+<script language="javascript">
+    function getHTTPObject() {
+        var xmlhttp;
+        /*@cc_on 
+        @if (@_jscript_version >= 5)  
+            try { xmlhttp = new ActiveXObject('Msxml2.XMLHTTP.3.0'); 
+            } catch (e) { 
+              try { 
+                xmlhttp = new ActiveXObject('Microsoft.XMLHTTP'); } 
+              catch (E) { 
+              xmlhttp = false; 
+              } 
+        } 
+        @else 
+        xmlhttp = false; 
+        @end @*/
+        if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+            try { xmlhttp = new XMLHttpRequest(); }
+            catch (e) {
+                xmlhttp = false;
+            }
+        }
+        return xmlhttp;
+    }
+
+    function ParseXML(text) {
+        if (window.DOMParser) {
+            var parser = new DOMParser();
+            xmlDoc = parser.parseFromString(text, "text/xml");
+        } else if (window.ActiveXObject) {
+            xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+            xmlDoc.async = false;
+            xmlDoc.loadXML(text);
+        }
+        return xmlDoc
+    }
+    function getResults() {
+        sess = document.getElementById("sessions").value;
+        url = 'https://www.akleg.gov/publicservice/basis/' + getValue("section") + '?minifyresult=false&session=' + sess
+        if (getValue("chamber")) {
+            url = url + '&chamber=' + getValue("chamber");
+        }
+        if (document.getElementById("JSON").checked) {
+            url = url + '&json=true';
+        }
+        if (document.getElementById("dotnet").checked) {
+            url = url + '&json=DC';
+        }
+        http.open(getValue("method"), url, true);
+        http.onreadystatechange = function () {
+            if ((http.readyState == 4)) {
+                document.getElementById("header").innerHTML = document.getElementById("header").innerHTML + "<BR><B>Response Headers:</B><BR>X-Alaska-Query-Count:" + http.getResponseHeader("X-Alaska-Query-Count")
+                    + "<BR>X-Alaska-Legislature-Basis-Query:" + http.getResponseHeader("X-Alaska-Legislature-Basis-Query") + "<BR><BR><B>Results:</B><BR><HR>";
+                resultsLocation = document.getElementById("results");
+
+                if (document.getElementById("JSON").checked) { resultsLocation = document.getElementById("json"); jsonObject = JSON.parse(http.responseText); }
+                resultsLocation.innerHTML = http.responseText.replace(/</gi, "&lt;").replace("\n", "\n<br>").replace(/\{/g, "<ul>{").replace(/(},?)/g, "$1</ul>").replace(/","/g, "\",<BR>\"");
+
+            }
+        }
+
+        version = document.getElementById("Version").value;
+        http.setRequestHeader("X-Alaska-Legislature-Basis-Version", version);
+        //http.setRequestHeader("X-Alaska-Query-ResultRange","1..20");
+        strHeader = "X-Alaska-Legislature-Basis-Version:" + version + "\n<BR>";
+        http.setRequestHeader("X-Alaska-Legislature-Basis-Query", document.getElementById("query").value + "," + document.getElementById("query2").value);
+        strHeader = strHeader + "X-Alaska-Legislature-Basis-Query:" + document.getElementById("query").value + "\n<BR>";
+        strHeader = strHeader + "X-Alaska-Legislature-Basis-Query:" + document.getElementById("query2").value + "\n<BR>";
+        http.send(null);
+        document.getElementById("header").innerHTML = url + "<BR><b>Request Headers:</B><BR><i>" + strHeader + "</i>";
+        document.getElementById("results").innerHTML = ""
+        return false;
+    }
+
+    function setQuery(intType, strQueryString1, strQueryString2) {
+        document.forms["form1"].elements["section"][intType].checked = true;
+        document.getElementById("query").value = strQueryString1;
+        document.getElementById("query2").value = strQueryString2;
+        getResults();
+    }
+
+    function getValue(strRadio) {
+        radioObj = document.forms['form1'].elements[strRadio];
+        var radioLength = radioObj.length;
+        if (radioLength == undefined)
+            if (radioObj.checked)
+                return radioObj.value;
+            else
+                return "";
+        for (var i = 0; i < radioLength; i++) {
+            if (radioObj[i].checked) {
+                return radioObj[i].value;
+            }
+        }
+        return "";
+    }
+    var http = getHTTPObject();
+
+
+    function saveTextAsFile() {
+        var session = document.getElementById('sessions').value;
+        var version = document.getElementById('Version').value;
+        var query1 = document.getElementById('query').value.replace(/\W+/g, "_");
+        var query2 = document.getElementById('query2').value.replace(/\W+/g, "_");
+        var section = getValue('section'); // Get the selected section value
+        var fileName = "BASIS_" + + version + "_Session_" + session + "_" + section + "_" + query1 + "_" + query2 + ".json";
+
+        console.log("Session:", session);
+        console.log("Version:", version);
+        console.log("Query 1:", query1);
+        console.log("Query 2:", query2);
+        console.log("Section:", section);
+        console.log("File name:", fileName);
+
+        var textToWrite = document.getElementById('json').innerText;
+        var textFileAsBlob = new Blob([textToWrite], { type: 'application/json' });
+
+        console.log("Blob:", textFileAsBlob);
+
+        var downloadLink = document.createElement("a");
+        downloadLink.download = fileName;
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+
+        console.log("Download link:", downloadLink);
+
+        downloadLink.click();
+
+        // Clear the JSON output area for a new query
+        document.getElementById('json').innerText = '';
+    }
+</script>
+</html>
