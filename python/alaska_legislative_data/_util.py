@@ -1,7 +1,5 @@
 import datetime
 
-DEFAULT_DB_PATH = "ak_leg.duckdb"
-
 
 def current_leg_num_approx(current_year: int | None = None) -> int:
     """Estimate the current legislature number.

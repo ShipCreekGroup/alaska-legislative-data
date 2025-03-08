@@ -18,18 +18,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v5
         with:
           version: "latest"
+
       - name: Install project
         run: uv sync
-      - name: Fetch the current .duckdb file from the data_v1_latest branch
-        run: uv run python -m alaska_legislative_data fetch
-      - name: Ingest new data into the .duckdb file
-        run: uv run python -m alaska_legislative_data ingest
+
+      - name: Ingest new data into motherduck
+        env:
+          motherduck_token: ${{ secrets.MOTHERDUCK_TOKEN }}
+        run: uv run python -m alaska_legislative_data ingest --db="md:ak_leg"
+
       - name: Export to the /export directory
-        run: uv run python -m alaska_legislative_data export
+        env:
+          motherduck_token: ${{ secrets.MOTHERDUCK_TOKEN }}
+        run: uv run python -m alaska_legislative_data export --db="md:ak_leg"
+
       - name: Publish the /export directory to a GH release
         env:
           GH_TOKEN: ${{ github.token }}

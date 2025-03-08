@@ -1,7 +1,6 @@
 import logging
-import urllib.request
-from pathlib import Path
 
+import dotenv
 import fire
 
 from alaska_legislative_data import _export, _ingest
@@ -10,25 +9,21 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    dotenv.load_dotenv(dotenv.find_dotenv(".env"))
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
+    # Set log level for other libraries to a higher level to suppress their logs
+    for logger_name in logging.root.manager.loggerDict:
+        if not logger_name.startswith("alaska_legislative_data"):
+            logging.getLogger(logger_name).setLevel(logging.WARNING)
     fire.Fire(
         {
-            "fetch": fetch,
             "ingest": _ingest.ingest_all,
             "export": _export.export,
         }
     )
-
-
-def fetch(
-    url: str = "https://github.com/ShipCreekGroup/alaska-legislative-data/raw/refs/heads/data_v1_latest/ak_leg.duckdb",
-    dest: str = "ak_leg.duckdb",
-):
-    """Get the .duckdb file from the data_v1_latest branch."""
-    p = Path(dest).absolute()
-    p.parent.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Downloading {url} to {p}")
-    urllib.request.urlretrieve(url, p)
 
 
 if __name__ == "__main__":

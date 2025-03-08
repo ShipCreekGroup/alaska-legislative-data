@@ -4,12 +4,12 @@ from pathlib import Path
 
 import ibis
 
-from alaska_legislative_data import _db, _util
+from alaska_legislative_data import _db
 
 
 def export(
     *,
-    db: str | Path | _db.Backend = _util.DEFAULT_DB_PATH,
+    db: str | Path | _db.Backend,
     directory: str | Path = "export/",
 ):
     db = _db.Backend(db)

@@ -112,7 +112,7 @@ def scrape_votes(*, leg_num_and_member_codes: list[tuple[int, str]]) -> list[dic
     async def main():
         tasks = [_scrape_votes_of(*t) for t in leg_num_and_member_codes]
         results = []
-        for chunk in _chunks(tasks, 25):
+        for chunk in _chunks(tasks, 20):
             chunk_votes = await asyncio.gather(*chunk)
             for v in chunk_votes:
                 if v is None:

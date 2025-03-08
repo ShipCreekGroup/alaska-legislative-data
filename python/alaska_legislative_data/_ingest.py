@@ -15,15 +15,17 @@ logger = logging.getLogger(__name__)
 
 
 def ingest_all(
-    db: str | _db.Backend = _util.DEFAULT_DB_PATH,
+    db: str | _db.Backend,
     *,
+    legislatures: ibis.Table | None = None,
+    sessions: ibis.Table | None = None,
     people: ibis.Table | None = None,
     members: ibis.Table | None = None,
     bills: ibis.Table | None = None,
     votes: ibis.Table | None = None,
     choices: ibis.Table | None = None,
 ):
-    ingest_legislatures_and_sessions(db)
+    ingest_legislatures_and_sessions(db, legislatures=legislatures, sessions=sessions)
     ingest_people(db, people=people)
     ingest_members(db, members=members)
     ingest_bills(db, new_bills=bills)
@@ -31,7 +33,7 @@ def ingest_all(
 
 
 def ingest_legislatures_and_sessions(
-    db: str | _db.Backend = _util.DEFAULT_DB_PATH,
+    db: str | _db.Backend,
     legislatures: ibis.Table | None = None,
     sessions: ibis.Table | None = None,
 ):
@@ -78,7 +80,7 @@ def ingest_legislatures_and_sessions(
 
 
 def ingest_people(
-    db: str | _db.Backend = _util.DEFAULT_DB_PATH,
+    db: str | _db.Backend,
     people: ibis.Table | None = None,
 ) -> None:
     """Ingest the curated people data."""
@@ -107,7 +109,7 @@ def ingest_people(
 
 
 def ingest_members(
-    db: str | _db.Backend = _util.DEFAULT_DB_PATH,
+    db: str | _db.Backend,
     members: ibis.Table | None = None,
 ):
     """Ingest the curated members data."""
@@ -146,7 +148,7 @@ def ingest_members(
 
 
 def ingest_bills(
-    db: str | _db.Backend = _util.DEFAULT_DB_PATH,
+    db: str | _db.Backend,
     new_bills: ibis.Table | None = None,
 ):
     db = _db.Backend(db)
@@ -168,7 +170,7 @@ def ingest_bills(
 
 
 def ingest_votes_and_choices(
-    db: str | _db.Backend = _util.DEFAULT_DB_PATH,
+    db: str | _db.Backend,
     *,
     votes: ibis.Table | None = None,
     choices: ibis.Table | None = None,
