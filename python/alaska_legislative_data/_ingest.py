@@ -1,6 +1,7 @@
 import logging
 
 import ibis
+from ibis import _
 
 from alaska_legislative_data import (
     _curated,
@@ -120,10 +121,6 @@ def ingest_members(
     # avoid https://github.com/ibis-project/ibis/issues/10942
     members = ibis.memtable(members.to_pyarrow(), schema=members.schema())
     logger.info(f"Ingesting {members.count().execute()} members")
-    if "MemberId" not in members.columns:
-        members = members.mutate(
-            MemberId=members.LegislatureNumber.cast(str) + ":" + members.PersonId
-        )
 
     only_new = db.Member.anti_join(members, "MemberId").to_pandas()
     if not only_new.empty:
@@ -136,6 +133,10 @@ def ingest_members(
         raise ValueError(
             f"Some new members don't have an existing person: {missing_person}"
         )
+
+    dupe_member_id = members.MemberId.topk(10, name="n").filter(_.n > 1).to_pandas()
+    if not dupe_member_id.empty:
+        raise ValueError(f"Some new members have duplicate MemberId: {dupe_member_id}")
 
     n_existing_members = members.semi_join(db.Member, "MemberId").count().execute()
     new_members = members.anti_join(db.Member, "MemberId")

@@ -53,7 +53,14 @@ def read_members(
     logger.info(f"Reading members from {path}")
     members = backend.read_csv(path)
     members = members.mutate(
-        MemberId=members.LegislatureNumber.cast(str) + ":" + members.PersonId
+        # see _db.py for the methodology
+        MemberId=members.LegislatureNumber.cast(str)
+        + ":"
+        + members.Chamber
+        + ":"
+        + members.District.fill_null("")
+        + ":"
+        + members.PersonId
     ).relocate("MemberId")
     return members
 

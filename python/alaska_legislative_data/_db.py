@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Annotated, get_type_hints
 
+import duckdb
 import ibis
 from ibis import ir
 from ibis.backends.duckdb import Backend as DuckdbBackend
@@ -25,9 +26,9 @@ class LegislatureSchema(TableSchema):
 
     LegislatureNumber: Annotated[ir.IntegerColumn, LEGISLATURE_NUMBER_TYPE]
     """eg 31 for the 31st legislature."""
-    LegislatureStartYear: Annotated[ir.IntegerColumn, "int16"]
+    LegislatureStartYear: Annotated[ir.IntegerColumn, "!int16"]
     """eg 2021 for the 31st legislature."""
-    LegislatureEndYear: Annotated[ir.IntegerColumn, "int16"]
+    LegislatureEndYear: Annotated[ir.IntegerColumn, "!int16"]
     """eg 2022 for the 31st legislature."""
 
 
@@ -85,7 +86,18 @@ class MemberSchema(TableSchema):
     """
 
     MemberId: Annotated[ir.StringColumn, "!string"]
-    """Unique identifier for this membership. Of the form '{LegislatureNumber}:{PersonId}'."""
+    """Unique id for this membership of the form '{LegislatureNumber}:{Chamber}:{District}:{PersonId}'.
+    
+    Using just the LegislatureNumber and PersonId is inadequate,
+    as there are some instances of someone switching from the house
+    to the senate when they are appointed to fill a vacancy.
+    Theoretically we COULD just use the District, but for the 7th legislature,
+    "H Meland:7" does this switch between the H and S,
+    BUT for data this old, we don't actually know the district,
+    which leads to both memberships having the ID of `7::H Meland:7`.
+    By including the Chamber, we end up with the IDs of `7:H::H Meland:7`
+    and `7:S::H Meland:7`, which are unique.
+    """
     LegislatureNumber: Annotated[ir.IntegerColumn, LEGISLATURE_NUMBER_TYPE]
     """eg 31 for the 31st legislature."""
     PersonId: Annotated[ir.StringColumn, "!string"]
@@ -219,7 +231,6 @@ class Backend(DuckdbBackend):
             raise TypeError(f"Expected DuckdbBackend, got {type(db)}")
         if isinstance(db, Backend):
             raise TypeError("Backend should not be nested")
-        self.create_tables(db)
         self._db = db
 
     def __getattr__(self, name):
@@ -266,20 +277,136 @@ class Backend(DuckdbBackend):
         return self._db.table(*args, **kwargs)
 
     @classmethod
-    def create_tables(cls, db: DuckdbBackend) -> None:
-        if "legislatures" not in db.tables:
-            db.create_table("legislatures", schema=LegislatureSchema.ibis_schema())
-        if "legislature_sessions" not in db.tables:
-            db.create_table(
-                "legislature_sessions", schema=LegislatureSessionSchema.ibis_schema()
-            )
-        if "people" not in db.tables:
-            db.create_table("people", schema=PersonSchema.ibis_schema())
-        if "members" not in db.tables:
-            db.create_table("members", schema=MemberSchema.ibis_schema())
-        if "bills" not in db.tables:
-            db.create_table("bills", schema=BillSchema.ibis_schema())
-        if "votes" not in db.tables:
-            db.create_table("votes", schema=VoteSchema.ibis_schema())
-        if "choices" not in db.tables:
-            db.create_table("choices", schema=ChoiceSchema.ibis_schema())
+    def create_tables(cls, db: DuckdbBackend | duckdb.DuckDBPyConnection) -> None:
+        if isinstance(db, DuckdbBackend):
+            conn = db.con
+        else:
+            conn = db
+        conn.sql(DDL)
+
+
+SCHEMAS = {
+    "legislatures": LegislatureSchema.ibis_schema(),
+    "legislature_sessions": LegislatureSessionSchema.ibis_schema(),
+    "people": PersonSchema.ibis_schema(),
+    "members": MemberSchema.ibis_schema(),
+    "bills": BillSchema.ibis_schema(),
+    "votes": VoteSchema.ibis_schema(),
+    "choices": ChoiceSchema.ibis_schema(),
+}
+
+DDL = """
+BEGIN TRANSACTION;
+CREATE TABLE legislatures(
+    LegislatureNumber SMALLINT PRIMARY KEY CHECK (LegislatureNumber > 0 AND LegislatureNumber < 100),
+    LegislatureStartYear SMALLINT NOT NULL,
+    LegislatureEndYear SMALLINT NOT NULL
+);
+
+CREATE TABLE legislature_sessions(
+    LegislatureSessionId VARCHAR PRIMARY KEY,
+    LegislatureNumber SMALLINT NOT NULL REFERENCES legislatures(LegislatureNumber),
+    LegislatureSessionCode TINYINT,
+    LegislatureSessionTitle VARCHAR,
+    LegislatureSessionStartDate DATE,
+    LegislatureSessionEndDate DATE
+);
+
+CREATE TABLE people(
+    PersonId VARCHAR PRIMARY KEY CHECK (PersonId LIKE '%:%'),
+    FullName VARCHAR NOT NULL,
+    FirstName VARCHAR NOT NULL,
+    LastName VARCHAR NOT NULL,
+    MiddleName VARCHAR,
+    NickName VARCHAR,
+    Suffix VARCHAR
+);
+
+CREATE TABLE members(
+    MemberId VARCHAR PRIMARY KEY CHECK (MemberId = CONCAT(LegislatureNumber, ':', Chamber, ':', District, ':', PersonId)),
+    LegislatureNumber SMALLINT NOT NULL REFERENCES legislatures(LegislatureNumber),
+    PersonId VARCHAR NOT NULL REFERENCES people(PersonId),
+    MemberCode VARCHAR,
+    Chamber VARCHAR CHECK (Chamber IN ('H', 'S')),
+    District VARCHAR,
+    Party VARCHAR,
+    IsMajority BOOLEAN,
+    IsActive BOOLEAN,
+    "Comment" VARCHAR,
+    Phone VARCHAR,
+    EMail VARCHAR,
+    Building VARCHAR,
+    Room VARCHAR
+);
+
+CREATE TABLE bills(
+    BillId VARCHAR PRIMARY KEY CHECK (BillId = CONCAT(LegislatureNumber, ':', BillNumber)),
+    LegislatureNumber SMALLINT NOT NULL REFERENCES legislatures(LegislatureNumber),
+    BillNumber VARCHAR NOT NULL,
+    BillName VARCHAR,
+    Documents JSON [],
+    PartialVeto BOOLEAN,
+    Vetoed BOOLEAN,
+    ShortTitle VARCHAR,
+    StatusCode VARCHAR,
+    StatusText VARCHAR,
+    Flag1 VARCHAR,
+    Flag2 UTINYINT,
+    StatusDate DATE,
+    StatusAndThen JSON [],
+    StatusSummaryCode VARCHAR,
+    OnFloor VARCHAR,
+    Filler VARCHAR,
+    "Lock" VARCHAR,
+    AllMeetings JSON [],
+    Meetings JSON [],
+    Subjects VARCHAR [],
+    ManifestErrors JSON [],
+    Statutes JSON [],
+    CurrentCommittee STRUCT(
+        Chamber VARCHAR,
+        Code VARCHAR,
+        Catagory VARCHAR,
+        "Name" VARCHAR,
+        MeetingDays VARCHAR,
+        "Location" VARCHAR,
+        StartTime VARCHAR,
+        EndTime VARCHAR,
+        Email VARCHAR
+    )
+);
+
+CREATE TABLE votes(
+    VoteId VARCHAR PRIMARY KEY,
+    LegislatureNumber SMALLINT NOT NULL REFERENCES legislatures(LegislatureNumber),
+    VoteChamber VARCHAR NOT NULL CHECK (VoteChamber IN ('H', 'S')),
+    VoteNumber USMALLINT NOT NULL,
+    VoteDate DATE,
+    VoteTitle VARCHAR NOT NULL,
+    BillId VARCHAR REFERENCES bills(BillId),
+    VoteBillAmendmentNumber DECIMAL(9, 1)
+);
+
+CREATE TABLE choices(
+    ChoiceId VARCHAR PRIMARY KEY,
+    VoteId VARCHAR NOT NULL REFERENCES votes(VoteId),
+    MemberId VARCHAR NOT NULL REFERENCES members(MemberId),
+    Choice VARCHAR NOT NULL CHECK (Choice IN ('Y', 'N', 'A', 'E'))
+);
+COMMIT;
+"""
+
+
+def _test_ddl():
+    tmp_db = ibis.duckdb.connect(":memory:")
+    tmp_db.con.execute(DDL)
+    for table_name, expected_schema in SCHEMAS.items():
+        created_schema = tmp_db.table(table_name).schema()
+        assert created_schema == expected_schema, (
+            table_name,
+            expected_schema,
+            created_schema,
+        )
+
+
+_test_ddl()
