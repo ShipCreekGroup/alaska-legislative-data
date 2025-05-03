@@ -3,6 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- https://www.jsdelivr.com/package/npm/@andypf/json-viewer -->
+    <script src="https://pfau-software.de/json-viewer/dist/iife/index.js"></script>
 
     <p style="margin:20px;"><b>3/6/2025:</b>
     We at Ship Creek Group took Will Muldoons/the AK Leg site and pulled it into
@@ -58,8 +60,6 @@
         to be set.
     </p>
 
-    <b> This page currently works with all browsers latest version<br>
-        Due to limitations it is known not to work in Internet Explorer 8 or less.</b><br><br>
     This is a testing and demonstration of the web service described here:
     <a href="https://www.akleg.gov/basis/BasisPublicServiceAPI.pdf">BasisPublicServiceAPI.pdf</a>
     <br><br>
@@ -240,13 +240,19 @@
 
     <pre id="header"></pre>
     <pre id="results"></pre>
-
-
-    <div id="json"></div>
+     
+    <andypf-json-viewer
+        id="json"
+        indent="2"
+        expanded="true"
+        theme="default-light"
+        show-data-types="false"
+        show-toolbar="false"
+        expand-icon-type="arrow"
+        show-copy="true"
+        show-size="true"
+    >Results will appear here.</andypf-json-viewer>
 </body>
-
-
-
 
 <script language="javascript">
     function getHTTPObject() {
@@ -301,10 +307,13 @@
             if ((http.readyState == 4)) {
                 document.getElementById("header").innerHTML = document.getElementById("header").innerHTML + "<BR><B>Response Headers:</B><BR>X-Alaska-Query-Count:" + http.getResponseHeader("X-Alaska-Query-Count")
                     + "<BR>X-Alaska-Legislature-Basis-Query:" + http.getResponseHeader("X-Alaska-Legislature-Basis-Query") + "<BR><BR><B>Results:</B><BR><HR>";
-                resultsLocation = document.getElementById("results");
-
-                if (document.getElementById("JSON").checked) { resultsLocation = document.getElementById("json"); jsonObject = JSON.parse(http.responseText); }
-                resultsLocation.innerHTML = http.responseText.replace(/</gi, "&lt;").replace("\n", "\n<br>").replace(/\{/g, "<ul>{").replace(/(},?)/g, "$1</ul>").replace(/","/g, "\",<BR>\"");
+                        
+                if (document.getElementById("JSON").checked) {
+                    document.getElementById("json").data = JSON.parse(http.responseText);;
+                } else {
+                    resultsLocation = document.getElementById("results");
+                    resultsLocation.innerHTML = http.responseText.replace(/</gi, "&lt;").replace("\n", "\n<br>").replace(/\{/g, "<ul>{").replace(/(},?)/g, "$1</ul>").replace(/","/g, "\",<BR>\"");
+                }
 
             }
         }
