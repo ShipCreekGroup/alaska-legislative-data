@@ -2,7 +2,7 @@ import asyncio
 import logging
 from typing import TypedDict
 
-from alaska_legislative_data import _low, _util
+from alaska_legislative_data import _bill_version_text, _low, _util
 
 logger = logging.getLogger(__name__)
 
@@ -136,6 +136,18 @@ async def scrape_bill_details(
         return None
 
 
+async def scrape_bill_versions(leg_num: int, bill_number: str) -> list[dict]:
+    """Scrape the versions of a bill."""
+    raw_bill = await scrape_bill_details(
+        legislature_number=leg_num, bill_number=bill_number
+    )
+    if raw_bill is None:
+        logger.warning(f"Failed to scrape bill {leg_num}:{bill_number}")
+        return []
+    versions = await _prep_bill_versions(leg_num, raw_bill)
+    return versions
+
+
 def scrape_votes(*, leg_num_and_member_codes: list[tuple[int, str]]) -> list[dict]:
     async def main():
         tasks = [_scrape_votes_of(*t) for t in leg_num_and_member_codes]
@@ -175,6 +187,39 @@ async def _scrape_votes_of(
         votes.extend(m["Votes"])
     votes = [{**v, "LegislatureNumber": leg_num} for v in votes]
     return votes
+
+
+async def _prep_bill_versions(leg_num: int, bill: _low.Bill) -> list[dict]:
+    bill_id = f"""{leg_num}:{bill["BillNumber"]}"""
+
+    async def _version(raw_version: _low.BillVersion):
+        bill_version_id = f"""{bill_id}:{raw_version["VersionLetter"]}"""
+        full_text = await _bill_version_text.get_bill_version_text(
+            legislature_number=leg_num,
+            bill_number=bill["BillNumber"],
+            version_letter=raw_version["VersionLetter"],
+        )
+        return {
+            "BillVersionId": bill_version_id,
+            "BillId": bill_id,
+            "BillVersionLetter": raw_version["VersionLetter"],
+            "BillVersionTitle": raw_version["Title"],
+            "BillVersionName": raw_version["Name"],
+            "BillVersionIntroDate": raw_version["IntroDate"],
+            "BillVersionPassedHouse": raw_version["PassedHouse"],
+            "BillVersionPassedSenate": raw_version["PassedSenate"],
+            "BillVersionWorkOrder": raw_version["WorkOrder"],
+            "BillVersionPdfUrl": raw_version["Url"],
+            "BillVersionFullText": full_text,
+        }
+
+    tasks = [_version(raw_version) for raw_version in bill["Versions"]]
+    logger.debug(f"Scraping {len(tasks)} versions for {bill_id} in leg {leg_num}")
+    result = await asyncio.gather(*tasks)
+    logger.debug(
+        f"Scraping {len(tasks)} versions for {bill_id} in leg {leg_num}...Done"
+    )
+    return result
 
 
 KNOWN_FAILING_MEMBERS = [

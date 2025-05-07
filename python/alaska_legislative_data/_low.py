@@ -292,7 +292,7 @@ async def _make_request(
         headers["X-Alaska-Legislature-Basis-Query"] = ",".join(queries)
     if range:
         headers["X-Alaska-Query-ResultRange"] = _range_str(range)
-    logger.info(f"Requesting {url} with headers {headers}")
+    logger.debug(f"Requesting {url} with headers {headers}")
 
     async with client:
 
