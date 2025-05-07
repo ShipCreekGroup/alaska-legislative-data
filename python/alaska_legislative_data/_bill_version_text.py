@@ -54,13 +54,13 @@ async def get_bill_version_text(
 ) -> str:
     formatted_bill_number = format_bill_number(bill_number)
     url = f"https://www.akleg.gov/basis/Bill/Plaintext/{legislature_number}?Hsid={formatted_bill_number}{version_letter}"
-    logger.info(
+    logger.debug(
         "fetching text for %s %s %s", legislature_number, bill_number, version_letter
     )
 
     raw_text = await _fetch_safe(url)
     parsed = _parse_raw_text(raw_text)
-    logger.info(
+    logger.debug(
         "fetching text for %s %s %s...Done",
         legislature_number,
         bill_number,
@@ -71,10 +71,11 @@ async def get_bill_version_text(
 
 def format_bill_number(bill_number_raw: str) -> str:
     # incoming looks like
-    # HB 169 or HB3169 or HJR 42 or SJR2345
+    # HB 169 or HB3169 or HJR 42 or SJR2345 or HSCR 1
     # We need it to look like "HB0169"
-    bill_type = re.search(r"[A-Z]{2,3}", bill_number_raw).group(0)
-    bill_number = re.search(r"\d+", bill_number_raw).group(0)
+    prepped = bill_number_raw.strip()
+    bill_type = re.search(r"[A-Z]{2,4}", prepped).group(0)
+    bill_number = re.search(r"\d+", prepped).group(0)
     return f"{bill_type}{int(bill_number):04d}"
 
 
