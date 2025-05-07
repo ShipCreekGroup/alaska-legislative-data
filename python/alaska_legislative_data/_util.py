@@ -20,3 +20,9 @@ assert current_leg_num_approx(2023) == 33, current_leg_num_approx(2023)
 assert current_leg_num_approx(2024) == 33, current_leg_num_approx(2024)
 assert current_leg_num_approx(2025) == 34, current_leg_num_approx(2025)
 assert current_leg_num_approx(2026) == 34, current_leg_num_approx(2026)
+
+
+def chunks(items, n: int):
+    items = list(items)
+    for i in range(0, len(items), n):
+        yield items[i : i + n]

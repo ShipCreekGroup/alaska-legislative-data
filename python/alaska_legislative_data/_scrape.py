@@ -1,9 +1,15 @@
 import asyncio
 import logging
+from typing import TypedDict
 
 from alaska_legislative_data import _low, _util
 
 logger = logging.getLogger(__name__)
+
+
+class BillSpec(TypedDict):
+    LegislatureNumber: int
+    BillNumber: str
 
 
 def scrape_legislatures_and_sessions(
@@ -108,11 +114,33 @@ async def scrape_bills_of_legislature(legislature_number: int) -> list[dict] | N
     return bills
 
 
+async def scrape_bill_details(
+    legislature_number: int, bill_number: str
+) -> _low.Bill | None:
+    try:
+        bills = await _low.bills(
+            queries=[
+                f"bills;bill={bill_number}",
+                "versions;fulltext=urlonly",
+                "sponsors",
+            ],
+            session=legislature_number,
+        )
+        logger.debug(f"Scraped bill {bill_number} from {legislature_number}")
+        return {
+            **bills[0],
+            "LegislatureNumber": legislature_number,
+        }
+    except _low.DataUnimplementedError:
+        # TODO: do something so we don't continually try re-scraping
+        return None
+
+
 def scrape_votes(*, leg_num_and_member_codes: list[tuple[int, str]]) -> list[dict]:
     async def main():
         tasks = [_scrape_votes_of(*t) for t in leg_num_and_member_codes]
         results = []
-        for chunk in _chunks(tasks, 20):
+        for chunk in _util.chunks(tasks, 20):
             chunk_votes = await asyncio.gather(*chunk)
             for v in chunk_votes:
                 if v is None:
@@ -147,11 +175,6 @@ async def _scrape_votes_of(
         votes.extend(m["Votes"])
     votes = [{**v, "LegislatureNumber": leg_num} for v in votes]
     return votes
-
-
-def _chunks(list_, n: int):
-    for i in range(0, len(list_), n):
-        yield list_[i : i + n]
 
 
 KNOWN_FAILING_MEMBERS = [

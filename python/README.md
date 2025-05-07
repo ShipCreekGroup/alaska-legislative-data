@@ -11,4 +11,4 @@ python notebooks should pick this up automatically,
 but python scripts probably will need to load this using the `dotenv` package.
 See `__main__.py` for an example.
 
-From inside this dir: `uv sync` to install all the deps.
+From inside this dir: `uv sync --all-extras` to install all the deps.

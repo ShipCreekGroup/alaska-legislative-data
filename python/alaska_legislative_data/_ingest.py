@@ -1,11 +1,15 @@
+import asyncio
 import logging
 
 import ibis
+import psycopg
 from ibis import _
 
 from alaska_legislative_data import (
+    _bill_version_text,
     _curated,
     _db,
+    _low,
     _parse,
     _scrape,
     _split_choices,
@@ -208,6 +212,151 @@ def ingest_votes_and_choices(
     if n_new_choices > 0:
         logger.info(f"Adding {n_new_choices} new choices")
         db.insert("choices", new_choices)
+
+
+def bills_needing_version_updates(backend: _db.Backend) -> list[_scrape.BillSpec]:
+    latest_leg_num = backend.Bill.LegislatureNumber.max().execute()
+    t = backend.Bill.filter(
+        backend.Bill.LegislatureNumber > 25,
+        ibis.or_(
+            backend.Bill.LegislatureNumber >= latest_leg_num,
+            backend.Bill.BillId.notin(backend.BillVersion.BillId),
+        ),
+    )
+    return (
+        t.select(
+            backend.Bill.LegislatureNumber,
+            backend.Bill.BillNumber,
+        )
+        .order_by(
+            backend.Bill.LegislatureNumber.asc(),
+        )
+        .to_pandas()
+        .to_dict(orient="records")
+    )
+
+
+async def _prep_bill_versions(leg_num: int, bill: _low.Bill) -> list[dict]:
+    bill_id = f"""{leg_num}:{bill["BillNumber"]}"""
+
+    async def _version(raw_version: _low.BillVersion):
+        bill_version_id = f"""{bill_id}:{raw_version["VersionLetter"]}"""
+        full_text = await _bill_version_text.get_bill_version_text(
+            legislature_number=leg_num,
+            bill_number=bill["BillNumber"],
+            version_letter=raw_version["VersionLetter"],
+        )
+        return {
+            "BillVersionId": bill_version_id,
+            "BillId": bill_id,
+            "BillVersionLetter": raw_version["VersionLetter"],
+            "BillVersionTitle": raw_version["Title"],
+            "BillVersionName": raw_version["Name"],
+            "BillVersionIntroDate": raw_version["IntroDate"],
+            "BillVersionPassedHouse": raw_version["PassedHouse"],
+            "BillVersionPassedSenate": raw_version["PassedSenate"],
+            "BillVersionWorkOrder": raw_version["WorkOrder"],
+            "BillVersionPdfUrl": raw_version["Url"],
+            "BillVersionFullText": full_text,
+        }
+
+    tasks = [_version(raw_version) for raw_version in bill["Versions"]]
+    logger.debug(f"Scraping {len(tasks)} versions for {bill_id} in leg {leg_num}")
+    result = await asyncio.gather(*tasks)
+    logger.debug(
+        f"Scraping {len(tasks)} versions for {bill_id} in leg {leg_num}...Done"
+    )
+    return result
+
+
+def _insert_bill_versions_sync(
+    con: psycopg.Connection, versions: list[dict]
+) -> list[dict]:
+    """Insert the bill versions into the database."""
+    versions = list(versions)
+    if not versions:
+        return []
+    with con.cursor() as cur, con.transaction():
+        logger.debug(f"Inserting {len(versions)} bill versions")
+        cur.executemany(
+            """
+            INSERT INTO "billVersions" (
+                "BillVersionId",
+                "BillId",
+                "BillVersionLetter",
+                "BillVersionTitle",
+                "BillVersionName",
+                "BillVersionIntroDate",
+                "BillVersionPassedHouse",
+                "BillVersionPassedSenate",
+                "BillVersionWorkOrder",
+                "BillVersionPdfUrl",
+                "BillVersionFullText"
+            ) VALUES (
+                %(BillVersionId)s,
+                %(BillId)s,
+                %(BillVersionLetter)s,
+                %(BillVersionTitle)s,
+                %(BillVersionName)s,
+                %(BillVersionIntroDate)s,
+                %(BillVersionPassedHouse)s,
+                %(BillVersionPassedSenate)s,
+                %(BillVersionWorkOrder)s,
+                %(BillVersionPdfUrl)s,
+                %(BillVersionFullText)s
+            )
+            ON CONFLICT ("BillVersionId") DO NOTHING
+            RETURNING "BillVersionId"
+        """,
+            versions,
+            returning=True,
+        )
+        inserted_ids = set(row[0] for row in cur.fetchall())
+    inserted = [v for v in versions if v["BillVersionId"] in inserted_ids]
+    logger.debug(f"Inserted {len(inserted)} new versions")
+    return inserted
+
+
+async def _scrape_bill_versions(leg_num: int, bill_number: str) -> list[dict]:
+    """Scrape the bill versions, insert them into the database, and return them."""
+    raw_bill = await _scrape.scrape_bill_details(
+        legislature_number=leg_num, bill_number=bill_number
+    )
+    if raw_bill is None:
+        logger.warning(f"Failed to scrape bill {leg_num}:{bill_number}")
+        return []
+    versions = await _prep_bill_versions(leg_num, raw_bill)
+    return versions
+
+
+def scrape_and_insert_bill_versions(db: _db.Backend, todos: list[_scrape.BillSpec]):
+    """Scrape the bill versions and insert them into the database."""
+
+    todos = list(todos)
+    # Do in chunks so that if we error, we still have made some progress
+    if len(todos) > 50:
+        results = []
+        for chunk in _util.chunks(todos, 50):
+            results.extend(scrape_and_insert_bill_versions(db, chunk))
+        return results
+
+    tasks = [
+        _scrape_bill_versions(
+            leg_num=spec["LegislatureNumber"], bill_number=spec["BillNumber"]
+        )
+        for spec in todos
+    ]
+
+    async def main():
+        return await asyncio.gather(*tasks)
+
+    task_results = asyncio.run(main())
+    bill_versions = []
+    for task_result in task_results:
+        bill_versions.extend(task_result)
+    inserted = _insert_bill_versions_sync(db.con, bill_versions)
+    logger.info(f"Inserted {len(inserted)} new bill versions into the database")
+    return inserted
 
 
 def _scrape_missing_legislatures_and_sessions(

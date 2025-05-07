@@ -2,18 +2,13 @@ import asyncio
 import json
 import logging
 from collections.abc import Iterable
-from typing import Literal
+from typing import Literal, TypedDict
 
 import httpx
 
 logger = logging.getLogger(__name__)
 
 BASE_URL = "https://www.akleg.gov/publicservice/basis"
-BASE_HEADERS = {
-    "user-agent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)",
-    "X-Alaska-Legislature-Basis-Version": "1.4",
-    "Accept-Encoding": "gzip;q=1.0",
-}
 
 
 class DataUnimplementedError(ValueError):
@@ -32,12 +27,142 @@ class ServerError(RuntimeError):
         super().__init__(f"Server error for {url} with headers {headers}: {response}")
 
 
+class SponsoringMember(TypedDict):
+    # {"Code":"BUR",
+    # "UID":0,"LastName":"Burke",
+    # "MiddleName":"",
+    # "FirstName":"Robyn Niayuq",
+    # "FormalName":"Representative Robyn Niayuq Burke",
+    # "ShortName":"Burke ",
+    # "Chamber":"H",
+    # "District":"40",
+    # "Seat":" ",
+    # "Party":"D",
+    # "Phone":"4653473",
+    # "EMail":"Representative.Robyn.Burke@akleg.gov",
+    # "Building":"CAPITOL",
+    # "Room":"108",
+    # "Comment":"",
+    # "IsActive":true,"IsMajority":true}
+    Code: str
+    UID: int
+    LastName: str
+    MiddleName: str
+    FirstName: str
+    FormalName: str
+    ShortName: str
+    Chamber: Literal["H", "S"]
+    District: str
+    Seat: str
+    Party: str
+    Phone: str
+    EMail: str
+    Building: str
+    Room: str
+    Comment: str
+    IsActive: bool
+    IsMajority: bool
+
+
+class BillSponsor(TypedDict):
+    # {"BillRoot":"HB 16",
+    # "SponsoringMember":,
+    # "SponsoringCommittee":null,"Chamber":"H",
+    # "Requestor":"",
+    # "Name":"Burke ",
+    # "SponsorSeq":"07",
+    # "isPrime":false},
+    BillRoot: str
+    SponsoringMember: SponsoringMember
+    SponsoringCommittee: str | None
+    Chamber: Literal["H", "S"]
+    Requestor: str
+    Name: str
+    SponsorSeq: str
+    isPrime: bool
+
+
+class Enacted(TypedDict):
+    # {"Url":null,"Mime":null,"Encoding":null,"Data":null}
+    Url: str | None
+    Mime: str | None
+    Encoding: str | None
+    Data: str | None
+
+
+class BillVersion(TypedDict):
+    # {"VersionLetter":"A",
+    # "Title":"\"An Act amending campaign contribution limits for state and local office; directing the Alaska Public Offices Commission to adjust campaign contribution limits for state and local office once each decade beginning in 2031; and relating to campaign contribution reporting requirements.\" ",
+    # "Name":"HB 16",
+    # "IntroDate":"2025-01-22",
+    # "PassedHouse":null,"PassedSenate":null,"WorkOrder":"34-LS0217",
+    # "Url":"https://www.akleg.gov/PDF/34/Bills/HB0016A.PDF",
+    # "Mime":null,"Encoding":null,"Data":null}
+    VersionLetter: str
+    Title: str
+    Name: str
+    IntroDate: str
+    PassedHouse: str | None
+    PassedSenate: str | None
+    WorkOrder: str
+    Url: str
+    Mime: str | None
+    Encoding: str | None
+    Data: str | None
+
+
+class Bill(TypedDict):
+    # PartialVeto":false,"Vetoed":false
+    # "BillNumber":"HB 16",
+    # "BillName":"CSHB 16(STA)",
+    # "ShortTitle":"CAMPAIGN FINANCE, CONTRIBUTION LIMITS",
+    # "FullTitle":" \"An Act requiring a group supporting or opposing a candidate or ballot proposition in a state or local election to maintain an address in the state; amending campaign contribution limits for state and local office; directing the Alaska Public Offices Commission to adjust campaign contribution limits for state and local office once each decade beginning in 2031; relating to campaign contribution reporting requirements; relating to administrative complaints filed with the Alaska Public Offices Commission; relating to state election expenditures and contributions made by a foreign-influenced corporation or foreign national; and providing for an effective date.\"",
+    # "StatusCode":"002",
+    # "StatusText":"(S) FIN",
+    # "Flag1":"S",
+    # "Flag2":" ",
+    # "StatusDate":"2025-04-30",
+    # "StatusAndThen":[],"StatusSummaryCode":" ",
+    # "OnFloor":" ",
+    # "NotKnown":" ",
+    # "Filler":" ",
+    # "Lock":" ",
+    PartialVeto: bool
+    Vetoed: bool
+    BillNumber: str
+    BillName: str
+    ShortTitle: str
+    FullTitle: str
+    StatusCode: str
+    StatusText: str
+    Flag1: str
+    Flag2: str
+    StatusDate: str
+    StatusAndThen: list[str]
+    StatusSummaryCode: str
+    OnFloor: str
+    NotKnown: str
+    Filler: str
+    Lock: str
+    Sponsors: list[BillSponsor]
+    Versions: list[BillVersion]
+    SponsorUrl: str
+    """eg "SponsorUrl":"http://www.akleg.gov/basis/get_documents.asp?session=34\u0026docid=6837"
+
+    This goes to a PDF statement of Schrage, the bill's prime sponsor,
+    explaining the reasoning behind the bill.
+
+    The `\u0026` is a unicode escape for `&`
+    """
+    Enacted: Enacted
+
+
 async def bills(
     queries: Iterable[str] | str | None = None,
     session: int | None = None,
     chamber: Literal["H", "S"] | None = None,
     range: slice | None = None,
-) -> dict:
+) -> list[Bill]:
     return (
         await _make_request(
             "bills",
@@ -120,10 +245,25 @@ async def session(
     return result["Session"]  # It is NOT "Sessions"
 
 
-def make_client() -> httpx.AsyncClient:
+rate_semaphore = asyncio.Semaphore(5)
+
+
+def get_client() -> httpx.AsyncClient:
+    """Get a system-wide client for the Alaska Legislature API.
+
+    By being system-wide, we can impose limits on the number of concurrent connections"""
     timeout = httpx.Timeout(30.0, pool=30.0)
-    limits = httpx.Limits(max_keepalive_connections=None, max_connections=1000)
-    return httpx.AsyncClient(timeout=timeout, limits=limits, follow_redirects=True)
+    limits = httpx.Limits(max_keepalive_connections=None, max_connections=5)
+    return httpx.AsyncClient(
+        headers={
+            "user-agent": "Mozilla/5.0",
+            "X-Alaska-Legislature-Basis-Version": "1.4",
+            "Accept-Encoding": "gzip;q=1.0",
+        },
+        timeout=timeout,
+        limits=limits,
+        follow_redirects=True,
+    )
 
 
 async def _make_request(
@@ -136,7 +276,7 @@ async def _make_request(
     client: httpx.AsyncClient | None = None,
 ) -> dict:
     if client is None:
-        client = make_client()
+        client = get_client()
     url = f"https://www.akleg.gov/publicservice/basis/{endpoint}?minifyresult=false&json=true"
     if session is not None:
         url += f"&session={session}"
@@ -147,7 +287,7 @@ async def _make_request(
         queries = ()
     if isinstance(queries, str):
         queries = (queries,)
-    headers = {**BASE_HEADERS}
+    headers = {}
     if queries:
         headers["X-Alaska-Legislature-Basis-Query"] = ",".join(queries)
     if range:
@@ -157,9 +297,10 @@ async def _make_request(
     async with client:
 
         async def f():
-            response = await client.get(url, headers=headers)
-            response.raise_for_status()
-            return _parse(url, headers, response.text)
+            async with rate_semaphore:
+                response = await client.get(url, headers=headers)
+                response.raise_for_status()
+                return _parse(url, headers, response.text)
 
         try:
             return await _with_retries(
@@ -198,6 +339,8 @@ def _parse(url: str, headers: dict, raw: str) -> dict:
         if "Invalid Session Number" in raw:
             raise DataUnimplementedError(str(e)) from e
         if "<Code>FaultException</Code>" in raw:
+            raise ServerError(raw, url, headers) from e
+        if "<Code>XmlSchemaValidationException</Code>" in raw:
             raise ServerError(raw, url, headers) from e
         raise ValueError(f"Invalid JSON: {raw}") from e
     return d["Basis"]

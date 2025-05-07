@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 from pathlib import Path
 from typing import Annotated, get_type_hints
 
@@ -7,6 +8,8 @@ import duckdb
 import ibis
 from ibis import ir
 from ibis.backends.duckdb import Backend as DuckdbBackend
+from ibis.backends.postgres import Backend as PostgresBackend
+from ibis.backends.sql import BaseBackend as SQLBackend
 
 LEGISLATURE_NUMBER_TYPE = "!int16"
 
@@ -176,6 +179,32 @@ class BillTable(ibis.Table, BillSchema):
     pass
 
 
+class BillVersionSchema(TableSchema):
+    """A version of a bill in the Alaska legislature."""
+
+    BillVersionId: Annotated[ir.StringColumn, "!string"]
+    """Of the form '{LegislatureNumber}:{BillNumber}:{BillVersionLetter}'."""
+    BillId: Annotated[ir.StringColumn, "!string"]
+    """Reference to the Bill table."""
+    BillVersionLetter: Annotated[ir.StringColumn, "!string"]
+    """eg 'A' or 'B'"""
+    BillVersionTitle: Annotated[ir.StringColumn, "!string"]
+    """eg 'An Act relating to the Alaska Pioneers' Home and the Alaska Veterans' Home.'"""
+    BillVersionName: Annotated[ir.StringColumn, "!string"]
+    """eg 'HB 1 A'"""
+    BillVersionIntroDate: Annotated[ir.DateColumn, "date"]
+    """eg '2021-01-19'"""
+    BillVersionPassedHouse: Annotated[ir.DateColumn, "date"]
+    BillVersionPassedSenate: Annotated[ir.DateColumn, "date"]
+    BillVersionWorkOrder: Annotated[ir.StringColumn, "!string"]
+    BillVersionPdfUrl: Annotated[ir.StringColumn, "!string"]
+    BillVersionFullText: Annotated[ir.StringColumn, "string"]
+
+
+class BillVersionTable(ibis.Table, BillVersionSchema):
+    pass
+
+
 class VoteSchema(TableSchema):
     VoteId: Annotated[ir.StringColumn, "!string"]
     LegislatureNumber: Annotated[ir.IntegerColumn, LEGISLATURE_NUMBER_TYPE]
@@ -221,52 +250,57 @@ class ChoiceTable(ibis.Table, ChoiceSchema):
     pass
 
 
-class Backend(DuckdbBackend):
-    def __init__(self, db: DuckdbBackend | str | Path):
-        if isinstance(db, Backend):
+class BackendMixin:
+    def __init__(
+        self, db: SQLBackend | str | Path, *, check_structure: bool = True, **kwargs
+    ):
+        if isinstance(db, BackendMixin):
             db = db._db
-        if not isinstance(db, DuckdbBackend):
-            db = ibis.duckdb.connect(db)
-        if not isinstance(db, DuckdbBackend):
-            raise TypeError(f"Expected DuckdbBackend, got {type(db)}")
-        if isinstance(db, Backend):
-            raise TypeError("Backend should not be nested")
+        if not isinstance(db, SQLBackend):
+            db = ibis.connect(db, **kwargs)
         self._db = db
+        if check_structure:
+            _assert_structure_matches(self._db, DDL)
 
     def __getattr__(self, name):
         return getattr(self._db, name)
 
-    @property
+    @functools.cached_property
     def Legislature(self) -> LegislatureTable:
         """Table of legislatures. Each person may have multiple `LegislatureSessions`"""
         return self.table("legislatures")
 
-    @property
+    @functools.cached_property
     def LegislatureSession(self) -> LegislatureSessionTable:
         """Table of `LegislativeSession`s."""
         return self.table("legislature_sessions")
 
-    @property
+    @functools.cached_property
     def Person(self) -> PersonTable:
         """Table of people. Each person may have multiple `Member`s."""
         return self.table("people")
 
-    @property
+    @functools.cached_property
     def Member(self) -> MemberTable:
         """Table of memberships (combo of `Person` and legislature)."""
         return self.table("members")
 
-    @property
+    @functools.cached_property
     def Bill(self) -> BillTable:
         """Table of bills."""
         return self.table("bills")
 
-    @property
+    @functools.cached_property
+    def BillVersion(self) -> BillVersionTable:
+        """Table of bills versions."""
+        return self.table("billVersions")
+
+    @functools.cached_property
     def Vote(self) -> VoteTable:
         """Table of roll call votes (where each member's choice is recorded)."""
         return self.table("votes")
 
-    @property
+    @functools.cached_property
     def Choice(self) -> ChoiceTable:
         """Table of choices on `Vote`s by `Member`s."""
         return self.table("choices")
@@ -283,6 +317,18 @@ class Backend(DuckdbBackend):
         else:
             conn = db
         conn.sql(DDL)
+
+
+class Backend(BackendMixin, SQLBackend):
+    pass
+
+
+class DuckdbBackend(BackendMixin, DuckdbBackend):
+    pass
+
+
+class PostgresBackend(BackendMixin, PostgresBackend):
+    pass
 
 
 SCHEMAS = {
@@ -376,6 +422,20 @@ CREATE TABLE bills(
     )
 );
 
+CREATE TABLE bill_versions(
+    BillVersionId VARCHAR PRIMARY KEY,
+    BillId VARCHAR NOT NULL REFERENCES bills(BillId),
+    BillVersionLetter VARCHAR NOT NULL CHECK (BillVersionLetter IN ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z')),
+    BillVersionTitle VARCHAR NOT NULL,
+    BillVersionName VARCHAR NOT NULL,
+    BillVersionIntroDate DATE NOT NULL,
+    BillVersionPassedHouse DATE,
+    BillVersionPassedSenate DATE,
+    BillVersionWorkOrder VARCHAR NOT NULL,
+    BillVersionPdfUrl VARCHAR NOT NULL,
+    BillVersionFullText VARCHAR,
+);
+
 CREATE TABLE votes(
     VoteId VARCHAR PRIMARY KEY,
     LegislatureNumber SMALLINT NOT NULL REFERENCES legislatures(LegislatureNumber),
@@ -397,16 +457,30 @@ COMMIT;
 """
 
 
-def _test_ddl():
-    tmp_db = ibis.duckdb.connect(":memory:")
-    tmp_db.con.execute(DDL)
-    for table_name, expected_schema in SCHEMAS.items():
-        created_schema = tmp_db.table(table_name).schema()
-        assert created_schema == expected_schema, (
-            table_name,
-            expected_schema,
-            created_schema,
+def get_db_structure(backend: SQLBackend) -> dict[str, ibis.Schema]:
+    """Get the structure of the database from the SQL DDL."""
+    return {
+        table_name: backend.table(table_name).schema()
+        for table_name in backend.list_tables()
+    }
+
+
+def _assert_structure_matches(backend: SQLBackend, sql: str = DDL):
+    tmp = ibis.duckdb.connect(":memory:")
+    tmp.con.execute(sql)
+    expected_structure = get_db_structure(tmp)
+    actual_structure = get_db_structure(backend)
+    missing_tables = set(expected_structure) - set(actual_structure)
+    extra_tables = set(actual_structure) - set(expected_structure)
+    mismatches = {
+        table_name: (expected_structure[table_name], actual_structure[table_name])
+        for table_name in expected_structure
+        if table_name in actual_structure
+        and expected_structure[table_name] != actual_structure[table_name]
+    }
+    if missing_tables or extra_tables or mismatches:
+        raise AssertionError(
+            f"Missing tables: {missing_tables}\n"
+            f"Extra tables: {extra_tables}\n"
+            f"Mismatches: {mismatches}"
         )
-
-
-_test_ddl()
