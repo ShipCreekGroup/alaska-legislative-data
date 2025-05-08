@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import logging
 from typing import TypedDict
 
@@ -205,9 +206,21 @@ async def _prep_bill_versions(leg_num: int, bill: _low.Bill) -> list[dict]:
             "BillVersionLetter": raw_version["VersionLetter"],
             "BillVersionTitle": raw_version["Title"],
             "BillVersionName": raw_version["Name"],
-            "BillVersionIntroDate": raw_version["IntroDate"],
-            "BillVersionPassedHouse": raw_version["PassedHouse"],
-            "BillVersionPassedSenate": raw_version["PassedSenate"],
+            "BillVersionIntroDate": datetime.date.fromisoformat(
+                raw_version["IntroDate"]
+            )
+            if raw_version["IntroDate"]
+            else None,
+            "BillVersionPassedHouse": datetime.date.fromisoformat(
+                raw_version["PassedHouse"]
+            )
+            if raw_version["PassedHouse"]
+            else None,
+            "BillVersionPassedSenate": datetime.date.fromisoformat(
+                raw_version["PassedSenate"]
+            )
+            if raw_version["PassedSenate"]
+            else None,
             "BillVersionWorkOrder": raw_version["WorkOrder"],
             "BillVersionPdfUrl": raw_version["Url"],
             "BillVersionFullText": full_text,

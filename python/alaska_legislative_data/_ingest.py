@@ -3,7 +3,6 @@ import logging
 import os
 
 import ibis
-import psycopg
 from ibis import _
 
 from alaska_legislative_data import (
@@ -235,58 +234,6 @@ def bills_needing_version_updates(backend: _db.Backend) -> list[_scrape.BillSpec
     )
 
 
-def _insert_bill_versions_sync(
-    con: psycopg.Connection, versions: list[dict]
-) -> list[dict]:
-    """Insert the bill versions into the database."""
-    versions = list(versions)
-    if not versions:
-        return []
-    with con.cursor() as cur, con.transaction():
-        logger.info(f"Inserting {len(versions)} bill versions")
-        cur.executemany(
-            """
-            INSERT INTO "billVersions" (
-                "BillVersionId",
-                "BillId",
-                "BillVersionLetter",
-                "BillVersionTitle",
-                "BillVersionName",
-                "BillVersionIntroDate",
-                "BillVersionPassedHouse",
-                "BillVersionPassedSenate",
-                "BillVersionWorkOrder",
-                "BillVersionPdfUrl",
-                "BillVersionFullText"
-            ) VALUES (
-                %(BillVersionId)s,
-                %(BillId)s,
-                %(BillVersionLetter)s,
-                %(BillVersionTitle)s,
-                %(BillVersionName)s,
-                %(BillVersionIntroDate)s,
-                %(BillVersionPassedHouse)s,
-                %(BillVersionPassedSenate)s,
-                %(BillVersionWorkOrder)s,
-                %(BillVersionPdfUrl)s,
-                %(BillVersionFullText)s
-            )
-            ON CONFLICT ("BillVersionId") DO NOTHING
-            RETURNING "BillVersionId"
-        """,
-            versions,
-            returning=True,
-        )
-        inserted_ids = []
-        while True:
-            inserted_ids.append(cur.fetchone()[0])
-            if not cur.nextset():
-                break
-    inserted = [v for v in versions if v["BillVersionId"] in inserted_ids]
-    logger.info(f"Inserted {len(inserted)} new bill versions")
-    return inserted
-
-
 def scrape_and_insert_bill_versions(
     *,
     db: _db.Backend | str | None = None,
@@ -299,7 +246,7 @@ def scrape_and_insert_bill_versions(
     logger.info(f"Scraping bill versions for {len(bills)} bills")
     bills = list(bills)
     # Do in chunks so that if we error, we still have made some progress
-    MAX_BILLS = 100
+    MAX_BILLS = 50
     if len(bills) > MAX_BILLS:
         results = []
         for chunk in _util.chunks(bills, MAX_BILLS):
@@ -320,8 +267,27 @@ def scrape_and_insert_bill_versions(
     bill_versions = []
     for task_result in task_results:
         bill_versions.extend(task_result)
-    inserted = _insert_bill_versions_sync(db.con, bill_versions)
+    inserted = _insert_bill_versions(db, bill_versions)
     return inserted
+
+
+def _insert_bill_versions(
+    db: _db.Backend,
+    versions: list[dict],
+) -> list[dict]:
+    """Insert the bill versions into the database."""
+    new = ibis.memtable(versions, schema=db.BillVersion.schema())
+    logger.info(f"Ingesting {new.count().execute()} bill versions")
+
+    new = new.anti_join(db.BillVersion, "BillVersionId")
+    new = new.cache()
+    n_new = new.count().execute()
+    # logger.info(f"Found {n_existing} existing bill versions")
+    logger.info(f"Found {n_new} new bill versions")
+    if n_new > 0:
+        logger.info(f"Adding {n_new} new bill versions")
+        db.insert("billVersions", new)
+    return new.execute().to_dict(orient="records")
 
 
 def _scrape_missing_legislatures_and_sessions(
