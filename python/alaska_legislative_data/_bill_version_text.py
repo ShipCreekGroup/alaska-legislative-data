@@ -101,8 +101,8 @@ async def _fetch(url: str) -> str:
     headers = {
         "accept": "text/html,application/xhtml+xml,application/xml,*/*",
         "accept-language": "en-US,en;q=0.9",
-        "sec-ch-ua": '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
         "upgrade-insecure-requests": "1",
+        "X-Alaska-Legislature-Basis-Version": "1.4",
         "user-agent": "Mozilla/5.0",
     }
     async with httpx.AsyncClient(headers=headers) as client:

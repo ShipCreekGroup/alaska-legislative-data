@@ -255,11 +255,6 @@ def get_client() -> httpx.AsyncClient:
     timeout = httpx.Timeout(30.0, pool=30.0)
     limits = httpx.Limits(max_keepalive_connections=None, max_connections=5)
     return httpx.AsyncClient(
-        headers={
-            "user-agent": "Mozilla/5.0",
-            "X-Alaska-Legislature-Basis-Version": "1.4",
-            "Accept-Encoding": "gzip;q=1.0",
-        },
         timeout=timeout,
         limits=limits,
         follow_redirects=True,
@@ -287,7 +282,11 @@ async def _make_request(
         queries = ()
     if isinstance(queries, str):
         queries = (queries,)
-    headers = {}
+    headers = {
+        "user-agent": "Mozilla/5.0",
+        "X-Alaska-Legislature-Basis-Version": "1.4",
+        "Accept-Encoding": "gzip;q=1.0",
+    }
     if queries:
         headers["X-Alaska-Legislature-Basis-Query"] = ",".join(queries)
     if range:
