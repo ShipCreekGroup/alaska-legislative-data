@@ -356,16 +356,11 @@ def _scrape_missing_votes_and_choices(
         votes_to_scrape = _votes_to_scrape(db)
     logger.info(f"Scraping missing votes for {votes_to_scrape}")
     dicts = _scrape.scrape_votes(leg_num_and_member_codes=votes_to_scrape)
-    if not dicts:
-        # workaround for https://github.com/ibis-project/ibis/issues/10940
-        votes = db.Vote.limit(0)
-        choices = db.Choice.limit(0)
-    else:
-        choices = ibis.memtable(dicts)
-        choices = _parse.clean_choices(choices)
-        votes, choices = _split_choices.split_choices(
-            choices_raw=choices, bills=db.Bill, members=db.Member
-        )
+    choices = ibis.memtable(dicts)
+    choices = _parse.clean_choices(choices)
+    votes, choices = _split_choices.split_choices(
+        choices_raw=choices, bills=db.Bill, members=db.Member
+    )
     return votes, choices
 
 

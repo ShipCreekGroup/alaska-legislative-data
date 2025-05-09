@@ -32,7 +32,7 @@ postgres = [
 requires-dist = [
     { name = "fire", specifier = ">=0.7.0" },
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "ibis-framework", specifier = ">=10.0.0" },
+    { name = "ibis-framework", specifier = ">=10.3.0" },
     { name = "ibis-framework", extras = ["duckdb"], marker = "extra == 'duckdb'" },
     { name = "ibis-framework", extras = ["postgres"], marker = "extra == 'postgres'" },
     { name = "ipykernel", specifier = ">=6.29.5" },
