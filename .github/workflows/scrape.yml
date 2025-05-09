@@ -27,7 +27,7 @@ jobs:
       - name: Install project
         run: uv sync
 
-      - name: Ingest new data into motherduck
+      - name: Ingest new data into SCG database
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: uv run python -m alaska_legislative_data ingest
