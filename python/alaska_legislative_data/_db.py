@@ -8,7 +8,6 @@ import duckdb
 import ibis
 from ibis import ir
 from ibis.backends.duckdb import Backend as DuckdbBackend
-from ibis.backends.postgres import Backend as PostgresBackend
 from ibis.backends.sql import BaseBackend as SQLBackend
 
 LEGISLATURE_NUMBER_TYPE = "!int16"
@@ -319,15 +318,7 @@ class BackendMixin:
         conn.sql(DDL)
 
 
-class Backend(BackendMixin, SQLBackend):
-    pass
-
-
-class DuckdbBackend(BackendMixin, DuckdbBackend):
-    pass
-
-
-class PostgresBackend(BackendMixin, PostgresBackend):
+class Backend(BackendMixin, DuckdbBackend):
     pass
 
 

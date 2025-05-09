@@ -1,9 +1,11 @@
 import asyncio
 import logging
 import os
+from urllib.parse import urlparse
 
 import ibis
 from ibis import _
+from ibis.backends.duckdb import Backend as DuckDBBackend
 
 from alaska_legislative_data import (
     _curated,
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 def ingest_all(
-    db: str | _db.Backend,
+    db: str | _db.Backend | None = None,
     *,
     legislatures: ibis.Table | None = None,
     sessions: ibis.Table | None = None,
@@ -28,7 +30,8 @@ def ingest_all(
     votes: ibis.Table | None = None,
     choices: ibis.Table | None = None,
 ):
-    ingest_legislatures_and_sessions(db, legislatures=legislatures, sessions=sessions)
+    db = get_db(db)
+    # ingest_legislatures_and_sessions(db, legislatures=legislatures, sessions=sessions)
     ingest_people(db, people=people)
     ingest_members(db, members=members)
     ingest_bills(db, new_bills=bills)
@@ -40,7 +43,7 @@ def ingest_legislatures_and_sessions(
     legislatures: ibis.Table | None = None,
     sessions: ibis.Table | None = None,
 ):
-    db = _db.Backend(db)
+    db = get_db(db)
     if legislatures is None or sessions is None:
         leg, sess = _scrape_missing_legislatures_and_sessions(db)
         if legislatures is None:
@@ -87,7 +90,7 @@ def ingest_people(
     people: ibis.Table | None = None,
 ) -> None:
     """Ingest the curated people data."""
-    db = _db.Backend(db)
+    db = get_db(db)
     if people is None:
         people = _curated.read_people(backend=db)
 
@@ -116,7 +119,7 @@ def ingest_members(
     members: ibis.Table | None = None,
 ):
     """Ingest the curated members data."""
-    db = _db.Backend(db)
+    db = get_db(db)
     if members is None:
         members = _curated.read_members(backend=db)
 
@@ -154,7 +157,7 @@ def ingest_bills(
     db: str | _db.Backend,
     new_bills: ibis.Table | None = None,
 ):
-    db = _db.Backend(db)
+    db = get_db(db)
     if new_bills is None:
         new_bills = _scrape_missing_bills(existing_bills=db.Bill)
 
@@ -178,7 +181,7 @@ def ingest_votes_and_choices(
     votes: ibis.Table | None = None,
     choices: ibis.Table | None = None,
 ):
-    db = _db.Backend(db)
+    db = get_db(db)
     if votes is None or choices is None:
         v, c = _scrape_missing_votes_and_choices(db)
         if votes is None:
@@ -392,11 +395,51 @@ def get_db(
         return url
     if url is None:
         url = os.environ.get("DATABASE_URL")
-    keepalive_kwargs = dict(
-        # keepalives=1,
-        # keepalives_idle=60,
-        # keepalives_interval=10,
-        # keepalives_count=5,
-        tcp_user_timeout=120 * 1000,
-    )
-    return _db.PostgresBackend(url, check_structure=False, **keepalive_kwargs)
+    backend: DuckDBBackend = ibis.duckdb.connect()
+    attach_postgres(backend, url, name="postgres", schema="vote_tracker")
+    backend.raw_sql("USE postgres")
+    # backend.raw_sql("SET search_path TO vote_tracker;")
+    return _db.Backend(backend, check_structure=False)
+
+
+def attach_postgres(
+    ddb_backend: DuckDBBackend,
+    url: str,
+    *,
+    name: str | None = None,
+    skip_if_exists: bool = False,
+    schema: str | None = None,
+) -> str:
+    """Attach a PostgreSQL instance to a duckdb connection.
+
+    This is useful for importing tables from PostgreSQL into duckdb.
+
+    Parameters
+    ----------
+    ddb_backend:
+        The duckdb backend to attach to.
+    url:
+        The connection string to the PostgreSQL instance.
+    name:
+        The name to attach as (the catalog name).
+        If not provided, a unique one will be generated.
+    skip_if_exists:
+        Whether to skip the attachment if it already exists.
+    schema:
+        The schema to attach to in the PostgreSQL instance.
+
+    Returns
+    -------
+    str
+        The name of the attached catalog.
+    """
+    spec = urlparse(url)
+    if name is None:
+        name = ibis.util.gen_name(spec.hostname)
+    ine = "IF NOT EXISTS" if skip_if_exists else ""
+    options = ["TYPE postgres"]
+    if schema is not None:
+        options.append(f"SCHEMA '{schema}'")
+    options_str = ", ".join(options)
+    ddb_backend.raw_sql(f"""ATTACH {ine} '{url}' AS "{name}" ({options_str});""")
+    return name
