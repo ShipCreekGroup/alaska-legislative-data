@@ -8,19 +8,10 @@ dependencies = [
     "dotenv>=0.9.9",
     "fire>=0.7.0",
     "httpx>=0.28.1",
-    "ibis-framework>=10.3.0",
+    "ibis-framework[duckdb]>=10.3.0",
     "ipykernel>=6.29.5",
     "pytest>=8.3.4",
     "python-dotenv>=1.0.1",
-]
-
-[project.optional-dependencies]
-duckdb = [
-  "ibis-framework[duckdb]",
-]
-postgres = [
-  "ibis-framework[postgres]",
-  "psycopg[pool]",
 ]
 
 [build-system]
