@@ -29,13 +29,13 @@ jobs:
 
       - name: Ingest new data into motherduck
         env:
-          motherduck_token: ${{ secrets.MOTHERDUCK_TOKEN }}
-        run: uv run python -m alaska_legislative_data ingest --db="md:ak_leg"
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: uv run python -m alaska_legislative_data ingest
 
       - name: Export to the /export directory
         env:
-          motherduck_token: ${{ secrets.MOTHERDUCK_TOKEN }}
-        run: uv run python -m alaska_legislative_data export --db="md:ak_leg"
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: uv run python -m alaska_legislative_data export
 
       - name: Publish the /export directory to a GH release
         env:

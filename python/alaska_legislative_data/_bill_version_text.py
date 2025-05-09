@@ -98,7 +98,14 @@ async def _fetch_safe(url: str) -> str:
 
 
 async def _fetch(url: str) -> str:
-    async with httpx.AsyncClient(headers={"user-agent": "Mozilla/5.0"}) as client:
+    headers = {
+        "accept": "text/html,application/xhtml+xml,application/xml,*/*",
+        "accept-language": "en-US,en;q=0.9",
+        "sec-ch-ua": '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0",
+    }
+    async with httpx.AsyncClient(headers=headers) as client:
         async with _low.rate_semaphore:
             # some versions, like https://www.akleg.gov/basis/Bill/Plaintext/27?Hsid=SB0160C,
             # are huge and take a long time to download

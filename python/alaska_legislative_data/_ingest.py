@@ -1,11 +1,8 @@
 import asyncio
 import logging
-import os
-from urllib.parse import urlparse
 
 import ibis
 from ibis import _
-from ibis.backends.duckdb import Backend as DuckDBBackend
 
 from alaska_legislative_data import (
     _curated,
@@ -30,13 +27,13 @@ def ingest_all(
     votes: ibis.Table | None = None,
     choices: ibis.Table | None = None,
 ):
-    db = get_db(db)
+    db = _db.get_db(db)
     # ingest_legislatures_and_sessions(db, legislatures=legislatures, sessions=sessions)
     ingest_people(db, people=people)
     ingest_members(db, members=members)
     ingest_bills(db, new_bills=bills)
     ingest_votes_and_choices(db, votes=votes, choices=choices)
-    scrape_and_insert_bill_versions(db=db)
+    ingest_bill_versions(db=db)
 
 
 def ingest_legislatures_and_sessions(
@@ -44,7 +41,7 @@ def ingest_legislatures_and_sessions(
     legislatures: ibis.Table | None = None,
     sessions: ibis.Table | None = None,
 ):
-    db = get_db(db)
+    db = _db.get_db(db)
     if legislatures is None or sessions is None:
         leg, sess = _scrape_missing_legislatures_and_sessions(db)
         if legislatures is None:
@@ -91,7 +88,7 @@ def ingest_people(
     people: ibis.Table | None = None,
 ) -> None:
     """Ingest the curated people data."""
-    db = get_db(db)
+    db = _db.get_db(db)
     if people is None:
         people = _curated.read_people(backend=db)
 
@@ -120,7 +117,7 @@ def ingest_members(
     members: ibis.Table | None = None,
 ):
     """Ingest the curated members data."""
-    db = get_db(db)
+    db = _db.get_db(db)
     if members is None:
         members = _curated.read_members(backend=db)
 
@@ -160,7 +157,7 @@ def ingest_bills(
     db: str | _db.Backend,
     new_bills: ibis.Table | None = None,
 ):
-    db = get_db(db)
+    db = _db.get_db(db)
     if new_bills is None:
         new_bills = _scrape_missing_bills(existing_bills=db.Bill)
 
@@ -184,7 +181,7 @@ def ingest_votes_and_choices(
     votes: ibis.Table | None = None,
     choices: ibis.Table | None = None,
 ):
-    db = get_db(db)
+    db = _db.get_db(db)
     if votes is None or choices is None:
         v, c = _scrape_missing_votes_and_choices(db)
         if votes is None:
@@ -199,6 +196,7 @@ def ingest_votes_and_choices(
     logger.info(f"Ingesting {votes.count().execute()} votes")
     logger.info(f"Ingesting {choices.count().execute()} choices")
 
+    votes = votes.mutate(VoteDescription=ibis.literal(""))
     n_existing_votes = votes.semi_join(db.Vote, "VoteId").count().execute()
     new_votes = votes.anti_join(db.Vote, "VoteId")
     n_new_votes = new_votes.count().execute()
@@ -240,13 +238,13 @@ def bills_needing_version_updates(backend: _db.Backend) -> list[_scrape.BillSpec
     )
 
 
-def scrape_and_insert_bill_versions(
+def scrape_bill_versions(
     *,
     db: _db.Backend | str | None = None,
     bills: list[_scrape.BillSpec] | None = None,
 ):
     """Scrape the bill versions and insert them into the database."""
-    db = get_db(db)
+    db = _db.get_db(db)
     if bills is None:
         bills = bills_needing_version_updates(db)
     logger.info(f"Scraping bill versions for {len(bills)} bills")
@@ -256,7 +254,7 @@ def scrape_and_insert_bill_versions(
     if len(bills) > MAX_BILLS:
         results = []
         for chunk in _util.chunks(bills, MAX_BILLS):
-            results.extend(scrape_and_insert_bill_versions(db=db, bills=chunk))
+            results.extend(scrape_bill_versions(db=db, bills=chunk))
         return results
 
     tasks = [
@@ -273,6 +271,18 @@ def scrape_and_insert_bill_versions(
     bill_versions = []
     for task_result in task_results:
         bill_versions.extend(task_result)
+    return bill_versions
+
+
+def ingest_bill_versions(
+    *,
+    db: _db.Backend | str | None = None,
+    bill_versions=None,
+):
+    """Scrape the bill versions and insert them into the database."""
+    db = _db.get_db(db)
+    if bill_versions is None:
+        bill_versions = scrape_bill_versions(db=db)
     inserted = _insert_bill_versions(db, bill_versions)
     return inserted
 
@@ -388,61 +398,3 @@ def _missing_leg_nums(
     missing_nums_list = sorted(missing_nums)
     logger.info(f"Missing leg_nums: {missing_nums_list}")
     return missing_nums_list
-
-
-def get_db(
-    url: str | _db.Backend | None = None,
-) -> _db.Backend:
-    """Get a database connection."""
-    if isinstance(url, _db.Backend):
-        return url
-    if url is None:
-        url = os.environ.get("DATABASE_URL")
-    backend: DuckDBBackend = ibis.duckdb.connect()
-    attach_postgres(backend, url, name="postgres", schema="vote_tracker")
-    backend.raw_sql("USE postgres")
-    # backend.raw_sql("SET search_path TO vote_tracker;")
-    return _db.Backend(backend, check_structure=False)
-
-
-def attach_postgres(
-    ddb_backend: DuckDBBackend,
-    url: str,
-    *,
-    name: str | None = None,
-    skip_if_exists: bool = False,
-    schema: str | None = None,
-) -> str:
-    """Attach a PostgreSQL instance to a duckdb connection.
-
-    This is useful for importing tables from PostgreSQL into duckdb.
-
-    Parameters
-    ----------
-    ddb_backend:
-        The duckdb backend to attach to.
-    url:
-        The connection string to the PostgreSQL instance.
-    name:
-        The name to attach as (the catalog name).
-        If not provided, a unique one will be generated.
-    skip_if_exists:
-        Whether to skip the attachment if it already exists.
-    schema:
-        The schema to attach to in the PostgreSQL instance.
-
-    Returns
-    -------
-    str
-        The name of the attached catalog.
-    """
-    spec = urlparse(url)
-    if name is None:
-        name = ibis.util.gen_name(spec.hostname)
-    ine = "IF NOT EXISTS" if skip_if_exists else ""
-    options = ["TYPE postgres"]
-    if schema is not None:
-        options.append(f"SCHEMA '{schema}'")
-    options_str = ", ".join(options)
-    ddb_backend.raw_sql(f"""ATTACH {ine} '{url}' AS "{name}" ({options_str});""")
-    return name

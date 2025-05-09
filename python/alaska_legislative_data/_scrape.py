@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import logging
+import re
 from typing import TypedDict
 
 from alaska_legislative_data import _bill_version_text, _low, _util
@@ -191,13 +192,14 @@ async def _scrape_votes_of(
 
 
 async def _prep_bill_versions(leg_num: int, bill: _low.Bill) -> list[dict]:
-    bill_id = f"""{leg_num}:{bill["BillNumber"]}"""
+    BillNumber = re.sub(" +", " ", bill["BillNumber"].strip())
+    bill_id = f"{leg_num}:{BillNumber}"
 
     async def _version(raw_version: _low.BillVersion):
         bill_version_id = f"""{bill_id}:{raw_version["VersionLetter"]}"""
         full_text = await _bill_version_text.get_bill_version_text(
             legislature_number=leg_num,
-            bill_number=bill["BillNumber"],
+            bill_number=BillNumber,
             version_letter=raw_version["VersionLetter"],
         )
         return {

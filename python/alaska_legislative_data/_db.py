@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import functools
+import os
 from pathlib import Path
 from typing import Annotated, get_type_hints
+from urllib.parse import urlparse
 
+import dotenv
 import duckdb
 import ibis
 from ibis import ir
-from ibis.backends.duckdb import Backend as DuckdbBackend
+from ibis.backends.duckdb import Backend as DuckDBBackend
 from ibis.backends.sql import BaseBackend as SQLBackend
 
 LEGISLATURE_NUMBER_TYPE = "!int16"
@@ -310,15 +313,15 @@ class BackendMixin:
         return self._db.table(*args, **kwargs)
 
     @classmethod
-    def create_tables(cls, db: DuckdbBackend | duckdb.DuckDBPyConnection) -> None:
-        if isinstance(db, DuckdbBackend):
+    def create_tables(cls, db: DuckDBBackend | duckdb.DuckDBPyConnection) -> None:
+        if isinstance(db, DuckDBBackend):
             conn = db.con
         else:
             conn = db
         conn.sql(DDL)
 
 
-class Backend(BackendMixin, DuckdbBackend):
+class Backend(BackendMixin, DuckDBBackend):
     pass
 
 
@@ -475,3 +478,62 @@ def _assert_structure_matches(backend: SQLBackend, sql: str = DDL):
             f"Extra tables: {extra_tables}\n"
             f"Mismatches: {mismatches}"
         )
+
+
+def get_db(
+    url: str | Backend | None = None,
+) -> Backend:
+    """Get a database connection."""
+    if isinstance(url, Backend):
+        return url
+    if url is None:
+        dotenv.load_dotenv()
+        url = os.environ.get("DATABASE_URL")
+    backend: DuckDBBackend = ibis.duckdb.connect()
+    attach_postgres(backend, url, name="postgres", schema="vote_tracker")
+    backend.raw_sql("USE postgres")
+    # backend.raw_sql("SET search_path TO vote_tracker;")
+    return Backend(backend, check_structure=False)
+
+
+def attach_postgres(
+    ddb_backend: DuckDBBackend,
+    url: str,
+    *,
+    name: str | None = None,
+    skip_if_exists: bool = False,
+    schema: str | None = None,
+) -> str:
+    """Attach a PostgreSQL instance to a duckdb connection.
+
+    This is useful for importing tables from PostgreSQL into duckdb.
+
+    Parameters
+    ----------
+    ddb_backend:
+        The duckdb backend to attach to.
+    url:
+        The connection string to the PostgreSQL instance.
+    name:
+        The name to attach as (the catalog name).
+        If not provided, a unique one will be generated.
+    skip_if_exists:
+        Whether to skip the attachment if it already exists.
+    schema:
+        The schema to attach to in the PostgreSQL instance.
+
+    Returns
+    -------
+    str
+        The name of the attached catalog.
+    """
+    spec = urlparse(url)
+    if name is None:
+        name = ibis.util.gen_name(spec.hostname)
+    ine = "IF NOT EXISTS" if skip_if_exists else ""
+    options = ["TYPE postgres"]
+    if schema is not None:
+        options.append(f"SCHEMA '{schema}'")
+    options_str = ", ".join(options)
+    ddb_backend.raw_sql(f"""ATTACH {ine} '{url}' AS "{name}" ({options_str});""")
+    return name

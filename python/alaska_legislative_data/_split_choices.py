@@ -53,14 +53,14 @@ def split_choices(
 
 
 def _add_bill_id(choices: ibis.Table, bills: ibis.Table) -> ibis.Table:
-    bill_id_lookup = bills.select("LegislatureNumber", "BillNumber", "BillId")
     dupes = (
-        bill_id_lookup.group_by("LegislatureNumber", "BillNumber")
+        bills.group_by("LegislatureNumber", "BillNumber")
         .agg(n=_.count())
         .filter(_.n > 1)
         .execute()
     )
     assert len(dupes) == 0, dupes
+    bill_id_lookup = bills.select("LegislatureNumber", "BillNumber", "BillId")
     missing = choices.filter(
         _.LegislatureNumber.notnull(),
         _.BillNumber.notnull(),
