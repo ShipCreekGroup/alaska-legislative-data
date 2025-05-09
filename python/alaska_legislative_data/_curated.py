@@ -56,9 +56,9 @@ def read_members(
         # see _db.py for the methodology
         MemberId=members.LegislatureNumber.cast(str)
         + ":"
-        + members.Chamber
+        + members.MemberChamber
         + ":"
-        + members.District.fill_null("")
+        + members.MemberDistrict.fill_null("")
         + ":"
         + members.PersonId
     ).relocate("MemberId")

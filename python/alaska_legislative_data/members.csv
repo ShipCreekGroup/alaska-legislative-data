@@ -1,4 +1,4 @@
-LegislatureNumber,PersonId,MemberCode,Chamber,District,Party,IsMajority,IsActive,Comment,EMail,Phone,Building,Room
+LegislatureNumber,PersonId,MemberCode,MemberChamber,MemberDistrict,MemberParty,MemberIsMajority,MemberIsActive,MemberComment,MemberEMail,MemberPhone,MemberBuilding,MemberRoom
 1,John Rader:1,,H,,,,,,,,,
 1,Oral Freeman:1,,H,,,,,,,,,
 1,Russ Meekins:1,,H,,,,,,,,,

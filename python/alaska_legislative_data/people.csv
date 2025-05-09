@@ -1,4 +1,4 @@
-PersonId,FullName,FirstName,LastName,MiddleName,NickName,Suffix
+PersonId,PersonFullName,PersonFirstName,PersonLastName,PersonMiddleName,PersonNickName,PersonSuffix
 A Saylors:8,A Saylors,A,Saylors,,,
 Adam Wool:29,Adam Wool,Adam,Wool,,,
 Adelheid Herrmann:13,Adelheid Herrmann,Adelheid,Herrmann,,,

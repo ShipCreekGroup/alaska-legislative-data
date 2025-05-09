@@ -7,51 +7,16 @@ from ibis.expr import types as ir
 from alaska_legislative_data import _db
 
 
-def clean_members(t: ibis.Table) -> ibis.Table:
-    t = _fix_strings(t)
-    t = t.rename(
-        MemberCode="Code",
-    )
-    schema = {
-        "LegislatureNumber": "int16",
-        "MemberCode": "string",
-        # "UID": "int64",  # always 0
-        "LastName": "string",
-        "MiddleName": "string",
-        "FirstName": "string",
-        "FormalName": "string",
-        "ShortName": "string",
-        "SessionContact": "struct<tollFree: json, Street: json, Room: json, City: json, State: json, Zip: json, Phone: json, Fax: json, POBox: json>",
-        "InterimContact": "struct<tollFree: json, Street: json, Room: json, City: json, State: json, Zip: json, Phone: json, Fax: json, POBox: json>",
-        "Chamber": "string",
-        "District": "string",
-        "Seat": "string",
-        "Party": "string",
-        "Phone": "string",
-        "EMail": "string",
-        "Building": "string",
-        "Room": "string",
-        "Comment": "string",
-        "IsActive": "boolean",
-        "IsMajority": "boolean",
-    }
-    t = t.select(schema.keys())
-    t = t.cast(schema)
-    t = t.distinct()
-    return t
-
-
 def clean_choices(t: ibis.Table) -> ibis.Table:
-    t = _fix_strings(t)
-    t = t.mutate(
-        VoteDate=t.VoteDate.nullif("-199- 0--0"),
+    t = t.select(
+        LegislatureNumber=_.LegislatureNumber,
+        VoteNum=_fix_string(_.VoteNum),
+        VoteDate=_.VoteDate.nullif("-199- 0--0"),
+        VoteTitle=_fix_string(_.Title),
+        BillNumber=_fix_BillNumber(_.Bill),
         VoteBillAmendmentNumber=_parse_amendment_numbers(t.Title),
-    )
-    t = t.rename(
-        BillNumber="Bill",
-        MemberCode="Member",
-        Choice="Vote",
-        VoteTitle="Title",
+        MemberCode=_fix_string(_.Member),
+        Choice=_fix_string(_.Vote),
     )
     schema = {
         "LegislatureNumber": "int16",
@@ -66,54 +31,79 @@ def clean_choices(t: ibis.Table) -> ibis.Table:
         # "MemberChamber": "string",  # This is redundant, can be derived from Member
         # "MemberName": "string",  # This is redundant, can be derived from Member
     }
-    t = t.select(schema.keys())
     t = t.cast(schema)
     t = t.distinct()
     return t
 
 
 def clean_bills(t: ibis.Table) -> ibis.Table:
-    t = _fix_strings(t)
-    t = t.mutate(StatusDate=_parse_StatusDate(t.StatusDate))
+    # t = _fix_strings(t)
+    # t = t.mutate(StatusDate=_parse_StatusDate(t.StatusDate))
+    t = t.select(
+        LegislatureNumber=_.LegislatureNumber,
+        BillNumber=_fix_BillNumber(_.BillNumber),
+        BillName=_fix_string(_.BillName),
+        BillDocuments=_.Documents,
+        BillPartialVeto=_.PartialVeto,
+        BillVetoed=_.Vetoed,
+        BillShortTitle=_fix_string(_.ShortTitle),
+        BillStatusCode=_fix_string(_.StatusCode),
+        BillStatusText=_fix_string(_.StatusText),
+        BillFlag1=_fix_string(_.Flag1),
+        BillFlag2=_fix_string(_.Flag2).cast("uint8"),
+        BillStatusDate=_parse_StatusDate(t.StatusDate),
+        BillStatusAndThen=_.StatusAndThen,
+        BillStatusSummaryCode=_fix_string(_.StatusSummaryCode),
+        BillOnFloor=_fix_string(_.OnFloor),
+        # BillNotKnown=t.NotKnown,  # This is always null
+        BillFiller=_fix_string(_.Filler),
+        BillLock=_fix_string(_.Lock),
+        BillAllMeetings=_.AllMeetings,
+        BillMeetings=_.Meetings,
+        BillSubjects=_.Subjects,
+        BillManifestErrors=_.ManifestErrors,
+        BillStatutes=_.Statutes,
+        BillCurrentCommittee=_.CurrentCommittee,
+    )
+    t = t.mutate(
+        # using session number and personId is inadequate, as there are some
+        # instances of a person being in both the Senate and House in the same
+        # session
+        BillId=_.LegislatureNumber.cast(str) + ":" + _.BillNumber,
+    )
     schema = {
         "LegislatureNumber": "int16",
         "BillNumber": "string",
         "BillName": "string",
-        "Documents": "array<json>",
-        "PartialVeto": "boolean",
-        "Vetoed": "boolean",
-        "ShortTitle": "string",
-        "StatusCode": "string",
-        "StatusText": "string",
-        "Flag1": "string",  # "G", "H", "X", "S", or NULL
-        "Flag2": "uint8",  # numbers 0 to 7
-        "StatusDate": "date",
-        "StatusAndThen": "array<json>",
-        "StatusSummaryCode": "string",
-        "OnFloor": "string",
-        # "NotKnown": "string",  # This is always null
-        "Filler": "string",
-        "Lock": "string",  # "H", "S", "B", NULL, or "\x00" (guessing an encoding error meaning NULL)
-        "AllMeetings": "array<json>",
-        "Meetings": "array<json>",
-        "Subjects": "array<string>",
-        "ManifestErrors": "array<json>",
-        "Statutes": "array<json>",
-        "CurrentCommittee": "struct<Chamber: string, Code: string, Catagory: string, Name: string, MeetingDays: string, Location: string, StartTime: string, EndTime: string, Email: string>",
+        "BillDocuments": "array<json>",
+        "BillPartialVeto": "boolean",
+        "BillVetoed": "boolean",
+        "BillShortTitle": "string",
+        "BillStatusCode": "string",
+        "BillStatusText": "string",
+        "BillFlag1": "string",  # "G", "H", "X", "S", or NULL
+        "BillFlag2": "uint8",  # numbers 0 to 7
+        "BillStatusDate": "date",
+        "BillStatusAndThen": "array<json>",
+        "BillStatusSummaryCode": "string",
+        "BillOnFloor": "string",
+        # Bill "NotKnown": "string",  # This is always null
+        "BillFiller": "string",
+        "BillLock": "string",  # "H", "S", "B", NULL, or "\x00" (guessing an encoding error meaning NULL)
+        "BillAllMeetings": "array<json>",
+        "BillMeetings": "array<json>",
+        "BillSubjects": "array<string>",
+        "BillManifestErrors": "array<json>",
+        "BillStatutes": "array<json>",
+        "BillCurrentCommittee": "struct<Chamber: string, Code: string, Catagory: string, Name: string, MeetingDays: string, Location: string, StartTime: string, EndTime: string, Email: string>",
     }
-    t = t.select(schema.keys())
+    assert set(t.columns) == set(t.schema().keys())
     t = t.cast(schema)
     t = t.distinct()
     t = t.order_by("LegislatureNumber", "BillNumber")
     t = t.cache()
     assert t.LegislatureNumber.notnull().all().execute()
     assert t.BillNumber.notnull().all().execute()
-    t = t.mutate(
-        # using session number and personId is inadequate, as there are some
-        # instances of a person being in both the Senate and House in the same
-        # session
-        BillId=_.LegislatureNumber.cast(str) + ":" + _.BillNumber,
-    ).relocate("BillId")
     assert t.BillId.value_counts(name="n").n.max().execute() == 1
     return t
 
@@ -166,9 +156,16 @@ def clean_and_split_legislatures_into_sessions(
 def _fix_strings(t: ibis.Table) -> ibis.Table:
     """Strip whitespace from all string columns in the table."""
     string_cols = [c for c in t.schema() if t.schema()[c].is_string()]
-    return t.mutate(
-        {c: t[c].strip().replace("\r\n", "\n").nullif("") for c in string_cols}
-    )
+    return t.mutate({c: _fix_string(c) for c in string_cols})
+
+
+def _fix_string(s: ir.StringValue) -> ir.StringValue:
+    """Strip whitespace from a string."""
+    return s.strip().replace("\r\n", "\n").nullif("")
+
+
+def _fix_BillNumber(s: ir.StringValue) -> ir.StringValue:
+    return _fix_string(s).re_replace("\s+", " ")
 
 
 def _parse_StatusDate(s: ir.StringValue) -> ir.DateValue:

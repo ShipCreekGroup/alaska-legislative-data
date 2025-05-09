@@ -36,6 +36,7 @@ def ingest_all(
     ingest_members(db, members=members)
     ingest_bills(db, new_bills=bills)
     ingest_votes_and_choices(db, votes=votes, choices=choices)
+    scrape_and_insert_bill_versions(db=db)
 
 
 def ingest_legislatures_and_sessions(
@@ -127,7 +128,7 @@ def ingest_members(
     members = ibis.memtable(members.to_pyarrow(), schema=members.schema())
     logger.info(f"Ingesting {members.count().execute()} members")
 
-    only_new = db.Member.anti_join(members, "MemberId").to_pandas()
+    only_new = db.Member.select("MemberId").anti_join(members, "MemberId").execute()
     if not only_new.empty:
         raise ValueError(
             f"Some members are in the database but not in the new list: {only_new}"
@@ -144,7 +145,9 @@ def ingest_members(
         raise ValueError(f"Some new members have duplicate MemberId: {dupe_member_id}")
 
     n_existing_members = members.semi_join(db.Member, "MemberId").count().execute()
-    new_members = members.anti_join(db.Member, "MemberId")
+    new_members = (
+        members.select(*db.Member.columns).anti_join(db.Member, "MemberId").cache()
+    )
     n_new_members = new_members.count().execute()
     logger.info(f"Found {n_existing_members} existing members")
     logger.info(f"Found {n_new_members} new members")
@@ -166,7 +169,7 @@ def ingest_bills(
     logger.info(f"Ingesting {new_bills.count().execute()} bills")
 
     n_existing_bills = new_bills.semi_join(db.Bill, "BillId").count().execute()
-    new_bills = new_bills.anti_join(db.Bill, "BillId")
+    new_bills = new_bills.select(*db.Bill.columns).anti_join(db.Bill, "BillId").cache()
     n_new_bills = new_bills.count().execute()
     logger.info(f"Found {n_existing_bills} existing bills")
     logger.info(f"Found {n_new_bills} new bills")
