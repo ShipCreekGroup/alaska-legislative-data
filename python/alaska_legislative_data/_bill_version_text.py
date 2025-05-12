@@ -1,51 +1,11 @@
 import logging
-import os
 import re
 
 import httpx
-import ibis
-from ibis import _
-from ibis.backends.sql import BaseBackend as SQLBackend
 
 from alaska_legislative_data import _low
 
 logger = logging.getLogger(__name__)
-
-
-def get_db(url: str | SQLBackend | None = None) -> SQLBackend:
-    if isinstance(url, SQLBackend):
-        return url
-    if url is None:
-        url = os.environ.get("DATABASE_URL")
-    return ibis.connect(url)
-
-
-def add_missing_bill_text(backend: str | SQLBackend | None = None) -> None:
-    backend = get_db(backend)
-    bills = backend.table("bills", database=("neondb", "vote_tracker"))
-    logger.info(bills.get_name(), bills.schema())
-    needs_text = bills.filter(
-        _.BillLatestVersionText.isnull() | (_.BillLatestVersionText == ""),
-        _.BillShortTitle != "NOT INTRODUCED",
-        # early bills don't have text
-        _.LegislatureNumber > 25,
-    )
-    # needs_text = needs_text.head(2)
-    df = needs_text.select("BillId", "LegislatureNumber", "BillNumber").execute()
-    records = df.to_dict(orient="records")
-    logger.info("Updating %d bills with missing text", len(records))
-    for record in records:
-        text = get_bill_version_text(record["LegislatureNumber"], record["BillNumber"])
-        backend.con.execute(
-            """
-                UPDATE vote_tracker.bills SET
-                    "BillLatestVersionText" = %s
-                WHERE
-                    "vote_tracker"."bills"."BillId" = %s;
-            """,
-            (text, record["BillId"]),
-        )
-        backend.con.commit()
 
 
 # https://www.akleg.gov/basis/Bill/Plaintext/25?Hsid=HB0087A
