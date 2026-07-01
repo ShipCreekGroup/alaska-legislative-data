@@ -214,7 +214,7 @@ async def members(
     chamber: Literal["H", "S"] | None = None,
     range: slice | tuple[int | None, int | None] | None = None,
 ) -> dict:
-    if session <= 9:
+    if session is not None and session <= 9:
         raise DataUnimplementedError(
             "Invalid Session Number: The data is not available for this session"
         )
@@ -245,7 +245,17 @@ async def session(
     return result["Session"]  # It is NOT "Sessions"
 
 
-rate_semaphore = asyncio.Semaphore(5)
+# One semaphore per event loop: asyncio.Semaphore binds to the running loop
+# on first use, so a single module-level instance breaks when asyncio.run()
+# is called more than once (each call creates a fresh loop).
+_rate_semaphores: dict[asyncio.AbstractEventLoop, asyncio.Semaphore] = {}
+
+
+def _get_rate_semaphore() -> asyncio.Semaphore:
+    loop = asyncio.get_running_loop()
+    if loop not in _rate_semaphores:
+        _rate_semaphores[loop] = asyncio.Semaphore(5)
+    return _rate_semaphores[loop]
 
 
 def get_client() -> httpx.AsyncClient:
@@ -296,7 +306,7 @@ async def _make_request(
     async with client:
 
         async def f():
-            async with rate_semaphore:
+            async with _get_rate_semaphore():
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 return _parse(url, headers, response.text)

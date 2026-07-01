@@ -66,7 +66,7 @@ async def _fetch(url: str) -> str:
         "user-agent": "Mozilla/5.0",
     }
     async with httpx.AsyncClient(headers=headers) as client:
-        async with _low.rate_semaphore:
+        async with _low._get_rate_semaphore():
             # some versions, like https://www.akleg.gov/basis/Bill/Plaintext/27?Hsid=SB0160C,
             # are huge and take a long time to download
             response = await client.get(url, timeout=60)
