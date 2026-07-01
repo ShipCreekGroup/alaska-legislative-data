@@ -489,6 +489,10 @@ def get_db(
     if url is None:
         dotenv.load_dotenv()
         url = os.environ.get("DATABASE_URL")
+    if url is None:
+        raise ValueError(
+            "No database URL provided. Set the DATABASE_URL environment variable or pass it as an argument."
+        )
     backend: DuckDBBackend = ibis.duckdb.connect()
     attach_postgres(backend, url, name="postgres", schema="vote_tracker")
     backend.raw_sql("USE postgres")
@@ -529,6 +533,8 @@ def attach_postgres(
     """
     spec = urlparse(url)
     if name is None:
+        if spec.hostname is None:
+            raise ValueError(f"Invalid URL: {url}")
         name = ibis.util.gen_name(spec.hostname)
     ine = "IF NOT EXISTS" if skip_if_exists else ""
     options = ["TYPE postgres"]
