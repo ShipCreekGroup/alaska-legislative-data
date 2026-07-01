@@ -108,11 +108,23 @@ class MemberSchema(TableSchema):
     PersonId: Annotated[ir.StringColumn, "!string"]
     """Reference to the Person table."""
     MemberCode: Annotated[ir.StringColumn, "string"]
-    """Three letter code that is unique to each person in a given legislature.
-    
+    """Three letter code that is unique within a given legislature, eg 'KAW'.
+
     It is NOT stable with a person across legislatures,
     and it is NOT unique across legislatures.
+    It can even change WITHIN a legislature, eg when a member changes their name.
+    In that case, this holds the most recent code,
+    and earlier codes are kept in MemberFormerCodes.
     This can be null, for really old legislatures.
+    """
+    MemberFormerCodes: Annotated[ir.StringColumn, "string"]
+    """Semicolon-separated earlier codes this member used within this legislature.
+
+    Almost always null. Eg 'BUR' for Robyn Frier (formerly Robyn Burke),
+    who changed her name partway through the 34th legislature:
+    her votes before the change are recorded under 'BUR', and after under 'FRB'.
+    Votes reference whichever code was current when they were cast,
+    so joins from votes to members must consider these codes too.
     """
     Chamber: Annotated[ir.StringColumn, "string"]
     """eg 'H' or 'S' for house or senate."""
@@ -367,6 +379,7 @@ CREATE TABLE members(
     LegislatureNumber SMALLINT NOT NULL REFERENCES legislatures(LegislatureNumber),
     PersonId VARCHAR NOT NULL REFERENCES people(PersonId),
     MemberCode VARCHAR,
+    MemberFormerCodes VARCHAR,
     Chamber VARCHAR CHECK (Chamber IN ('H', 'S')),
     District VARCHAR,
     Party VARCHAR,

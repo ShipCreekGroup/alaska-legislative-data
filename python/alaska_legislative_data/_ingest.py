@@ -358,10 +358,16 @@ def _votes_to_scrape(db: _db.Backend) -> list[tuple[int, str]]:
     )
     results = []
     for leg_num in missing_leg_nums:
-        member_codes = db.Member.filter(
-            db.Member.LegislatureNumber == leg_num
-        ).MemberCode
-        results.extend((leg_num, code) for code in member_codes.execute())
+        members = db.Member.filter(db.Member.LegislatureNumber == leg_num).select(
+            "MemberCode", "MemberFormerCodes"
+        )
+        for member in members.execute().itertuples():
+            results.append((leg_num, member.MemberCode))
+            if member.MemberFormerCodes:
+                # votes cast before eg a name change are recorded under the old code
+                results.extend(
+                    (leg_num, code) for code in member.MemberFormerCodes.split(";")
+                )
     return results
 
 

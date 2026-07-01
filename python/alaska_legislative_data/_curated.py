@@ -20,6 +20,14 @@ Also, people's name can change, eg "Al" -> "Albert".
 
 So, the only way I could think of solving this is with a handwritten
 lookup table from (Session, Code) to PersonId.
+
+A person's code can even change WITHIN a legislature:
+when Robyn Burke changed her name to Robyn Frier partway through the
+34th legislature, her code changed from BUR to FRB.
+We keep one row per membership, with the current code in MemberCode
+and any earlier codes in MemberFormerCodes (semicolon-separated).
+Votes are recorded under whichever code was current when they were cast,
+so the vote-scraping and vote-joining code considers both columns.
 """
 
 import logging

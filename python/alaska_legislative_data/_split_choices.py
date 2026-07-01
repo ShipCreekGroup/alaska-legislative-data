@@ -74,7 +74,16 @@ def _add_bill_id(choices: ibis.Table, bills: ibis.Table) -> ibis.Table:
 
 
 def _add_member_id(choices: ibis.Table, members: ibis.Table) -> ibis.Table:
-    member_id_lookup = members.select("LegislatureNumber", "MemberCode", "MemberId")
+    # Votes are recorded under whichever code was current when they were cast,
+    # so a member with former codes (eg after a name change) needs a lookup
+    # entry for each of their codes, all resolving to the same MemberId.
+    current_codes = members.select("LegislatureNumber", "MemberCode", "MemberId")
+    former_codes = members.filter(_.MemberFormerCodes.notnull()).select(
+        "LegislatureNumber",
+        MemberCode=_.MemberFormerCodes.split(";").unnest(),
+        MemberId=_.MemberId,
+    )
+    member_id_lookup = current_codes.union(former_codes)
     member_id_lookup = member_id_lookup.filter(
         _.LegislatureNumber.notnull(),
         _.MemberCode.notnull(),
@@ -89,8 +98,8 @@ def _add_member_id(choices: ibis.Table, members: ibis.Table) -> ibis.Table:
         .all()
         .execute()
     )
-    # check that every (LegislatureNumber, MemberCode) combo is votes
-    # is also present in bill_id_lookup
+    # check that every (LegislatureNumber, MemberCode) combo in votes
+    # is also present in member_id_lookup
     missing = choices.filter(
         _.LegislatureNumber.notnull(),
         _.MemberCode.notnull(),
