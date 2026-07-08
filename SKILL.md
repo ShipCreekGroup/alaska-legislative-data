@@ -134,6 +134,7 @@ Lessons that make the results usable:
 - **Budget/appropriation bills swamp the close-vote list and are hard to interpret.** The omnibus operating/capital budgets (e.g. `HB 39`, `HB 53`, `HB 263`, `SB 214`) carry nearly every subject tag, so their dozens of *amendment* roll calls dominate any topic filter. For substantive, readable results, restrict to decisive votes with `VoteTitle ILIKE '%Final Passage%' OR '%Concur%' OR '%Third Reading%'`, and/or exclude the big approp bills.
 - **The modern House is split ~20–20**, so a genuinely contested House vote is often a literal `20`–`20` tie — don't treat `abs(y-n)=0` as a data error.
 - **Add a party breakdown to turn a close vote into accountability signal** — join `choices → members` and `GROUP BY MemberParty` (do this per-`VoteId`, and remember party is per-legislature; see the join-graph notes). Votes where a caucus splits internally, or where a member crosses party lines, are the most revealing.
+- **Do background research on selected bills** - Once you have a list of contentious votes, you can look up the bill's text and subjects, and read news coverage or legislative analysis to understand the context. This helps interpret why a vote was close and what issues were at stake.
 
 ## Gotchas
 - **Identify people by `PersonId`, never by name** — names change and repeat, and `PersonId` survives name changes (see "Identifying people" above).
