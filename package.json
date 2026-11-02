@@ -1,0 +1,43 @@
+{
+  "name": "alaska-legislative-api",
+  "version": "1.0.0",
+  "description": "Dependency-free TypeScript client and scraper for the Alaska Legislature's BASIS API (https://www.akleg.gov/publicservice/basis)",
+  "author": "Nick Crews <n.crews@shipcreekgroup.com>",
+  "license": "MIT",
+  "repository": "github:ShipCreekGroup/alaska-legislative-data",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema.json": "./schema/basis.schema.json"
+  },
+  "bin": {
+    "akleg": "./dist/cli.js"
+  },
+  "files": [
+    "dist/",
+    "schema/",
+    "data/curated/"
+  ],
+  "scripts": {
+    "gen": "node scripts/gen-types.ts",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && node scripts/build-gas.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test 'test/**/*.test.ts'",
+    "test:live": "LIVE=1 node --test test/contract.test.ts",
+    "prepublishOnly": "npm run gen && npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "ajv": "8.20.0",
+    "json-schema-to-typescript": "16.0.0",
+    "typescript": "5.9.3"
+  }
+}
