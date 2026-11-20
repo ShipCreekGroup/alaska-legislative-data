@@ -2,42 +2,67 @@ name: Scrape and Publish
 
 on:
   workflow_dispatch:
+    inputs:
+      full:
+        description: "Rebuild everything from scratch instead of updating the latest release (takes hours)"
+        type: boolean
+        default: false
   schedule:
-    - cron: "37 2 * * *" # Run every day at 2:37 am
+    - cron: "37 2 * * *" # Every day at 2:37 UTC
 
 permissions:
   contents: write
 
 jobs:
+  contract:
+    # Checks the live API still matches schema/basis.schema.json.
+    # A failure here means the Legislature changed something; the scrape still runs.
+    name: API contract tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:live
+
   scrape:
     name: Scrape and Release
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./python
+    timeout-minutes: 360
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          version: "latest"
+          node-version: 22
+          cache: npm
+      - run: npm ci
 
-      - name: Install project
-        run: uv sync
+      - name: Download the previous release as the baseline
+        if: ${{ !inputs.full }}
+        run: |
+          mkdir -p baseline
+          gh release download --pattern export.zip --dir baseline
+          unzip -q baseline/export.zip -d baseline
 
-      - name: Ingest new data into SCG database
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: uv run python -m alaska_legislative_data ingest
+      - name: Scrape
+        run: |
+          if [ -d baseline/export ]; then
+            node src/cli.ts scrape --out export --baseline baseline/export
+          else
+            node src/cli.ts scrape --out export
+          fi
 
-      - name: Export to the /export directory
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: uv run python -m alaska_legislative_data export
+      - name: Build ak_leg.duckdb
+        run: |
+          curl -sSL -o duckdb.zip https://github.com/duckdb/duckdb/releases/download/v1.4.2/duckdb_cli-linux-amd64.zip
+          unzip -q duckdb.zip -d "$RUNNER_TEMP"
+          cd export && "$RUNNER_TEMP/duckdb" ak_leg.duckdb < ../scripts/build-duckdb.sql
+          "$RUNNER_TEMP/duckdb" ak_leg.duckdb -c "SELECT 'bills' AS t, count(*) FROM bills UNION ALL SELECT 'votes', count(*) FROM votes UNION ALL SELECT 'choices', count(*) FROM choices UNION ALL SELECT 'billVersions', count(*) FROM billVersions"
 
-      - name: Publish the /export directory to a GH release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: ./release.sh export
+      - name: Publish the export directory as a GitHub release
+        run: scripts/release.sh export
