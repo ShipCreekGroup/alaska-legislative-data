@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 // Command line interface: `akleg scrape` builds the published tables;
 // `akleg get|count|text` are thin wrappers around the client.
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { createBasis, type Endpoint, type Logger } from './client.ts';
+import { readCsvAll } from './scrape/csv.ts';
 import { scrape } from './scrape/scrape.ts';
+import { curatedFromCsv } from './tables/curated.ts';
 
 const HELP = `Usage: akleg <command> [options]
 
@@ -14,7 +16,7 @@ Commands:
     --baseline DIR    Previous release's CSVs. Only the latest legislature is re-downloaded.
                       Without this, everything is scraped, which takes hours.
     --legislatures L  Comma separated legislatures to re-download, eg 33,34
-    --curated DIR     Directory with people.csv and members.csv (default: bundled data/curated)
+    --curated DIR     Directory with people.csv and members.csv (default: the bundled copy of data/curated)
     --skip-text       Don't download bill text for new versions
     --recheck-missing-versions
                       Also re-check older bills that have no versions yet (slow)
@@ -80,7 +82,9 @@ async function main(argv: string[]): Promise<number> {
       logger,
       outDir: values.out!,
       baselineDir: values.baseline,
-      curatedDir: values.curated ?? fileURLToPath(new URL('../data/curated', import.meta.url)),
+      curated: values.curated
+        ? curatedFromCsv(await readCsvAll(join(values.curated, 'people.csv')), await readCsvAll(join(values.curated, 'members.csv')))
+        : undefined,
       legislatures: values.legislatures ? values.legislatures.split(',').map(Number) : undefined,
       skipText: values['skip-text'],
       recheckMissingVersions: values['recheck-missing-versions'],

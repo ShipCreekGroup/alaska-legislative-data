@@ -1,8 +1,7 @@
 -- Packs the CSVs written by `akleg scrape` into a single DuckDB file.
 -- Run from the export directory:
 --   cd export && duckdb ak_leg.duckdb < ../scripts/build-duckdb.sql
--- Table and column names/types match the database published before the
--- TypeScript rewrite.
+-- IDs are text with a type prefix, eg 'bil_34th_HB0016' (see src/tables/ids.ts).
 
 CREATE OR REPLACE TABLE people AS
 SELECT * FROM read_csv('people.csv', header = true, delim = ',', quote = '"', escape = '"', allow_quoted_nulls = false, columns = {
@@ -34,12 +33,12 @@ SELECT *
 FROM read_csv('votes.csv', header = true, delim = ',', quote = '"', escape = '"', allow_quoted_nulls = false, columns = {
   'VoteId': 'VARCHAR', 'BillId': 'VARCHAR', 'VoteNumber': 'INTEGER', 'VoteDate': 'DATE', 'VoteTitle': 'VARCHAR',
   'LegislatureNumber': 'INTEGER', 'VoteChamber': 'VARCHAR', 'VoteDescription': 'VARCHAR',
-  'VoteBillAmendmentNumber': 'DECIMAL(9,1)'
+  'VoteAmendmentNumber': 'INTEGER', 'VoteSubAmendmentNumber': 'INTEGER', 'VoteAmendmentId': 'VARCHAR'
 });
 
 CREATE OR REPLACE TABLE choices AS
 SELECT * FROM read_csv('choices.csv', header = true, delim = ',', quote = '"', escape = '"', allow_quoted_nulls = false, columns = {
-  'ChoiceId': 'VARCHAR', 'VoteId': 'VARCHAR', 'MemberId': 'VARCHAR', 'Choice': 'VARCHAR'
+  'VoteId': 'VARCHAR', 'MemberId': 'VARCHAR', 'Choice': 'VARCHAR'
 });
 
 CREATE OR REPLACE TABLE billVersions AS
@@ -50,7 +49,7 @@ SELECT * FROM read_csv('bill_versions.csv', header = true, delim = ',', quote = 
   'BillVersionFullText': 'VARCHAR'
 });
 
--- Same NOT NULL constraints as before.
+-- NOT NULL constraints.
 ALTER TABLE people ALTER PersonId SET NOT NULL;
 ALTER TABLE people ALTER PersonFullName SET NOT NULL;
 ALTER TABLE people ALTER PersonFirstName SET NOT NULL;
@@ -67,7 +66,6 @@ ALTER TABLE votes ALTER VoteNumber SET NOT NULL;
 ALTER TABLE votes ALTER LegislatureNumber SET NOT NULL;
 ALTER TABLE votes ALTER VoteChamber SET NOT NULL;
 ALTER TABLE votes ALTER VoteDescription SET NOT NULL;
-ALTER TABLE choices ALTER ChoiceId SET NOT NULL;
 ALTER TABLE choices ALTER VoteId SET NOT NULL;
 ALTER TABLE choices ALTER MemberId SET NOT NULL;
 ALTER TABLE billVersions ALTER BillVersionId SET NOT NULL;

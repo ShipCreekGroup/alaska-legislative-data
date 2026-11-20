@@ -20,6 +20,10 @@
       "types": "./dist/zod.d.ts",
       "default": "./dist/zod.js"
     },
+    "./tables": {
+      "types": "./dist/tables/index.d.ts",
+      "default": "./dist/tables/index.js"
+    },
     "./schema.json": "./schema/basis.schema.json"
   },
   "bin": {
@@ -27,8 +31,7 @@
   },
   "files": [
     "dist/",
-    "schema/",
-    "data/curated/"
+    "schema/"
   ],
   "scripts": {
     "gen": "node scripts/gen.ts",

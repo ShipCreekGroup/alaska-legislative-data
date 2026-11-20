@@ -27,23 +27,34 @@ SQL
 
 Six tables. Prefixed column names (e.g. every `bills` column starts with `Bill`). Row counts as of July 2026.
 
+Every ID is a 3-letter type prefix plus fields joined by `_`: the legislature as a two-digit ordinal (`34th`, `09th`, `21st`), then zero-padded numbers, so IDs sort correctly as text.
+
+| ID | Example | Parts |
+| --- | --- | --- |
+| `PersonId` | `per_robyn-burke-34th` | name first served under + first legislature |
+| `MemberId` | `mem_34th_H_robyn-burke-34th` | legislature, chamber, person |
+| `BillId` | `bil_34th_HB0016` | legislature, bill code (`HB 16` padded to `HB0016`) |
+| `BillVersionId` | `ver_34th_HB0016_A` | legislature, bill code, version letter |
+| `VoteId` | `vot_34th_H0396` | legislature, chamber + roll-call number |
+| `VoteAmendmentId` | `amd_34th_HB0016_H002_10` | legislature, bill code, chamber + amendment number, optional sub-amendment number |
+
 **bills** (~24.9k) — one row per bill per legislature.
-`BillId` (PK, e.g. `34:HB 225`) · `LegislatureNumber` (12–34) · `BillNumber` (`HB 225`) · `BillName` (usually NULL) · `BillShortTitle` (use this as the title) · `BillStatusDate` · `BillSubjects` (**VARCHAR[]** array of topic tags) · `BillVetoed` (bool, nullable).
+`BillId` (PK, e.g. `bil_34th_HB0225`) · `LegislatureNumber` (12–34) · `BillNumber` (`HB 225`) · `BillName` (usually NULL) · `BillShortTitle` (use this as the title) · `BillStatusDate` · `BillSubjects` (**VARCHAR[]** array of topic tags) · `BillVetoed` (bool, nullable).
 
 **billVersions** (~13k, ~7k bills) — text of each bill version.
 `BillVersionId` · `BillId` (FK→bills) · `BillVersionLetter` (A, B…) · `BillVersionTitle` · `BillVersionName` · intro/passed dates · `BillVersionPdfUrl` · `BillVersionFullText` (can be large — don't `SELECT *` this across many rows).
 
 **votes** (~21.6k) — one row per roll call.
-`VoteId` (PK, e.g. `34:H:411`) · `BillId` (FK→bills, **nullable** — non-bill votes like judicial confirmations aren't tied to a bill) · `VoteNumber` · `VoteDate` · `VoteTitle` (contains `\n`) · `LegislatureNumber` · `VoteChamber` (`H`/`S`) · `VoteDescription` · `VoteBillAmendmentNumber` (decimal encoding: `1.0` = amendment 1, `1.1` = 1st sub-amendment to amendment 1, `2.0` = amendment 2; sortable).
+`VoteId` (PK, e.g. `vot_34th_H0411`) · `BillId` (FK→bills, **nullable** — non-bill votes like judicial confirmations aren't tied to a bill) · `VoteNumber` · `VoteDate` · `VoteTitle` (contains `\n`) · `LegislatureNumber` · `VoteChamber` (`H`/`S`) · `VoteDescription` · `VoteAmendmentNumber` (2 for "Amendment No. 2" and for "Amendment No. 10 to Amendment No. 2") · `VoteSubAmendmentNumber` (10 in that second case; NULL for an amendment that isn't to another one) · `VoteAmendmentId` (e.g. `amd_34th_HB0016_H002_10`; NULL when the vote isn't on an amendment to a bill). All three are NULL for votes that aren't on an amendment.
 
 **choices** (~678k) — one row per legislator per roll call. This is the roll-call detail.
-`ChoiceId` · `VoteId` (FK→votes) · `MemberId` (FK→members) · `Choice` ∈ `Y` (yea), `N` (nay), `E` (excused), `A` (absent).
+`VoteId` (FK→votes) · `MemberId` (FK→members) · `Choice`; `(VoteId, MemberId)` is the key ∈ `Y` (yea), `N` (nay), `E` (excused), `A` (absent).
 
 **members** (~2.1k) — one row per person per legislature (their seat that term).
-`MemberId` (PK) · `LegislatureNumber` · `PersonId` (FK→people) · `MemberChamber` (`H`/`S`) · `MemberDistrict` (House = number 1–40; Senate = letter A–T) · `MemberIsMajority` (bool — in the majority caucus) · `MemberParty` (`D`,`R`,`I`,`L`,`N`=nonpartisan/undeclared, NULL) · `MemberCode` (3-letter code, see below) · `MemberFormerCodes` (semicolon-separated earlier codes).
+`MemberId` (PK, e.g. `mem_34th_H_robyn-burke-34th`) · `LegislatureNumber` · `PersonId` (FK→people) · `MemberChamber` (`H`/`S`) · `MemberDistrict` (House = number 1–40; Senate = letter A–T) · `MemberIsMajority` (bool — in the majority caucus) · `MemberParty` (`D`,`R`,`I`,`L`,`N`=nonpartisan/undeclared, NULL) · `MemberCode` (3-letter code, see below) · `MemberFormerCodes` (semicolon-separated earlier codes).
 
 **people** (~600) — one row per real person.
-`PersonId` (PK, e.g. `Neal Foster:26`) · full/first/last/middle/nick/suffix names.
+`PersonId` (PK, e.g. `per_neal-foster-26th`) · full/first/last/middle/nick/suffix names.
 
 ### Join graph
 ```
@@ -53,7 +64,7 @@ people ─PersonId→ members ─MemberId→ choices ←VoteId─ votes ─BillI
 - One person can hold **two memberships in a single legislature** — `MemberId` includes the chamber precisely because members sometimes switch House↔Senate mid-term (appointed to fill a vacancy). So don't assume one row per person per legislature when someone switched chambers.
 
 ### Identifying people (important)
-- **`PersonId` is the only stable key for a real person across terms — always use it, not names.** Format is `{FullName}:{first legislature they held office}` (e.g. `Neal Foster:26`). It is *not* a per-name counter; the suffix is their first legislature. It happens to separate two people who share a name only because they first took office in different years (there are two "Neal Foster"s and two "Mike Miller"s).
+- **`PersonId` is the only stable key for a real person across terms — always use it, not names.** Format is `per_{name slug}-{first legislature they held office}` (e.g. `per_neal-foster-26th`). It is *not* a per-name counter; the suffix is their first legislature. It happens to separate two people who share a name only because they first took office in different years (there are two "Neal Foster"s: `per_neal-foster-03rd` and `per_neal-foster-26th`).
 - Names are unreliable for lookup: they repeat, and they change (marriage, nickname → legal name). To find someone by name, query `people`, eyeball the matches, grab the `PersonId`, then join through `members`.
 - **Name changes:** the `PersonId` string is frozen at the person's *original* name even after they change it, and `PersonFullName` may show either the old or new name depending on when the data was scraped. So a `WHERE PersonLastName = 'Frier'` can silently miss that person's earlier records. Prefer `PersonId`.
 
@@ -75,7 +86,7 @@ ORDER BY BillStatusDate DESC;
 ```sql
 SELECT c.Choice, m.MemberParty, count(*) n
 FROM choices c JOIN members m ON c.MemberId = m.MemberId
-WHERE c.VoteId = '34:H:411'
+WHERE c.VoteId = 'vot_34th_H0411'
 GROUP BY 1,2 ORDER BY 1,2;
 ```
 
@@ -99,7 +110,7 @@ FROM votes v
 JOIN choices c ON c.VoteId = v.VoteId
 JOIN members m ON m.MemberId = c.MemberId
 JOIN people  p ON p.PersonId = m.PersonId
-WHERE v.BillId = '34:HB 176' AND c.Choice = 'Y'
+WHERE v.BillId = 'bil_34th_HB0176' AND c.Choice = 'Y'
   AND v.VoteTitle ILIKE '%Final Passage%';
 ```
 
@@ -144,6 +155,6 @@ Lessons that make the results usable:
 - Subjects are arrays, not strings; `list_contains(BillSubjects, 'TAG')`, and `UNNEST` to list/count tags. Tags are uppercase (e.g. `'FISH & GAME (BOTH)'`).
 - Titles hold real newlines (`\n`); match with `ILIKE '%...%'` rather than exact equality.
 - Bill number prefixes are mostly `HB`/`SB`/`HJR`/`SJR`/`HCR`/`SCR`/`HR`/`SR`, but 4-letter prefixes exist too (e.g. `HSCR`, `SSCR`). Match on prefix loosely if filtering by bill type.
-- `(LegislatureNumber, BillNumber)` is unique, so `BillId` = `'{leg}:{BillNumber}'` uniquely identifies a bill.
+- `(LegislatureNumber, BillNumber)` is unique. `BillId` is built from them: `HB 16` in the 34th is `bil_34th_HB0016`. To look a bill up by its readable number, filter on `LegislatureNumber` and `BillNumber` instead of typing the ID.
 - Members only reliably go back to the **10th legislature**; earlier terms (1st–9th) are hand-curated and sparser — districts are often blank, and party/other fields may be NULL.
 - To confirm the current/latest legislature, `SELECT max(LegislatureNumber) FROM bills;` rather than hardcoding.
