@@ -10,25 +10,60 @@
       "enum": ["H", "S"]
     },
     "IsoDate": {
-      "description": "A date as yyyy-mm-dd, eg '2025-01-22'. Some very old records use other formats, eg 'Jul -10- 1'.",
-      "type": "string"
+      "description": "A date as yyyy-mm-dd, eg '2025-01-22'.",
+      "type": "string",
+      "format": "date"
+    },
+    "Time": {
+      "description": "A time of day as HH:MM:SS, eg '15:15:00'. JSON Schema's time format requires a timezone, which the API doesn't send.",
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d$"
     },
     "MsDate": {
       "description": "A Microsoft JSON date, eg '/Date(1737450000000)/' (milliseconds since 1970).",
       "type": "string",
       "pattern": "^/Date\\(-?\\d+\\)/$"
     },
-    "Document": {
-      "description": "A link to (or the inline content of) a document. With fulltext=urlonly only Url is set.",
+    "DocumentEmpty": {
+      "description": "A document with nothing set, eg a bill version with no PDF yet.",
       "type": "object",
-      "additionalProperties": false,
+      "required": ["Url", "Mime", "Encoding", "Data"],
+      "properties": {
+        "Url": { "type": "null" },
+        "Mime": { "type": "null" },
+        "Encoding": { "type": "null" },
+        "Data": { "type": "null" }
+      }
+    },
+    "DocumentUrlOnly": {
+      "description": "A link only. What fulltext=urlonly returns, and the usual shape when fulltext isn't requested.",
+      "type": "object",
+      "required": ["Url", "Mime", "Encoding", "Data"],
+      "properties": {
+        "Url": { "type": "string" },
+        "Mime": { "type": "null" },
+        "Encoding": { "type": "null" },
+        "Data": { "type": "null" }
+      }
+    },
+    "DocumentFull": {
+      "description": "Inline content, with fulltext=true. The link is usually set too.",
+      "type": "object",
       "required": ["Url", "Mime", "Encoding", "Data"],
       "properties": {
         "Url": { "type": ["string", "null"] },
-        "Mime": { "type": ["string", "null"] },
-        "Encoding": { "type": ["string", "null"] },
-        "Data": { "type": ["string", "null"] }
+        "Mime": { "type": "string", "description": "eg 'text/plain'" },
+        "Encoding": { "type": "string", "description": "eg 'base64'" },
+        "Data": { "type": "string" }
       }
+    },
+    "Document": {
+      "description": "A link to, or the inline content of, a document. Objects with document fields (bill versions, fiscal notes, media files, journals, minutes) include one of these shapes.",
+      "oneOf": [
+        { "$ref": "#/$defs/DocumentEmpty" },
+        { "$ref": "#/$defs/DocumentUrlOnly" },
+        { "$ref": "#/$defs/DocumentFull" }
+      ]
     },
     "Fault": {
       "description": "A Warning or Error element. The API returns these as XML even when JSON was requested.",
@@ -40,7 +75,6 @@
         "Description": { "type": "string", "description": "eg 'Invalid Session Number.'" }
       }
     },
-
     "Committee": {
       "type": "object",
       "additionalProperties": false,
@@ -55,21 +89,56 @@
         "StartTime": { "type": "string", "description": "eg '3:15 PM', or ''" },
         "EndTime": { "type": "string", "description": "eg '000000' (appears to mean unset)" },
         "Email": { "type": "string" },
-        "Meetings": { "type": "array", "items": { "$ref": "#/$defs/Meeting" }, "description": "Present on the committees endpoint; filled with the 'meetings' include." },
-        "Membership": { "type": "array", "items": { "$ref": "#/$defs/CommitteeMembership" }, "description": "With the 'members' include." },
-        "PastMembership": { "type": "array", "items": { "$ref": "#/$defs/CommitteeMembership" }, "description": "With the 'members' include." },
-        "BillSponsorships": { "type": "array", "items": { "$ref": "#/$defs/Bill" }, "description": "With the 'bills' include." },
-        "BillsInCommittee": { "type": "array", "items": { "$ref": "#/$defs/Bill" }, "description": "With the 'bills' include." },
-        "BillsNextReferral": { "type": "array", "items": { "$ref": "#/$defs/Bill" }, "description": "With the 'bills' include." },
-        "BillsReferredOutOfCommittee": { "type": "array", "items": { "$ref": "#/$defs/Bill" }, "description": "With the 'bills' include." },
-        "BillsReferredToCommittee": { "type": "array", "items": { "$ref": "#/$defs/Bill" }, "description": "With the 'bills' include." }
+        "Meetings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Meeting" },
+          "description": "Present on the committees endpoint; filled with the 'meetings' include."
+        },
+        "Membership": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/CommitteeMembership" },
+          "description": "With the 'members' include."
+        },
+        "PastMembership": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/CommitteeMembership" },
+          "description": "With the 'members' include."
+        },
+        "BillSponsorships": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Bill" },
+          "description": "With the 'bills' include."
+        },
+        "BillsInCommittee": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Bill" },
+          "description": "With the 'bills' include."
+        },
+        "BillsNextReferral": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Bill" },
+          "description": "With the 'bills' include."
+        },
+        "BillsReferredOutOfCommittee": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Bill" },
+          "description": "With the 'bills' include."
+        },
+        "BillsReferredToCommittee": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Bill" },
+          "description": "With the 'bills' include."
+        }
       }
     },
     "CommitteeMembership": {
       "description": "A member's seat on a committee.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["Position", "CommitteeName", "MemberName", "MemberCode", "MemberChamber", "CommitteeChamber", "CommitteeCode", "MemberComment"],
+      "required": [
+        "Position", "CommitteeName", "MemberName", "MemberCode", "MemberChamber", "CommitteeChamber", "CommitteeCode",
+        "MemberComment"
+      ],
       "properties": {
         "Position": { "type": "string", "description": "eg 'C0' (chair), 'C1' (co-chair), 'VC', '01'" },
         "CommitteeName": { "type": "string" },
@@ -81,20 +150,20 @@
         "MemberComment": { "type": "string", "description": "eg 'Resigned November 14, 2025', or ''" }
       }
     },
-
     "MediaFile": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["StartTime", "Length", "MediaType", "Duration", "Url", "Mime", "Encoding", "Data"],
+      "allOf": [{ "$ref": "#/$defs/Document" }],
+      "unevaluatedProperties": false,
+      "required": ["StartTime", "Length", "MediaType", "Duration"],
       "properties": {
-        "StartTime": { "type": ["string", "null"], "pattern": "^/Date\\(-?\\d+\\)/$", "description": "eg '/Date(1736451596000)/'" },
+        "StartTime": {
+          "type": ["string", "null"],
+          "pattern": "^/Date\\(-?\\d+\\)/$",
+          "description": "eg '/Date(1736451596000)/'"
+        },
         "Length": { "type": "integer" },
         "MediaType": { "type": "string", "description": "eg 'V' for video, 'A' for audio" },
-        "Duration": { "type": "integer" },
-        "Url": { "type": ["string", "null"] },
-        "Mime": { "type": ["string", "null"] },
-        "Encoding": { "type": ["string", "null"] },
-        "Data": { "type": ["string", "null"] }
+        "Duration": { "type": "integer" }
       }
     },
     "Meeting": {
@@ -111,10 +180,13 @@
         "MediaFiles": { "type": "array", "items": { "$ref": "#/$defs/MediaFile" } },
         "AudioFiles": { "type": "array", "items": { "$ref": "#/$defs/MediaFile" } },
         "VideoFiles": { "type": "array", "items": { "$ref": "#/$defs/MediaFile" } },
-        "Media": { "$ref": "#/$defs/Document" },
-        "Minutes": { "description": "With the 'minutes' include. Shape not yet observed." },
+        "Media": { "type": "object", "$ref": "#/$defs/Document", "unevaluatedProperties": false },
+        "Minutes": {
+          "description": "With the 'minutes' include; null when a meeting has no minutes.",
+          "oneOf": [{ "$ref": "#/$defs/Minutes" }, { "type": "null" }]
+        },
         "MeetingDate": { "$ref": "#/$defs/IsoDate" },
-        "MeetingTime": { "type": "string", "description": "eg '15:15:00'" },
+        "MeetingTime": { "$ref": "#/$defs/Time" },
         "MeetingTitle": { "type": "string" },
         "MeetingChangeText": { "type": "string" },
         "MeetingCanceled": { "type": "boolean" },
@@ -134,7 +206,53 @@
         "Url": { "type": "string" }
       }
     },
-
+    "Minutes": {
+      "description": "A committee meeting's minutes: an index of timestamps into the recording, plus a link to the PDF.",
+      "type": "object",
+      "allOf": [{ "$ref": "#/$defs/Document" }],
+      "unevaluatedProperties": false,
+      "required": [
+        "Chamber", "MinutesDate", "MinutesTime", "CommitteeCode", "TimeStamps", "VideoStart", "AudioUrl", "VideoUrl"
+      ],
+      "properties": {
+        "Chamber": {
+          "type": "string",
+          "enum": ["H", "S", "J"],
+          "description": "'J' for joint committees, eg Legislative Budget & Audit"
+        },
+        "MinutesDate": { "$ref": "#/$defs/IsoDate" },
+        "MinutesTime": { "type": "string", "pattern": "^\\d{4}$", "description": "Start time as HHMM, eg '1401'" },
+        "CommitteeCode": { "type": "string", "description": "eg 'FIN'" },
+        "TimeStamps": { "type": "array", "items": { "$ref": "#/$defs/MinutesTimeStamp" } },
+        "VideoStart": {
+          "$ref": "#/$defs/MsDate",
+          "description": "'/Date(-62135564400000)/' (year 1) when there's no video"
+        },
+        "AudioUrl": {
+          "type": "string",
+          "description": "eg 'https://www.akleg.gov/ftr/2025/20250121/sccm/sccm_1401.mp3', or ''"
+        },
+        "VideoUrl": { "type": "string", "description": "'' when there's no video" }
+      }
+    },
+    "MinutesTimeStamp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Text", "Time", "AudioElapsed", "Type"],
+      "properties": {
+        "Text": { "type": "string", "description": "eg 'Adopt Committee on Committees Report'" },
+        "Time": {
+          "type": "string",
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d *$",
+          "description": "Space padded, eg '14:01:39  '"
+        },
+        "AudioElapsed": { "type": "integer", "description": "Seconds into the audio recording" },
+        "Type": {
+          "type": "string",
+          "description": "eg 'S' start, 'A' adjourn, 'T' topic, 'M' member speaking, 'B' and 'E'"
+        }
+      }
+    },
     "Contact": {
       "type": "object",
       "additionalProperties": false,
@@ -155,8 +273,8 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "Code", "UID", "LastName", "MiddleName", "FirstName", "FormalName", "ShortName", "Chamber", "District",
-        "Seat", "Party", "Phone", "EMail", "Building", "Room", "Comment", "IsActive", "IsMajority"
+        "Code", "UID", "LastName", "MiddleName", "FirstName", "FormalName", "ShortName", "Chamber", "District", "Seat",
+        "Party", "Phone", "EMail", "Building", "Room", "Comment", "IsActive", "IsMajority"
       ],
       "properties": {
         "Code": { "type": "string", "description": "Three letter code, eg 'FRB'" },
@@ -180,9 +298,21 @@
         "Hometown": { "type": "string" },
         "SessionContact": { "$ref": "#/$defs/Contact" },
         "InterimContact": { "$ref": "#/$defs/Contact" },
-        "CommitteeMemberships": { "type": "array", "items": { "$ref": "#/$defs/CommitteeMembership" }, "description": "With the 'committees' include." },
-        "PastCommitteeMemberships": { "type": "array", "items": { "$ref": "#/$defs/CommitteeMembership" }, "description": "With the 'committees' include." },
-        "BillSponsorships": { "type": "array", "items": { "$ref": "#/$defs/Bill" }, "description": "With the 'bills' include." },
+        "CommitteeMemberships": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/CommitteeMembership" },
+          "description": "With the 'committees' include."
+        },
+        "PastCommitteeMemberships": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/CommitteeMembership" },
+          "description": "With the 'committees' include."
+        },
+        "BillSponsorships": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Bill" },
+          "description": "With the 'bills' include."
+        },
         "Votes": { "type": "array", "items": { "$ref": "#/$defs/Vote" }, "description": "With the 'votes' include." }
       }
     },
@@ -190,20 +320,30 @@
       "description": "One legislator's choice on one roll call.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["Vote", "VoteNum", "Bill", "Member", "MemberParty", "MemberChamber", "MemberName", "Title", "VoteDate"],
+      "required": [
+        "Vote", "VoteNum", "Bill", "Member", "MemberParty", "MemberChamber", "MemberName", "Title", "VoteDate"
+      ],
       "properties": {
         "Vote": { "type": "string", "description": "Space padded: 'Y ' yea, 'N ' nay, 'E ' excused, 'A ' absent." },
         "VoteNum": { "type": "string", "description": "Chamber + number, eg 'H0396'" },
-        "Bill": { "type": ["string", "null"], "description": "eg 'SB 113'. null when the vote isn't on a bill, eg a confirmation." },
+        "Bill": {
+          "type": ["string", "null"],
+          "description": "eg 'SB 113'. null when the vote isn't on a bill, eg a confirmation."
+        },
         "Member": { "type": "string", "description": "Member code, eg 'FRB'" },
         "MemberParty": { "type": "string" },
         "MemberChamber": { "$ref": "#/$defs/Chamber" },
         "MemberName": { "type": "string", "description": "Space padded last name" },
-        "Title": { "type": "string", "description": "Lines separated by \\r\\n, eg 'CSHB 16(STA)\\r\\nSecond Reading\\r\\nAmendment No. 1\\r\\n'" },
-        "VoteDate": { "$ref": "#/$defs/IsoDate" }
+        "Title": {
+          "type": "string",
+          "description": "Lines separated by \\r\\n, eg 'CSHB 16(STA)\\r\\nSecond Reading\\r\\nAmendment No. 1\\r\\n'"
+        },
+        "VoteDate": {
+          "description": "A few old votes have '-199- 0--0'.",
+          "anyOf": [{ "$ref": "#/$defs/IsoDate" }, { "const": "-199- 0--0" }]
+        }
       }
     },
-
     "Action": {
       "description": "A journal entry about a bill.",
       "type": "object",
@@ -217,13 +357,15 @@
         "Code": { "type": "string" },
         "Seq": { "type": "string" },
         "LinkActive": { "type": "boolean" },
-        "Document": { "$ref": "#/$defs/Document" }
+        "Document": { "type": "object", "$ref": "#/$defs/Document", "unevaluatedProperties": false }
       }
     },
     "Sponsor": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["BillRoot", "SponsoringMember", "SponsoringCommittee", "Chamber", "Requestor", "Name", "SponsorSeq", "isPrime"],
+      "required": [
+        "BillRoot", "SponsoringMember", "SponsoringCommittee", "Chamber", "Requestor", "Name", "SponsorSeq", "isPrime"
+      ],
       "properties": {
         "BillRoot": { "type": "string", "description": "eg 'HB  16'" },
         "SponsoringMember": { "oneOf": [{ "$ref": "#/$defs/Member" }, { "type": "null" }] },
@@ -237,36 +379,34 @@
     },
     "BillVersion": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["VersionLetter", "Title", "Name", "IntroDate", "PassedHouse", "PassedSenate", "WorkOrder", "Url", "Mime", "Encoding", "Data"],
+      "allOf": [{ "$ref": "#/$defs/Document" }],
+      "unevaluatedProperties": false,
+      "required": ["VersionLetter", "Title", "Name", "IntroDate", "PassedHouse", "PassedSenate", "WorkOrder"],
       "properties": {
         "VersionLetter": { "type": "string", "description": "eg 'A'" },
         "Title": { "type": "string" },
         "Name": { "type": "string", "description": "eg 'CSHB 16(STA)'" },
         "IntroDate": { "$ref": "#/$defs/IsoDate" },
-        "PassedHouse": { "type": ["string", "null"] },
-        "PassedSenate": { "type": ["string", "null"] },
-        "WorkOrder": { "type": "string", "description": "eg '34-LS0217'" },
-        "Url": { "type": ["string", "null"], "description": "PDF link" },
-        "Mime": { "type": ["string", "null"] },
-        "Encoding": { "type": ["string", "null"] },
-        "Data": { "type": ["string", "null"] }
+        "PassedHouse": { "oneOf": [{ "$ref": "#/$defs/IsoDate" }, { "type": "null" }] },
+        "PassedSenate": { "oneOf": [{ "$ref": "#/$defs/IsoDate" }, { "type": "null" }] },
+        "WorkOrder": { "type": "string", "description": "eg '34-LS0217'" }
       }
     },
     "FiscalNote": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["Name", "Preparer", "PublishedDate", "Chamber", "FiscalImpact", "Url", "Mime", "Encoding", "Data"],
+      "allOf": [{ "$ref": "#/$defs/Document" }],
+      "unevaluatedProperties": false,
+      "required": ["Name", "Preparer", "PublishedDate", "Chamber", "FiscalImpact"],
       "properties": {
         "Name": { "type": "string", "description": "eg 'Fiscal Note 1'" },
         "Preparer": { "type": "string" },
-        "PublishedDate": { "type": "string", "description": "mm/dd/yyyy, eg '04/11/2025'" },
+        "PublishedDate": {
+          "type": "string",
+          "pattern": "^(0[1-9]|1[0-2])/(0[1-9]|[12]\\d|3[01])/\\d{4}$",
+          "description": "MM/DD/YYYY, eg '04/11/2025'"
+        },
         "Chamber": { "$ref": "#/$defs/Chamber" },
-        "FiscalImpact": { "type": "string", "description": "eg 'N'" },
-        "Url": { "type": ["string", "null"] },
-        "Mime": { "type": ["string", "null"] },
-        "Encoding": { "type": ["string", "null"] },
-        "Data": { "type": ["string", "null"] }
+        "FiscalImpact": { "type": "string", "description": "eg 'N'" }
       }
     },
     "Bill": {
@@ -284,7 +424,10 @@
         "FullTitle": { "type": "string" },
         "StatusCode": { "type": "string" },
         "StatusText": { "type": "string", "description": "eg '(S) FIN' or 'VETOED BY GOVERNOR'" },
-        "StatusDate": { "$ref": "#/$defs/IsoDate" },
+        "StatusDate": {
+          "description": "Bills in the 12th to 17th legislatures have dates like 'Jul -10- 1' or 'Mar - 2- 1'.",
+          "anyOf": [{ "$ref": "#/$defs/IsoDate" }, { "type": "string", "pattern": "^[A-Z][a-z]{2} -[ \\d]\\d- \\d$" }]
+        },
         "StatusAndThen": { "type": "array" },
         "StatusSummaryCode": { "type": "string" },
         "Flag1": { "type": "string" },
@@ -297,25 +440,45 @@
         "Vetoed": { "type": "boolean" },
         "SponsorUrl": { "type": "string", "description": "Link to the sponsor statement, or ''" },
         "CurrentCommittee": { "$ref": "#/$defs/Committee" },
-        "Enacted": { "$ref": "#/$defs/Document" },
+        "Enacted": { "type": "object", "$ref": "#/$defs/Document", "unevaluatedProperties": false },
         "Documents": { "type": "array" },
         "AllMeetings": { "type": "array", "items": { "$ref": "#/$defs/Meeting" } },
         "Meetings": { "type": "array", "items": { "$ref": "#/$defs/Meeting" } },
         "ManifestErrors": { "type": "array", "items": { "$ref": "#/$defs/Action" } },
         "Statutes": { "type": "array" },
-        "Subjects": { "type": "array", "items": { "type": "string" }, "description": "With the 'subjects' include, eg ['ELECTIONS']" },
-        "Sponsors": { "type": "array", "items": { "$ref": "#/$defs/Sponsor" }, "description": "With the 'sponsors' include." },
-        "Versions": { "type": "array", "items": { "$ref": "#/$defs/BillVersion" }, "description": "With the 'versions' include." },
-        "Actions": { "type": "array", "items": { "$ref": "#/$defs/Action" }, "description": "With the 'actions' include." },
-        "FiscalNotes": { "type": "array", "items": { "$ref": "#/$defs/FiscalNote" }, "description": "With the 'fiscalnotes' include." },
+        "Subjects": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "With the 'subjects' include, eg ['ELECTIONS']"
+        },
+        "Sponsors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Sponsor" },
+          "description": "With the 'sponsors' include."
+        },
+        "Versions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/BillVersion" },
+          "description": "With the 'versions' include."
+        },
+        "Actions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Action" },
+          "description": "With the 'actions' include."
+        },
+        "FiscalNotes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/FiscalNote" },
+          "description": "With the 'fiscalnotes' include."
+        },
         "Votes": { "type": "array", "items": { "$ref": "#/$defs/Vote" }, "description": "With the 'votes' include." }
       }
     },
-
     "Journal": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["Chamber", "JournalDate", "StartPage", "EndPage", "IsDraft", "VideoFiles", "AudioFiles", "Url", "Mime", "Encoding", "Data"],
+      "allOf": [{ "$ref": "#/$defs/Document" }],
+      "unevaluatedProperties": false,
+      "required": ["Chamber", "JournalDate", "StartPage", "EndPage", "IsDraft", "VideoFiles", "AudioFiles"],
       "properties": {
         "Chamber": { "$ref": "#/$defs/Chamber" },
         "JournalDate": { "$ref": "#/$defs/IsoDate" },
@@ -323,11 +486,7 @@
         "EndPage": { "type": "string" },
         "IsDraft": { "type": "string", "description": "'Y' or 'N'" },
         "VideoFiles": { "type": "array", "items": { "$ref": "#/$defs/MediaFile" } },
-        "AudioFiles": { "type": "array", "items": { "$ref": "#/$defs/MediaFile" } },
-        "Url": { "type": ["string", "null"] },
-        "Mime": { "type": ["string", "null"] },
-        "Encoding": { "type": ["string", "null"] },
-        "Data": { "type": ["string", "null"] }
+        "AudioFiles": { "type": "array", "items": { "$ref": "#/$defs/MediaFile" } }
       }
     },
     "SessionDate": {
@@ -351,26 +510,57 @@
         "Number": { "type": "string", "description": "eg '34'" },
         "Year": { "type": "string", "description": "First year, eg '2025'" },
         "SessionDates": { "type": "array", "items": { "$ref": "#/$defs/SessionDate" } },
-        "Journals": { "type": ["array", "null"], "items": { "$ref": "#/$defs/Journal" }, "description": "With the 'journals' include." },
-        "Laws": { "description": "Shape not yet observed (always null so far)." },
-        "Locations": { "description": "Shape not yet observed (always null so far)." },
-        "Subjects": { "description": "Shape not yet observed (always null so far)." },
-        "Requestors": { "description": "Shape not yet observed (always null so far)." },
-        "Sponsors": { "description": "Shape not yet observed (always null so far)." },
-        "Stats": { "description": "Shape not yet observed (always null so far)." },
-        "HouseStatus": { "description": "Shape not yet observed (always null so far)." },
-        "SenateStatus": { "description": "Shape not yet observed (always null so far)." }
+        "Journals": {
+          "type": ["array", "null"],
+          "items": { "$ref": "#/$defs/Journal" },
+          "description": "With the 'journals' include."
+        },
+        "Laws": {
+          "type": "null",
+          "description": "Always null so far, even with its include. Typed null so the contract tests notice if that changes."
+        },
+        "Locations": {
+          "type": "null",
+          "description": "Always null so far, even with its include. Typed null so the contract tests notice if that changes."
+        },
+        "Subjects": {
+          "type": "null",
+          "description": "Always null so far, even with its include. Typed null so the contract tests notice if that changes."
+        },
+        "Requestors": {
+          "type": "null",
+          "description": "Always null so far, even with its include. Typed null so the contract tests notice if that changes."
+        },
+        "Sponsors": {
+          "type": "null",
+          "description": "Always null so far, even with its include. Typed null so the contract tests notice if that changes."
+        },
+        "Stats": {
+          "type": "null",
+          "description": "Always null so far, even with its include. Typed null so the contract tests notice if that changes."
+        },
+        "HouseStatus": {
+          "type": "null",
+          "description": "Always null so far, even with its include. Typed null so the contract tests notice if that changes."
+        },
+        "SenateStatus": {
+          "type": "null",
+          "description": "Always null so far, even with its include. Typed null so the contract tests notice if that changes."
+        }
       }
     },
-
     "BillsResponse": {
       "type": "object",
       "additionalProperties": false,
       "required": ["Basis"],
       "properties": {
         "Basis": {
-          "type": "object", "additionalProperties": false, "required": ["Bills"],
-          "properties": { "Bills": { "type": "array", "items": { "$ref": "#/$defs/Bill" } } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["Bills"],
+          "properties": {
+            "Bills": { "type": "array", "items": { "$ref": "#/$defs/Bill" } }
+          }
         }
       }
     },
@@ -380,8 +570,12 @@
       "required": ["Basis"],
       "properties": {
         "Basis": {
-          "type": "object", "additionalProperties": false, "required": ["Committees"],
-          "properties": { "Committees": { "type": "array", "items": { "$ref": "#/$defs/Committee" } } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["Committees"],
+          "properties": {
+            "Committees": { "type": "array", "items": { "$ref": "#/$defs/Committee" } }
+          }
         }
       }
     },
@@ -391,8 +585,12 @@
       "required": ["Basis"],
       "properties": {
         "Basis": {
-          "type": "object", "additionalProperties": false, "required": ["Meetings"],
-          "properties": { "Meetings": { "type": "array", "items": { "$ref": "#/$defs/Meeting" } } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["Meetings"],
+          "properties": {
+            "Meetings": { "type": "array", "items": { "$ref": "#/$defs/Meeting" } }
+          }
         }
       }
     },
@@ -402,8 +600,12 @@
       "required": ["Basis"],
       "properties": {
         "Basis": {
-          "type": "object", "additionalProperties": false, "required": ["Members"],
-          "properties": { "Members": { "type": "array", "items": { "$ref": "#/$defs/Member" } } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["Members"],
+          "properties": {
+            "Members": { "type": "array", "items": { "$ref": "#/$defs/Member" } }
+          }
         }
       }
     },
@@ -414,8 +616,12 @@
       "required": ["Basis"],
       "properties": {
         "Basis": {
-          "type": "object", "additionalProperties": false, "required": ["Session"],
-          "properties": { "Session": { "$ref": "#/$defs/Session" } }
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["Session"],
+          "properties": {
+            "Session": { "$ref": "#/$defs/Session" }
+          }
         }
       }
     }

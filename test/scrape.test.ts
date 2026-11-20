@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
-import { BasisClient } from '../src/client.ts';
+import { createBasis } from '../src/client.ts';
 import { readCsvAll } from '../src/scrape/csv.ts';
 import { legislaturesToRefresh, scrape } from '../src/scrape/scrape.ts';
 import { fakeFetch, noSleep, response, silent } from './helpers.ts';
@@ -103,9 +103,9 @@ describe('scrape', () => {
       }
       throw new Error(`unexpected request ${url} ${q}`);
     });
-    const client = new BasisClient({ fetch, sleep: noSleep, logger: silent });
+    const basis = createBasis({ fetch, sleep: noSleep, logger: silent });
     const summary = await scrape({
-      client, logger: silent, outDir: dirs.out, curatedDir: dirs.curated, baselineDir: dirs.baseline, legislatures: [34],
+      basis, logger: silent, outDir: dirs.out, curatedDir: dirs.curated, baselineDir: dirs.baseline, legislatures: [34],
     });
     assert.deepEqual(summary.refreshed, [34]);
     assert.deepEqual(summary.warnings, []);
@@ -156,9 +156,9 @@ describe('scrape', () => {
       if (url.includes('session=35')) return response('{"Basis":{"Error":{"Code":"BaoSystemFault","Description":"Invalid Session Number."},}}');
       throw new Error(`unexpected request ${url}`);
     });
-    const client = new BasisClient({ fetch, sleep: noSleep, logger: silent });
+    const basis = createBasis({ fetch, sleep: noSleep, logger: silent });
     const summary = await scrape({
-      client, logger: silent, outDir: dirs.out, curatedDir: dirs.curated, baselineDir: dirs.baseline, legislatures: [35],
+      basis, logger: silent, outDir: dirs.out, curatedDir: dirs.curated, baselineDir: dirs.baseline, legislatures: [35],
     });
     assert.equal(summary.warnings.length, 1);
     assert.equal(summary.rows.bills, 2);

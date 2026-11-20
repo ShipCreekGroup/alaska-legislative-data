@@ -1,10 +1,7 @@
 // A dependency-free client for the Alaska Legislature's BASIS API.
 //
-// Works anywhere a `fetch`-like function exists (Node 18+, Deno, Bun, browsers,
-// Cloudflare Workers). For Google Apps Script, pass `fetch: urlFetchAppFetch()`.
-//
-// This file must stay self-contained (type-only imports only) so that
-// scripts/build-gas.ts can turn it into a single Apps Script file.
+// Works anywhere a `fetch`-like function exists (Node, Deno, Bun, browsers,
+// Cloudflare Workers). Elsewhere, pass your own `fetch`.
 import type { Bill, Chamber, Committee, Fault, Meeting, Member, Session } from './types.gen.ts';
 
 export const DEFAULT_BASE_URL = 'https://www.akleg.gov/publicservice/basis';
@@ -53,7 +50,19 @@ export interface ClientOptions {
   logger?: Logger;
   /** Extra headers sent with every request. */
   headers?: Record<string, string>;
+  /**
+   * Checks each response against the schema, eg `validate` from
+   * 'alaska-legislative-api/zod'. Mismatches are logged with `logger.warn`;
+   * the data is returned anyway.
+   */
+  validate?: Validate;
 }
+
+/**
+ * Checks a parsed response body (`{ Basis: ... }`) from one endpoint and
+ * returns a description of each mismatch, or an empty array.
+ */
+export type Validate = (endpoint: Endpoint, body: unknown) => string[];
 
 // ---------------------------------------------------------------------------
 // queries
@@ -259,77 +268,107 @@ function defaultFetch(): FetchFn {
   if (typeof f !== 'function') {
     return () =>
       Promise.reject(
-        new Error('No global fetch found. Pass `fetch` in the client options (eg `urlFetchAppFetch()` in Google Apps Script).'),
+        new Error('No global fetch found. Pass `fetch` in the client options.'),
       );
   }
   return (url, init) => (f as FetchFn)(url, init);
 }
 
-export class BasisClient {
-  readonly baseUrl: string;
-  readonly textBaseUrl: string;
-  readonly maxAttempts: number;
-  readonly maxConcurrency: number;
-  private fetchFn: FetchFn;
-  private sleep: (ms: number) => Promise<void>;
-  private logger: Logger;
-  private extraHeaders: Record<string, string>;
-  private active = 0;
-  private waiting: Array<() => void> = [];
+export interface ListGroup<T, Q extends object> {
+  /** The endpoint's results. */
+  list(params?: RequestParams<Q>): Promise<T[]>;
+  /** Number of results a query would return, without downloading them (a HEAD request). */
+  count(params?: RequestParams<Q>): Promise<number>;
+}
 
-  constructor(options: ClientOptions = {}) {
-    this.baseUrl = (options.baseUrl ?? DEFAULT_BASE_URL).replace(/\/$/, '');
-    this.textBaseUrl = (options.textBaseUrl ?? DEFAULT_TEXT_BASE_URL).replace(/\/$/, '');
-    this.fetchFn = options.fetch ?? defaultFetch();
-    this.maxConcurrency = options.maxConcurrency ?? 5;
-    this.maxAttempts = options.maxAttempts ?? 4;
-    this.sleep = options.sleep ?? defaultSleep;
-    this.logger = options.logger ?? consoleLogger;
-    this.extraHeaders = options.headers ?? {};
-  }
+export interface BillTextParams {
+  /** Legislature number, eg 34. */
+  session: number;
+  /** eg 'HB 16' (any spacing) */
+  bill: string;
+  /** eg 'A' */
+  version: string;
+}
 
-  /** Bills. Use `query` to add sponsors, versions, votes, etc. */
-  async bills(params: RequestParams<BillsQuery> = {}): Promise<Bill[]> {
-    return (await this.get('bills', params)).data.Bills as Bill[];
-  }
-
-  async committees(params: RequestParams<CommitteesQuery> = {}): Promise<Committee[]> {
-    return (await this.get('committees', params)).data.Committees as Committee[];
-  }
-
-  async meetings(params: RequestParams<MeetingsQuery> = {}): Promise<Meeting[]> {
-    return (await this.get('meetings', params)).data.Meetings as Meeting[];
-  }
-
+export interface Basis {
+  bills: ListGroup<Bill, BillsQuery>;
+  committees: ListGroup<Committee, CommitteesQuery>;
+  meetings: ListGroup<Meeting, MeetingsQuery>;
   /** Legislators. Add `query: { votes: true }` to get every roll-call choice they made. */
-  async members(params: RequestParams<MembersQuery> = {}): Promise<Member[]> {
-    return (await this.get('members', params)).data.Members as Member[];
-  }
+  members: ListGroup<Member, MembersQuery>;
+  /** One legislature's details (the API calls a legislature a session). */
+  sessions: { get(params?: RequestParams<SessionsQuery>): Promise<Session> };
+  billText: {
+    /**
+     * The plain text of one bill version, with line numbers removed. Control
+     * characters marking added (\x16\x10 ... \x11\x17) and other sections are kept.
+     */
+    get(params: BillTextParams): Promise<string>;
+    /** The plain text of one bill version exactly as served. */
+    getRaw(params: BillTextParams): Promise<string>;
+  };
+  /** Send a GET request to any endpoint and return the parsed `Basis` object plus metadata. */
+  request(endpoint: Endpoint, params?: RequestParams<object>): Promise<RawResponse>;
+}
 
-  /** One legislature's details (the API calls it a session). */
-  async session(params: RequestParams<SessionsQuery> = {}): Promise<Session> {
-    return (await this.get('sessions', params)).data.Session as Session;
-  }
+/** Create a client for the BASIS API. */
+export function createBasis(options: ClientOptions = {}): Basis {
+  const baseUrl = (options.baseUrl ?? DEFAULT_BASE_URL).replace(/\/$/, '');
+  const textBaseUrl = (options.textBaseUrl ?? DEFAULT_TEXT_BASE_URL).replace(/\/$/, '');
+  const fetchFn = options.fetch ?? defaultFetch();
+  const maxConcurrency = options.maxConcurrency ?? 5;
+  const maxAttempts = options.maxAttempts ?? 4;
+  const sleep = options.sleep ?? defaultSleep;
+  const logger = options.logger ?? consoleLogger;
+  const extraHeaders = options.headers ?? {};
+  const validate = options.validate;
 
-  /** Number of results a query would return, without downloading them. */
-  async count(endpoint: Endpoint, params: RequestParams<object> = {}): Promise<number> {
-    const { url, headers } = buildRequest(endpoint, params, this.baseUrl);
-    return this.withRetries(url, async () => {
-      const res = await this.send(url, { method: 'HEAD', headers: { ...this.extraHeaders, ...headers } });
-      if (res.status >= 400) throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, [], '');
-      const n = res.headers.get('x-alaska-query-count');
-      if (n === null || Number.isNaN(Number(n))) {
-        throw new BasisError('Response had no X-Alaska-Query-Count header', url, res.status, [], '');
+  // A simple semaphore: at most maxConcurrency requests in flight.
+  let active = 0;
+  const waiting: Array<() => void> = [];
+  const acquire = (): Promise<void> => {
+    if (active < maxConcurrency) {
+      active++;
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => waiting.push(resolve));
+  };
+  const release = (): void => {
+    const next = waiting.shift();
+    if (next) next();
+    else active--;
+  };
+
+  const send = async (url: string, init: FetchInit): Promise<FetchResponse> => {
+    await acquire();
+    try {
+      logger.debug(init.method, url, init.headers);
+      return await fetchFn(url, init);
+    } finally {
+      release();
+    }
+  };
+
+  const withRetries = async <T>(url: string, attempt: () => Promise<T>): Promise<T> => {
+    let lastError: unknown;
+    for (let i = 0; i < maxAttempts; i++) {
+      try {
+        return await attempt();
+      } catch (e) {
+        lastError = e;
+        if (!isRetryable(e) || i === maxAttempts - 1) break;
+        const wait = 500 * 2 ** i;
+        logger.warn(`Retrying ${url} in ${wait}ms (attempt ${i + 2}/${maxAttempts}): ${String(e)}`);
+        await sleep(wait);
       }
-      return Number(n);
-    });
-  }
+    }
+    throw lastError;
+  };
 
-  /** Send a GET request and return the parsed `Basis` object plus metadata. */
-  async get(endpoint: Endpoint, params: RequestParams<object> = {}): Promise<RawResponse> {
-    const { url, headers } = buildRequest(endpoint, params, this.baseUrl);
-    return this.withRetries(url, async () => {
-      const res = await this.send(url, { method: 'GET', headers: { ...this.extraHeaders, ...headers } });
+  const request = async (endpoint: Endpoint, params: RequestParams<object> = {}): Promise<RawResponse> => {
+    const { url, headers } = buildRequest(endpoint, params, baseUrl);
+    const res = await withRetries(url, async () => {
+      const res = await send(url, { method: 'GET', headers: { ...extraHeaders, ...headers } });
       const body = await res.text();
       if (res.status >= 400) {
         throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, parseFaults(body), body);
@@ -356,69 +395,58 @@ export class BasisClient {
       const count = res.headers.get('x-alaska-query-count');
       return { data: parsed.Basis, count: count === null ? null : Number(count), url, headers };
     });
-  }
+    if (validate) {
+      let problems: string[];
+      try {
+        problems = validate(endpoint, { Basis: res.data });
+      } catch (e) {
+        problems = [`validator threw: ${String(e)}`];
+      }
+      if (problems.length) {
+        const query = headers['X-Alaska-Legislature-Basis-Query'];
+        logger.warn(`Response from ${url}${query ? ` (query ${query})` : ''} doesn't match the schema:\n  ${problems.join('\n  ')}`);
+      }
+    }
+    return res;
+  };
 
-  /**
-   * The plain text of one bill version, with line numbers removed.
-   * Control characters marking added (\x16\x10 ... \x11\x17) and other sections are kept.
-   * @param legislature eg 34
-   * @param bill eg 'HB 16' (any spacing)
-   * @param version eg 'A'
-   */
-  async billText(legislature: number, bill: string, version: string): Promise<string> {
-    return cleanBillText(await this.billTextRaw(legislature, bill, version));
-  }
+  const count = async (endpoint: Endpoint, params: RequestParams<object> = {}): Promise<number> => {
+    const { url, headers } = buildRequest(endpoint, params, baseUrl);
+    return withRetries(url, async () => {
+      const res = await send(url, { method: 'HEAD', headers: { ...extraHeaders, ...headers } });
+      if (res.status >= 400) throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, [], '');
+      const n = res.headers.get('x-alaska-query-count');
+      if (n === null || Number.isNaN(Number(n))) {
+        throw new BasisError('Response had no X-Alaska-Query-Count header', url, res.status, [], '');
+      }
+      return Number(n);
+    });
+  };
 
-  /** The plain text of one bill version exactly as served. */
-  async billTextRaw(legislature: number, bill: string, version: string): Promise<string> {
-    const url = `${this.textBaseUrl}/${legislature}?Hsid=${textBillCode(bill)}${version}`;
-    return this.withRetries(url, async () => {
-      const res = await this.send(url, { method: 'GET', headers: { ...this.extraHeaders } });
+  const group = <T, Q extends object>(endpoint: Endpoint, key: string): ListGroup<T, Q> => ({
+    list: async (params = {}) => (await request(endpoint, params)).data[key] as T[],
+    count: (params = {}) => count(endpoint, params),
+  });
+
+  const billTextRaw = async ({ session, bill, version }: BillTextParams): Promise<string> => {
+    const url = `${textBaseUrl}/${session}?Hsid=${textBillCode(bill)}${version}`;
+    return withRetries(url, async () => {
+      const res = await send(url, { method: 'GET', headers: { ...extraHeaders } });
       const body = await res.text();
       if (res.status >= 400) throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, [], body);
       return body;
     });
-  }
+  };
 
-  private async withRetries<T>(url: string, attempt: () => Promise<T>): Promise<T> {
-    let lastError: unknown;
-    for (let i = 0; i < this.maxAttempts; i++) {
-      try {
-        return await attempt();
-      } catch (e) {
-        lastError = e;
-        if (!isRetryable(e) || i === this.maxAttempts - 1) break;
-        const wait = 500 * 2 ** i;
-        this.logger.warn(`Retrying ${url} in ${wait}ms (attempt ${i + 2}/${this.maxAttempts}): ${String(e)}`);
-        await this.sleep(wait);
-      }
-    }
-    throw lastError;
-  }
-
-  private async send(url: string, init: FetchInit): Promise<FetchResponse> {
-    await this.acquire();
-    try {
-      this.logger.debug(init.method, url, init.headers);
-      return await this.fetchFn(url, init);
-    } finally {
-      this.release();
-    }
-  }
-
-  private acquire(): Promise<void> {
-    if (this.active < this.maxConcurrency) {
-      this.active++;
-      return Promise.resolve();
-    }
-    return new Promise((resolve) => this.waiting.push(resolve));
-  }
-
-  private release(): void {
-    const next = this.waiting.shift();
-    if (next) next();
-    else this.active--;
-  }
+  return {
+    bills: group('bills', 'Bills'),
+    committees: group('committees', 'Committees'),
+    meetings: group('meetings', 'Meetings'),
+    members: group('members', 'Members'),
+    sessions: { get: async (params = {}) => (await request('sessions', params)).data.Session as Session },
+    billText: { get: async (p) => cleanBillText(await billTextRaw(p)), getRaw: billTextRaw },
+    request,
+  };
 }
 
 function isRetryable(e: unknown): boolean {
@@ -467,42 +495,4 @@ export function cleanBillText(raw: string): string {
 /** Rough current legislature number: 34 for 2025-2026, 35 for 2027-2028, ... */
 export function currentLegislature(date: Date = new Date()): number {
   return Math.floor((date.getFullYear() - 2023) / 2) + 33;
-}
-
-// ---------------------------------------------------------------------------
-// Google Apps Script
-// ---------------------------------------------------------------------------
-
-interface UrlFetchAppLike {
-  fetch(
-    url: string,
-    params: { method: string; headers: Record<string, string>; muteHttpExceptions: boolean; followRedirects: boolean },
-  ): {
-    getResponseCode(): number;
-    getContentText(): string;
-    getAllHeaders(): Record<string, string | string[]>;
-  };
-}
-
-/**
- * A FetchFn backed by Apps Script's UrlFetchApp. UrlFetchApp can't send HEAD
- * requests, so `count()` sends a GET instead (and downloads the results).
- */
-export function urlFetchAppFetch(urlFetchApp?: UrlFetchAppLike): FetchFn {
-  return async (url, init) => {
-    const app = urlFetchApp ?? (globalThis as { UrlFetchApp?: UrlFetchAppLike }).UrlFetchApp;
-    if (!app) throw new Error('UrlFetchApp is not available');
-    const res = app.fetch(url, { method: 'get', headers: init.headers, muteHttpExceptions: true, followRedirects: true });
-    const all = res.getAllHeaders();
-    const lower: Record<string, string> = {};
-    for (const k of Object.keys(all)) {
-      const v = all[k]!;
-      lower[k.toLowerCase()] = Array.isArray(v) ? v.join(', ') : v;
-    }
-    return {
-      status: res.getResponseCode(),
-      headers: { get: (name: string) => lower[name.toLowerCase()] ?? null },
-      text: async () => res.getContentText(),
-    };
-  };
 }

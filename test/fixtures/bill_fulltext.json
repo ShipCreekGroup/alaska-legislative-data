@@ -1,0 +1,65 @@
+{
+ "Basis": {
+  "Bills": [
+   {
+    "Documents": [],
+    "PartialVeto": false,
+    "Vetoed": false,
+    "BillNumber": "HB  16",
+    "BillName": "CSHB 16(STA) AM S(EFD FLD H)",
+    "ShortTitle": "CAMPAIGN FINANCE;CONTRIBUTION LIMITS;APOC",
+    "FullTitle": " \"An Act requiring a group supporting or opposing a candidate or ballot proposition in a state or local election to maintain an address in the state; amending campaign contribution limits for state and local office; directing the Alaska Public Offices Commission to adjust campaign contribution limits for state and local office once each decade beginning in 2031; relating to campaign contribution reporting requirements; relating to administrative complaints filed with the Alaska Public Offices Commission; and relating to state election expenditures and contributions made by a foreign-influenced corporation or foreign national.\"",
+    "StatusCode": "044",
+    "StatusText": "VETOED BY GOVERNOR",
+    "Flag1": "X",
+    "Flag2": "0",
+    "StatusDate": "2026-07-09",
+    "StatusAndThen": [],
+    "StatusSummaryCode": " ",
+    "OnFloor": " ",
+    "NotKnown": " ",
+    "Filler": " ",
+    "Lock": " ",
+    "Versions": [
+     {
+      "VersionLetter": "A",
+      "Title": "\"An Act amending campaign contribution limits for state and local office; directing the Alaska Public Offices Commission to adjust campaign contribution limits for state and local office once each decade beginning in 2031; and relating to campaign contribution reporting requirements.\" ",
+      "Name": "HB 16",
+      "IntroDate": "2025-01-22",
+      "PassedHouse": null,
+      "PassedSenate": null,
+      "WorkOrder": "34-LS0217",
+      "Url": "https://www.akleg.gov/PDF/34/Bills/HB0016A.PDF",
+      "Mime": "text/plain",
+      "Encoding": "base64",
+      "Data": "MDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBIT1VTRSBCSUxMIE5PLiAxNiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg"
+     },
+     {
+      "VersionLetter": "B",
+      "Title": "\"An Act requiring a group supporting or opposing a candidate or ballot proposition in a state or local election to maintain an address in the state; amending campaign contribution limits for state and local office; directing the Alaska Public Offices Commission to adjust campaign contribution limits for state and local office once each decade beginning in 2031; relating to campaign contribution reporting requirements; relating to administrative complaints filed with the Alaska Public Offices Commission; relating to state election expenditures and contributions made by a foreign-influenced corporation or foreign national; and providing for an effective date.\" ",
+      "Name": "CSHB 16(STA)",
+      "IntroDate": "2025-04-11",
+      "PassedHouse": "2025-04-28",
+      "PassedSenate": null,
+      "WorkOrder": "34-LS0217",
+      "Url": "https://www.akleg.gov/PDF/34/Bills/HB0016B.PDF",
+      "Mime": "text/plain",
+      "Encoding": "base64",
+      "Data": "MDAgICAgICAgICAgICAgICAgICAgICAgIENTIEZPUiBIT1VTRSBCSUxMIE5PLiAxNihTVEEpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg"
+     }
+    ],
+    "AllMeetings": [],
+    "Meetings": [],
+    "Enacted": {
+     "Url": null,
+     "Mime": null,
+     "Encoding": null,
+     "Data": null
+    },
+    "ManifestErrors": [],
+    "SponsorUrl": "",
+    "Statutes": []
+   }
+  ]
+ }
+}

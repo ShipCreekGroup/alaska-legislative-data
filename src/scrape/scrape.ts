@@ -5,8 +5,8 @@
 // Without a baseline, every legislature is scraped (slow: hours, mostly bill text).
 import { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { BasisClient, BasisError, currentLegislature, type Logger } from '../client.ts';
-import type { Bill, Vote } from '../types.gen.ts';
+import { BasisError, currentLegislature, type Basis, type Logger } from '../client.ts';
+import type { Vote } from '../types.gen.ts';
 import { CsvWriter, readCsv, readCsvAll, writeCsv } from './csv.ts';
 import {
   COLUMNS,
@@ -40,7 +40,7 @@ export const FIRST_VERSION_LEGISLATURE = 26;
 const KNOWN_FAILING_MEMBERS = new Set(['18:GRS', '18:HUD', '18:DVG']);
 
 export interface ScrapeOptions {
-  client: BasisClient;
+  basis: Basis;
   outDir: string;
   /** Directory with the curated people.csv and members.csv. */
   curatedDir: string;
@@ -66,7 +66,7 @@ const quietLogger: Logger = { debug() {}, info: console.error, warn: console.err
 
 export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
   const log = opts.logger ?? quietLogger;
-  const { client, outDir } = opts;
+  const { basis, outDir } = opts;
   const warnings: string[] = [];
   const warn = (msg: string) => {
     warnings.push(msg);
@@ -99,7 +99,7 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
   const bills: BillRow[] = baseBills.filter((b) => !refreshSet.has(b.LegislatureNumber));
   const available = new Set<number>();
   for (const leg of refresh.filter((l) => l >= FIRST_BILL_LEGISLATURE)) {
-    const raw = await unlessUnavailable(() => client.bills({ session: leg, query: { subjects: true } }));
+    const raw = await unlessUnavailable(() => basis.bills.list({ session: leg, query: { subjects: true } }));
     if (raw === undefined) {
       warn(`Legislature ${leg}: no data from the API yet; keeping baseline rows`);
       bills.push(...baseBills.filter((b) => b.LegislatureNumber === leg));
@@ -132,7 +132,7 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
     }
   }
   for (const leg of voteLegs) {
-    const raw = await scrapeVotes(client, leg, members, warn);
+    const raw = await scrapeVotes(basis, leg, members, warn);
     const split = splitVotes(raw, billIds, members);
     for (const u of dedupe(split.unmatched.map((u) => `${u.leg}:${u.code}`))) {
       warn(`Votes by member code ${u} have no matching row in members.csv; dropped`);
@@ -167,18 +167,18 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
   log.info(`Checking ${toCheck.length} bills for new versions`);
   let added = 0;
   await mapLimit(toCheck, 25, async (b) => {
-    const detail = await client.bills({
+    const detail = await basis.bills.list({
       session: b.LegislatureNumber,
       query: { bills: { bill: b.BillNumber }, versions: { fulltext: 'urlonly' } },
     });
     const found: BillVersionRow[] = [];
-    for (const bill of detail as Bill[]) {
+    for (const bill of detail) {
       for (const v of bill.Versions ?? []) {
         const row = cleanBillVersion(b.LegislatureNumber, bill.BillNumber, v, null);
         if (haveVersion.has(row.BillVersionId) || found.some((f) => f.BillVersionId === row.BillVersionId)) continue;
         if (!opts.skipText) {
           try {
-            row.BillVersionFullText = await client.billText(b.LegislatureNumber, b.BillNumber, v.VersionLetter);
+            row.BillVersionFullText = await basis.billText.get({ session: b.LegislatureNumber, bill: b.BillNumber, version: v.VersionLetter });
           } catch (e) {
             warn(`No text for ${row.BillVersionId}: ${String(e)}`);
           }
@@ -204,7 +204,7 @@ export function legislaturesToRefresh(have: Set<number>, current: number): numbe
 
 /** Every roll-call choice cast in one legislature, fetched member by member. */
 async function scrapeVotes(
-  client: BasisClient,
+  basis: Basis,
   leg: number,
   members: MemberRow[],
   warn: (m: string) => void,
@@ -212,7 +212,7 @@ async function scrapeVotes(
   const codes = dedupe(members.filter((m) => m.LegislatureNumber === leg).flatMap(memberCodes));
   const results = await mapLimit(codes, 20, async (code) => {
     try {
-      const ms = await client.members({ session: leg, query: { members: { code }, votes: true } });
+      const ms = await basis.members.list({ session: leg, query: { members: { code }, votes: true } });
       return ms.flatMap((m) => m.Votes ?? []).map((vote) => ({ leg, vote }));
     } catch (e) {
       if (e instanceof BasisError && KNOWN_FAILING_MEMBERS.has(`${leg}:${code}`)) {

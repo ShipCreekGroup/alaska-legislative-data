@@ -1,4 +1,4 @@
-/* Generated from schema/basis.schema.json by scripts/gen-types.ts. Do not edit by hand. */
+/* Generated from schema/basis.schema.json by scripts/gen.ts. Do not edit by hand. */
 
 /**
  * 'H' for House, 'S' for Senate.
@@ -8,12 +8,19 @@
  */
 export type Chamber = 'H' | 'S';
 /**
- * A date as yyyy-mm-dd, eg '2025-01-22'. Some very old records use other formats, eg 'Jul -10- 1'.
+ * A date as yyyy-mm-dd, eg '2025-01-22'.
  *
  * This interface was referenced by `BasisTypes`'s JSON-Schema
  * via the `definition` "IsoDate".
  */
 export type IsoDate = string;
+/**
+ * A time of day as HH:MM:SS, eg '15:15:00'. JSON Schema's time format requires a timezone, which the API doesn't send.
+ *
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "Time".
+ */
+export type Time = string;
 /**
  * A Microsoft JSON date, eg '/Date(1737450000000)/' (milliseconds since 1970).
  *
@@ -21,18 +28,175 @@ export type IsoDate = string;
  * via the `definition` "MsDate".
  */
 export type MsDate = string;
-
 /**
- * A link to (or the inline content of) a document. With fulltext=urlonly only Url is set.
+ * A link to, or the inline content of, a document. Objects with document fields (bill versions, fiscal notes, media files, journals, minutes) include one of these shapes.
  *
  * This interface was referenced by `BasisTypes`'s JSON-Schema
  * via the `definition` "Document".
  */
-export interface Document {
+export type Document = DocumentEmpty | DocumentUrlOnly | DocumentFull;
+/**
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "MediaFile".
+ */
+export type MediaFile = Document & {
+  /**
+   * eg '/Date(1736451596000)/'
+   */
+  StartTime: string | null;
+  Length: number;
+  /**
+   * eg 'V' for video, 'A' for audio
+   */
+  MediaType: string;
+  Duration: number;
+};
+/**
+ * A link to, or the inline content of, a document. Objects with document fields (bill versions, fiscal notes, media files, journals, minutes) include one of these shapes.
+ */
+export type Document1 = DocumentEmpty | DocumentUrlOnly | DocumentFull;
+/**
+ * A committee meeting's minutes: an index of timestamps into the recording, plus a link to the PDF.
+ *
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "Minutes".
+ */
+export type Minutes = Document & {
+  /**
+   * 'J' for joint committees, eg Legislative Budget & Audit
+   */
+  Chamber: 'H' | 'S' | 'J';
+  MinutesDate: IsoDate;
+  /**
+   * Start time as HHMM, eg '1401'
+   */
+  MinutesTime: string;
+  /**
+   * eg 'FIN'
+   */
+  CommitteeCode: string;
+  TimeStamps: MinutesTimeStamp[];
+  /**
+   * '/Date(-62135564400000)/' (year 1) when there's no video
+   */
+  VideoStart: string;
+  /**
+   * eg 'https://www.akleg.gov/ftr/2025/20250121/sccm/sccm_1401.mp3', or ''
+   */
+  AudioUrl: string;
+  /**
+   * '' when there's no video
+   */
+  VideoUrl: string;
+};
+/**
+ * A link to, or the inline content of, a document. Objects with document fields (bill versions, fiscal notes, media files, journals, minutes) include one of these shapes.
+ */
+export type Document2 = DocumentEmpty | DocumentUrlOnly | DocumentFull;
+/**
+ * A link to, or the inline content of, a document. Objects with document fields (bill versions, fiscal notes, media files, journals, minutes) include one of these shapes.
+ */
+export type Document3 = DocumentEmpty | DocumentUrlOnly | DocumentFull;
+/**
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "BillVersion".
+ */
+export type BillVersion = Document & {
+  /**
+   * eg 'A'
+   */
+  VersionLetter: string;
+  Title: string;
+  /**
+   * eg 'CSHB 16(STA)'
+   */
+  Name: string;
+  IntroDate: IsoDate;
+  PassedHouse: IsoDate | null;
+  PassedSenate: IsoDate | null;
+  /**
+   * eg '34-LS0217'
+   */
+  WorkOrder: string;
+};
+/**
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "FiscalNote".
+ */
+export type FiscalNote = Document & {
+  /**
+   * eg 'Fiscal Note 1'
+   */
+  Name: string;
+  Preparer: string;
+  /**
+   * MM/DD/YYYY, eg '04/11/2025'
+   */
+  PublishedDate: string;
+  Chamber: Chamber;
+  /**
+   * eg 'N'
+   */
+  FiscalImpact: string;
+};
+/**
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "Journal".
+ */
+export type Journal = Document & {
+  Chamber: Chamber;
+  JournalDate: IsoDate;
+  StartPage: string;
+  EndPage: string;
+  /**
+   * 'Y' or 'N'
+   */
+  IsDraft: string;
+  VideoFiles: MediaFile[];
+  AudioFiles: MediaFile[];
+};
+
+/**
+ * A document with nothing set, eg a bill version with no PDF yet.
+ *
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "DocumentEmpty".
+ */
+export interface DocumentEmpty {
+  Url: null;
+  Mime: null;
+  Encoding: null;
+  Data: null;
+}
+/**
+ * A link only. What fulltext=urlonly returns, and the usual shape when fulltext isn't requested.
+ *
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "DocumentUrlOnly".
+ */
+export interface DocumentUrlOnly {
+  Url: string;
+  Mime: null;
+  Encoding: null;
+  Data: null;
+}
+/**
+ * Inline content, with fulltext=true. The link is usually set too.
+ *
+ * This interface was referenced by `BasisTypes`'s JSON-Schema
+ * via the `definition` "DocumentFull".
+ */
+export interface DocumentFull {
   Url: string | null;
-  Mime: string | null;
-  Encoding: string | null;
-  Data: string | null;
+  /**
+   * eg 'text/plain'
+   */
+  Mime: string;
+  /**
+   * eg 'base64'
+   */
+  Encoding: string;
+  Data: string;
 }
 /**
  * A Warning or Error element. The API returns these as XML even when JSON was requested.
@@ -130,18 +294,13 @@ export interface Meeting {
   MediaFiles: MediaFile[];
   AudioFiles: MediaFile[];
   VideoFiles: MediaFile[];
-  Media?: Document;
+  Media?: Document1;
   /**
-   * With the 'minutes' include. Shape not yet observed.
+   * With the 'minutes' include; null when a meeting has no minutes.
    */
-  Minutes?: {
-    [k: string]: unknown;
-  };
+  Minutes?: Minutes | null;
   MeetingDate: IsoDate;
-  /**
-   * eg '15:15:00'
-   */
-  MeetingTime: string;
+  MeetingTime: Time;
   MeetingTitle: string;
   MeetingChangeText: string;
   MeetingCanceled: boolean;
@@ -168,23 +327,25 @@ export interface Meeting {
 }
 /**
  * This interface was referenced by `BasisTypes`'s JSON-Schema
- * via the `definition` "MediaFile".
+ * via the `definition` "MinutesTimeStamp".
  */
-export interface MediaFile {
+export interface MinutesTimeStamp {
   /**
-   * eg '/Date(1736451596000)/'
+   * eg 'Adopt Committee on Committees Report'
    */
-  StartTime: string | null;
-  Length: number;
+  Text: string;
   /**
-   * eg 'V' for video, 'A' for audio
+   * Space padded, eg '14:01:39  '
    */
-  MediaType: string;
-  Duration: number;
-  Url: string | null;
-  Mime: string | null;
-  Encoding: string | null;
-  Data: string | null;
+  Time: string;
+  /**
+   * Seconds into the audio recording
+   */
+  AudioElapsed: number;
+  /**
+   * eg 'S' start, 'A' adjourn, 'T' topic, 'M' member speaking, 'B' and 'E'
+   */
+  Type: string;
 }
 /**
  * A member's seat on a committee.
@@ -231,6 +392,9 @@ export interface Bill {
    * eg '(S) FIN' or 'VETOED BY GOVERNOR'
    */
   StatusText: string;
+  /**
+   * Bills in the 12th to 17th legislatures have dates like 'Jul -10- 1' or 'Mar - 2- 1'.
+   */
   StatusDate: IsoDate;
   StatusAndThen: unknown[];
   StatusSummaryCode: string;
@@ -247,7 +411,7 @@ export interface Bill {
    */
   SponsorUrl: string;
   CurrentCommittee?: Committee;
-  Enacted?: Document;
+  Enacted?: Document2;
   Documents: unknown[];
   AllMeetings: Meeting[];
   Meetings: Meeting[];
@@ -295,7 +459,7 @@ export interface Action {
   Code: string;
   Seq: string;
   LinkActive: boolean;
-  Document?: Document;
+  Document?: Document3;
 }
 /**
  * This interface was referenced by `BasisTypes`'s JSON-Schema
@@ -437,80 +601,10 @@ export interface Vote {
    * Lines separated by \r\n, eg 'CSHB 16(STA)\r\nSecond Reading\r\nAmendment No. 1\r\n'
    */
   Title: string;
-  VoteDate: IsoDate;
-}
-/**
- * This interface was referenced by `BasisTypes`'s JSON-Schema
- * via the `definition` "BillVersion".
- */
-export interface BillVersion {
   /**
-   * eg 'A'
+   * A few old votes have '-199- 0--0'.
    */
-  VersionLetter: string;
-  Title: string;
-  /**
-   * eg 'CSHB 16(STA)'
-   */
-  Name: string;
-  IntroDate: IsoDate;
-  PassedHouse: string | null;
-  PassedSenate: string | null;
-  /**
-   * eg '34-LS0217'
-   */
-  WorkOrder: string;
-  /**
-   * PDF link
-   */
-  Url: string | null;
-  Mime: string | null;
-  Encoding: string | null;
-  Data: string | null;
-}
-/**
- * This interface was referenced by `BasisTypes`'s JSON-Schema
- * via the `definition` "FiscalNote".
- */
-export interface FiscalNote {
-  /**
-   * eg 'Fiscal Note 1'
-   */
-  Name: string;
-  Preparer: string;
-  /**
-   * mm/dd/yyyy, eg '04/11/2025'
-   */
-  PublishedDate: string;
-  Chamber: Chamber;
-  /**
-   * eg 'N'
-   */
-  FiscalImpact: string;
-  Url: string | null;
-  Mime: string | null;
-  Encoding: string | null;
-  Data: string | null;
-}
-/**
- * This interface was referenced by `BasisTypes`'s JSON-Schema
- * via the `definition` "Journal".
- */
-export interface Journal {
-  Chamber: Chamber;
-  JournalDate: IsoDate;
-  StartPage: string;
-  EndPage: string;
-  /**
-   * 'Y' or 'N'
-   */
-  IsDraft: string;
-  VideoFiles: MediaFile[];
-  AudioFiles: MediaFile[];
-  Url: string | null;
-  Mime: string | null;
-  Encoding: string | null;
-  Data: string | null;
+  VoteDate: IsoDate | '-199- 0--0';
 }
 /**
  * One regular or special session within a legislature.
@@ -551,53 +645,37 @@ export interface Session {
    */
   Journals?: Journal[] | null;
   /**
-   * Shape not yet observed (always null so far).
+   * Always null so far, even with its include. Typed null so the contract tests notice if that changes.
    */
-  Laws?: {
-    [k: string]: unknown;
-  };
+  Laws?: null;
   /**
-   * Shape not yet observed (always null so far).
+   * Always null so far, even with its include. Typed null so the contract tests notice if that changes.
    */
-  Locations?: {
-    [k: string]: unknown;
-  };
+  Locations?: null;
   /**
-   * Shape not yet observed (always null so far).
+   * Always null so far, even with its include. Typed null so the contract tests notice if that changes.
    */
-  Subjects?: {
-    [k: string]: unknown;
-  };
+  Subjects?: null;
   /**
-   * Shape not yet observed (always null so far).
+   * Always null so far, even with its include. Typed null so the contract tests notice if that changes.
    */
-  Requestors?: {
-    [k: string]: unknown;
-  };
+  Requestors?: null;
   /**
-   * Shape not yet observed (always null so far).
+   * Always null so far, even with its include. Typed null so the contract tests notice if that changes.
    */
-  Sponsors?: {
-    [k: string]: unknown;
-  };
+  Sponsors?: null;
   /**
-   * Shape not yet observed (always null so far).
+   * Always null so far, even with its include. Typed null so the contract tests notice if that changes.
    */
-  Stats?: {
-    [k: string]: unknown;
-  };
+  Stats?: null;
   /**
-   * Shape not yet observed (always null so far).
+   * Always null so far, even with its include. Typed null so the contract tests notice if that changes.
    */
-  HouseStatus?: {
-    [k: string]: unknown;
-  };
+  HouseStatus?: null;
   /**
-   * Shape not yet observed (always null so far).
+   * Always null so far, even with its include. Typed null so the contract tests notice if that changes.
    */
-  SenateStatus?: {
-    [k: string]: unknown;
-  };
+  SenateStatus?: null;
 }
 /**
  * This interface was referenced by `BasisTypes`'s JSON-Schema

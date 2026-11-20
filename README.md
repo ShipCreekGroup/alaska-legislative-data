@@ -38,7 +38,8 @@ The repo has three parts:
    (eg with [quicktype](https://quicktype.io)).
 2. **A TypeScript client** ([`src/client.ts`](./src/client.ts)), published on npm as `alaska-legislative-api`.
    No dependencies. Runs anywhere `fetch` does (Node, Deno, Bun, browsers, Workers), and accepts your
-   own fetch function, eg for Google Apps Script.
+   own fetch function. Optional [zod](https://zod.dev) validators, generated from the schema, live in
+   `alaska-legislative-api/zod`.
 3. **The `akleg` command line tool**, which scrapes and cleans the data and is what the daily job runs.
 
 ### Client
@@ -48,50 +49,53 @@ npm install alaska-legislative-api
 ```
 
 ```ts
-import { BasisClient } from 'alaska-legislative-api';
+import { createBasis } from 'alaska-legislative-api';
 
-const client = new BasisClient();
-const bills = await client.bills({
+const basis = createBasis();
+const bills = await basis.bills.list({
   session: 34,
   query: { bills: { bill: 'HB 16' }, sponsors: true, versions: { fulltext: 'urlonly' } },
 });
-const members = await client.members({ session: 34, query: { members: { code: 'FRB' }, votes: true } });
-const n = await client.count('bills', { session: 34 });
-const text = await client.billText(34, 'HB 16', 'A');
+const members = await basis.members.list({ session: 34, query: { members: { code: 'FRB' }, votes: true } });
+const n = await basis.bills.count({ session: 34 });
+const legislature = await basis.sessions.get({ session: 34 });
+const text = await basis.billText.get({ session: 34, bill: 'HB 16', version: 'A' });
 ```
 
-Methods: `bills`, `committees`, `meetings`, `members`, `session`, `count`, `get` (raw response),
-`billText`. Every method takes `session` (legislature number), `chamber` (`'H'` or `'S'`),
-`query` and `range`. The `query` object is typed per endpoint and turned into the API's
-`X-Alaska-Legislature-Basis-Query` header; a raw header string also works.
+Endpoint groups: `bills`, `committees`, `meetings` and `members` each have `list()` and `count()`
+(a HEAD request, nothing downloaded); `sessions.get()` returns one legislature; `billText.get()`
+returns a bill version's plain text with line numbers removed (`getRaw()` returns it as served);
+`request(endpoint, params)` returns the raw parsed response. Every call takes `session` (legislature
+number), `chamber` (`'H'` or `'S'`), `query` and `range`. The `query` object is typed per endpoint and
+turned into the API's `X-Alaska-Legislature-Basis-Query` header; a raw header string also works.
 See [`docs/docs.pdf`](./docs/docs.pdf) for what each filter does.
 
 The client limits itself to 5 requests at once and retries server errors with backoff.
 Errors are thrown as `BasisError`; `err.isDataUnavailable` is true for legislatures the API has no data for.
 
-Options: `fetch`, `baseUrl`, `maxConcurrency`, `maxAttempts`, `sleep`, `logger`, `headers`.
+Options: `fetch`, `baseUrl`, `textBaseUrl`, `maxConcurrency`, `maxAttempts`, `sleep`, `logger`,
+`headers`, `validate`.
+
+**Validation:** install `zod` (version 4) and pass the generated validator. Each response is checked
+strictly, unknown fields included. Mismatches are logged with `logger.warn` and the data is returned
+anyway, so a change on the Legislature's side never breaks your code.
+
+```ts
+import { createBasis } from 'alaska-legislative-api';
+import { validate, Bill } from 'alaska-legislative-api/zod';
+
+const basis = createBasis({ validate });
+Bill.parse(someObject); // every schema type is also exported as a zod/mini validator
+```
 
 **Browsers:** works, except `range`, which the server's CORS policy blocks.
 
-**Google Apps Script:** Apps Script has no `fetch` and no modules. Run `npm run build` and paste
-`dist/gas/akleg.js` into your project, then:
-
-```js
-async function myFunction() {
-  const client = new BasisClient({
-    fetch: urlFetchAppFetch(),
-    sleep: async (ms) => Utilities.sleep(ms),
-  });
-  const bills = await client.bills({ session: 34, query: { subjects: true } });
-  Logger.log(bills.length);
-}
-```
-
-`UrlFetchApp` can't send HEAD requests, so `count()` downloads the results there.
+**Other environments:** pass any function shaped like `fetch` as the `fetch` option, and a `sleep`
+if `setTimeout` doesn't exist there.
 
 ### Command line
 
-Needs Node 18 or later. From a clone of this repo, run `node src/cli.ts` instead of `npx akleg` (Node 22.18 or later).
+Needs Node 22.18 or later. From a clone of this repo, run `node src/cli.ts` instead of `npx akleg`. Add `--validate` to any command to log responses that don't match the schema.
 
 ```bash
 npx akleg count bills --session 34
@@ -123,8 +127,10 @@ A separate job runs the contract tests against the live API. Run the workflow by
 npm install
 npm test            # offline tests, using recorded responses in test/fixtures
 npm run test:live   # check the live API against the schema
-npm run gen         # regenerate src/types.gen.ts after editing the schema
-npm run build       # dist/ (npm package) and dist/gas/akleg.js (Apps Script)
+npm run gen         # after editing the schema: rewrites it in the standard layout, regenerates the types and zod validators
+npm run typecheck   # also checks the zod validators agree with the TypeScript types
+npm run build       # dist/ (npm package)
 ```
 
-To change the schema: edit `schema/basis.schema.json`, run `npm run gen`, and commit both files.
+To change the schema: edit `schema/basis.schema.json`, run `npm run gen`, and commit the schema,
+`src/types.gen.ts` and `src/zod.gen.ts`. Tests fail if any of them is out of date.

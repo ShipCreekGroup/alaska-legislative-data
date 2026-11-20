@@ -1,8 +1,10 @@
 import { readFileSync } from 'node:fs';
 import Ajv2020, { type ValidateFunction } from 'ajv/dist/2020.js';
+import addFormats from 'ajv-formats';
 
 const schema = JSON.parse(readFileSync(new URL('../schema/basis.schema.json', import.meta.url), 'utf8'));
 const ajv = new Ajv2020.default({ allErrors: true, strict: true, allowUnionTypes: true });
+addFormats.default(ajv, ['date']);
 ajv.addSchema(schema);
 
 /** A validator for one of the schema's $defs, eg 'BillsResponse'. */
