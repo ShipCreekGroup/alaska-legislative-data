@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { compile } from 'json-schema-to-typescript';
 import { format as prettier } from 'prettier';
-import { readCsvAll } from '../src/scrape/csv.ts';
+import { readCsvAll } from '../src/build/csv.ts';
 import { curatedFromCsv, encodeCurated } from '../src/tables/curated.ts';
 
 const SCHEMA_URL = new URL('../schema/basis.schema.json', import.meta.url);
@@ -220,10 +220,11 @@ function regex(pattern: string): string {
 // bundled curated data
 // ---------------------------------------------------------------------------
 
-/** src/tables/curated.gen.ts: people.csv and members.csv in a compact form, one person or member per line. */
+/** src/tables/curated.gen.ts: the curated CSVs in a compact form, one row per line. */
 export async function generateCurated(dir: URL = new URL('../data/curated/', import.meta.url)): Promise<string> {
-  const curated = curatedFromCsv(await readCsvAll(new URL('people.csv', dir).pathname), await readCsvAll(new URL('members.csv', dir).pathname));
-  const { people, members } = encodeCurated(curated);
+  const read = (f: string) => readCsvAll(new URL(f, dir).pathname);
+  const curated = curatedFromCsv(await read('people.csv'), await read('members.csv'), await read('vote_descriptions.csv'));
+  const { people, members, voteDescriptions } = encodeCurated(curated);
   return [
     '/* Generated from data/curated/*.csv by scripts/gen.ts. Do not edit by hand. */',
     "import type { CompactCurated } from './curated.ts';",
@@ -234,6 +235,9 @@ export async function generateCurated(dir: URL = new URL('../data/curated/', imp
     '  ],',
     '  members: [',
     ...members.map((m) => `${JSON.stringify(m)},`),
+    '  ],',
+    '  voteDescriptions: [',
+    ...voteDescriptions.map((d) => `${JSON.stringify(d)},`),
     '  ],',
     '};',
     '',
