@@ -123,6 +123,33 @@ function api(day: number) {
   });
 }
 
+describe('fetch checkpoints', () => {
+  it('saves the log while fetching, not just at the end', async () => {
+    const store = new FileStore(mkdtempSync(join(tmpdir(), 'akleg-ckpt-')));
+    const inner = api(1);
+    const seen: number[] = [];
+    const fetch: typeof inner = Object.assign(
+      async (url: string, init: Parameters<typeof inner>[1]) => {
+        seen.push((await new RawStore(store).loadLog()).length);
+        return inner(url, init);
+      },
+      { calls: inner.calls },
+    );
+    const summary = await fetchRaw({
+      raw: new RawStore(store),
+      curated,
+      logger: silent,
+      date: '2026-04-01',
+      now: new Date('2026-04-05T12:00:00Z'),
+      legislatures: [34],
+      checkpointEvery: 1,
+      client: { fetch, sleep: async () => {} },
+    });
+    assert.ok(seen.at(-1)! > 0, `log was empty until the end: ${seen.join(',')}`);
+    assert.equal((await new RawStore(store).loadLog()).length, summary.requests);
+  });
+});
+
 describe('fetch and build', () => {
   it('builds current tables and SCD2 history from the raw store', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'akleg-build-'));

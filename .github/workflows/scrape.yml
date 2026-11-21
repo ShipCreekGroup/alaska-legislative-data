@@ -56,7 +56,8 @@ jobs:
           restore-keys: raw-objects-
 
       - name: Fetch new API responses into the raw store
-        run: node src/cli.ts fetch --store r2 ${{ inputs.full && '--all' || '' }}
+        # exec, so a cancel signals node directly and it can save its progress.
+        run: exec node src/cli.ts fetch --store r2 ${{ inputs.full && '--all' || '' }}
 
       - name: Build the tables and their history
         run: node src/cli.ts build --store r2 --out export
