@@ -2,12 +2,13 @@
 // Skipped unless LIVE=1 (`npm run test:live`). Run daily in CI to notice API changes early.
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { BasisClient, BasisError, currentLegislature, type Endpoint, type RequestParams } from '../src/client.ts';
+import { BasisError, createBasis, currentLegislature, type Endpoint, type RequestParams } from '../src/client.ts';
+import { validate } from '../src/zod.ts';
 import { describeErrors, validator } from './validate.ts';
 
 const live = process.env.LIVE === '1';
 const leg = currentLegislature();
-const client = new BasisClient({ maxConcurrency: 3 });
+const basis = createBasis({ maxConcurrency: 3 });
 
 const RESPONSE_TYPE: Record<Endpoint, string> = {
   bills: 'BillsResponse',
@@ -25,6 +26,8 @@ const CASES: Array<[Endpoint, RequestParams<object>]> = [
   ['committees', { session: leg, query: { committees: { code: 'HSS' }, members: true, meetings: true, bills: true } }],
   ['meetings', { session: leg, range: 50 }],
   ['meetings', { session: leg, query: { meetings: true, media: true, minutes: { fulltext: 'urlonly' } }, range: 10 }],
+  ['meetings', { session: 34, query: { meetings: true, minutes: { fulltext: 'urlonly' } }, range: 100 }],
+  ['bills', { session: 34, query: { bills: { bill: 'HB 16' }, versions: { fulltext: 'true' } } }],
   ['members', { session: leg }],
   ['members', { session: 19 }],
   ['members', { session: leg, query: { members: { chamber: 'S' }, committees: true, bills: true, votes: true }, range: 2 }],
@@ -36,23 +39,24 @@ const CASES: Array<[Endpoint, RequestParams<object>]> = [
 describe('live API matches schema/basis.schema.json', { skip: !live && 'set LIVE=1 to run' }, () => {
   for (const [endpoint, params] of CASES) {
     it(`${endpoint} ${JSON.stringify(params)}`, async () => {
-      const res = await client.get(endpoint, params);
+      const res = await basis.request(endpoint, params);
       const v = validator(RESPONSE_TYPE[endpoint]);
       assert.ok(v({ Basis: res.data }), describeErrors(v));
+      assert.deepEqual(validate(endpoint, { Basis: res.data }), [], 'zod validators disagree with the JSON Schema');
     });
   }
 
   it('reports missing legislatures as unavailable', async () => {
-    const err = await client.members({ session: leg + 1 }).catch((e) => e);
+    const err = await basis.members.list({ session: leg + 1 }).catch((e) => e);
     assert.ok(err instanceof BasisError && err.isDataUnavailable, String(err));
   });
 
   it('counts', async () => {
-    assert.ok((await client.count('members', { session: leg })) >= 60);
+    assert.ok((await basis.members.count({ session: leg })) >= 60);
   });
 
   it('serves bill text', async () => {
-    const text = await client.billText(34, 'HB 16', 'A');
+    const text = await basis.billText.get({ session: 34, bill: 'HB 16', version: 'A' });
     assert.match(text, /HOUSE BILL NO\. 16/);
   });
 });

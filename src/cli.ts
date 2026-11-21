@@ -3,7 +3,7 @@
 // `akleg get|count|text` are thin wrappers around the client.
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { BasisClient, type Endpoint, type Logger } from './client.ts';
+import { createBasis, type Endpoint, type Logger } from './client.ts';
 import { scrape } from './scrape/scrape.ts';
 
 const HELP = `Usage: akleg <command> [options]
@@ -29,6 +29,7 @@ Commands:
   text LEG BILL VERSION   Print the plain text of a bill version, eg: akleg text 34 "HB 16" A
 
 Common options:
+  --validate        Check every response against the schema and log mismatches (needs zod)
   --verbose         Log every request
   --concurrency N   Maximum requests in flight (default 5)
 `;
@@ -50,6 +51,7 @@ async function main(argv: string[]): Promise<number> {
       chamber: { type: 'string' },
       query: { type: 'string' },
       range: { type: 'string' },
+      validate: { type: 'boolean', default: false },
       verbose: { type: 'boolean', default: false },
       concurrency: { type: 'string' },
       help: { type: 'boolean', short: 'h', default: false },
@@ -66,14 +68,15 @@ async function main(argv: string[]): Promise<number> {
     warn: (...a) => console.error(stamp(), 'WARN', ...a),
     error: (...a) => console.error(stamp(), 'ERROR', ...a),
   };
-  const client = new BasisClient({
+  const basis = createBasis({
     logger,
+    validate: values.validate ? (await import('./zod.ts')).validate : undefined,
     maxConcurrency: values.concurrency ? Number(values.concurrency) : undefined,
   });
 
   if (command === 'scrape') {
     const summary = await scrape({
-      client,
+      basis,
       logger,
       outDir: values.out!,
       baselineDir: values.baseline,
@@ -99,9 +102,13 @@ async function main(argv: string[]): Promise<number> {
       range: values.range,
     };
     if (command === 'count') {
-      console.log(await client.count(endpoint as Endpoint, params));
+      if (endpoint === 'sessions') {
+        console.error('The sessions endpoint has no count.');
+        return 1;
+      }
+      console.log(await basis[endpoint as Exclude<Endpoint, 'sessions'>].count(params));
     } else {
-      console.log(JSON.stringify((await client.get(endpoint as Endpoint, params)).data, null, 2));
+      console.log(JSON.stringify((await basis.request(endpoint as Endpoint, params)).data, null, 2));
     }
     return 0;
   }
@@ -112,7 +119,7 @@ async function main(argv: string[]): Promise<number> {
       console.error('Usage: akleg text LEG BILL VERSION');
       return 1;
     }
-    process.stdout.write((await client.billText(Number(leg), bill, version)) + '\n');
+    process.stdout.write((await basis.billText.get({ session: Number(leg), bill, version })) + '\n');
     return 0;
   }
 

@@ -1,0 +1,140 @@
+{
+ "Basis": {
+  "Meetings": [
+   {
+    "MediaFiles": [],
+    "AudioFiles": [],
+    "VideoFiles": [],
+    "MeetingDate": "2025-01-21",
+    "BillChangeText": "",
+    "BillinCommittee": false,
+    "MeetingChangeText": "",
+    "MeetingCanceled": false,
+    "MeetingPostponed": false,
+    "MeetingTime": "14:00:00",
+    "MeetingTitle": "COMMITTEE ON COMMITTEES",
+    "Location": "BUTROVICH 205",
+    "MeetingSponsor": "CCM",
+    "SponsorType": "Other Committee",
+    "Chamber": "S",
+    "Minutes": {
+     "Chamber": "S",
+     "MinutesDate": "2025-01-21",
+     "MinutesTime": "1401",
+     "CommitteeCode": "CCM",
+     "TimeStamps": [
+      {
+       "Text": "Start",
+       "Time": "14:01:39  ",
+       "AudioElapsed": 39,
+       "Type": "S"
+      },
+      {
+       "Text": "Adopt Committee on Committees Report",
+       "Time": "14:01:43  ",
+       "AudioElapsed": 43,
+       "Type": "T"
+      },
+      {
+       "Text": "Adopt Committee on Committees Report",
+       "Time": "14:01:51  ",
+       "AudioElapsed": 51,
+       "Type": "T"
+      },
+      {
+       "Text": "Adopt Committee on Committees Report",
+       "Time": "14:01:57  ",
+       "AudioElapsed": 57,
+       "Type": "T"
+      },
+      {
+       "Text": "Adopt Committee on Committees Report",
+       "Time": "14:02:07  ",
+       "AudioElapsed": 67,
+       "Type": "T"
+      },
+      {
+       "Text": "Adjourn",
+       "Time": "14:02:31  ",
+       "AudioElapsed": 91,
+       "Type": "A"
+      }
+     ],
+     "VideoStart": "/Date(-62135564400000)/",
+     "AudioUrl": "https://www.akleg.gov/ftr/2025/20250121/sccm/sccm_1401.mp3",
+     "VideoUrl": "",
+     "Url": "https://www.akleg.gov/PDF/34/M/SCCM2025-01-211401.PDF",
+     "Mime": null,
+     "Encoding": null,
+     "Data": null
+    },
+    "HasDocuments": false,
+    "HasVideo": true,
+    "HasAudio": true,
+    "HasMedia": true,
+    "Url": "http://www.akleg.gov/basis/Meeting/Detail?Meeting=SCCM 2025-01-21 14:00:00",
+    "HasMinutes": true,
+    "HasSchedule": false,
+    "Id": 422133
+   },
+   {
+    "MediaFiles": [],
+    "AudioFiles": [],
+    "VideoFiles": [],
+    "MeetingDate": "2025-01-22",
+    "BillChangeText": "",
+    "BillinCommittee": false,
+    "MeetingChangeText": "",
+    "MeetingCanceled": false,
+    "MeetingPostponed": false,
+    "MeetingTime": "13:30:00",
+    "MeetingTitle": "FINANCE",
+    "Location": "ADAMS 519",
+    "MeetingSponsor": "FIN",
+    "SponsorType": "Standing Committee",
+    "Chamber": "H",
+    "Minutes": {
+     "Chamber": "H",
+     "MinutesDate": "2025-01-22",
+     "MinutesTime": "1332",
+     "CommitteeCode": "FIN",
+     "TimeStamps": [
+      {
+       "Text": "Start",
+       "Time": "13:32:39  ",
+       "AudioElapsed": 85,
+       "Type": "S"
+      },
+      {
+       "Text": "Presentation: Production Forecast by Department of Natural Resources",
+       "Time": "13:36:35  ",
+       "AudioElapsed": 321,
+       "Type": "T"
+      },
+      {
+       "Text": "Presentation: Production Forecast by Department of Natural Resources",
+       "Time": "13:39:40  ",
+       "AudioElapsed": 506,
+       "Type": "T"
+      }
+     ],
+     "VideoStart": "/Date(-62135564400000)/",
+     "AudioUrl": "https://www.akleg.gov/ftr/2025/20250122/hfin/hfin_1332.mp3",
+     "VideoUrl": "",
+     "Url": null,
+     "Mime": null,
+     "Encoding": null,
+     "Data": null
+    },
+    "HasDocuments": false,
+    "HasVideo": true,
+    "HasAudio": true,
+    "HasMedia": true,
+    "Url": "http://www.akleg.gov/basis/Meeting/Detail?Meeting=HFIN 2025-01-22 13:30:00",
+    "HasMinutes": true,
+    "HasSchedule": true,
+    "Id": 422135
+   }
+  ]
+ }
+}
