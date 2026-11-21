@@ -101,3 +101,63 @@
     @apply outline-2 outline-offset-2 outline-ring;
   }
 }
+
+/* Big server-rendered tables use plain elements and these short classes instead of components,
+   which keeps a 100-row page small. */
+@layer components {
+  .dt-wrap {
+    @apply relative w-full overflow-x-auto rounded-lg border bg-card;
+  }
+  .dt {
+    @apply w-full text-sm;
+  }
+  .dt th {
+    @apply h-9 bg-muted/60 px-3 text-left align-middle text-xs font-semibold tracking-wide whitespace-nowrap text-muted-foreground uppercase;
+  }
+  .dt td {
+    @apply px-3 py-2 align-middle tabular-nums;
+  }
+  .dt tr {
+    @apply border-b;
+  }
+  .dt tbody tr:last-child {
+    @apply border-0;
+  }
+  .dt tbody tr:hover {
+    @apply bg-muted/40;
+  }
+  .dt .r {
+    @apply text-right;
+  }
+  .dt .nw {
+    @apply whitespace-nowrap;
+  }
+  .dt .mu {
+    @apply text-muted-foreground;
+  }
+  .dt .b {
+    @apply font-medium;
+  }
+  .ch {
+    @apply inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold whitespace-nowrap;
+  }
+  .ch-Y {
+    @apply bg-yea/15 text-yea;
+  }
+  .ch-N {
+    @apply bg-nay/15 text-nay;
+  }
+  .ch-E,
+  .ch-A {
+    @apply bg-secondary text-secondary-foreground;
+  }
+  .ty {
+    @apply font-semibold text-yea;
+  }
+  .tn {
+    @apply font-semibold text-nay;
+  }
+  .pb {
+    @apply inline-flex size-6 items-center justify-center rounded-md bg-muted text-xs font-bold;
+  }
+}

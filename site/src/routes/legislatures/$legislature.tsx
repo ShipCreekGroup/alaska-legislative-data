@@ -20,6 +20,7 @@ export const Route = createFileRoute('/legislatures/$legislature')({
       description: `The ${name} Alaska State Legislature: ${fmt(d.counts.bills)} bills, ${fmt(d.counts.votes)} roll-call votes and ${d.counts.members} members, with how each legislator voted.`,
       path: `/legislatures/${d.number}`,
       crumbs: crumbsFor(d.number),
+      markdown: true,
       jsonLd: { '@type': 'GovernmentOrganization', name: `${name}, Alaska State Legislature`, areaServed: 'Alaska' },
     });
   },

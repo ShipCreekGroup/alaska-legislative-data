@@ -277,8 +277,9 @@ export function DataLinks(props: { kind: string; id: string }) {
   const url = () => `/data/${props.kind}/${encodeURIComponent(props.id)}.json`;
   return (
     <aside class="mt-10 rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
-      This record as JSON: <a href={url()}>{url()}</a>. ID <code class="font-mono text-foreground">{props.id}</code> is
-      stable and matches the downloadable data. <a href="/developers">About the data</a>
+      This record as <a href={`/${props.kind}/${encodeURIComponent(props.id)}.md`}>Markdown</a> or{' '}
+      <a href={url()}>JSON</a>. ID <code class="font-mono text-foreground">{props.id}</code> is stable and matches the
+      downloadable data. <a href="/developers">About the data</a>
     </aside>
   );
 }

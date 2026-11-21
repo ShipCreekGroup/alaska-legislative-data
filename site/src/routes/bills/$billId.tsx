@@ -6,6 +6,7 @@ import { Breadcrumbs, Container, DataLinks, PageTitle, Section } from '~/compone
 import { VotesTable } from '~/components/lists';
 import { fetchBill } from '~/server/fns';
 import { SITE_URL, akleg, clip, date, legName, legYears, legFull } from '~/lib/format';
+import { billSummary as summary } from '~/lib/summaries';
 import { seo } from '~/lib/seo';
 import type { Bill } from '~/lib/types';
 import { href } from '~/lib/search';
@@ -17,21 +18,6 @@ const crumbsFor = (b: Bill) => [
   { name: b.number, path: `/bills/${encodeURIComponent(b.id)}` },
 ];
 
-function summary(b: Bill): string {
-  const parts = [
-    `${b.number} is a ${b.number.includes('R') && !b.number.startsWith('HB') && !b.number.startsWith('SB') ? 'resolution' : 'bill'} in the ${legFull(b.legislature)} (${legYears(b.legislature)})${b.title ? `, titled “${b.title}”` : ''}.`,
-  ];
-  if (b.versions.length) parts.push(`It has ${b.versions.length} version${b.versions.length === 1 ? '' : 's'}.`);
-  parts.push(
-    b.votes.length
-      ? `Legislators took ${b.votes.length} recorded floor vote${b.votes.length === 1 ? '' : 's'} on it, the last on ${date(b.votes[b.votes.length - 1]!.date)}.`
-      : 'No floor votes on it are recorded.',
-  );
-  if (b.vetoed) parts.push('It was vetoed by the governor.');
-  if (b.statusDate) parts.push(`Its status was last updated on ${date(b.statusDate)}.`);
-  return parts.join(' ');
-}
-
 export const Route = createFileRoute('/bills/$billId')({
   loader: ({ params }) => fetchBill({ data: { id: params.billId } }),
   head: ({ loaderData: b }) => {
@@ -42,6 +28,7 @@ export const Route = createFileRoute('/bills/$billId')({
       description: clip(summary(b)),
       path,
       crumbs: crumbsFor(b),
+      markdown: true,
       jsonLd: {
         '@type': 'Legislation',
         name: `${b.number}: ${b.title ?? ''}`.trim(),

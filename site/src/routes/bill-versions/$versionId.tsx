@@ -3,6 +3,7 @@ import { Show } from 'solid-js';
 import { Breadcrumbs, Container, DataLinks, PageTitle, Section } from '~/components/site';
 import { fetchBillVersion } from '~/server/fns';
 import { SITE_URL, clip, date, legName, legYears, legFull } from '~/lib/format';
+import { versionSummary as summary } from '~/lib/summaries';
 import { seo } from '~/lib/seo';
 import type { BillVersion } from '~/lib/types';
 import { href } from '~/lib/search';
@@ -15,15 +16,6 @@ const crumbsFor = (v: BillVersion) => [
   { name: `Version ${v.letter}`, path: `/bill-versions/${encodeURIComponent(v.id)}` },
 ];
 
-function summary(v: BillVersion): string {
-  const s = [
-    `This is version ${v.letter} of ${v.billNumber}${v.billTitle ? ` (“${v.billTitle}”)` : ''} in the ${legFull(v.legislature)}, introduced ${date(v.introDate)}.`,
-  ];
-  if (v.passedHouse) s.push(`It passed the House on ${date(v.passedHouse)}.`);
-  if (v.passedSenate) s.push(`It passed the Senate on ${date(v.passedSenate)}.`);
-  return s.join(' ');
-}
-
 export const Route = createFileRoute('/bill-versions/$versionId')({
   loader: ({ params }) => fetchBillVersion({ data: { id: params.versionId } }),
   head: ({ loaderData: v }) => {
@@ -33,6 +25,7 @@ export const Route = createFileRoute('/bill-versions/$versionId')({
       description: clip(summary(v) + (v.fullText ? ' ' + v.fullText : '')),
       path: `/bill-versions/${encodeURIComponent(v.id)}`,
       crumbs: crumbsFor(v),
+      markdown: true,
       jsonLd: {
         '@type': 'Legislation',
         name: v.name,

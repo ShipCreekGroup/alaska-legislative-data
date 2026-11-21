@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { Breadcrumbs, Container, DataLinks, PageTitle, PartyBadge, Section } from '~/components/site';
 import { fetchPerson } from '~/server/fns';
 import { chamberName, clip, fmt, legName, legYears, memberTitle, partyName } from '~/lib/format';
+import { personSummary as summary } from '~/lib/summaries';
 import { seo } from '~/lib/seo';
 import type { Person } from '~/lib/types';
 
@@ -12,23 +13,6 @@ const crumbsFor = (p: Person) => [
   { name: 'Legislators', path: '/people' },
   { name: p.name, path: `/people/${encodeURIComponent(p.id)}` },
 ];
-
-function summary(p: Person): string {
-  const t = p.terms;
-  if (!t.length) return `${p.name} served in the Alaska State Legislature.`;
-  const first = t[0]!,
-    last = t[t.length - 1]!;
-  const chambers = [...new Set(t.map((x) => chamberName(x.chamber)))].join(' and ');
-  const parties = [...new Set(t.map((x) => x.party).filter(Boolean))].map(partyName).join(', then ');
-  const y = t.reduce((a, x) => a + (x.y ?? 0), 0),
-    n = t.reduce((a, x) => a + (x.n ?? 0), 0),
-    missed = t.reduce((a, x) => a + (x.missed ?? 0), 0);
-  const s = [
-    `${p.name} served ${t.length} term${t.length === 1 ? '' : 's'} in the Alaska ${chambers}, from the ${legName(first.legislature)} (${legYears(first.legislature).slice(0, 4)}) to the ${legName(last.legislature)} (${legYears(last.legislature).slice(5)})${parties ? `, as a ${parties}` : ''}.`,
-  ];
-  if (y + n) s.push(`Across those terms they cast ${fmt(y)} yea and ${fmt(n)} nay votes and missed ${fmt(missed)}.`);
-  return s.join(' ');
-}
 
 export const Route = createFileRoute('/people/$personId')({
   loader: ({ params }) => fetchPerson({ data: { id: params.personId } }),
@@ -40,6 +24,7 @@ export const Route = createFileRoute('/people/$personId')({
       description: clip(summary(p)),
       path: `/people/${encodeURIComponent(p.id)}`,
       crumbs: crumbsFor(p),
+      markdown: true,
       jsonLd: {
         '@type': 'Person',
         name: p.name,

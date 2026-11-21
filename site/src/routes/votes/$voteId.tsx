@@ -15,6 +15,7 @@ import {
   voteMotion,
   voteVersion,
 } from '~/lib/format';
+import { byParty, voteSummary as summary } from '~/lib/summaries';
 import { seo } from '~/lib/seo';
 import type { Choice, Vote } from '~/lib/types';
 import { href } from '~/lib/search';
@@ -26,32 +27,6 @@ const crumbsFor = (v: Vote) => [
   { name: `${chamberName(v.chamber)} vote ${v.number}`, path: `/votes/${encodeURIComponent(v.id)}` },
 ];
 
-function byParty(v: Vote) {
-  const m = new Map<string, Record<Choice, number>>();
-  for (const c of v.choices) {
-    const k = c.party ?? '?';
-    const r = m.get(k) ?? { Y: 0, N: 0, E: 0, A: 0 };
-    r[c.choice]++;
-    m.set(k, r);
-  }
-  return [...m.entries()].sort((a, b) => b[1].Y + b[1].N - (a[1].Y + a[1].N));
-}
-
-function summary(v: Vote): string {
-  const what = v.billNumber
-    ? `${voteVersion(v.title) ?? v.billNumber} (${v.billNumber}${v.billTitle ? `, “${v.billTitle}”` : ''})`
-    : 'a non-bill matter';
-  const s = [
-    `On ${date(v.date)}, the Alaska ${chamberName(v.chamber)} voted ${v.y} to ${v.n} on “${voteMotion(v.title)}” for ${what}.`,
-  ];
-  const parties = byParty(v)
-    .filter(([p]) => p !== '?')
-    .map(([p, r]) => `${partyPlural(p)} voted ${r.Y}–${r.N}`);
-  if (parties.length) s.push(parties.join('; ') + '.');
-  if (v.e + v.a) s.push(`${v.e + v.a} member${v.e + v.a === 1 ? ' was' : 's were'} absent or excused.`);
-  return s.join(' ');
-}
-
 export const Route = createFileRoute('/votes/$voteId')({
   loader: ({ params }) => fetchVote({ data: { id: params.voteId } }),
   head: ({ loaderData: v }) => {
@@ -61,6 +36,7 @@ export const Route = createFileRoute('/votes/$voteId')({
       description: clip(summary(v)),
       path: `/votes/${encodeURIComponent(v.id)}`,
       crumbs: crumbsFor(v),
+      markdown: true,
       jsonLd: {
         '@type': 'WebPage',
         name: `Alaska ${chamberName(v.chamber)} roll-call vote ${v.number}, ${legName(v.legislature)}`,

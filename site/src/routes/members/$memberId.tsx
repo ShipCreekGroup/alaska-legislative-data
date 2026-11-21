@@ -15,6 +15,7 @@ import {
   partyName,
   legFull,
 } from '~/lib/format';
+import { memberSummary as summary } from '~/lib/summaries';
 import { isVariant, seo } from '~/lib/seo';
 import { href, num, str } from '~/lib/search';
 
@@ -27,18 +28,6 @@ const crumbsFor = (m: M) => [
   { name: 'Legislators', path: href('/legislators', { legislature: m.legislature }) },
   { name: m.name, path: path(m) },
 ];
-
-function summary(m: M): string {
-  const total = m.y + m.n + m.e + m.a;
-  const s = [
-    `${memberTitle(m.chamber)} ${m.name} (${partyName(m.party)}) represented ${chamberName(m.chamber)} District ${m.district ?? 'unknown'} in the ${legFull(m.legislature)} (${legYears(m.legislature)})${m.majority === null ? '' : `, as a member of the ${m.majority ? 'majority' : 'minority'} caucus`}.`,
-  ];
-  if (total)
-    s.push(
-      `${m.lastName} voted yea ${fmt(m.y)} times and nay ${fmt(m.n)} times, and missed ${fmt(m.e + m.a)} of ${fmt(total)} roll-call votes (${((100 * (m.e + m.a)) / total).toFixed(1)}%).`,
-    );
-  return s.join(' ');
-}
 
 export const Route = createFileRoute('/members/$memberId')({
   validateSearch: (s: Record<string, unknown>): { q?: string; choice?: string; page?: number } => ({
@@ -55,6 +44,7 @@ export const Route = createFileRoute('/members/$memberId')({
       description: clip(summary(m)),
       path: path(m),
       crumbs: crumbsFor(m),
+      markdown: true,
       noindex: isVariant(match.search),
       jsonLd: {
         '@type': 'Person',

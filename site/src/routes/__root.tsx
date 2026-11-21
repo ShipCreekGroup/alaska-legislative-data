@@ -1,6 +1,6 @@
-import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/solid-router';
+import { HeadContent, Outlet, Scripts, createRootRoute, useRouter } from '@tanstack/solid-router';
 import { HydrationScript } from 'solid-js/web';
-import { Suspense, type JSX } from 'solid-js';
+import { Suspense, onCleanup, onMount, type JSX } from 'solid-js';
 import appCss from '~/styles.css?url';
 import { NotFoundPage, SiteFooter, SiteHeader } from '~/components/site';
 import { SITE_NAME } from '~/lib/format';
@@ -24,9 +24,31 @@ export const Route = createRootRoute({
     ],
   }),
   shellComponent: RootDocument,
-  component: () => <Outlet />,
+  component: RootComponent,
   notFoundComponent: NotFoundPage,
 });
+
+/**
+ * Tables are rendered as plain HTML links (see components/lists.tsx). This turns a click on any
+ * same-site link into client-side navigation, as <Link> would.
+ */
+function RootComponent() {
+  const router = useRouter();
+  onMount(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element | null)?.closest?.('a');
+      if (!a || a.target || a.hasAttribute('download') || a.origin !== location.origin) return;
+      const href = a.getAttribute('href') ?? '';
+      if (!href.startsWith('/') || /\.(json|xml|txt|md)(\?|$)/.test(a.pathname)) return;
+      e.preventDefault();
+      void router.navigate({ href });
+    };
+    document.addEventListener('click', onClick);
+    onCleanup(() => document.removeEventListener('click', onClick));
+  });
+  return <Outlet />;
+}
 
 function RootDocument(props: { children: JSX.Element }) {
   return (

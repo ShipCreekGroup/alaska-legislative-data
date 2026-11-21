@@ -6,8 +6,10 @@ import { join } from 'node:path';
 
 export type Kind = 'legislatures' | 'bills' | 'bill-versions' | 'votes' | 'members' | 'people';
 
-const cache = new Map<string, unknown>();
+// In-memory copies expire after 10 minutes so a nightly data update is picked up promptly.
+const cache = new Map<string, { at: number; doc: unknown }>();
 const MAX = 300;
+const TTL = 10 * 60 * 1000;
 
 type R2 = { get(k: string): Promise<{ text(): Promise<string> } | null> };
 let r2: R2 | null | undefined;
@@ -39,11 +41,13 @@ async function readRaw(path: string): Promise<string | null> {
 }
 
 async function readJson<T>(path: string): Promise<T | null> {
-  if (cache.has(path)) return cache.get(path) as T;
+  const hit = cache.get(path);
+  if (hit && Date.now() - hit.at < TTL) return hit.doc as T;
   const text = await readRaw(path);
   if (text === null) return null;
   const doc = JSON.parse(text) as T;
-  cache.set(path, doc);
+  cache.delete(path);
+  cache.set(path, { at: Date.now(), doc });
   if (cache.size > MAX) cache.delete(cache.keys().next().value!);
   return doc;
 }

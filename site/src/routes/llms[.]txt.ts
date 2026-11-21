@@ -14,7 +14,7 @@ export const Route = createFileRoute('/llms.txt')({
 > Every Alaska State Legislature bill, roll-call vote, individual legislator vote, legislator and bill text since 1981.
 > Updated nightly (last: ${meta?.updated}). MIT license. Maintained by Ship Creek Group, Anchorage.
 
-Every record has a permanent page and a JSON copy. IDs are stable and match the downloadable tables.
+Every record has a permanent page, a Markdown copy and a JSON copy. IDs are stable and match the downloadable tables.
 
 ## Pages
 - ${SITE_URL}/bills/<BillId>: a bill, its versions and every floor vote on it
@@ -25,7 +25,9 @@ Every record has a permanent page and a JSON copy. IDs are stable and match the 
 - ${SITE_URL}/legislatures/<number>: one two-year legislature (current: ${current})
 - Lists: ${SITE_URL}/bills?legislature=${current}, ${SITE_URL}/votes?legislature=${current}, ${SITE_URL}/legislators?legislature=${current}
 
-## JSON
+## Markdown and JSON
+- Add .md to any record page for a Markdown copy with no layout, e.g. ${SITE_URL}/legislatures/${current}.md
+  (or send Accept: text/markdown). Markdown lists are not paginated.
 - ${SITE_URL}/data/<bills|bill-versions|votes|members|people|legislatures>/<id>.json
 
 ## Bulk data and analysis

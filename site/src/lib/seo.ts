@@ -16,6 +16,8 @@ export function seo(opts: {
   crumbs?: Crumb[];
   jsonLd?: object;
   noindex?: boolean;
+  /** Record pages also have a Markdown copy at <path>.md. */
+  markdown?: boolean;
 }) {
   const url = SITE_URL + opts.path;
   const title = opts.path === '/' ? opts.title : `${opts.title} | ${SITE_NAME}`;
@@ -42,7 +44,10 @@ export function seo(opts: {
       { property: 'og:site_name', content: SITE_NAME },
       ...(opts.noindex ? [{ name: 'robots', content: 'noindex, follow' }] : []),
     ],
-    links: [{ rel: 'canonical', href: url }],
+    links: [
+      { rel: 'canonical', href: url },
+      ...(opts.markdown ? [{ rel: 'alternate', type: 'text/markdown', href: url + '.md' }] : []),
+    ],
     scripts: graph.length
       ? [
           {

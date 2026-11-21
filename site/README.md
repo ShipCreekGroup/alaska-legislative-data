@@ -32,7 +32,9 @@ pnpm dev                                              # http://localhost:3000
 
 ## Deploy to Cloudflare
 
-Pages are rendered on request by a Cloudflare Worker that reads the JSON files from R2.
+Pages are rendered on request by a Cloudflare Worker that reads the JSON files from R2. Rendered
+pages are kept in Cloudflare's edge cache, keyed by the data's last-updated date, so each page is
+rendered at most once per nightly update (`src/start.ts`). Browsers keep pages for 5 minutes.
 
 1. Each night, after `ak_leg.duckdb` is built, run `scripts/extract.ts` and upload the output folder
    to the R2 bucket under `site/latest/`.
