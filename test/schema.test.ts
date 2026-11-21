@@ -66,17 +66,17 @@ describe('schema', () => {
     assert.ok(!ok('Action', { ...action, Document: { ...doc, Extra: 1 } }));
   });
 
-  it('is in the standard layout (run `npm run gen`)', () => {
+  it('is in the standard layout (run `pnpm gen`)', () => {
     const committed = readFileSync(new URL('../schema/basis.schema.json', import.meta.url), 'utf8');
     assert.equal(committed, formatSchema(readSchema()));
   });
 
-  it('src/types.gen.ts is up to date (run `npm run gen`)', async () => {
+  it('src/types.gen.ts is up to date (run `pnpm gen`)', async () => {
     const committed = readFileSync(new URL('../src/types.gen.ts', import.meta.url), 'utf8');
     assert.equal(committed, await generateTypes());
   });
 
-  it('src/zod.gen.ts is up to date (run `npm run gen`)', async () => {
+  it('src/zod.gen.ts is up to date (run `pnpm gen`)', async () => {
     const committed = readFileSync(new URL('../src/zod.gen.ts', import.meta.url), 'utf8');
     assert.equal(committed, await generateZod());
   });

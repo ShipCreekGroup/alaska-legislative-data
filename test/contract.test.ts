@@ -1,5 +1,5 @@
 // Contract tests: call the live API and check the responses still match the JSON Schema.
-// Skipped unless LIVE=1 (`npm run test:live`). Run daily in CI to notice API changes early.
+// Skipped unless LIVE=1 (`pnpm test:live`). Run daily in CI to notice API changes early.
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { BasisError, createBasis, currentLegislature, type Endpoint, type RequestParams } from '../src/client.ts';
