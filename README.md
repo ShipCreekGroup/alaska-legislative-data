@@ -124,15 +124,15 @@ A separate job runs the contract tests against the live API. Run the workflow by
 ### Development
 
 ```bash
-npm install
-npm test            # offline tests, using recorded responses in test/fixtures
-npm run test:live   # check the live API against the schema
-npm run gen         # after editing the schema: rewrites it in the standard layout, regenerates the types and zod validators
-npm run typecheck   # also checks the zod validators agree with the TypeScript types
-npm run lint        # oxlint
-npm run format      # oxfmt (format:check to only check)
-npm run build       # dist/ (npm package)
+pnpm install
+pnpm test         # offline tests, using recorded responses in test/fixtures
+pnpm test:live    # check the live API against the schema
+pnpm gen          # after editing the schema: rewrites it in the standard layout, regenerates the types and zod validators
+pnpm typecheck    # also checks the zod validators agree with the TypeScript types
+pnpm lint         # oxlint
+pnpm format       # oxfmt (format:check to only check)
+pnpm build        # dist/ (npm package)
 ```
 
-To change the schema: edit `schema/basis.schema.json`, run `npm run gen`, and commit the schema,
+To change the schema: edit `schema/basis.schema.json`, run `pnpm gen`, and commit the schema,
 `src/types.gen.ts` and `src/zod.gen.ts`. Tests fail if any of them is out of date.

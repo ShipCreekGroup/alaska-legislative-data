@@ -5,6 +5,7 @@
   "author": "Nick Crews <n.crews@shipcreekgroup.com>",
   "license": "MIT",
   "repository": "github:ShipCreekGroup/alaska-legislative-data",
+  "packageManager": "pnpm@10.28.0",
   "type": "module",
   "engines": {
     "node": ">=22.18"
@@ -39,7 +40,7 @@
     "format:check": "oxfmt --check",
     "test": "node --test 'test/**/*.test.ts'",
     "test:live": "LIVE=1 node --test test/contract.test.ts",
-    "prepublishOnly": "npm run gen && npm run typecheck && npm run lint && npm run format:check && npm test && npm run build"
+    "prepublishOnly": "pnpm gen && pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm build"
   },
   "peerDependencies": {
     "zod": "^4.1.0"
@@ -54,6 +55,8 @@
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "json-schema-to-typescript": "16.0.0",
+    "oxfmt": "0.79.0",
+    "oxlint": "1.94.0",
     "prettier": "3.9.10",
     "typescript": "5.9.3",
     "zod": "4.6.7"

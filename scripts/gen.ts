@@ -2,7 +2,7 @@
 // - rewrites the schema itself in one standard layout
 // - src/types.gen.ts: TypeScript types
 // - src/zod.gen.ts: zod/mini validators
-// Run with `npm run gen` after editing the schema. A test fails if any of
+// Run with `pnpm gen` after editing the schema. A test fails if any of
 // the three committed files is out of date.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { compile } from 'json-schema-to-typescript';
@@ -101,7 +101,7 @@ export async function generateTypes(schema: Schema = readSchema()): Promise<stri
 
 /**
  * zod/mini validators, one per $def. Each is annotated with its generated
- * TypeScript type, so `npm run typecheck` fails if the two disagree. Objects
+ * TypeScript type, so `pnpm typecheck` fails if the two disagree. Objects
  * are strict (unknown fields are errors), like the JSON Schema.
  */
 export async function generateZod(schema: Schema = readSchema()): Promise<string> {

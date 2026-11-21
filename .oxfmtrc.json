@@ -9,7 +9,6 @@
     "index.html",
     "schema/basis.schema.json",
     "src/*.gen.ts",
-    "package-lock.json",
     "pnpm-lock.yaml"
   ]
 }
