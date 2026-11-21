@@ -107,8 +107,21 @@ export async function generateTypes(schema: Schema = readSchema()): Promise<stri
 export async function generateZod(schema: Schema = readSchema()): Promise<string> {
   const defs: Record<string, Schema> = schema.$defs;
   const KEYWORDS = new Set([
-    'description', 'unevaluatedProperties', 'additionalProperties', 'required', 'properties', 'type', 'items',
-    'allOf', 'oneOf', 'anyOf', '$ref', 'enum', 'const', 'pattern', 'format',
+    'description',
+    'unevaluatedProperties',
+    'additionalProperties',
+    'required',
+    'properties',
+    'type',
+    'items',
+    'allOf',
+    'oneOf',
+    'anyOf',
+    '$ref',
+    'enum',
+    'const',
+    'pattern',
+    'format',
   ]);
   let current = '';
 
@@ -120,7 +133,8 @@ export async function generateZod(schema: Schema = readSchema()): Promise<string
     if ('const' in s) return `z.literal(${JSON.stringify(s.const)})`;
     if (s.enum) return `z.enum(${JSON.stringify(s.enum)})`;
     if (s.allOf) return objectExpr(s, refs);
-    if (Array.isArray(s.type)) return `z.union([${s.type.map((t: string) => expr({ ...s, type: t }, refs)).join(', ')}])`;
+    if (Array.isArray(s.type))
+      return `z.union([${s.type.map((t: string) => expr({ ...s, type: t }, refs)).join(', ')}])`;
     switch (s.type) {
       case undefined:
         return 'z.unknown()';

@@ -22,7 +22,10 @@ describe('building requests', () => {
       buildQuery({ bills: { bill: 'HB 16' }, versions: { fulltext: 'urlonly' }, sponsors: true }),
       'bills;bill=HB 16,versions;fulltext=urlonly,sponsors',
     );
-    assert.equal(buildQuery({ members: { code: 'FRB', ismajority: true }, votes: true }), 'members;code=FRB;ismajority=true,votes');
+    assert.equal(
+      buildQuery({ members: { code: 'FRB', ismajority: true }, votes: true }),
+      'members;code=FRB;ismajority=true,votes',
+    );
     assert.equal(buildQuery('Bills; title=*Oil*'), 'Bills; title=*Oil*');
     assert.equal(buildQuery(['subjects', 'sponsors']), 'subjects,sponsors');
     assert.equal(buildQuery({}), undefined);
@@ -38,7 +41,10 @@ describe('building requests', () => {
 
   it('builds the URL and headers', () => {
     const r = buildRequest('bills', { session: 34, chamber: 'H', query: { subjects: true }, range: 5 });
-    assert.equal(r.url, 'https://www.akleg.gov/publicservice/basis/bills?minifyresult=false&json=true&session=34&chamber=H');
+    assert.equal(
+      r.url,
+      'https://www.akleg.gov/publicservice/basis/bills?minifyresult=false&json=true&session=34&chamber=H',
+    );
     assert.deepEqual(r.headers, {
       'X-Alaska-Legislature-Basis-Version': '1.4',
       'X-Alaska-Legislature-Basis-Query': 'subjects',
@@ -71,7 +77,9 @@ describe('errors', () => {
   });
 
   it('retries server faults, then succeeds', async () => {
-    const fetch = fakeFetch((_u, _i, n) => (n < 3 ? response(fixture('err_session3.xml')) : response(fixture('members.json'))));
+    const fetch = fakeFetch((_u, _i, n) =>
+      n < 3 ? response(fixture('err_session3.xml')) : response(fixture('members.json')),
+    );
     const waits: number[] = [];
     const basis = createBasis({ fetch, sleep: async (ms) => void waits.push(ms), logger: silent });
     const members = await basis.members.list({ session: 34 });
@@ -97,7 +105,7 @@ describe('errors', () => {
 });
 
 describe('createBasis', () => {
-  it('returns each endpoint\'s list', async () => {
+  it("returns each endpoint's list", async () => {
     const bodies: Record<string, string> = {
       bills: fixture('bills_subjects.json'),
       committees: fixture('committees.json'),
@@ -105,7 +113,9 @@ describe('createBasis', () => {
       members: fixture('members.json'),
       sessions: fixture('session34.json'),
     };
-    const fetch = fakeFetch((url) => response(bodies[/basis\/(\w+)\?/.exec(url)![1]!]!, 200, { 'X-Alaska-Query-Count': '5' }));
+    const fetch = fakeFetch((url) =>
+      response(bodies[/basis\/(\w+)\?/.exec(url)![1]!]!, 200, { 'X-Alaska-Query-Count': '5' }),
+    );
     const basis = createBasis({ fetch });
     const bills = await basis.bills.list({ session: 34, query: { subjects: true } });
     assert.equal(bills[0]!.BillNumber, 'HB   1');
@@ -145,7 +155,10 @@ describe('createBasis', () => {
     const raw = '\r\n00   HOUSE BILL NO. 16  \r\n01 "An Act amending\r\n\r\n02 \x16\x10law\x11 \x17\r\n';
     const fetch = fakeFetch(() => response(raw));
     const basis = createBasis({ fetch });
-    assert.equal(await basis.billText.get({ session: 34, bill: 'HB 16', version: 'A' }), '  HOUSE BILL NO. 16  \n"An Act amending\n\x16\x10law\x11 \x17');
+    assert.equal(
+      await basis.billText.get({ session: 34, bill: 'HB 16', version: 'A' }),
+      '  HOUSE BILL NO. 16  \n"An Act amending\n\x16\x10law\x11 \x17',
+    );
     assert.equal(fetch.calls[0]!.url, 'https://www.akleg.gov/basis/Bill/Plaintext/34?Hsid=HB0016A');
   });
 
@@ -169,7 +182,10 @@ describe('validate option', () => {
     const members = await basis.members.list({ session: 34, query: { members: { party: 'D' } } });
     assert.equal(members.length, 5);
     assert.equal(warnings.length, 1);
-    assert.match(warnings[0]!, /members\?.*\(query members;party=D\) doesn't match the schema:\n  Basis\.Members\.\*: unknown fields NewField/);
+    assert.match(
+      warnings[0]!,
+      /members\?.*\(query members;party=D\) doesn't match the schema:\n  Basis\.Members\.\*: unknown fields NewField/,
+    );
   });
 
   it('stays quiet for matching responses and survives a validator that throws', async () => {
@@ -200,7 +216,15 @@ describe('helpers', () => {
   });
 
   it('estimates the current legislature', () => {
-    for (const [year, leg] of [[2021, 32], [2022, 32], [2023, 33], [2024, 33], [2025, 34], [2026, 34], [2027, 35]]) {
+    for (const [year, leg] of [
+      [2021, 32],
+      [2022, 32],
+      [2023, 33],
+      [2024, 33],
+      [2025, 34],
+      [2026, 34],
+      [2027, 35],
+    ]) {
       assert.equal(currentLegislature(new Date(year!, 5, 1)), leg);
     }
   });

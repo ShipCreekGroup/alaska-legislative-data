@@ -8,14 +8,60 @@ import type { Row } from './csv.ts';
 // ---------------------------------------------------------------------------
 
 export const COLUMNS = {
-  people: ['PersonId', 'PersonFullName', 'PersonFirstName', 'PersonLastName', 'PersonMiddleName', 'PersonNickName', 'PersonSuffix'],
-  members: ['MemberId', 'LegislatureNumber', 'PersonId', 'MemberChamber', 'MemberDistrict', 'MemberIsMajority', 'MemberParty', 'MemberCode', 'MemberFormerCodes'],
-  bills: ['BillId', 'LegislatureNumber', 'BillNumber', 'BillName', 'BillShortTitle', 'BillStatusDate', 'BillSubjects', 'BillVetoed'],
-  votes: ['VoteId', 'BillId', 'VoteNumber', 'VoteDate', 'VoteTitle', 'LegislatureNumber', 'VoteChamber', 'VoteDescription', 'VoteBillAmendmentNumber'],
+  people: [
+    'PersonId',
+    'PersonFullName',
+    'PersonFirstName',
+    'PersonLastName',
+    'PersonMiddleName',
+    'PersonNickName',
+    'PersonSuffix',
+  ],
+  members: [
+    'MemberId',
+    'LegislatureNumber',
+    'PersonId',
+    'MemberChamber',
+    'MemberDistrict',
+    'MemberIsMajority',
+    'MemberParty',
+    'MemberCode',
+    'MemberFormerCodes',
+  ],
+  bills: [
+    'BillId',
+    'LegislatureNumber',
+    'BillNumber',
+    'BillName',
+    'BillShortTitle',
+    'BillStatusDate',
+    'BillSubjects',
+    'BillVetoed',
+  ],
+  votes: [
+    'VoteId',
+    'BillId',
+    'VoteNumber',
+    'VoteDate',
+    'VoteTitle',
+    'LegislatureNumber',
+    'VoteChamber',
+    'VoteDescription',
+    'VoteBillAmendmentNumber',
+  ],
   choices: ['ChoiceId', 'VoteId', 'MemberId', 'Choice'],
   bill_versions: [
-    'BillVersionId', 'BillId', 'BillVersionLetter', 'BillVersionTitle', 'BillVersionName', 'BillVersionIntroDate',
-    'BillVersionPassedHouse', 'BillVersionPassedSenate', 'BillVersionWorkOrder', 'BillVersionPdfUrl', 'BillVersionFullText',
+    'BillVersionId',
+    'BillId',
+    'BillVersionLetter',
+    'BillVersionTitle',
+    'BillVersionName',
+    'BillVersionIntroDate',
+    'BillVersionPassedHouse',
+    'BillVersionPassedSenate',
+    'BillVersionWorkOrder',
+    'BillVersionPdfUrl',
+    'BillVersionFullText',
   ],
 } as const;
 
@@ -222,7 +268,12 @@ export function cleanBill(leg: number, b: Bill): BillRow {
   };
 }
 
-export function cleanBillVersion(leg: number, billNumber: string, v: BillVersion, fullText: string | null): BillVersionRow {
+export function cleanBillVersion(
+  leg: number,
+  billNumber: string,
+  v: BillVersion,
+  fullText: string | null,
+): BillVersionRow {
   const billId = `${leg}:${fixBillNumber(billNumber)}`;
   return {
     BillVersionId: `${billId}:${v.VersionLetter}`,
@@ -259,7 +310,8 @@ export function splitVotes(
   members: MemberRow[],
 ): SplitVotesResult {
   const memberByCode = new Map<string, string>();
-  for (const m of members) for (const code of memberCodes(m)) memberByCode.set(`${m.LegislatureNumber}:${code}`, m.MemberId);
+  for (const m of members)
+    for (const code of memberCodes(m)) memberByCode.set(`${m.LegislatureNumber}:${code}`, m.MemberId);
 
   const votes = new Map<string, VoteRow>();
   const choices = new Map<string, ChoiceRow>();

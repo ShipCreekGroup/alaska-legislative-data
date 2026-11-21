@@ -11,17 +11,43 @@ import { fakeFetch, noSleep, response, silent } from './helpers.ts';
 
 function bill(number: string, extra: Record<string, unknown> = {}) {
   return {
-    Documents: [], PartialVeto: false, Vetoed: false, BillNumber: number, BillName: '', ShortTitle: `TITLE ${number}`,
-    StatusCode: '002', StatusText: '(H) STA', Flag1: ' ', Flag2: ' ', StatusDate: '2026-04-01', StatusAndThen: [],
-    StatusSummaryCode: ' ', OnFloor: ' ', NotKnown: ' ', Filler: ' ', Lock: ' ', AllMeetings: [], Meetings: [],
-    ManifestErrors: [], Statutes: [], SponsorUrl: '', ...extra,
+    Documents: [],
+    PartialVeto: false,
+    Vetoed: false,
+    BillNumber: number,
+    BillName: '',
+    ShortTitle: `TITLE ${number}`,
+    StatusCode: '002',
+    StatusText: '(H) STA',
+    Flag1: ' ',
+    Flag2: ' ',
+    StatusDate: '2026-04-01',
+    StatusAndThen: [],
+    StatusSummaryCode: ' ',
+    OnFloor: ' ',
+    NotKnown: ' ',
+    Filler: ' ',
+    Lock: ' ',
+    AllMeetings: [],
+    Meetings: [],
+    ManifestErrors: [],
+    Statutes: [],
+    SponsorUrl: '',
+    ...extra,
   };
 }
 
 function vote(member: string, num: string, choice: string, billNumber: string | null) {
   return {
-    Vote: `${choice} `, VoteNum: num, Bill: billNumber, Member: member, MemberParty: 'R', MemberChamber: 'H',
-    MemberName: 'Name      ', Title: `${billNumber ?? 'CONFIRM'}\r\nThird Reading\r\nAmendment No. 2\r\n`, VoteDate: '2026-04-02',
+    Vote: `${choice} `,
+    VoteNum: num,
+    Bill: billNumber,
+    Member: member,
+    MemberParty: 'R',
+    MemberChamber: 'H',
+    MemberName: 'Name      ',
+    Title: `${billNumber ?? 'CONFIRM'}\r\nThird Reading\r\nAmendment No. 2\r\n`,
+    VoteDate: '2026-04-02',
   };
 }
 
@@ -83,56 +109,88 @@ describe('scrape', () => {
       const q = init.headers['X-Alaska-Legislature-Basis-Query'] ?? '';
       if (url.includes('/Plaintext/34?Hsid=HB0001B')) return response('\r\n00 HOUSE BILL NO. 1 B\r\n01 text\r\n');
       if (url.includes('/basis/bills') && q === 'subjects') {
-        return response(JSON.stringify({ Basis: { Bills: [bill('HB   1', { ShortTitle: 'FRESH TITLE', Subjects: ['ELECTIONS'] }), bill('HB   2')] } }));
+        return response(
+          JSON.stringify({
+            Basis: { Bills: [bill('HB   1', { ShortTitle: 'FRESH TITLE', Subjects: ['ELECTIONS'] }), bill('HB   2')] },
+          }),
+        );
       }
       if (url.includes('/basis/bills') && q.startsWith('bills;bill=')) {
         const number = /bill=([^,]+)/.exec(q)![1]!;
-        const versions = number === 'HB 1'
-          ? ['A', 'B'].map((l) => ({ VersionLetter: l, Title: 'An Act', Name: `HB 1${l}`, IntroDate: '2025-01-22', PassedHouse: null, PassedSenate: null, WorkOrder: '34-LS0001', Url: `https://x/HB0001${l}.PDF`, Mime: null, Encoding: null, Data: null }))
-          : [];
+        const versions =
+          number === 'HB 1'
+            ? ['A', 'B'].map((l) => ({
+                VersionLetter: l,
+                Title: 'An Act',
+                Name: `HB 1${l}`,
+                IntroDate: '2025-01-22',
+                PassedHouse: null,
+                PassedSenate: null,
+                WorkOrder: '34-LS0001',
+                Url: `https://x/HB0001${l}.PDF`,
+                Mime: null,
+                Encoding: null,
+                Data: null,
+              }))
+            : [];
         return response(JSON.stringify({ Basis: { Bills: [bill(number, { Versions: versions })] } }));
       }
       if (url.includes('/basis/members')) {
         const code = /code=(\w+)/.exec(q)![1]!;
-        const votes = {
-          LEA: [vote('LEA', 'H0001', 'Y', 'HB   1'), vote('LEA', 'H0002', 'N', null)],
-          LEE: [vote('LEE', 'H0003', 'E', 'HB   2')], // cast under the former code
-          ROE: [vote('ROE', 'H0001', 'N', 'HB   1')],
-        }[code] ?? [];
+        const votes =
+          {
+            LEA: [vote('LEA', 'H0001', 'Y', 'HB   1'), vote('LEA', 'H0002', 'N', null)],
+            LEE: [vote('LEE', 'H0003', 'E', 'HB   2')], // cast under the former code
+            ROE: [vote('ROE', 'H0001', 'N', 'HB   1')],
+          }[code] ?? [];
         return response(JSON.stringify({ Basis: { Members: [{ Votes: votes }] } }));
       }
       throw new Error(`unexpected request ${url} ${q}`);
     });
     const basis = createBasis({ fetch, sleep: noSleep, logger: silent });
     const summary = await scrape({
-      basis, logger: silent, outDir: dirs.out, curatedDir: dirs.curated, baselineDir: dirs.baseline, legislatures: [34],
+      basis,
+      logger: silent,
+      outDir: dirs.out,
+      curatedDir: dirs.curated,
+      baselineDir: dirs.baseline,
+      legislatures: [34],
     });
     assert.deepEqual(summary.refreshed, [34]);
     assert.deepEqual(summary.warnings, []);
 
     const bills = await readCsvAll(join(dirs.out, 'bills.csv'));
-    assert.deepEqual(bills.map((b) => [b.BillId, b.BillShortTitle, b.BillSubjects]), [
-      ['33:HB 5', 'OLD BILL', '[FUNDS, TAXATION]'],
-      ['34:HB 1', 'FRESH TITLE', '[ELECTIONS]'],
-      ['34:HB 2', 'TITLE HB   2', '[]'], // inner spaces in titles are kept
-    ]);
+    assert.deepEqual(
+      bills.map((b) => [b.BillId, b.BillShortTitle, b.BillSubjects]),
+      [
+        ['33:HB 5', 'OLD BILL', '[FUNDS, TAXATION]'],
+        ['34:HB 1', 'FRESH TITLE', '[ELECTIONS]'],
+        ['34:HB 2', 'TITLE HB   2', '[]'], // inner spaces in titles are kept
+      ],
+    );
 
     const votes = await readCsvAll(join(dirs.out, 'votes.csv'));
-    assert.deepEqual(votes.map((v) => [v.VoteId, v.BillId, v.VoteDescription, v.VoteBillAmendmentNumber]), [
-      ['33:H:9', '33:HB 5', '', null],
-      ['34:H:1', '34:HB 1', 'Hand-written note', '2.0'],
-      ['34:H:2', null, '', '2.0'],
-      ['34:H:3', '34:HB 2', '', '2.0'],
-    ]);
+    assert.deepEqual(
+      votes.map((v) => [v.VoteId, v.BillId, v.VoteDescription, v.VoteBillAmendmentNumber]),
+      [
+        ['33:H:9', '33:HB 5', '', null],
+        ['34:H:1', '34:HB 1', 'Hand-written note', '2.0'],
+        ['34:H:2', null, '', '2.0'],
+        ['34:H:3', '34:HB 2', '', '2.0'],
+      ],
+    );
 
     const choices = await readCsvAll(join(dirs.out, 'choices.csv'));
-    assert.deepEqual(choices.map((c) => [c.ChoiceId, c.Choice]), [
-      ['33:H:9:H:1:Ann Lee:33', 'Y'],
-      ['34:H:1:H:1:Ann Lee:33', 'Y'],
-      ['34:H:1:H:2:Bob Roe:34', 'N'],
-      ['34:H:2:H:1:Ann Lee:33', 'N'],
-      ['34:H:3:H:1:Ann Lee:33', 'E'],
-    ]);
+    assert.deepEqual(
+      choices.map((c) => [c.ChoiceId, c.Choice]),
+      [
+        ['33:H:9:H:1:Ann Lee:33', 'Y'],
+        ['34:H:1:H:1:Ann Lee:33', 'Y'],
+        ['34:H:1:H:2:Bob Roe:34', 'N'],
+        ['34:H:2:H:1:Ann Lee:33', 'N'],
+        ['34:H:3:H:1:Ann Lee:33', 'E'],
+      ],
+    );
 
     const versions = await readCsvAll(join(dirs.out, 'bill_versions.csv'));
     assert.equal(versions.length, 2);
@@ -143,8 +201,15 @@ describe('scrape', () => {
 
     const members = await readCsvAll(join(dirs.out, 'members.csv'));
     assert.deepEqual(members[1], {
-      MemberId: '34:H:1:Ann Lee:33', LegislatureNumber: '34', PersonId: 'Ann Lee:33', MemberChamber: 'H', MemberDistrict: '1',
-      MemberIsMajority: 'false', MemberParty: 'R', MemberCode: 'LEA', MemberFormerCodes: 'LEE',
+      MemberId: '34:H:1:Ann Lee:33',
+      LegislatureNumber: '34',
+      PersonId: 'Ann Lee:33',
+      MemberChamber: 'H',
+      MemberDistrict: '1',
+      MemberIsMajority: 'false',
+      MemberParty: 'R',
+      MemberCode: 'LEA',
+      MemberFormerCodes: 'LEE',
     });
     // Only one text download: version A was already in the baseline.
     assert.equal(fetch.calls.filter((c) => c.url.includes('Plaintext')).length, 1);
@@ -153,12 +218,18 @@ describe('scrape', () => {
   it('keeps baseline rows for a legislature the API has no data for yet', async () => {
     const dirs = setup();
     const fetch = fakeFetch((url) => {
-      if (url.includes('session=35')) return response('{"Basis":{"Error":{"Code":"BaoSystemFault","Description":"Invalid Session Number."},}}');
+      if (url.includes('session=35'))
+        return response('{"Basis":{"Error":{"Code":"BaoSystemFault","Description":"Invalid Session Number."},}}');
       throw new Error(`unexpected request ${url}`);
     });
     const basis = createBasis({ fetch, sleep: noSleep, logger: silent });
     const summary = await scrape({
-      basis, logger: silent, outDir: dirs.out, curatedDir: dirs.curated, baselineDir: dirs.baseline, legislatures: [35],
+      basis,
+      logger: silent,
+      outDir: dirs.out,
+      curatedDir: dirs.curated,
+      baselineDir: dirs.baseline,
+      legislatures: [35],
     });
     assert.equal(summary.warnings.length, 1);
     assert.equal(summary.rows.bills, 2);

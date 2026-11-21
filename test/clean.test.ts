@@ -61,8 +61,14 @@ describe('API objects to rows', () => {
     const [member] = JSON.parse(fixture('member_full.json')).Basis.Members as Member[];
     const members: MemberRow[] = [
       cleanMember({
-        LegislatureNumber: '34', PersonId: 'Robyn Burke:34', MemberCode: 'FRB', MemberFormerCodes: 'BUR',
-        MemberChamber: 'H', MemberDistrict: '40', MemberParty: 'D', MemberIsMajority: 'TRUE',
+        LegislatureNumber: '34',
+        PersonId: 'Robyn Burke:34',
+        MemberCode: 'FRB',
+        MemberFormerCodes: 'BUR',
+        MemberChamber: 'H',
+        MemberDistrict: '40',
+        MemberParty: 'D',
+        MemberIsMajority: 'TRUE',
       }),
     ];
     const raw = member!.Votes!.map((vote) => ({ leg: 34, vote }));
@@ -80,7 +86,17 @@ describe('API objects to rows', () => {
   });
 
   it('reports votes by unknown member codes', () => {
-    const vote = { Vote: 'Y ', VoteNum: 'H0001', Bill: null, Member: 'ZZZ', MemberParty: 'R', MemberChamber: 'H' as const, MemberName: 'X', Title: 'T', VoteDate: '2025-01-01' };
+    const vote = {
+      Vote: 'Y ',
+      VoteNum: 'H0001',
+      Bill: null,
+      Member: 'ZZZ',
+      MemberParty: 'R',
+      MemberChamber: 'H' as const,
+      MemberName: 'X',
+      Title: 'T',
+      VoteDate: '2025-01-01',
+    };
     const r = splitVotes([{ leg: 34, vote }], new Set(), []);
     assert.equal(r.votes.length, 1);
     assert.equal(r.choices.length, 0);
@@ -99,7 +115,14 @@ describe('curated data', () => {
 
   it('catches a member code used twice in one legislature', () => {
     const p = cleanPerson({ PersonId: 'A B:1', PersonFullName: 'A B', PersonFirstName: 'A', PersonLastName: 'B' });
-    const m = (d: string) => cleanMember({ LegislatureNumber: '1', PersonId: 'A B:1', MemberChamber: 'H', MemberDistrict: d, MemberCode: 'ABC' });
+    const m = (d: string) =>
+      cleanMember({
+        LegislatureNumber: '1',
+        PersonId: 'A B:1',
+        MemberChamber: 'H',
+        MemberDistrict: d,
+        MemberCode: 'ABC',
+      });
     assert.throws(() => checkCurated([p], [m('1'), m('2')]), /used twice/);
   });
 });
@@ -127,7 +150,10 @@ describe('csv', () => {
     await writeCsv(path, ['a', 'b', 'c'], rows);
     assert.deepEqual(await readCsvAll(path), rows);
     writeFileSync(path, 'x,y\r\n1,"a""b"\r\n2,\r\n');
-    assert.deepEqual(await readCsvAll(path), [{ x: '1', y: 'a"b' }, { x: '2', y: null }]);
+    assert.deepEqual(await readCsvAll(path), [
+      { x: '1', y: 'a"b' },
+      { x: '2', y: null },
+    ]);
     assert.ok(readFileSync(path, 'utf8').length > 0);
   });
 });

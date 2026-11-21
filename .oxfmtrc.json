@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "printWidth": 120,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "data/",
+    "test/fixtures/",
+    "index.html",
+    "schema/basis.schema.json",
+    "src/*.gen.ts",
+    "package-lock.json",
+    "pnpm-lock.yaml"
+  ]
+}

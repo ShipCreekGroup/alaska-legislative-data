@@ -100,16 +100,24 @@ describe('zod validators', () => {
       ['bad fiscal note date', 'bills', (b) => ((b.Basis.Bills[0].FiscalNotes[0].PublishedDate = '2025-04-11'), b)],
       ['document with data but no mime', 'bills', (b) => ((b.Basis.Bills[0].Versions[0].Data = 'AA=='), b)],
       ['wrong chamber', 'bills', (b) => ((b.Basis.Bills[0].Actions[0].Chamber = 'X'), b)],
-      ['bad meeting time', 'meetings', () => {
-        const m = JSON.parse(fixture('meetings.json'));
-        m.Basis.Meetings[0].MeetingTime = '3:15 PM';
-        return m;
-      }],
-      ['minutes with an unknown field', 'meetings', () => {
-        const m = JSON.parse(fixture('meetings_minutes.json'));
-        m.Basis.Meetings[0].Minutes.TimeStamps[0].Extra = true;
-        return m;
-      }],
+      [
+        'bad meeting time',
+        'meetings',
+        () => {
+          const m = JSON.parse(fixture('meetings.json'));
+          m.Basis.Meetings[0].MeetingTime = '3:15 PM';
+          return m;
+        },
+      ],
+      [
+        'minutes with an unknown field',
+        'meetings',
+        () => {
+          const m = JSON.parse(fixture('meetings_minutes.json'));
+          m.Basis.Meetings[0].Minutes.TimeStamps[0].Extra = true;
+          return m;
+        },
+      ],
     ];
     for (const [name, endpoint, mutate] of cases) {
       const [schemaOk, zodOk] = verdicts(endpoint, mutate(bill()));

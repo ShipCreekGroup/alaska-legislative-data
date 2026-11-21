@@ -72,8 +72,28 @@ export type ConstraintValue = string | number | boolean;
 /** `true` to just include the section, or an object of constraints (values may use `*` as a wildcard). */
 export type Include<K extends string> = true | Partial<Record<K, ConstraintValue>>;
 
-type BillFields = 'name' | 'chamber' | 'bill' | 'onfloor' | 'shorttitle' | 'statustext' | 'statuscode' | 'committeecode' | 'fulltext' | 'subject';
-type MemberFields = 'building' | 'chamber' | 'comment' | 'district' | 'party' | 'phone' | 'firstname' | 'lastname' | 'ismajority' | 'code';
+type BillFields =
+  | 'name'
+  | 'chamber'
+  | 'bill'
+  | 'onfloor'
+  | 'shorttitle'
+  | 'statustext'
+  | 'statuscode'
+  | 'committeecode'
+  | 'fulltext'
+  | 'subject';
+type MemberFields =
+  | 'building'
+  | 'chamber'
+  | 'comment'
+  | 'district'
+  | 'party'
+  | 'phone'
+  | 'firstname'
+  | 'lastname'
+  | 'ismajority'
+  | 'code';
 type CommitteeFields = 'category' | 'chamber' | 'location' | 'name' | 'title' | 'code';
 type MeetingFields = 'date' | 'startdate' | 'enddate' | 'details';
 type ActionFields = 'code' | 'text' | 'date' | 'startdate' | 'enddate' | 'page' | 'startpage' | 'endpage';
@@ -222,7 +242,10 @@ export function parseFaults(body: string, kind: 'Error' | 'Warning' = 'Error'): 
     const description = /<Description>([\s\S]*?)<\/Description>/.exec(inner)?.[1] ?? '';
     out.push({ Code: decodeXml(code.trim()), Description: decodeXml(description.trim()) });
   }
-  const json = new RegExp(`"${kind}"\\s*:\\s*\\{\\s*"Code"\\s*:\\s*("(?:[^"\\\\]|\\\\.)*")\\s*,\\s*"Description"\\s*:\\s*("(?:[^"\\\\]|\\\\.)*")`, 'g');
+  const json = new RegExp(
+    `"${kind}"\\s*:\\s*\\{\\s*"Code"\\s*:\\s*("(?:[^"\\\\]|\\\\.)*")\\s*,\\s*"Description"\\s*:\\s*("(?:[^"\\\\]|\\\\.)*")`,
+    'g',
+  );
   while ((m = json.exec(body))) {
     out.push({ Code: JSON.parse(m[1]!), Description: JSON.parse(m[2]!) });
   }
@@ -266,10 +289,7 @@ function defaultSleep(ms: number): Promise<void> {
 function defaultFetch(): FetchFn {
   const f = (globalThis as { fetch?: unknown }).fetch;
   if (typeof f !== 'function') {
-    return () =>
-      Promise.reject(
-        new Error('No global fetch found. Pass `fetch` in the client options.'),
-      );
+    return () => Promise.reject(new Error('No global fetch found. Pass `fetch` in the client options.'));
   }
   return (url, init) => (f as FetchFn)(url, init);
 }
@@ -390,7 +410,13 @@ export function createBasis(options: ClientOptions = {}): Basis {
       const err = (parsed.Basis as { Error?: Fault | Fault[] }).Error;
       if (err) {
         const faults = Array.isArray(err) ? err : [err];
-        throw new BasisError(faults.map((f) => `${f.Code}: ${f.Description}`).join('; '), url, res.status, faults, body);
+        throw new BasisError(
+          faults.map((f) => `${f.Code}: ${f.Description}`).join('; '),
+          url,
+          res.status,
+          faults,
+          body,
+        );
       }
       const count = res.headers.get('x-alaska-query-count');
       return { data: parsed.Basis, count: count === null ? null : Number(count), url, headers };
@@ -404,7 +430,9 @@ export function createBasis(options: ClientOptions = {}): Basis {
       }
       if (problems.length) {
         const query = headers['X-Alaska-Legislature-Basis-Query'];
-        logger.warn(`Response from ${url}${query ? ` (query ${query})` : ''} doesn't match the schema:\n  ${problems.join('\n  ')}`);
+        logger.warn(
+          `Response from ${url}${query ? ` (query ${query})` : ''} doesn't match the schema:\n  ${problems.join('\n  ')}`,
+        );
       }
     }
     return res;
@@ -485,11 +513,14 @@ export function parseMsDate(s: string): Date {
 /** Remove the 3-character line-number prefix and blank lines from bill plain text. */
 export function cleanBillText(raw: string): string {
   // Same line breaks as Python's str.splitlines(), which the original scraper used.
-  return raw
-    .split(/\r\n|[\n\r\v\f\x1c\x1d\x1e\x85\u2028\u2029]/)
-    .filter((line) => line !== '')
-    .map((line) => line.slice(3))
-    .join('\n');
+  return (
+    raw
+      // oxlint-disable-next-line no-control-regex -- matches the separators of str.splitlines()
+      .split(/\r\n|[\n\r\v\f\x1c\x1d\x1e\x85\u2028\u2029]/)
+      .filter((line) => line !== '')
+      .map((line) => line.slice(3))
+      .join('\n')
+  );
 }
 
 /** Rough current legislature number: 34 for 2025-2026, 35 for 2027-2028, ... */

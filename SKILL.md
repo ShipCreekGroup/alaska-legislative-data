@@ -46,24 +46,29 @@ Six tables. Prefixed column names (e.g. every `bills` column starts with `Bill`)
 `PersonId` (PK, e.g. `Neal Foster:26`) · full/first/last/middle/nick/suffix names.
 
 ### Join graph
+
 ```
 people ─PersonId→ members ─MemberId→ choices ←VoteId─ votes ─BillId→ bills ←BillId─ billVersions
 ```
+
 - Party/district/chamber live on **members** and are **per-legislature** — always join choices→members and filter/group by the member's term, not the person. Don't assume a legislator's current party/majority status held historically.
 - One person can hold **two memberships in a single legislature** — `MemberId` includes the chamber precisely because members sometimes switch House↔Senate mid-term (appointed to fill a vacancy). So don't assume one row per person per legislature when someone switched chambers.
 
 ### Identifying people (important)
-- **`PersonId` is the only stable key for a real person across terms — always use it, not names.** Format is `{FullName}:{first legislature they held office}` (e.g. `Neal Foster:26`). It is *not* a per-name counter; the suffix is their first legislature. It happens to separate two people who share a name only because they first took office in different years (there are two "Neal Foster"s and two "Mike Miller"s).
+
+- **`PersonId` is the only stable key for a real person across terms — always use it, not names.** Format is `{FullName}:{first legislature they held office}` (e.g. `Neal Foster:26`). It is _not_ a per-name counter; the suffix is their first legislature. It happens to separate two people who share a name only because they first took office in different years (there are two "Neal Foster"s and two "Mike Miller"s).
 - Names are unreliable for lookup: they repeat, and they change (marriage, nickname → legal name). To find someone by name, query `people`, eyeball the matches, grab the `PersonId`, then join through `members`.
-- **Name changes:** the `PersonId` string is frozen at the person's *original* name even after they change it, and `PersonFullName` may show either the old or new name depending on when the data was scraped. So a `WHERE PersonLastName = 'Frier'` can silently miss that person's earlier records. Prefer `PersonId`.
+- **Name changes:** the `PersonId` string is frozen at the person's _original_ name even after they change it, and `PersonFullName` may show either the old or new name depending on when the data was scraped. So a `WHERE PersonLastName = 'Frier'` can silently miss that person's earlier records. Prefer `PersonId`.
 
 ### Member codes and name changes
-- `MemberCode` is a 3-letter code that is unique only *within* one legislature. It is **not stable for a person across legislatures and not unique across them**, and it can even change mid-legislature when a member changes their name (e.g. Robyn Burke → Frier in the 34th: code went `BUR` → `FRB`). Never use `MemberCode` as a person key — use `PersonId`.
+
+- `MemberCode` is a 3-letter code that is unique only _within_ one legislature. It is **not stable for a person across legislatures and not unique across them**, and it can even change mid-legislature when a member changes their name (e.g. Robyn Burke → Frier in the 34th: code went `BUR` → `FRB`). Never use `MemberCode` as a person key — use `PersonId`.
 - When a code changes, `MemberCode` holds the current one and `MemberFormerCodes` holds the earlier one(s), semicolon-separated. **You normally don't need to touch these** — the pipeline already resolves every vote (cast under whichever code was current at the time) to the single correct `MemberId`, so joining `choices → members → people` counts all of a member's votes correctly across a name change automatically.
 
 ## Common queries
 
 **Find bills by subject/topic** (subjects is an array — use `list_contains` or `UNNEST`):
+
 ```sql
 SELECT BillId, BillShortTitle, BillStatusDate
 FROM bills
@@ -72,6 +77,7 @@ ORDER BY BillStatusDate DESC;
 ```
 
 **Vote tally by party for one roll call:**
+
 ```sql
 SELECT c.Choice, m.MemberParty, count(*) n
 FROM choices c JOIN members m ON c.MemberId = m.MemberId
@@ -80,6 +86,7 @@ GROUP BY 1,2 ORDER BY 1,2;
 ```
 
 **How a named legislator voted on final-passage votes** (career-spanning via PersonId):
+
 ```sql
 SELECT v.VoteDate, b.BillNumber, b.BillShortTitle, c.Choice
 FROM people p
@@ -93,6 +100,7 @@ ORDER BY v.VoteDate DESC;
 ```
 
 **Who voted YES on a given bill's passage:**
+
 ```sql
 SELECT p.PersonFullName, m.MemberParty, m.MemberDistrict
 FROM votes v
@@ -104,6 +112,7 @@ WHERE v.BillId = '34:HB 176' AND c.Choice = 'Y'
 ```
 
 **Search bill full text:**
+
 ```sql
 SELECT bv.BillId, b.BillShortTitle, bv.BillVersionPdfUrl
 FROM billVersions bv JOIN bills b ON b.BillId = bv.BillId
@@ -111,6 +120,7 @@ WHERE bv.BillVersionFullText ILIKE '%carbon%' AND b.LegislatureNumber = 34;
 ```
 
 **Find contentious (close-margin) votes on a topic** — "contentious" = a roll call decided by a narrow margin. Tally each vote with `count(*) FILTER`, keep the contested ones (`n > 0`), and rank by `abs(y-n)`:
+
 ```sql
 WITH tally AS (
   SELECT v.VoteId, v.BillId, v.VoteChamber, v.VoteDate,
@@ -129,14 +139,17 @@ FROM tally
 WHERE n > 0 AND abs(y - n) <= 5   -- tighten/loosen this to taste
 ORDER BY abs(y - n), VoteDate DESC;
 ```
+
 Lessons that make the results usable:
+
 - **`list_has_any(BillSubjects, [...])` beats chained `list_contains` ORs** for matching any of several subject tags.
-- **Budget/appropriation bills swamp the close-vote list and are hard to interpret.** The omnibus operating/capital budgets (e.g. `HB 39`, `HB 53`, `HB 263`, `SB 214`) carry nearly every subject tag, so their dozens of *amendment* roll calls dominate any topic filter. For substantive, readable results, restrict to decisive votes with `VoteTitle ILIKE '%Final Passage%' OR '%Concur%' OR '%Third Reading%'`, and/or exclude the big approp bills.
+- **Budget/appropriation bills swamp the close-vote list and are hard to interpret.** The omnibus operating/capital budgets (e.g. `HB 39`, `HB 53`, `HB 263`, `SB 214`) carry nearly every subject tag, so their dozens of _amendment_ roll calls dominate any topic filter. For substantive, readable results, restrict to decisive votes with `VoteTitle ILIKE '%Final Passage%' OR '%Concur%' OR '%Third Reading%'`, and/or exclude the big approp bills.
 - **The modern House is split ~20–20**, so a genuinely contested House vote is often a literal `20`–`20` tie — don't treat `abs(y-n)=0` as a data error.
 - **Add a party breakdown to turn a close vote into accountability signal** — join `choices → members` and `GROUP BY MemberParty` (do this per-`VoteId`, and remember party is per-legislature; see the join-graph notes). Votes where a caucus splits internally, or where a member crosses party lines, are the most revealing.
 - **Do background research on selected bills** - Once you have a list of contentious votes, you can look up the bill's text and subjects, and read news coverage or legislative analysis to understand the context. This helps interpret why a vote was close and what issues were at stake.
 
 ## Gotchas
+
 - **Identify people by `PersonId`, never by name** — names change and repeat, and `PersonId` survives name changes (see "Identifying people" above).
 - Member codes are not person keys; vote joins across a name change already resolve correctly through `choices → members` (see "Member codes and name changes").
 - One person can have two `members` rows in one legislature (House↔Senate switch mid-term).

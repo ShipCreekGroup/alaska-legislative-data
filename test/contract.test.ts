@@ -21,7 +21,21 @@ const RESPONSE_TYPE: Record<Endpoint, string> = {
 const CASES: Array<[Endpoint, RequestParams<object>]> = [
   ['bills', { session: leg, query: { subjects: true } }],
   ['bills', { session: 13, query: { subjects: true }, range: 50 }],
-  ['bills', { session: 34, query: { bills: { bill: 'HB 16' }, versions: { fulltext: 'urlonly' }, sponsors: true, actions: true, fiscalnotes: true, votes: true, subjects: true } }],
+  [
+    'bills',
+    {
+      session: 34,
+      query: {
+        bills: { bill: 'HB 16' },
+        versions: { fulltext: 'urlonly' },
+        sponsors: true,
+        actions: true,
+        fiscalnotes: true,
+        votes: true,
+        subjects: true,
+      },
+    },
+  ],
   ['committees', { session: leg }],
   ['committees', { session: leg, query: { committees: { code: 'HSS' }, members: true, meetings: true, bills: true } }],
   ['meetings', { session: leg, range: 50 }],
@@ -30,7 +44,10 @@ const CASES: Array<[Endpoint, RequestParams<object>]> = [
   ['bills', { session: 34, query: { bills: { bill: 'HB 16' }, versions: { fulltext: 'true' } } }],
   ['members', { session: leg }],
   ['members', { session: 19 }],
-  ['members', { session: leg, query: { members: { chamber: 'S' }, committees: true, bills: true, votes: true }, range: 2 }],
+  [
+    'members',
+    { session: leg, query: { members: { chamber: 'S' }, committees: true, bills: true, votes: true }, range: 2 },
+  ],
   ['sessions', { session: leg }],
   ['sessions', { session: 13 }],
   ['sessions', { session: leg, query: { journals: { startdate: '2025-01-21', enddate: '2025-01-23' } } }],
