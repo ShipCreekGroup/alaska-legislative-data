@@ -1,11 +1,12 @@
 // End-to-end test of `scrape` against a fake API and a small baseline.
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
 import { createBasis } from '../src/client.ts';
 import { readCsvAll } from '../src/scrape/csv.ts';
+import { curatedFromCsv } from '../src/tables/index.ts';
 import { legislaturesToRefresh, scrape } from '../src/scrape/scrape.ts';
 import { fakeFetch, noSleep, response, silent } from './helpers.ts';
 
@@ -25,24 +26,11 @@ function vote(member: string, num: string, choice: string, billNumber: string | 
   };
 }
 
+// The baseline is in the format published before the new IDs, to check it's converted.
 function setup() {
   const root = mkdtempSync(join(tmpdir(), 'akleg-scrape-'));
-  const curated = join(root, 'curated');
   const baseline = join(root, 'baseline');
-  mkdirSync(curated);
   mkdirSync(baseline);
-  writeFileSync(
-    join(curated, 'people.csv'),
-    'PersonId,PersonFullName,PersonFirstName,PersonLastName,PersonMiddleName,PersonNickName,PersonSuffix\n' +
-      'Ann Lee:33,Ann Lee,Ann,Lee,,,\nBob Roe:34,Bob Roe,Bob,Roe,,,\n',
-  );
-  writeFileSync(
-    join(curated, 'members.csv'),
-    'LegislatureNumber,PersonId,MemberCode,MemberFormerCodes,MemberChamber,MemberDistrict,MemberParty,MemberIsMajority,MemberIsActive\n' +
-      '33,Ann Lee:33,LEE,,H,1,R,TRUE,TRUE\n' +
-      '34,Ann Lee:33,LEA,LEE,H,1,R,FALSE,TRUE\n' +
-      '34,Bob Roe:34,ROE,,H,2,D,TRUE,TRUE\n',
-  );
   writeFileSync(
     join(baseline, 'bills.csv'),
     'BillId,LegislatureNumber,BillNumber,BillName,BillShortTitle,BillStatusDate,BillSubjects,BillVetoed\n' +
@@ -52,7 +40,7 @@ function setup() {
   writeFileSync(
     join(baseline, 'votes.csv'),
     'VoteId,BillId,VoteNumber,VoteDate,VoteTitle,LegislatureNumber,VoteChamber,VoteDescription,VoteBillAmendmentNumber\n' +
-      '33:H:9,33:HB 5,9,2024-04-01,"HB 5\nThird Reading",33,H,"",\n' +
+      '33:H:9,33:HB 5,9,2024-04-01,"HB 5\nThird Reading\nAmendment No. 4",33,H,"",4.0\n' +
       '34:H:1,34:HB 1,1,2026-04-02,old,34,H,Hand-written note,\n',
   );
   writeFileSync(
@@ -64,8 +52,20 @@ function setup() {
     'BillVersionId,BillId,BillVersionLetter,BillVersionTitle,BillVersionName,BillVersionIntroDate,BillVersionPassedHouse,BillVersionPassedSenate,BillVersionWorkOrder,BillVersionPdfUrl,BillVersionFullText\n' +
       '34:HB 1:A,34:HB 1,A,"""An Act"" ",HB 1,2025-01-22,,,34-LS0001,https://x/HB0001A.PDF,"  HOUSE BILL NO. 1\n""An Act"""\n',
   );
-  return { root, curated, baseline, out: join(root, 'out') };
+  return { root, baseline, out: join(root, 'out') };
 }
+
+const curated = curatedFromCsv(
+  [
+    { PersonId: 'per_ann-lee-33rd', PersonFullName: 'Ann Lee', PersonFirstName: 'Ann', PersonLastName: 'Lee' },
+    { PersonId: 'per_bob-roe-34th', PersonFullName: 'Bob Roe', PersonFirstName: 'Bob', PersonLastName: 'Roe' },
+  ],
+  [
+    { LegislatureNumber: '33', PersonId: 'per_ann-lee-33rd', MemberCode: 'LEE', MemberChamber: 'H', MemberDistrict: '1', MemberParty: 'R', MemberIsMajority: 'TRUE' },
+    { LegislatureNumber: '34', PersonId: 'per_ann-lee-33rd', MemberCode: 'LEA', MemberFormerCodes: 'LEE', MemberChamber: 'H', MemberDistrict: '1', MemberParty: 'R', MemberIsMajority: 'FALSE' },
+    { LegislatureNumber: '34', PersonId: 'per_bob-roe-34th', MemberCode: 'ROE', MemberChamber: 'H', MemberDistrict: '2', MemberParty: 'D', MemberIsMajority: 'TRUE' },
+  ],
+);
 
 describe('scrape', () => {
   it('picks which legislatures to refresh', () => {
@@ -105,49 +105,62 @@ describe('scrape', () => {
     });
     const basis = createBasis({ fetch, sleep: noSleep, logger: silent });
     const summary = await scrape({
-      basis, logger: silent, outDir: dirs.out, curatedDir: dirs.curated, baselineDir: dirs.baseline, legislatures: [34],
+      basis, logger: silent, outDir: dirs.out, curated, baselineDir: dirs.baseline, legislatures: [34],
     });
     assert.deepEqual(summary.refreshed, [34]);
     assert.deepEqual(summary.warnings, []);
 
     const bills = await readCsvAll(join(dirs.out, 'bills.csv'));
     assert.deepEqual(bills.map((b) => [b.BillId, b.BillShortTitle, b.BillSubjects]), [
-      ['33:HB 5', 'OLD BILL', '[FUNDS, TAXATION]'],
-      ['34:HB 1', 'FRESH TITLE', '[ELECTIONS]'],
-      ['34:HB 2', 'TITLE HB   2', '[]'], // inner spaces in titles are kept
+      ['bil_33rd_HB0005', 'OLD BILL', '[FUNDS, TAXATION]'],
+      ['bil_34th_HB0001', 'FRESH TITLE', '[ELECTIONS]'],
+      ['bil_34th_HB0002', 'TITLE HB   2', '[]'], // inner spaces in titles are kept
     ]);
 
     const votes = await readCsvAll(join(dirs.out, 'votes.csv'));
-    assert.deepEqual(votes.map((v) => [v.VoteId, v.BillId, v.VoteDescription, v.VoteBillAmendmentNumber]), [
-      ['33:H:9', '33:HB 5', '', null],
-      ['34:H:1', '34:HB 1', 'Hand-written note', '2.0'],
-      ['34:H:2', null, '', '2.0'],
-      ['34:H:3', '34:HB 2', '', '2.0'],
+    assert.deepEqual(Object.keys(votes[0]!), [
+      'VoteId', 'BillId', 'VoteNumber', 'VoteDate', 'VoteTitle', 'LegislatureNumber', 'VoteChamber', 'VoteDescription',
+      'VoteAmendmentNumber', 'VoteSubAmendmentNumber', 'VoteAmendmentId',
+    ]);
+    assert.deepEqual(votes.map((v) => [v.VoteId, v.BillId, v.VoteDescription, v.VoteAmendmentNumber, v.VoteAmendmentId]), [
+      ['vot_33rd_H0009', 'bil_33rd_HB0005', '', '4', 'amd_33rd_HB0005_H004'], // converted from the old format
+      ['vot_34th_H0001', 'bil_34th_HB0001', 'Hand-written note', '2', 'amd_34th_HB0001_H002'],
+      ['vot_34th_H0002', null, '', '2', null],
+      ['vot_34th_H0003', 'bil_34th_HB0002', '', '2', 'amd_34th_HB0002_H002'],
     ]);
 
     const choices = await readCsvAll(join(dirs.out, 'choices.csv'));
-    assert.deepEqual(choices.map((c) => [c.ChoiceId, c.Choice]), [
-      ['33:H:9:H:1:Ann Lee:33', 'Y'],
-      ['34:H:1:H:1:Ann Lee:33', 'Y'],
-      ['34:H:1:H:2:Bob Roe:34', 'N'],
-      ['34:H:2:H:1:Ann Lee:33', 'N'],
-      ['34:H:3:H:1:Ann Lee:33', 'E'],
+    assert.deepEqual(choices.map((c) => [c.VoteId, c.MemberId, c.Choice]), [
+      ['vot_33rd_H0009', 'mem_33rd_H_ann-lee-33rd', 'Y'],
+      ['vot_34th_H0001', 'mem_34th_H_ann-lee-33rd', 'Y'],
+      ['vot_34th_H0001', 'mem_34th_H_bob-roe-34th', 'N'],
+      ['vot_34th_H0002', 'mem_34th_H_ann-lee-33rd', 'N'],
+      ['vot_34th_H0003', 'mem_34th_H_ann-lee-33rd', 'E'],
     ]);
 
     const versions = await readCsvAll(join(dirs.out, 'bill_versions.csv'));
     assert.equal(versions.length, 2);
     assert.equal(versions[0]!.BillVersionFullText, '  HOUSE BILL NO. 1\n"An Act"'); // copied from baseline
-    assert.equal(versions[1]!.BillVersionId, '34:HB 1:B');
+    assert.equal(versions[0]!.BillVersionId, 'ver_34th_HB0001_A');
+    assert.equal(versions[0]!.BillId, 'bil_34th_HB0001');
+    assert.equal(versions[1]!.BillVersionId, 'ver_34th_HB0001_B');
     assert.equal(versions[1]!.BillVersionFullText, 'HOUSE BILL NO. 1 B\ntext');
     assert.equal(versions[1]!.BillVersionPassedHouse, null);
 
     const members = await readCsvAll(join(dirs.out, 'members.csv'));
     assert.deepEqual(members[1], {
-      MemberId: '34:H:1:Ann Lee:33', LegislatureNumber: '34', PersonId: 'Ann Lee:33', MemberChamber: 'H', MemberDistrict: '1',
+      MemberId: 'mem_34th_H_ann-lee-33rd', LegislatureNumber: '34', PersonId: 'per_ann-lee-33rd', MemberChamber: 'H', MemberDistrict: '1',
       MemberIsMajority: 'false', MemberParty: 'R', MemberCode: 'LEA', MemberFormerCodes: 'LEE',
     });
     // Only one text download: version A was already in the baseline.
     assert.equal(fetch.calls.filter((c) => c.url.includes('Plaintext')).length, 1);
+
+    // A release in the new format works as the next baseline and gives the same files.
+    const again = join(dirs.root, 'again');
+    await scrape({ basis, logger: silent, outDir: again, curated, baselineDir: dirs.out, legislatures: [34] });
+    for (const f of ['people', 'members', 'bills', 'votes', 'choices', 'bill_versions']) {
+      assert.equal(readFileSync(join(again, `${f}.csv`), 'utf8'), readFileSync(join(dirs.out, `${f}.csv`), 'utf8'), f);
+    }
   });
 
   it('keeps baseline rows for a legislature the API has no data for yet', async () => {
@@ -158,7 +171,7 @@ describe('scrape', () => {
     });
     const basis = createBasis({ fetch, sleep: noSleep, logger: silent });
     const summary = await scrape({
-      basis, logger: silent, outDir: dirs.out, curatedDir: dirs.curated, baselineDir: dirs.baseline, legislatures: [35],
+      basis, logger: silent, outDir: dirs.out, curated, baselineDir: dirs.baseline, legislatures: [35],
     });
     assert.equal(summary.warnings.length, 1);
     assert.equal(summary.rows.bills, 2);

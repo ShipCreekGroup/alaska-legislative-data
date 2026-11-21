@@ -1,56 +1,46 @@
-// Builds the published tables (CSV files) from the BASIS API.
+// Writes the published tables (CSV files), using the tables layer.
 //
 // The scrape is incremental: pass the previous release's CSVs as `baselineDir`
 // and only the latest legislature (plus any missing ones) is re-downloaded.
-// Without a baseline, every legislature is scraped (slow: hours, mostly bill text).
+// A baseline in the format published before the new IDs is converted as it's
+// read. Without a baseline, every legislature is scraped (slow: hours, mostly
+// bill text).
 import { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { BasisError, currentLegislature, type Basis, type Logger } from '../client.ts';
-import type { Vote } from '../types.gen.ts';
-import { CsvWriter, readCsv, readCsvAll, writeCsv } from './csv.ts';
 import {
   COLUMNS,
-  billFromCsv,
-  checkCurated,
-  choiceFromCsv,
-  cleanBill,
-  cleanBillVersion,
-  cleanMember,
-  cleanPerson,
+  FIRST_BILL_LEGISLATURE,
+  FIRST_VOTE_LEGISLATURE,
   compareBy,
-  legOf,
-  memberCodes,
-  splitVotes,
-  voteFromCsv,
+  createTables,
+  parseAmendmentNumber,
+  parseOrdinal,
+  voteAmendmentId,
   type BillRow,
-  type BillVersionRow,
   type ChoiceRow,
-  type MemberRow,
+  type Curated,
   type VoteRow,
-} from './clean.ts';
+} from '../tables/index.ts';
+import { CsvWriter, readCsv, readCsvAll, writeCsv, type Row } from './csv.ts';
+import { isLegacyId, legacyBillId, legacyBillVersionId, legacyMemberId, legacyVoteId } from './legacy.ts';
 
-/** The API has no bills before the 12th legislature. */
-export const FIRST_BILL_LEGISLATURE = 12;
-/** The API has no roll-call votes before the 19th legislature. */
-export const FIRST_VOTE_LEGISLATURE = 19;
+export { FIRST_BILL_LEGISLATURE, FIRST_VOTE_LEGISLATURE };
 /** Bill text is only scraped from the 26th legislature on. */
 export const FIRST_VERSION_LEGISLATURE = 26;
-
-/** Members whose vote requests always fail on the server. */
-const KNOWN_FAILING_MEMBERS = new Set(['18:GRS', '18:HUD', '18:DVG']);
 
 export interface ScrapeOptions {
   basis: Basis;
   outDir: string;
-  /** Directory with the curated people.csv and members.csv. */
-  curatedDir: string;
+  /** People and members to use instead of the bundled lists. */
+  curated?: Curated;
   /** Directory with the previous release's CSVs. */
   baselineDir?: string;
   /** Legislatures to re-download. Default: the latest one in the baseline plus any missing. */
   legislatures?: number[];
   /** Skip downloading bill text. New versions get a null BillVersionFullText. */
   skipText?: boolean;
-  /** Also re-check bills that have no versions yet in older legislatures (slow, like the old Python scraper). */
+  /** Also re-check bills that have no versions yet in older legislatures (slow). */
   recheckMissingVersions?: boolean;
   logger?: Logger;
   now?: Date;
@@ -72,6 +62,7 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
     warnings.push(msg);
     log.warn(msg);
   };
+  const tables = createTables(basis, { curated: opts.curated, logger: { warn } });
   mkdirSync(outDir, { recursive: true });
   const baseline = opts.baselineDir;
   if (baseline && !existsSync(join(baseline, 'bills.csv'))) {
@@ -80,12 +71,9 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
   const current = currentLegislature(opts.now);
 
   // --- curated people and members -----------------------------------------
-  const people = (await readCsvAll(join(opts.curatedDir, 'people.csv'))).map(cleanPerson);
-  const members = (await readCsvAll(join(opts.curatedDir, 'members.csv'))).map(cleanMember);
-  checkCurated(people, members);
   const rows = {} as ScrapeSummary['rows'];
-  rows.people = await writeCsv(join(outDir, 'people.csv'), COLUMNS.people, people);
-  rows.members = await writeCsv(join(outDir, 'members.csv'), COLUMNS.members, members);
+  rows.people = await writeCsv(join(outDir, 'people.csv'), COLUMNS.people, await tables.people());
+  rows.members = await writeCsv(join(outDir, 'members.csv'), COLUMNS.members, await tables.members());
 
   // --- which legislatures to refresh --------------------------------------
   const baseBills = baseline ? (await readCsvAll(join(baseline, 'bills.csv'))).map(billFromCsv) : [];
@@ -97,30 +85,23 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
 
   // --- bills ---------------------------------------------------------------
   const bills: BillRow[] = baseBills.filter((b) => !refreshSet.has(b.LegislatureNumber));
-  const available = new Set<number>();
+  const billsByLeg = new Map<number, BillRow[]>();
   for (const leg of refresh.filter((l) => l >= FIRST_BILL_LEGISLATURE)) {
-    const raw = await unlessUnavailable(() => basis.bills.list({ session: leg, query: { subjects: true } }));
-    if (raw === undefined) {
+    const fresh = await unlessUnavailable(() => tables.bills({ legislature: leg }));
+    if (fresh === undefined) {
       warn(`Legislature ${leg}: no data from the API yet; keeping baseline rows`);
       bills.push(...baseBills.filter((b) => b.LegislatureNumber === leg));
       continue;
     }
-    available.add(leg);
-    const byId = new Map<string, BillRow>();
-    for (const b of raw) {
-      const row = cleanBill(leg, b);
-      if (byId.has(row.BillId)) warn(`Duplicate bill ${row.BillId}; keeping the first`);
-      else byId.set(row.BillId, row);
-    }
-    log.info(`Legislature ${leg}: ${byId.size} bills`);
-    bills.push(...byId.values());
+    log.info(`Legislature ${leg}: ${fresh.length} bills`);
+    billsByLeg.set(leg, fresh);
+    bills.push(...fresh);
   }
-  bills.sort(compareBy((b) => b.LegislatureNumber, (b) => b.BillNumber));
+  bills.sort(compareBy((b) => b.BillId));
   rows.bills = await writeCsv(join(outDir, 'bills.csv'), COLUMNS.bills, bills);
-  const billIds = new Set(bills.map((b) => b.BillId));
 
   // --- votes and choices ---------------------------------------------------
-  const voteLegs = refresh.filter((l) => l >= FIRST_VOTE_LEGISLATURE && available.has(l));
+  const voteLegs = [...billsByLeg.keys()].filter((l) => l >= FIRST_VOTE_LEGISLATURE);
   const voteLegSet = new Set(voteLegs);
   const baseVotes: VoteRow[] = baseline ? (await readCsvAll(join(baseline, 'votes.csv'))).map(voteFromCsv) : [];
   const descriptions = new Map(baseVotes.filter((v) => v.VoteDescription).map((v) => [v.VoteId, v.VoteDescription]));
@@ -128,22 +109,19 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
   const choices: ChoiceRow[] = [];
   if (baseline) {
     for await (const r of readCsv(join(baseline, 'choices.csv'))) {
-      if (!voteLegSet.has(legOf(r.VoteId!))) choices.push(choiceFromCsv(r));
+      const c = choiceFromCsv(r);
+      if (!voteLegSet.has(legOf(c.VoteId))) choices.push(c);
     }
   }
   for (const leg of voteLegs) {
-    const raw = await scrapeVotes(basis, leg, members, warn);
-    const split = splitVotes(raw, billIds, members);
-    for (const u of dedupe(split.unmatched.map((u) => `${u.leg}:${u.code}`))) {
-      warn(`Votes by member code ${u} have no matching row in members.csv; dropped`);
-    }
-    for (const v of split.votes) v.VoteDescription = descriptions.get(v.VoteId) ?? '';
-    log.info(`Legislature ${leg}: ${split.votes.length} votes, ${split.choices.length} choices`);
-    votes.push(...split.votes);
-    choices.push(...split.choices);
+    const fresh = await tables.votes({ legislature: leg, bills: billsByLeg.get(leg) });
+    for (const v of fresh.votes) v.VoteDescription = descriptions.get(v.VoteId) ?? '';
+    log.info(`Legislature ${leg}: ${fresh.votes.length} votes, ${fresh.choices.length} choices`);
+    votes.push(...fresh.votes);
+    choices.push(...fresh.choices);
   }
-  votes.sort(compareBy((v) => v.LegislatureNumber, (v) => v.VoteChamber, (v) => v.VoteNumber));
-  choices.sort(compareBy((c) => c.ChoiceId));
+  votes.sort(compareBy((v) => v.VoteId));
+  choices.sort(compareBy((c) => c.VoteId, (c) => c.MemberId));
   rows.votes = await writeCsv(join(outDir, 'votes.csv'), COLUMNS.votes, votes);
   rows.choices = await writeCsv(join(outDir, 'choices.csv'), COLUMNS.choices, choices);
 
@@ -154,41 +132,29 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
   const billsWithVersions = new Set<string>();
   if (baseline) {
     for await (const r of readCsv(join(baseline, 'bill_versions.csv'))) {
-      haveVersion.add(r.BillVersionId!);
-      billsWithVersions.add(r.BillId!);
-      await out.write(r);
+      const row = versionFromCsv(r);
+      haveVersion.add(row.BillVersionId!);
+      billsWithVersions.add(row.BillId!);
+      await out.write(row);
     }
   }
   const toCheck = bills.filter(
     (b) =>
       b.LegislatureNumber >= FIRST_VERSION_LEGISLATURE &&
-      (available.has(b.LegislatureNumber) || (opts.recheckMissingVersions && !billsWithVersions.has(b.BillId))),
+      (billsByLeg.has(b.LegislatureNumber) || (opts.recheckMissingVersions && !billsWithVersions.has(b.BillId))),
   );
   log.info(`Checking ${toCheck.length} bills for new versions`);
   let added = 0;
-  await mapLimit(toCheck, 25, async (b) => {
-    const detail = await basis.bills.list({
-      session: b.LegislatureNumber,
-      query: { bills: { bill: b.BillNumber }, versions: { fulltext: 'urlonly' } },
+  for (const leg of new Set(toCheck.map((b) => b.LegislatureNumber))) {
+    const found = await tables.billVersions({
+      legislature: leg,
+      bills: toCheck.filter((b) => b.LegislatureNumber === leg).map((b) => b.BillNumber),
+      text: !opts.skipText,
+      skip: haveVersion,
     });
-    const found: BillVersionRow[] = [];
-    for (const bill of detail) {
-      for (const v of bill.Versions ?? []) {
-        const row = cleanBillVersion(b.LegislatureNumber, bill.BillNumber, v, null);
-        if (haveVersion.has(row.BillVersionId) || found.some((f) => f.BillVersionId === row.BillVersionId)) continue;
-        if (!opts.skipText) {
-          try {
-            row.BillVersionFullText = await basis.billText.get({ session: b.LegislatureNumber, bill: b.BillNumber, version: v.VersionLetter });
-          } catch (e) {
-            warn(`No text for ${row.BillVersionId}: ${String(e)}`);
-          }
-        }
-        found.push(row);
-        await out.write({ ...row });
-        added++;
-      }
-    }
-  });
+    for (const row of found) await out.write(row);
+    added += found.length;
+  }
   await out.close();
   log.info(`Added ${added} new bill versions`);
   rows.bill_versions = out.rows;
@@ -198,31 +164,10 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
 
 /** Missing legislatures, plus the latest one we have and the current one (which may have changed). */
 export function legislaturesToRefresh(have: Set<number>, current: number): number[] {
+  const out: number[] = [];
   const latest = have.size ? Math.max(...have) : undefined;
-  return range(FIRST_BILL_LEGISLATURE, current).filter((l) => !have.has(l) || l === latest || l === current);
-}
-
-/** Every roll-call choice cast in one legislature, fetched member by member. */
-async function scrapeVotes(
-  basis: Basis,
-  leg: number,
-  members: MemberRow[],
-  warn: (m: string) => void,
-): Promise<Array<{ leg: number; vote: Vote }>> {
-  const codes = dedupe(members.filter((m) => m.LegislatureNumber === leg).flatMap(memberCodes));
-  const results = await mapLimit(codes, 20, async (code) => {
-    try {
-      const ms = await basis.members.list({ session: leg, query: { members: { code }, votes: true } });
-      return ms.flatMap((m) => m.Votes ?? []).map((vote) => ({ leg, vote }));
-    } catch (e) {
-      if (e instanceof BasisError && KNOWN_FAILING_MEMBERS.has(`${leg}:${code}`)) {
-        warn(`Skipping votes for ${leg}:${code} (known server error)`);
-        return [];
-      }
-      throw e;
-    }
-  });
-  return results.flat();
+  for (let l = FIRST_BILL_LEGISLATURE; l <= current; l++) if (!have.has(l) || l === latest || l === current) out.push(l);
+  return out;
 }
 
 async function unlessUnavailable<T>(f: () => Promise<T>): Promise<T | undefined> {
@@ -234,26 +179,70 @@ async function unlessUnavailable<T>(f: () => Promise<T>): Promise<T | undefined>
   }
 }
 
-/** Like Promise.all(items.map(f)), with at most `limit` pending at once. Order is preserved. */
-export async function mapLimit<T, R>(items: T[], limit: number, f: (x: T) => Promise<R>): Promise<R[]> {
-  const out = new Array<R>(items.length);
-  let next = 0;
-  const worker = async () => {
-    while (next < items.length) {
-      const i = next++;
-      out[i] = await f(items[i]!);
-    }
+// ---------------------------------------------------------------------------
+// reading the baseline (previous release's CSVs, old or new IDs)
+// ---------------------------------------------------------------------------
+
+/** 'vot_34th_H0396' -> 34 */
+function legOf(id: string): number {
+  return parseOrdinal(id.split('_')[1]!);
+}
+
+function upgrade(id: string, convert: (old: string) => string): string {
+  return isLegacyId(id) ? convert(id) : id;
+}
+
+export function billFromCsv(r: Row): BillRow {
+  const inner = (r.BillSubjects ?? '[]').replace(/^\[|\]$/g, '');
+  return {
+    BillId: upgrade(r.BillId!, legacyBillId),
+    LegislatureNumber: Number(r.LegislatureNumber),
+    BillNumber: r.BillNumber!,
+    BillName: r.BillName ?? null,
+    BillShortTitle: r.BillShortTitle ?? null,
+    BillStatusDate: r.BillStatusDate ?? null,
+    BillSubjects: inner === '' ? [] : inner.split(', '),
+    BillVetoed: r.BillVetoed == null ? null : r.BillVetoed === 'true',
   };
-  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
-  return out;
 }
 
-function range(lo: number, hi: number): number[] {
-  const out: number[] = [];
-  for (let i = lo; i <= hi; i++) out.push(i);
-  return out;
+export function voteFromCsv(r: Row): VoteRow {
+  const row: VoteRow = {
+    VoteId: upgrade(r.VoteId!, legacyVoteId),
+    BillId: r.BillId ? upgrade(r.BillId, legacyBillId) : null,
+    VoteNumber: Number(r.VoteNumber),
+    VoteDate: r.VoteDate ?? null,
+    VoteTitle: r.VoteTitle ?? null,
+    LegislatureNumber: Number(r.LegislatureNumber),
+    VoteChamber: r.VoteChamber as 'H' | 'S',
+    VoteDescription: r.VoteDescription ?? '',
+    VoteAmendmentNumber: numOrNull(r.VoteAmendmentNumber),
+    VoteSubAmendmentNumber: numOrNull(r.VoteSubAmendmentNumber),
+    VoteAmendmentId: r.VoteAmendmentId ?? null,
+  };
+  if ('VoteBillAmendmentNumber' in r) {
+    // Old format: work the new amendment columns out from the title.
+    const a = parseAmendmentNumber(row.VoteTitle);
+    row.VoteAmendmentNumber = a?.number ?? null;
+    row.VoteSubAmendmentNumber = a?.sub ?? null;
+    row.VoteAmendmentId =
+      a && row.BillId ? voteAmendmentId(row.LegislatureNumber, row.BillId.split('_')[2]!, row.VoteChamber, a) : null;
+  }
+  return row;
 }
 
-function dedupe<T>(xs: T[]): T[] {
-  return [...new Set(xs)];
+function numOrNull(s: string | null | undefined): number | null {
+  return s == null || s === '' ? null : Number(s);
+}
+
+export function choiceFromCsv(r: Row): ChoiceRow {
+  return {
+    VoteId: upgrade(r.VoteId!, legacyVoteId),
+    MemberId: upgrade(r.MemberId!, legacyMemberId),
+    Choice: r.Choice ?? null,
+  };
+}
+
+function versionFromCsv(r: Row): Row {
+  return { ...r, BillVersionId: upgrade(r.BillVersionId!, legacyBillVersionId), BillId: upgrade(r.BillId!, legacyBillId) };
 }

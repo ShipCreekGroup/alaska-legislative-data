@@ -39,7 +39,7 @@ The repo has three parts:
 2. **A TypeScript client** ([`src/client.ts`](./src/client.ts)), published on npm as `alaska-legislative-api`.
    No dependencies. Runs anywhere `fetch` does (Node, Deno, Bun, browsers, Workers), and accepts your
    own fetch function. Optional [zod](https://zod.dev) validators, generated from the schema, live in
-   `alaska-legislative-api/zod`.
+   `alaska-legislative-api/zod`, and the cleaned tables in `alaska-legislative-api/tables`.
 3. **The `akleg` command line tool**, which scrapes and cleans the data and is what the daily job runs.
 
 ### Client
@@ -88,6 +88,29 @@ const basis = createBasis({ validate });
 Bill.parse(someObject); // every schema type is also exported as a zod/mini validator
 ```
 
+### Tables
+
+`alaska-legislative-api/tables` wraps the client and returns exactly the rows of the published
+tables, with the same IDs (see [SKILL.md](./SKILL.md) for the columns):
+
+```ts
+import { createBasis } from 'alaska-legislative-api';
+import { createTables } from 'alaska-legislative-api/tables';
+
+const tables = createTables(createBasis());
+const people = await tables.people();
+const members = await tables.members({ legislature: 34 });
+const bills = await tables.bills({ legislature: 34 });
+const { votes, choices } = await tables.votes({ legislature: 34 }); // one request per member
+const versions = await tables.billVersions({ legislature: 34, bills: ['HB 16'] });
+```
+
+The hand-kept people and members lists are bundled (about 88 KB, 22 KB gzipped). Pass
+`curated` to use your own, and `logger` to collect data warnings.
+
+IDs are built with the helpers in `src/tables/ids.ts`, eg `billId(34, 'HB 16')` is
+`'bil_34th_HB0016'` and `memberId(34, 'H', 'per_robyn-burke-34th')` is `'mem_34th_H_robyn-burke-34th'`.
+
 **Browsers:** works, except `range`, which the server's CORS policy blocks.
 
 **Other environments:** pass any function shaped like `fetch` as the `fetch` option, and a `sleep`
@@ -112,7 +135,13 @@ CSVs into `ak_leg.duckdb`.
 
 People and legislators can't be tracked across legislatures from the API alone (member codes change,
 names repeat), so `people.csv` and `members.csv` are hand-curated in [`data/curated`](./data/curated).
-Edit those files to add new legislators.
+Edit those files to add new legislators, then run `npm run gen` to update the bundled copy. A new
+person's `PersonId` is `per_` + their name as a slug + their first legislature, eg
+`per_robyn-burke-34th`; it never changes afterwards, even if their name does. `members.csv` has no
+`MemberId` column: it's built from `LegislatureNumber`, `MemberChamber` and `PersonId`.
+
+A baseline in the format published before the new IDs is converted as it's read, so the first
+nightly run with the new IDs doesn't need a full scrape.
 
 ### Daily job
 
