@@ -9,7 +9,7 @@ We scrape and clean the data daily, and publish the results to the
 
 ## Usage
 
-The easiest way to analyze this data is tell your favorite ai agent *that has code execution ability*, such as [claude.ai](https://claude.ai) or [chatgpt Codex](https://chatgpt.com/codex/) (as of July 2026, chatgpt.com and gemini can't do this) to read the included [SKILL.md](./SKILL.md), and then ask your question. Example:
+The easiest way to analyze this data is tell your favorite ai agent _that has code execution ability_, such as [claude.ai](https://claude.ai) or [chatgpt Codex](https://chatgpt.com/codex/) (as of July 2026, chatgpt.com and gemini can't do this) to read the included [SKILL.md](./SKILL.md), and then ask your question. Example:
 
 > First read https://raw.githubusercontent.com/ShipCreekGroup/alaska-legislative-data/refs/heads/main/SKILL.md.
 > Find me recent contentious votes on affordability and cost of living and breakdown on how
@@ -129,6 +129,8 @@ npm test            # offline tests, using recorded responses in test/fixtures
 npm run test:live   # check the live API against the schema
 npm run gen         # after editing the schema: rewrites it in the standard layout, regenerates the types and zod validators
 npm run typecheck   # also checks the zod validators agree with the TypeScript types
+npm run lint        # oxlint
+npm run format      # oxfmt (format:check to only check)
 npm run build       # dist/ (npm package)
 ```
 

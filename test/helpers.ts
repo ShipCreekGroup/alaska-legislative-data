@@ -16,7 +16,9 @@ export interface Call {
 }
 
 /** A fake fetch that answers with `handler` and records every call. */
-export function fakeFetch(handler: (url: string, init: FetchInit, n: number) => FetchResponse | Promise<FetchResponse>): FetchFn & {
+export function fakeFetch(
+  handler: (url: string, init: FetchInit, n: number) => FetchResponse | Promise<FetchResponse>,
+): FetchFn & {
   calls: Call[];
 } {
   const calls: Call[] = [];

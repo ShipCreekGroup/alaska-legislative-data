@@ -115,7 +115,12 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
     log.info(`Legislature ${leg}: ${byId.size} bills`);
     bills.push(...byId.values());
   }
-  bills.sort(compareBy((b) => b.LegislatureNumber, (b) => b.BillNumber));
+  bills.sort(
+    compareBy(
+      (b) => b.LegislatureNumber,
+      (b) => b.BillNumber,
+    ),
+  );
   rows.bills = await writeCsv(join(outDir, 'bills.csv'), COLUMNS.bills, bills);
   const billIds = new Set(bills.map((b) => b.BillId));
 
@@ -142,7 +147,13 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
     votes.push(...split.votes);
     choices.push(...split.choices);
   }
-  votes.sort(compareBy((v) => v.LegislatureNumber, (v) => v.VoteChamber, (v) => v.VoteNumber));
+  votes.sort(
+    compareBy(
+      (v) => v.LegislatureNumber,
+      (v) => v.VoteChamber,
+      (v) => v.VoteNumber,
+    ),
+  );
   choices.sort(compareBy((c) => c.ChoiceId));
   rows.votes = await writeCsv(join(outDir, 'votes.csv'), COLUMNS.votes, votes);
   rows.choices = await writeCsv(join(outDir, 'choices.csv'), COLUMNS.choices, choices);
@@ -178,7 +189,11 @@ export async function scrape(opts: ScrapeOptions): Promise<ScrapeSummary> {
         if (haveVersion.has(row.BillVersionId) || found.some((f) => f.BillVersionId === row.BillVersionId)) continue;
         if (!opts.skipText) {
           try {
-            row.BillVersionFullText = await basis.billText.get({ session: b.LegislatureNumber, bill: b.BillNumber, version: v.VersionLetter });
+            row.BillVersionFullText = await basis.billText.get({
+              session: b.LegislatureNumber,
+              bill: b.BillNumber,
+              version: v.VersionLetter,
+            });
           } catch (e) {
             warn(`No text for ${row.BillVersionId}: ${String(e)}`);
           }
@@ -236,6 +251,7 @@ async function unlessUnavailable<T>(f: () => Promise<T>): Promise<T | undefined>
 
 /** Like Promise.all(items.map(f)), with at most `limit` pending at once. Order is preserved. */
 export async function mapLimit<T, R>(items: T[], limit: number, f: (x: T) => Promise<R>): Promise<R[]> {
+  // oxlint-disable-next-line unicorn/no-new-array -- preallocate by length
   const out = new Array<R>(items.length);
   let next = 0;
   const worker = async () => {

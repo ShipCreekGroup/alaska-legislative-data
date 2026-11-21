@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       full:
-        description: "Rebuild everything from scratch instead of updating the latest release (takes hours)"
+        description: 'Rebuild everything from scratch instead of updating the latest release (takes hours)'
         type: boolean
         default: false
   schedule:
-    - cron: "37 2 * * *" # Every day at 2:37 UTC
+    - cron: '37 2 * * *' # Every day at 2:37 UTC
 
 permissions:
   contents: write

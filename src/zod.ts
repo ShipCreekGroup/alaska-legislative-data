@@ -83,5 +83,8 @@ function message(issue: Issue): string {
 }
 
 function count(issues: Issue[]): number {
-  return issues.reduce((n, i) => n + (i.code === 'invalid_union' && i.errors?.length ? Math.min(...i.errors.map(count)) : 1), 0);
+  return issues.reduce(
+    (n, i) => n + (i.code === 'invalid_union' && i.errors?.length ? Math.min(...i.errors.map(count)) : 1),
+    0,
+  );
 }
