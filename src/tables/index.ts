@@ -5,7 +5,7 @@
 //   import { createTables } from 'alaska-legislative-api/tables';
 //   const tables = createTables(createBasis());
 //   const bills = await tables.bills({ legislature: 34 });
-import { BasisError, type Basis, type Logger } from '../client.ts';
+import type { Basis, Logger } from '../client.ts';
 import type { Vote } from '../types.gen.ts';
 import { cleanBill, cleanBillVersion, compareBy, memberCodes, splitVotes } from './clean.ts';
 import { bundledCurated, checkCurated, type Curated } from './curated.ts';
@@ -26,7 +26,7 @@ export const FIRST_VOTE_LEGISLATURE = 19;
 const KNOWN_FAILING_MEMBERS = new Set(['18:GRS', '18:HUD', '18:DVG']);
 
 export interface TablesOptions {
-  /** People and members to use instead of the bundled lists, eg read from edited CSVs. */
+  /** People, members and vote descriptions to use instead of the bundled lists, eg read from edited CSVs. */
   curated?: Curated;
   /** Problems in the data (eg votes by unknown member codes) go to `logger.warn`. Default: `console.warn`. */
   logger?: Pick<Logger, 'warn'>;
@@ -52,8 +52,8 @@ export interface VotesResult {
 export interface BillVersionsParams extends LegislatureParams {
   /** Bill numbers to check, eg ['HB 16']. Default: every bill in the legislature. */
   bills?: string[];
-  /** Download each version's plain text. Default true. */
-  text?: boolean;
+  /** Download each version's plain text. Default true. A function decides per version. */
+  text?: boolean | ((version: { legislature: number; bill: string; version: string; id: string }) => boolean);
   /** BillVersionIds to leave out, eg ones you already have. Their text isn't downloaded. */
   skip?: Set<string>;
 }
@@ -81,6 +81,7 @@ export function createTables(basis: Basis, options: TablesOptions = {}): Tables 
   if (options.curated) checkCurated(curated);
   const warn = (msg: string) => (options.logger ?? console).warn(msg);
   const concurrency = options.concurrency ?? 20;
+  const descriptions = new Map(curated.voteDescriptions.map((d) => [d.VoteId, d.VoteDescription]));
 
   const bills = async ({ legislature }: LegislatureParams): Promise<BillRow[]> => {
     const raw = await basis.bills.list({ session: legislature, query: { subjects: true } });
@@ -111,7 +112,7 @@ export function createTables(basis: Basis, options: TablesOptions = {}): Tables 
           const ms = await basis.members.list({ session: legislature, query: { members: { code }, votes: true } });
           return ms.flatMap((m) => m.Votes ?? []).map((vote: Vote) => ({ leg: legislature, vote }));
         } catch (e) {
-          if (e instanceof BasisError && KNOWN_FAILING_MEMBERS.has(`${legislature}:${code}`)) {
+          if (KNOWN_FAILING_MEMBERS.has(`${legislature}:${code}`)) {
             warn(`Skipping votes for ${legislature}:${code} (known server error)`);
             return [];
           }
@@ -119,6 +120,7 @@ export function createTables(basis: Basis, options: TablesOptions = {}): Tables 
         }
       });
       const split = splitVotes(perCode.flat(), new Set(billRows.map((b) => b.BillId)), members);
+      for (const v of split.votes) v.VoteDescription = descriptions.get(v.VoteId) ?? '';
       for (const u of new Set(split.unmatched.map((u) => `${u.leg}:${u.code}`))) {
         warn(`Votes by member code ${u} have no matching member; dropped`);
       }
@@ -141,7 +143,8 @@ export function createTables(basis: Basis, options: TablesOptions = {}): Tables 
           for (const v of bill.Versions ?? []) {
             const row = cleanBillVersion(legislature, number, v, null);
             if (skip.has(row.BillVersionId) || found.has(row.BillVersionId)) continue;
-            if (text) {
+            const wanted = typeof text === 'function' ? text({ legislature, bill: number, version: v.VersionLetter, id: row.BillVersionId }) : text;
+            if (wanted) {
               try {
                 row.BillVersionFullText = await basis.billText.get({ session: legislature, bill: number, version: v.VersionLetter });
               } catch (e) {

@@ -311,6 +311,11 @@ export interface Basis {
   request(endpoint: Endpoint, params?: RequestParams<object>): Promise<RawResponse>;
 }
 
+/** Where one bill version's plain text is served. */
+export function billTextUrl({ session, bill, version }: BillTextParams, textBaseUrl: string = DEFAULT_TEXT_BASE_URL): string {
+  return `${textBaseUrl.replace(/\/$/, '')}/${session}?Hsid=${textBillCode(bill)}${version}`;
+}
+
 /** Create a client for the BASIS API. */
 export function createBasis(options: ClientOptions = {}): Basis {
   const baseUrl = (options.baseUrl ?? DEFAULT_BASE_URL).replace(/\/$/, '');
@@ -428,8 +433,8 @@ export function createBasis(options: ClientOptions = {}): Basis {
     count: (params = {}) => count(endpoint, params),
   });
 
-  const billTextRaw = async ({ session, bill, version }: BillTextParams): Promise<string> => {
-    const url = `${textBaseUrl}/${session}?Hsid=${textBillCode(bill)}${version}`;
+  const billTextRaw = async (params: BillTextParams): Promise<string> => {
+    const url = billTextUrl(params, textBaseUrl);
     return withRetries(url, async () => {
       const res = await send(url, { method: 'GET', headers: { ...extraHeaders } });
       const body = await res.text();

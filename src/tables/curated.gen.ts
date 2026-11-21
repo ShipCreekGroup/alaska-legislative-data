@@ -2699,4 +2699,7 @@ export const CURATED: CompactCurated = {
 [34,398,"S","S","D",1,"HOF"],
 [34,151,"S","T","D",1,"OLS"],
   ],
+  voteDescriptions: [
+["vot_34th_H0064","Corporal Punishment"],
+  ],
 };

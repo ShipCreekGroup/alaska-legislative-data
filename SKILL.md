@@ -56,6 +56,20 @@ Every ID is a 3-letter type prefix plus fields joined by `_`: the legislature as
 **people** (~600) — one row per real person.
 `PersonId` (PK, e.g. `per_neal-foster-26th`) · full/first/last/middle/nick/suffix names.
 
+### History
+
+Every table also has a history version: `bills_history`, `votes_history`, `choices_history`,
+`billVersions_history`, `members_history`, `people_history`. Each has the same columns plus
+`ValidFrom` and `ValidTo` (dates; a version is valid from `ValidFrom` up to but not including
+`ValidTo`; `ValidTo` is NULL for the current version). The plain tables are views of the current
+versions. History starts on the first nightly run with the raw store (late 2026), so earlier
+changes aren't recorded. What a bill looked like on a date:
+```sql
+SELECT * FROM bills_history
+WHERE BillId = 'bil_34th_HB0016'
+  AND ValidFrom <= DATE '2026-12-01' AND (ValidTo IS NULL OR ValidTo > DATE '2026-12-01');
+```
+
 ### Join graph
 ```
 people ─PersonId→ members ─MemberId→ choices ←VoteId─ votes ─BillId→ bills ←BillId─ billVersions

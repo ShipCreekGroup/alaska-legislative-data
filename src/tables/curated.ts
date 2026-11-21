@@ -1,6 +1,7 @@
-// The hand-kept people and members lists. People and legislators can't be
-// tracked across legislatures from the API alone (member codes change, names
-// repeat), so data/curated/people.csv and members.csv are edited by hand. They
+// The hand-kept lists. People and legislators can't be tracked across
+// legislatures from the API alone (member codes change, names repeat), so
+// data/curated/people.csv and members.csv are edited by hand, as is
+// vote_descriptions.csv, the one hand-typed column of the votes table. They
 // are bundled into this package in a compact form (src/tables/curated.gen.ts,
 // written by `npm run gen`).
 import { CURATED } from './curated.gen.ts';
@@ -8,9 +9,15 @@ import { isPersonId, memberId } from './ids.ts';
 import { memberCodes } from './clean.ts';
 import type { MemberRow, PersonRow } from './rows.ts';
 
+export interface VoteDescription {
+  VoteId: string;
+  VoteDescription: string;
+}
+
 export interface Curated {
   people: PersonRow[];
   members: MemberRow[];
+  voteDescriptions: VoteDescription[];
 }
 
 /** A CSV row: column name to value, with null for an empty field. */
@@ -24,6 +31,8 @@ export type MemberTuple = [number, number, 'H' | 'S', (string | null)?, (string 
 export interface CompactCurated {
   people: PersonTuple[];
   members: MemberTuple[];
+  /** [VoteId, VoteDescription] */
+  voteDescriptions: Array<[string, string]>;
 }
 
 let cache: Curated | undefined;
@@ -31,12 +40,23 @@ let cache: Curated | undefined;
 /** The people and members lists bundled with this package. */
 export function bundledCurated(): Curated {
   cache ??= decodeCurated(CURATED);
-  return { people: cache.people.map((p) => ({ ...p })), members: cache.members.map((m) => ({ ...m })) };
+  return {
+    people: cache.people.map((p) => ({ ...p })),
+    members: cache.members.map((m) => ({ ...m })),
+    voteDescriptions: cache.voteDescriptions.map((d) => ({ ...d })),
+  };
 }
 
-/** Parse the rows of people.csv and members.csv, and check them. */
-export function curatedFromCsv(peopleRows: CsvRow[], memberRows: CsvRow[]): Curated {
-  const curated = { people: peopleRows.map(personFromCsv), members: memberRows.map(memberFromCsv) };
+/** Parse the rows of people.csv, members.csv and vote_descriptions.csv, and check them. */
+export function curatedFromCsv(peopleRows: CsvRow[], memberRows: CsvRow[], descriptionRows: CsvRow[] = []): Curated {
+  const curated = {
+    people: peopleRows.map(personFromCsv),
+    members: memberRows.map(memberFromCsv),
+    voteDescriptions: descriptionRows.map((r) => {
+      if (!r.VoteId || !r.VoteDescription) throw new Error(`vote_descriptions.csv: bad row ${JSON.stringify(r)}`);
+      return { VoteId: r.VoteId, VoteDescription: r.VoteDescription };
+    }),
+  };
   checkCurated(curated);
   return curated;
 }
@@ -85,7 +105,13 @@ function parseBool(s: string | null): boolean | null {
 }
 
 /** Checks the curated tables against each other. Throws on problems. */
-export function checkCurated({ people, members }: Curated): void {
+export function checkCurated({ people, members, voteDescriptions }: Curated): void {
+  const voteIds = new Set<string>();
+  for (const d of voteDescriptions) {
+    if (!/^vot_\d{2}(st|nd|rd|th)_[HS]\d{4}$/.test(d.VoteId)) throw new Error(`vote_descriptions.csv: bad VoteId ${d.VoteId}`);
+    if (voteIds.has(d.VoteId)) throw new Error(`vote_descriptions.csv: ${d.VoteId} listed twice`);
+    voteIds.add(d.VoteId);
+  }
   const personIds = new Set<string>();
   for (const p of people) {
     if (!isPersonId(p.PersonId)) throw new Error(`PersonId ${p.PersonId} must look like 'per_robyn-burke-34th'`);
@@ -106,7 +132,7 @@ export function checkCurated({ people, members }: Curated): void {
   }
 }
 
-export function encodeCurated({ people, members }: Curated): CompactCurated {
+export function encodeCurated({ people, members, voteDescriptions }: Curated): CompactCurated {
   const index = new Map(people.map((p, i) => [p.PersonId, i]));
   const trim = <T extends unknown[]>(t: T): T => {
     while (t.length && t[t.length - 1] === null) t.pop();
@@ -123,6 +149,7 @@ export function encodeCurated({ people, members }: Curated): CompactCurated {
       const majority = m.MemberIsMajority === null ? null : m.MemberIsMajority ? 1 : 0;
       return trim([m.LegislatureNumber, i, m.MemberChamber, m.MemberDistrict, m.MemberParty, majority, m.MemberCode, m.MemberFormerCodes]) as MemberTuple;
     }),
+    voteDescriptions: voteDescriptions.map((d) => [d.VoteId, d.VoteDescription]),
   };
 }
 
@@ -151,5 +178,5 @@ export function decodeCurated(c: CompactCurated): Curated {
       MemberFormerCodes: former ?? null,
     };
   });
-  return { people, members };
+  return { people, members, voteDescriptions: c.voteDescriptions.map(([VoteId, VoteDescription]) => ({ VoteId, VoteDescription })) };
 }

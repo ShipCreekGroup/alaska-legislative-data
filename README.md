@@ -2,7 +2,7 @@
 
 Clean data on the Alaska State Legislature: bills, roll-call votes, individual legislator choices, members, people, and full bill text. Covers legislatures **12–34** (roughly 1981–2026);
 
-We scrape and clean the data daily, and publish the results to the
+We fetch and clean the data daily, keep the history of every row, and publish the results to the
 [releases page](https://github.com/ShipCreekGroup/alaska-legislative-data/releases).
 
 ---
@@ -40,7 +40,7 @@ The repo has three parts:
    No dependencies. Runs anywhere `fetch` does (Node, Deno, Bun, browsers, Workers), and accepts your
    own fetch function. Optional [zod](https://zod.dev) validators, generated from the schema, live in
    `alaska-legislative-api/zod`, and the cleaned tables in `alaska-legislative-api/tables`.
-3. **The `akleg` command line tool**, which scrapes and cleans the data and is what the daily job runs.
+3. **The `akleg` command line tool**, which fetches and cleans the data and is what the nightly job runs.
 
 ### Client
 
@@ -124,31 +124,59 @@ Needs Node 22.18 or later. From a clone of this repo, run `node src/cli.ts` inst
 npx akleg count bills --session 34
 npx akleg get bills --session 34 --query 'bills;bill=HB 16,sponsors'
 npx akleg text 34 "HB 16" A
-npx akleg scrape --baseline path/to/previous/export --out export
+npx akleg fetch --store raw-store --legislatures 34     # download into a local raw store
+npx akleg build --store raw-store --out export          # build the tables and their history
 ```
 
-`akleg scrape` writes `people.csv`, `members.csv`, `bills.csv`, `votes.csv`, `choices.csv` and
-`bill_versions.csv`. With `--baseline` (the previous release's CSVs) it re-downloads only the latest
-legislature and any missing ones, which takes a few minutes. Without it, everything is scraped, which
-takes hours (mostly bill text). [`scripts/build-duckdb.sql`](./scripts/build-duckdb.sql) packs the
-CSVs into `ak_leg.duckdb`.
+### How the data is built
+
+Only two things are stored as sources of truth; everything else is rebuilt from them by code:
+
+1. **The raw store**: every API response we fetch, on [Cloudflare R2](https://developers.cloudflare.com/r2/)
+   (or a local directory with `--store DIR`). `raw/objects/<sha256>.gz` holds each response body,
+   named by the hash of its content and written only when the content is new;
+   `raw/log/<YYYY-MM-DD>.ndjson.gz` has one line per request (time, URL, query, range, status, body
+   hash). Nothing in it is ever edited or deleted, so an unchanged response only adds a log line.
+2. **The curated CSVs** in [`data/curated`](./data/curated): `people.csv`, `members.csv` and
+   `vote_descriptions.csv` (the one hand-typed column of `votes`).
+
+`akleg fetch` downloads the current legislature (all of them on the first run, which takes hours,
+mostly bill text) through the same `tables` code that builds the tables, recording every response.
+Bill text is downloaded once per version.
+
+`akleg build` replays the raw store to rebuild the tables as of each fetch date and compares
+consecutive dates row by row. It writes each table twice: `X.csv` with the current rows and
+`X_history.csv` with every version of every row plus `ValidFrom` and `ValidTo` (the first date the
+version was no longer current; empty for current rows). A row the API stops returning gets a
+`ValidTo`. Only legislatures fetched on a date are compared, so old legislatures aren't closed just
+because they weren't downloaded again. History starts on the first fetch.
+
+Because everything is rebuilt from the roots, fixing a cleaning bug fixes every past version too,
+and a new column is filled into existing versions instead of creating new ones. Edits to the curated
+CSVs also apply to every date.
+
+[`scripts/build-duckdb.sql`](./scripts/build-duckdb.sql) packs the CSVs into `ak_leg.duckdb`, where
+each `X_history` is a table and `X` is a view of its current rows, and writes Parquet copies.
+`akleg publish` copies the results to `published/<YYYY-MM-DD>/` and `published/latest/` on R2,
+keeping the last 30 days.
 
 People and legislators can't be tracked across legislatures from the API alone (member codes change,
-names repeat), so `people.csv` and `members.csv` are hand-curated in [`data/curated`](./data/curated).
-Edit those files to add new legislators, then run `npm run gen` to update the bundled copy. A new
-person's `PersonId` is `per_` + their name as a slug + their first legislature, eg
-`per_robyn-burke-34th`; it never changes afterwards, even if their name does. `members.csv` has no
-`MemberId` column: it's built from `LegislatureNumber`, `MemberChamber` and `PersonId`.
+names repeat), so `people.csv` and `members.csv` are hand-curated. Edit them to add new legislators,
+then run `npm run gen` to update the bundled copy. A new person's `PersonId` is `per_` + their name
+as a slug + their first legislature, eg `per_robyn-burke-34th`; it never changes afterwards, even if
+their name does. `members.csv` has no `MemberId` column: it's built from `LegislatureNumber`,
+`MemberChamber` and `PersonId`.
 
-A baseline in the format published before the new IDs is converted as it's read, so the first
-nightly run with the new IDs doesn't need a full scrape.
+### Nightly job
 
-### Daily job
+[`.github/workflows/scrape.yml`](./.github/workflows/scrape.yml) runs `akleg fetch`, `akleg build`,
+the DuckDB script and `akleg publish`, then publishes the export as the only GitHub release (older
+releases are deleted). A separate job runs the contract tests against the live API. Run the workflow
+by hand with "full" checked to fetch every legislature again.
 
-[`.github/workflows/scrape.yml`](./.github/workflows/scrape.yml) runs every night: it downloads the
-latest release, runs `akleg scrape` on top of it, builds `ak_leg.duckdb`, and publishes a new release.
-A separate job runs the contract tests against the live API. Run the workflow by hand with
-"full" checked to rebuild everything from scratch.
+It needs four GitHub Actions secrets for an R2 bucket: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`,
+`R2_SECRET_ACCESS_KEY` (an R2 API token with read and write access to the bucket) and `R2_BUCKET`.
+The first run fills the raw store from scratch.
 
 ### Development
 

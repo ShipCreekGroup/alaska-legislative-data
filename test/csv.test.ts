@@ -3,7 +3,7 @@ import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
-import { formatCell, readCsvAll, writeCsv } from '../src/scrape/csv.ts';
+import { formatCell, readCsvAll, writeCsv } from '../src/build/csv.ts';
 
 describe('csv', () => {
   it('quotes like DuckDB', () => {

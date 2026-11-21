@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { describe, it } from 'node:test';
 import { generateCurated } from '../scripts/gen.ts';
 import { createBasis } from '../src/client.ts';
-import { readCsvAll } from '../src/scrape/csv.ts';
+import { readCsvAll } from '../src/build/csv.ts';
 import {
   amendmentId,
   billCode,
@@ -152,7 +152,11 @@ describe('cleaning', () => {
 
 describe('curated data', () => {
   const fromCsv = async (): Promise<Curated> =>
-    curatedFromCsv(await readCsvAll('data/curated/people.csv'), await readCsvAll('data/curated/members.csv'));
+    curatedFromCsv(
+      await readCsvAll('data/curated/people.csv'),
+      await readCsvAll('data/curated/members.csv'),
+      await readCsvAll('data/curated/vote_descriptions.csv'),
+    );
 
   it('people.csv and members.csv are consistent', async () => {
     const c = await fromCsv();
@@ -178,7 +182,8 @@ describe('curated data', () => {
     assert.throws(() => curatedFromCsv([p], [m('1'), m('2', 'XYZ')]), /Duplicate MemberId/);
     assert.throws(() => curatedFromCsv([p, p], []), /Duplicate PersonId/);
     assert.throws(() => curatedFromCsv([{ ...p, PersonId: 'A B:1' }], []), /must look like/);
-    assert.throws(() => checkCurated({ people: [], members: curatedFromCsv([p], [m('1')]).members }), /unknown PersonId/);
+    assert.throws(() => checkCurated({ people: [], members: curatedFromCsv([p], [m('1')]).members, voteDescriptions: [] }), /unknown PersonId/);
+    assert.throws(() => curatedFromCsv([p], [], [{ VoteId: '34:H:64', VoteDescription: 'x' }]), /bad VoteId/);
   });
 });
 
