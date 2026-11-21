@@ -163,7 +163,7 @@ export function createTables(basis: Basis, options: TablesOptions = {}): Tables 
 
 /** Like Promise.all(items.map(f)), with at most `limit` pending at once. Order is preserved. */
 export async function mapLimit<T, R>(items: T[], limit: number, f: (x: T) => Promise<R>): Promise<R[]> {
-  const out = new Array<R>(items.length);
+  const out: R[] = [];
   let next = 0;
   const worker = async () => {
     while (next < items.length) {
