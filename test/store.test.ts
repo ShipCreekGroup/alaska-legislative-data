@@ -46,6 +46,8 @@ describe('R2Store', () => {
     assert.equal(calls[1]![1], 'https://acct.r2.cloudflarestorage.com/akleg/?list-type=2&prefix=raw%2Flog%2F&continuation-token=t%262');
     assert.equal(calls[3]![1], 'https://acct.r2.cloudflarestorage.com/akleg/published/latest/bills.csv');
     assert.throws(() => R2Store.fromEnv({}), /Set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET/);
+    const env = { CLOUDFLARE_ACCOUNT_ID: 'cf', R2_ACCESS_KEY_ID: 'k', R2_SECRET_ACCESS_KEY: 's', R2_BUCKET: 'b' };
+    assert.equal(R2Store.fromEnv(env).name, 'r2://b');
   });
 });
 

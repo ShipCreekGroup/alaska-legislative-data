@@ -106,8 +106,9 @@ export class R2Store implements BlobStore {
     this.now = opts.now ?? (() => new Date());
   }
 
-  /** Reads R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY and R2_BUCKET. */
+  /** Reads R2_ACCOUNT_ID (or CLOUDFLARE_ACCOUNT_ID), R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY and R2_BUCKET. */
   static fromEnv(env: Record<string, string | undefined> = process.env): R2Store {
+    env = { ...env, R2_ACCOUNT_ID: env.R2_ACCOUNT_ID || env.CLOUDFLARE_ACCOUNT_ID };
     const need = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET'];
     const missing = need.filter((k) => !env[k]);
     if (missing.length) throw new Error(`Set ${missing.join(', ')} to use R2`);
