@@ -1,23 +1,42 @@
 #!/usr/bin/env node
-// Command line interface: `akleg scrape` builds the published tables;
-// `akleg get|count|text` are thin wrappers around the client.
-import { fileURLToPath } from 'node:url';
+// Command line interface. `akleg fetch`, `build` and `publish` run the nightly
+// job; `akleg get|count|text` are thin wrappers around the client.
+import { join } from 'node:path';
 import { parseArgs } from 'node:util';
+import { build } from './build/build.ts';
+import { readCsvAll } from './build/csv.ts';
+import { fetchRaw } from './build/fetch.ts';
+import { publish } from './build/publish.ts';
 import { createBasis, type Endpoint, type Logger } from './client.ts';
-import { scrape } from './scrape/scrape.ts';
+import { FileStore, R2Store, type BlobStore } from './store/blob.ts';
+import { RawStore } from './store/raw.ts';
+import { curatedFromCsv } from './tables/curated.ts';
 
 const HELP = `Usage: akleg <command> [options]
 
 Commands:
-  scrape            Build the CSV tables (people, members, bills, votes, choices, bill_versions)
-    --out DIR         Output directory (default: export)
-    --baseline DIR    Previous release's CSVs. Only the latest legislature is re-downloaded.
-                      Without this, everything is scraped, which takes hours.
-    --legislatures L  Comma separated legislatures to re-download, eg 33,34
-    --curated DIR     Directory with people.csv and members.csv (default: bundled data/curated)
+  fetch             Download legislatures from the API into the raw store
+    --legislatures L  Comma separated, eg 33,34. Default: the current one, the latest with
+                      data, and any never fetched (all of them on the first run: hours)
+    --all             Every legislature
     --skip-text       Don't download bill text for new versions
     --recheck-missing-versions
-                      Also re-check older bills that have no versions yet (slow)
+                      Also re-check older bills that had no versions yet (slow)
+
+  build             Build the tables and their history from the raw store
+    --out DIR         Output directory (default: export)
+    --date D          As of this date, yyyy-mm-dd (default: the latest fetch)
+
+  publish           Copy DIR to published/<date>/ and published/latest/ in the store,
+                    and delete dated sets older than 30 days
+    --dir DIR         Default: export
+
+  Options for fetch, build and publish:
+    --store S         r2 (reads R2_ACCOUNT_ID or CLOUDFLARE_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET)
+                      or a local directory (default: raw-store)
+    --cache DIR       Local copies of raw objects (default: .akleg-cache)
+    --curated DIR     Directory with people.csv, members.csv and vote_descriptions.csv
+                      (default: the bundled copy of data/curated)
 
   get ENDPOINT      Print the API response as JSON. ENDPOINT: bills, committees, meetings, members, sessions
   count ENDPOINT    Print the number of results
@@ -42,7 +61,11 @@ async function main(argv: string[]): Promise<number> {
     allowPositionals: true,
     options: {
       out: { type: 'string', default: 'export' },
-      baseline: { type: 'string' },
+      dir: { type: 'string', default: 'export' },
+      store: { type: 'string', default: 'raw-store' },
+      cache: { type: 'string', default: '.akleg-cache' },
+      date: { type: 'string' },
+      all: { type: 'boolean', default: false },
       legislatures: { type: 'string' },
       curated: { type: 'string' },
       'skip-text': { type: 'boolean', default: false },
@@ -74,18 +97,44 @@ async function main(argv: string[]): Promise<number> {
     maxConcurrency: values.concurrency ? Number(values.concurrency) : undefined,
   });
 
-  if (command === 'scrape') {
-    const summary = await scrape({
-      basis,
-      logger,
-      outDir: values.out!,
-      baselineDir: values.baseline,
-      curatedDir: values.curated ?? fileURLToPath(new URL('../data/curated', import.meta.url)),
-      legislatures: values.legislatures ? values.legislatures.split(',').map(Number) : undefined,
-      skipText: values['skip-text'],
-      recheckMissingVersions: values['recheck-missing-versions'],
-    });
-    logger.info('Done.', JSON.stringify(summary.rows), `${summary.warnings.length} warnings`);
+  if (command === 'fetch' || command === 'build' || command === 'publish') {
+    const store: BlobStore = values.store === 'r2' ? R2Store.fromEnv() : new FileStore(values.store!);
+    if (command === 'publish') {
+      await publish({ store, dir: values.dir!, date: values.date, logger });
+      return 0;
+    }
+    const raw = new RawStore(store, { cacheDir: values.cache });
+    const curated = values.curated
+      ? curatedFromCsv(
+          await readCsvAll(join(values.curated, 'people.csv')),
+          await readCsvAll(join(values.curated, 'members.csv')),
+          await readCsvAll(join(values.curated, 'vote_descriptions.csv')),
+        )
+      : undefined;
+    if (command === 'fetch') {
+      const summary = await fetchRaw({
+        raw,
+        curated,
+        logger,
+        date: values.date,
+        all: values.all,
+        legislatures: values.legislatures ? values.legislatures.split(',').map(Number) : undefined,
+        skipText: values['skip-text'],
+        recheckMissingVersions: values['recheck-missing-versions'],
+        client: {
+          maxConcurrency: values.concurrency ? Number(values.concurrency) : undefined,
+          validate: values.validate ? (await import('./zod.ts')).validate : undefined,
+        },
+      });
+      logger.info(`Done: ${summary.requests} responses, ${summary.warnings.length} warnings`);
+    } else {
+      const summary = await build({ raw, curated, logger, outDir: values.out!, date: values.date });
+      logger.info(
+        `Done: ${summary.dates.length} dates, ${summary.builds} builds.`,
+        JSON.stringify(summary.rows),
+        `${summary.warnings.length} warnings`,
+      );
+    }
     return 0;
   }
 
