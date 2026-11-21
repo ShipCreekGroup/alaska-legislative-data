@@ -233,3 +233,33 @@ describe('helpers', () => {
     assert.equal(cleanBillText('00 a\n01 b\r02 c\x0c03 d'), 'a\nb\nc\nd');
   });
 });
+
+describe('rate limiting', () => {
+  it('pauses on HTTP 429, honoring Retry-After', async () => {
+    const fetch = fakeFetch((_u, _i, n) =>
+      n === 1 ? response('slow down', 429, { 'Retry-After': '40' }) : response(fixture('committees.json')),
+    );
+    const waits: number[] = [];
+    const basis = createBasis({ fetch, sleep: async (ms) => void waits.push(ms), logger: silent });
+    assert.equal((await basis.committees.list()).length, 5);
+    assert.equal(waits.length, 1);
+    assert.ok(waits[0]! > 39_000 && waits[0]! <= 40_000, `waited ${waits[0]}`);
+  });
+
+  it('backs off from 15s without Retry-After, and gives up after maxRateLimitAttempts', async () => {
+    const fetch = fakeFetch(() => response('slow down', 429));
+    const waits: number[] = [];
+    const basis = createBasis({
+      fetch,
+      sleep: async (ms) => void waits.push(ms),
+      logger: silent,
+      maxRateLimitAttempts: 3,
+    });
+    await assert.rejects(basis.committees.list(), (e: BasisError) => e.status === 429);
+    assert.equal(fetch.calls.length, 3);
+    assert.deepEqual(
+      waits.map((w) => Math.round(w / 1000)),
+      [15, 30],
+    );
+  });
+});
