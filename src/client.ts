@@ -44,6 +44,12 @@ export interface ClientOptions {
   maxConcurrency?: number;
   /** Attempts per request for network errors, 5xx responses and server faults. Default 4. */
   maxAttempts?: number;
+  /**
+   * Attempts per request when the server says "too many requests" (HTTP 429). Default 8.
+   * Each 429 pauses every request, not just the one that got it, for the
+   * server's Retry-After time or 15s, 30s, 60s, ... up to 5 minutes.
+   */
+  maxRateLimitAttempts?: number;
   /** Used between retries. Defaults to setTimeout, or no wait where that doesn't exist. */
   sleep?: (ms: number) => Promise<void>;
   /** Defaults to warnings and errors on `console`. */
@@ -213,13 +219,16 @@ export class BasisError extends Error {
   status: number;
   faults: Fault[];
   body: string;
-  constructor(message: string, url: string, status: number, faults: Fault[], body: string) {
+  /** From the Retry-After header of a 429 or 503, if the server sent one. */
+  retryAfterMs?: number;
+  constructor(message: string, url: string, status: number, faults: Fault[], body: string, retryAfterMs?: number) {
     super(message);
     this.name = 'BasisError';
     this.url = url;
     this.status = status;
     this.faults = faults;
     this.body = body;
+    if (retryAfterMs !== undefined) this.retryAfterMs = retryAfterMs;
   }
   /** True when the server says the requested legislature has no data, eg legislatures before the 10th. */
   get isDataUnavailable(): boolean {
@@ -346,6 +355,7 @@ export function createBasis(options: ClientOptions = {}): Basis {
   const fetchFn = options.fetch ?? defaultFetch();
   const maxConcurrency = options.maxConcurrency ?? 5;
   const maxAttempts = options.maxAttempts ?? 4;
+  const maxRateLimitAttempts = options.maxRateLimitAttempts ?? 8;
   const sleep = options.sleep ?? defaultSleep;
   const logger = options.logger ?? consoleLogger;
   const extraHeaders = options.headers ?? {};
@@ -367,9 +377,17 @@ export function createBasis(options: ClientOptions = {}): Basis {
     else active--;
   };
 
+  // After a 429, no request is sent until this time (ms since epoch).
+  let pausedUntil = 0;
+  const waitForPause = async (): Promise<void> => {
+    const ms = pausedUntil - Date.now();
+    if (ms > 0) await sleep(ms);
+  };
+
   const send = async (url: string, init: FetchInit): Promise<FetchResponse> => {
     await acquire();
     try {
+      await waitForPause();
       logger.debug(init.method, url, init.headers);
       return await fetchFn(url, init);
     } finally {
@@ -378,19 +396,32 @@ export function createBasis(options: ClientOptions = {}): Basis {
   };
 
   const withRetries = async <T>(url: string, attempt: () => Promise<T>): Promise<T> => {
-    let lastError: unknown;
-    for (let i = 0; i < maxAttempts; i++) {
+    let failures = 0;
+    let rateLimited = 0;
+    for (;;) {
       try {
         return await attempt();
       } catch (e) {
-        lastError = e;
-        if (!isRetryable(e) || i === maxAttempts - 1) break;
-        const wait = 500 * 2 ** i;
-        logger.warn(`Retrying ${url} in ${wait}ms (attempt ${i + 2}/${maxAttempts}): ${String(e)}`);
+        if (!isRetryable(e)) throw e;
+        if (e instanceof BasisError && e.status === 429) {
+          rateLimited++;
+          if (rateLimited >= maxRateLimitAttempts) throw e;
+          const wait = Math.min(Math.max(e.retryAfterMs ?? 0, 15_000 * 2 ** (rateLimited - 1)), 300_000);
+          // Pause everything, so the other requests in flight don't keep tripping the limit.
+          const until = Date.now() + wait;
+          if (until > pausedUntil) {
+            pausedUntil = until;
+            logger.warn(`Rate limited (HTTP 429); pausing all requests for ${Math.round(wait / 1000)}s`);
+          }
+          continue; // send() waits out the pause
+        }
+        failures++;
+        if (failures >= maxAttempts) throw e;
+        const wait = 500 * 2 ** (failures - 1);
+        logger.warn(`Retrying ${url} in ${wait}ms (attempt ${failures + 1}/${maxAttempts}): ${String(e)}`);
         await sleep(wait);
       }
     }
-    throw lastError;
   };
 
   const request = async (endpoint: Endpoint, params: RequestParams<object> = {}): Promise<RawResponse> => {
@@ -399,7 +430,14 @@ export function createBasis(options: ClientOptions = {}): Basis {
       const res = await send(url, { method: 'GET', headers: { ...extraHeaders, ...headers } });
       const body = await res.text();
       if (res.status >= 400) {
-        throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, parseFaults(body), body);
+        throw new BasisError(
+          `HTTP ${res.status} from ${url}`,
+          url,
+          res.status,
+          parseFaults(body),
+          body,
+          retryAfter(res),
+        );
       }
       let parsed: { Basis?: Record<string, unknown> };
       try {
@@ -450,7 +488,9 @@ export function createBasis(options: ClientOptions = {}): Basis {
     const { url, headers } = buildRequest(endpoint, params, baseUrl);
     return withRetries(url, async () => {
       const res = await send(url, { method: 'HEAD', headers: { ...extraHeaders, ...headers } });
-      if (res.status >= 400) throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, [], '');
+      if (res.status >= 400) {
+        throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, [], '', retryAfter(res));
+      }
       const n = res.headers.get('x-alaska-query-count');
       if (n === null || Number.isNaN(Number(n))) {
         throw new BasisError('Response had no X-Alaska-Query-Count header', url, res.status, [], '');
@@ -469,7 +509,9 @@ export function createBasis(options: ClientOptions = {}): Basis {
     return withRetries(url, async () => {
       const res = await send(url, { method: 'GET', headers: { ...extraHeaders } });
       const body = await res.text();
-      if (res.status >= 400) throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, [], body);
+      if (res.status >= 400) {
+        throw new BasisError(`HTTP ${res.status} from ${url}`, url, res.status, [], body, retryAfter(res));
+      }
       return body;
     });
   };
@@ -498,6 +540,16 @@ function isRetryable(e: unknown): boolean {
 // ---------------------------------------------------------------------------
 // helpers
 // ---------------------------------------------------------------------------
+
+/** The Retry-After header in ms: either a number of seconds or an HTTP date. */
+function retryAfter(res: FetchResponse): number | undefined {
+  const h = res.headers.get('retry-after');
+  if (!h) return undefined;
+  const secs = Number(h);
+  if (Number.isFinite(secs)) return Math.max(0, secs * 1000);
+  const at = Date.parse(h);
+  return Number.isNaN(at) ? undefined : Math.max(0, at - Date.now());
+}
 
 /** 'HB   16' -> 'HB 16' */
 export function normalizeBillNumber(bill: string): string {
