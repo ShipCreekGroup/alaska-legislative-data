@@ -207,7 +207,9 @@ export class RawIndex {
 
   /** Legislatures with any requests. */
   legislatures(): number[] {
-    return [...new Set(this.entries.flatMap((e) => (e.legislature === null ? [] : [e.legislature])))].sort((a, b) => a - b);
+    return [...new Set(this.entries.flatMap((e) => (e.legislature === null ? [] : [e.legislature])))].sort(
+      (a, b) => a - b,
+    );
   }
 
   /** URLs of bill text fetched successfully. */

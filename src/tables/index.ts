@@ -98,7 +98,9 @@ export function createTables(basis: Basis, options: TablesOptions = {}): Tables 
     people: async () => curated.people.map((p) => ({ ...p })),
 
     members: async ({ legislature } = {}) =>
-      curated.members.filter((m) => legislature === undefined || m.LegislatureNumber === legislature).map((m) => ({ ...m })),
+      curated.members
+        .filter((m) => legislature === undefined || m.LegislatureNumber === legislature)
+        .map((m) => ({ ...m })),
 
     bills,
 
@@ -126,7 +128,12 @@ export function createTables(basis: Basis, options: TablesOptions = {}): Tables 
       }
       return {
         votes: split.votes.sort(compareBy((v) => v.VoteId)),
-        choices: split.choices.sort(compareBy((c) => c.VoteId, (c) => c.MemberId)),
+        choices: split.choices.sort(
+          compareBy(
+            (c) => c.VoteId,
+            (c) => c.MemberId,
+          ),
+        ),
       };
     },
 
@@ -143,10 +150,17 @@ export function createTables(basis: Basis, options: TablesOptions = {}): Tables 
           for (const v of bill.Versions ?? []) {
             const row = cleanBillVersion(legislature, number, v, null);
             if (skip.has(row.BillVersionId) || found.has(row.BillVersionId)) continue;
-            const wanted = typeof text === 'function' ? text({ legislature, bill: number, version: v.VersionLetter, id: row.BillVersionId }) : text;
+            const wanted =
+              typeof text === 'function'
+                ? text({ legislature, bill: number, version: v.VersionLetter, id: row.BillVersionId })
+                : text;
             if (wanted) {
               try {
-                row.BillVersionFullText = await basis.billText.get({ session: legislature, bill: number, version: v.VersionLetter });
+                row.BillVersionFullText = await basis.billText.get({
+                  session: legislature,
+                  bill: number,
+                  version: v.VersionLetter,
+                });
               } catch (e) {
                 warn(`No text for ${row.BillVersionId}: ${String(e)}`);
               }

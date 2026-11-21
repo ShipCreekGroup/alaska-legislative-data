@@ -75,7 +75,12 @@ export function cleanBill(leg: number, b: Bill): BillRow {
   };
 }
 
-export function cleanBillVersion(leg: number, billNumber: string, v: BillVersion, fullText: string | null): BillVersionRow {
+export function cleanBillVersion(
+  leg: number,
+  billNumber: string,
+  v: BillVersion,
+  fullText: string | null,
+): BillVersionRow {
   return {
     BillVersionId: billVersionId(leg, billNumber, v.VersionLetter),
     BillId: billId(leg, billNumber),
@@ -105,9 +110,14 @@ export interface SplitVotesResult {
  * @param billIds every BillId known, so votes can be linked to bills
  * @param members the curated members, to resolve member codes to MemberIds
  */
-export function splitVotes(raw: Array<{ leg: number; vote: Vote }>, billIds: Set<string>, members: MemberRow[]): SplitVotesResult {
+export function splitVotes(
+  raw: Array<{ leg: number; vote: Vote }>,
+  billIds: Set<string>,
+  members: MemberRow[],
+): SplitVotesResult {
   const memberByCode = new Map<string, string>();
-  for (const m of members) for (const code of memberCodes(m)) memberByCode.set(`${m.LegislatureNumber}:${code}`, m.MemberId);
+  for (const m of members)
+    for (const code of memberCodes(m)) memberByCode.set(`${m.LegislatureNumber}:${code}`, m.MemberId);
 
   const votes = new Map<string, VoteRow>();
   const choices = new Map<string, ChoiceRow>();
@@ -152,7 +162,12 @@ function cleanVote(leg: number, voteNum: string, vote: Vote, billIds: Set<string
 }
 
 /** A vote's AmendmentId; null when the numbers don't fit the ID format (amendments 1-999, sub-amendments 1-99). */
-export function voteAmendmentId(leg: number, billNumber: string, chamber: 'H' | 'S', a: AmendmentNumber): string | null {
+export function voteAmendmentId(
+  leg: number,
+  billNumber: string,
+  chamber: 'H' | 'S',
+  a: AmendmentNumber,
+): string | null {
   const fits = a.number >= 1 && a.number <= 999 && (a.sub === null || (a.sub >= 1 && a.sub <= 99));
   return fits ? amendmentId(leg, billNumber, chamber, a.number, a.sub) : null;
 }

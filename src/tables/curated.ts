@@ -26,7 +26,16 @@ export type CsvRow = Record<string, string | null>;
 /** [PersonId without 'per_', full, first, last, middle, nick, suffix], trailing nulls dropped. */
 export type PersonTuple = [string, string, string, string, (string | null)?, (string | null)?, (string | null)?];
 /** [legislature, index into people, chamber, district, party, is majority (1/0), code, former codes], trailing nulls dropped. */
-export type MemberTuple = [number, number, 'H' | 'S', (string | null)?, (string | null)?, (0 | 1 | null)?, (string | null)?, (string | null)?];
+export type MemberTuple = [
+  number,
+  number,
+  'H' | 'S',
+  (string | null)?,
+  (string | null)?,
+  (0 | 1 | null)?,
+  (string | null)?,
+  (string | null)?,
+];
 
 export interface CompactCurated {
   people: PersonTuple[];
@@ -108,7 +117,8 @@ function parseBool(s: string | null): boolean | null {
 export function checkCurated({ people, members, voteDescriptions }: Curated): void {
   const voteIds = new Set<string>();
   for (const d of voteDescriptions) {
-    if (!/^vot_\d{2}(st|nd|rd|th)_[HS]\d{4}$/.test(d.VoteId)) throw new Error(`vote_descriptions.csv: bad VoteId ${d.VoteId}`);
+    if (!/^vot_\d{2}(st|nd|rd|th)_[HS]\d{4}$/.test(d.VoteId))
+      throw new Error(`vote_descriptions.csv: bad VoteId ${d.VoteId}`);
     if (voteIds.has(d.VoteId)) throw new Error(`vote_descriptions.csv: ${d.VoteId} listed twice`);
     voteIds.add(d.VoteId);
   }
@@ -141,13 +151,30 @@ export function encodeCurated({ people, members, voteDescriptions }: Curated): C
   return {
     people: people.map(
       (p) =>
-        trim([p.PersonId.slice(4), p.PersonFullName, p.PersonFirstName, p.PersonLastName, p.PersonMiddleName, p.PersonNickName, p.PersonSuffix]) as PersonTuple,
+        trim([
+          p.PersonId.slice(4),
+          p.PersonFullName,
+          p.PersonFirstName,
+          p.PersonLastName,
+          p.PersonMiddleName,
+          p.PersonNickName,
+          p.PersonSuffix,
+        ]) as PersonTuple,
     ),
     members: members.map((m) => {
       const i = index.get(m.PersonId);
       if (i === undefined) throw new Error(`Member ${m.MemberId} has unknown PersonId`);
       const majority = m.MemberIsMajority === null ? null : m.MemberIsMajority ? 1 : 0;
-      return trim([m.LegislatureNumber, i, m.MemberChamber, m.MemberDistrict, m.MemberParty, majority, m.MemberCode, m.MemberFormerCodes]) as MemberTuple;
+      return trim([
+        m.LegislatureNumber,
+        i,
+        m.MemberChamber,
+        m.MemberDistrict,
+        m.MemberParty,
+        majority,
+        m.MemberCode,
+        m.MemberFormerCodes,
+      ]) as MemberTuple;
     }),
     voteDescriptions: voteDescriptions.map((d) => [d.VoteId, d.VoteDescription]),
   };
@@ -178,5 +205,9 @@ export function decodeCurated(c: CompactCurated): Curated {
       MemberFormerCodes: former ?? null,
     };
   });
-  return { people, members, voteDescriptions: c.voteDescriptions.map(([VoteId, VoteDescription]) => ({ VoteId, VoteDescription })) };
+  return {
+    people,
+    members,
+    voteDescriptions: c.voteDescriptions.map(([VoteId, VoteDescription]) => ({ VoteId, VoteDescription })),
+  };
 }

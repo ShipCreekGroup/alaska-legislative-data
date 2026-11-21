@@ -30,7 +30,10 @@ export async function publish(opts: PublishOptions): Promise<{ uploaded: string[
   const date = opts.date ?? now.toISOString().slice(0, 10);
   const keepDays = opts.keepDays ?? 30;
   const log = opts.logger ?? { info: console.error };
-  const files = (await readdir(opts.dir, { withFileTypes: true })).filter((f) => f.isFile()).map((f) => f.name).sort();
+  const files = (await readdir(opts.dir, { withFileTypes: true }))
+    .filter((f) => f.isFile())
+    .map((f) => f.name)
+    .sort();
   const uploaded: string[] = [];
   for (const name of files) {
     const body = await readFile(join(opts.dir, name));
@@ -46,7 +49,8 @@ export async function publish(opts: PublishOptions): Promise<{ uploaded: string[
   const cutoff = new Date(now.getTime() - keepDays * 86400e3).toISOString().slice(0, 10);
   for (const key of await opts.store.list('published/')) {
     const [, folder, name] = key.split('/');
-    const stale = folder === 'latest' ? !files.includes(name!) : /^\d{4}-\d{2}-\d{2}$/.test(folder!) && folder! < cutoff;
+    const stale =
+      folder === 'latest' ? !files.includes(name!) : /^\d{4}-\d{2}-\d{2}$/.test(folder!) && folder! < cutoff;
     if (stale) {
       await opts.store.delete(key);
       deleted.push(key);

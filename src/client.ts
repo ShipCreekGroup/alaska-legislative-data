@@ -332,7 +332,10 @@ export interface Basis {
 }
 
 /** Where one bill version's plain text is served. */
-export function billTextUrl({ session, bill, version }: BillTextParams, textBaseUrl: string = DEFAULT_TEXT_BASE_URL): string {
+export function billTextUrl(
+  { session, bill, version }: BillTextParams,
+  textBaseUrl: string = DEFAULT_TEXT_BASE_URL,
+): string {
   return `${textBaseUrl.replace(/\/$/, '')}/${session}?Hsid=${textBillCode(bill)}${version}`;
 }
 

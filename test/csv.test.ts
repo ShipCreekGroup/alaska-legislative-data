@@ -28,7 +28,10 @@ describe('csv', () => {
     await writeCsv(path, ['a', 'b', 'c'], rows);
     assert.deepEqual(await readCsvAll(path), rows);
     writeFileSync(path, 'x,y\r\n1,"a""b"\r\n2,\r\n');
-    assert.deepEqual(await readCsvAll(path), [{ x: '1', y: 'a"b' }, { x: '2', y: null }]);
+    assert.deepEqual(await readCsvAll(path), [
+      { x: '1', y: 'a"b' },
+      { x: '2', y: null },
+    ]);
     assert.ok(readFileSync(path, 'utf8').length > 0);
   });
 });

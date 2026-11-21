@@ -29,14 +29,14 @@ Six tables. Prefixed column names (e.g. every `bills` column starts with `Bill`)
 
 Every ID is a 3-letter type prefix plus fields joined by `_`: the legislature as a two-digit ordinal (`34th`, `09th`, `21st`), then zero-padded numbers, so IDs sort correctly as text.
 
-| ID | Example | Parts |
-| --- | --- | --- |
-| `PersonId` | `per_robyn-burke-34th` | name first served under + first legislature |
-| `MemberId` | `mem_34th_H_robyn-burke-34th` | legislature, chamber, person |
-| `BillId` | `bil_34th_HB0016` | legislature, bill code (`HB 16` padded to `HB0016`) |
-| `BillVersionId` | `ver_34th_HB0016_A` | legislature, bill code, version letter |
-| `VoteId` | `vot_34th_H0396` | legislature, chamber + roll-call number |
-| `VoteAmendmentId` | `amd_34th_HB0016_H002_10` | legislature, bill code, chamber + amendment number, optional sub-amendment number |
+| ID                | Example                       | Parts                                                                             |
+| ----------------- | ----------------------------- | --------------------------------------------------------------------------------- |
+| `PersonId`        | `per_robyn-burke-34th`        | name first served under + first legislature                                       |
+| `MemberId`        | `mem_34th_H_robyn-burke-34th` | legislature, chamber, person                                                      |
+| `BillId`          | `bil_34th_HB0016`             | legislature, bill code (`HB 16` padded to `HB0016`)                               |
+| `BillVersionId`   | `ver_34th_HB0016_A`           | legislature, bill code, version letter                                            |
+| `VoteId`          | `vot_34th_H0396`              | legislature, chamber + roll-call number                                           |
+| `VoteAmendmentId` | `amd_34th_HB0016_H002_10`     | legislature, bill code, chamber + amendment number, optional sub-amendment number |
 
 **bills** (~24.9k) — one row per bill per legislature.
 `BillId` (PK, e.g. `bil_34th_HB0225`) · `LegislatureNumber` (12–34) · `BillNumber` (`HB 225`) · `BillName` (usually NULL) · `BillShortTitle` (use this as the title) · `BillStatusDate` · `BillSubjects` (**VARCHAR[]** array of topic tags) · `BillVetoed` (bool, nullable).
@@ -64,6 +64,7 @@ Every table also has a history version: `bills_history`, `votes_history`, `choic
 `ValidTo`; `ValidTo` is NULL for the current version). The plain tables are views of the current
 versions. History starts on the first nightly run with the raw store (late 2026), so earlier
 changes aren't recorded. What a bill looked like on a date:
+
 ```sql
 SELECT * FROM bills_history
 WHERE BillId = 'bil_34th_HB0016'
@@ -80,7 +81,8 @@ people ─PersonId→ members ─MemberId→ choices ←VoteId─ votes ─BillI
 - One person can hold **two memberships in a single legislature** — `MemberId` includes the chamber precisely because members sometimes switch House↔Senate mid-term (appointed to fill a vacancy). So don't assume one row per person per legislature when someone switched chambers.
 
 ### Identifying people (important)
-- **`PersonId` is the only stable key for a real person across terms — always use it, not names.** Format is `per_{name slug}-{first legislature they held office}` (e.g. `per_neal-foster-26th`). It is *not* a per-name counter; the suffix is their first legislature. It happens to separate two people who share a name only because they first took office in different years (there are two "Neal Foster"s: `per_neal-foster-03rd` and `per_neal-foster-26th`).
+
+- **`PersonId` is the only stable key for a real person across terms — always use it, not names.** Format is `per_{name slug}-{first legislature they held office}` (e.g. `per_neal-foster-26th`). It is _not_ a per-name counter; the suffix is their first legislature. It happens to separate two people who share a name only because they first took office in different years (there are two "Neal Foster"s: `per_neal-foster-03rd` and `per_neal-foster-26th`).
 - Names are unreliable for lookup: they repeat, and they change (marriage, nickname → legal name). To find someone by name, query `people`, eyeball the matches, grab the `PersonId`, then join through `members`.
 - **Name changes:** the `PersonId` string is frozen at the person's _original_ name even after they change it, and `PersonFullName` may show either the old or new name depending on when the data was scraped. So a `WHERE PersonLastName = 'Frier'` can silently miss that person's earlier records. Prefer `PersonId`.
 

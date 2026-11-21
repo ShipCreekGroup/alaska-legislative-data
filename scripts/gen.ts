@@ -237,7 +237,11 @@ function regex(pattern: string): string {
 /** src/tables/curated.gen.ts: the curated CSVs in a compact form, one row per line. */
 export async function generateCurated(dir: URL = new URL('../data/curated/', import.meta.url)): Promise<string> {
   const read = (f: string) => readCsvAll(new URL(f, dir).pathname);
-  const curated = curatedFromCsv(await read('people.csv'), await read('members.csv'), await read('vote_descriptions.csv'));
+  const curated = curatedFromCsv(
+    await read('people.csv'),
+    await read('members.csv'),
+    await read('vote_descriptions.csv'),
+  );
   const { people, members, voteDescriptions } = encodeCurated(curated);
   return [
     '/* Generated from data/curated/*.csv by scripts/gen.ts. Do not edit by hand. */',

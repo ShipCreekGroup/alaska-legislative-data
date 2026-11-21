@@ -3,7 +3,14 @@
 // The same tables code that `akleg build` replays makes the requests, so
 // every response a build needs is recorded. Bill text is downloaded once per
 // version; every other response is re-requested on each fetch.
-import { BasisError, billTextUrl, createBasis, currentLegislature, type ClientOptions, type Logger } from '../client.ts';
+import {
+  BasisError,
+  billTextUrl,
+  createBasis,
+  currentLegislature,
+  type ClientOptions,
+  type Logger,
+} from '../client.ts';
 import { RawIndex, replayFetch, type LogEntry, type RawStore } from '../store/raw.ts';
 import { FIRST_BILL_LEGISLATURE, FIRST_VOTE_LEGISLATURE, createTables, type Curated } from '../tables/index.ts';
 
@@ -77,20 +84,31 @@ export async function fetchRaw(opts: FetchOptions): Promise<FetchSummary> {
         log.info(`Legislature ${leg}: ${votes.length} votes`);
       }
       if (leg >= FIRST_VERSION_LEGISLATURE) {
-        const versions = await tables.billVersions({ legislature: leg, bills: bills.map((b) => b.BillNumber), text: wantText });
+        const versions = await tables.billVersions({
+          legislature: leg,
+          bills: bills.map((b) => b.BillNumber),
+          text: wantText,
+        });
         log.info(`Legislature ${leg}: ${versions.length} bill versions`);
       }
     }
 
     if (opts.recheckMissingVersions) {
       // For legislatures not fetched now: ask again about bills whose last answer had no versions.
-      const replay = createTables(createBasis({ fetch: replayFetch(opts.raw, index.view(date)), maxAttempts: 1, logger: quiet }), {
-        curated: opts.curated,
-        logger: { warn() {} },
-      });
-      for (const leg of index.legislatures().filter((l) => l >= FIRST_VERSION_LEGISLATURE && !legislatures.includes(l))) {
+      const replay = createTables(
+        createBasis({ fetch: replayFetch(opts.raw, index.view(date)), maxAttempts: 1, logger: quiet }),
+        {
+          curated: opts.curated,
+          logger: { warn() {} },
+        },
+      );
+      for (const leg of index
+        .legislatures()
+        .filter((l) => l >= FIRST_VERSION_LEGISLATURE && !legislatures.includes(l))) {
         const bills = await replay.bills({ legislature: leg });
-        const withVersions = new Set((await replay.billVersions({ legislature: leg, text: false })).map((v) => v.BillId));
+        const withVersions = new Set(
+          (await replay.billVersions({ legislature: leg, text: false })).map((v) => v.BillId),
+        );
         const missing = bills.filter((b) => !withVersions.has(b.BillId)).map((b) => b.BillNumber);
         log.info(`Legislature ${leg}: re-checking ${missing.length} bills with no versions`);
         await tables.billVersions({ legislature: leg, bills: missing, text: wantText });

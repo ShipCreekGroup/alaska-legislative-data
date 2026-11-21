@@ -56,7 +56,10 @@ export async function build(opts: BuildOptions): Promise<BuildSummary> {
   const curated = opts.curated ?? bundledCurated();
   const index = new RawIndex(await opts.raw.loadLog());
   const dates = index.dates().filter((d) => !opts.date || d <= opts.date);
-  if (!dates.length) throw new Error(`The raw store ${opts.raw.blobs.name} has no fetches${opts.date ? ` on or before ${opts.date}` : ''}`);
+  if (!dates.length)
+    throw new Error(
+      `The raw store ${opts.raw.blobs.name} has no fetches${opts.date ? ` on or before ${opts.date}` : ''}`,
+    );
   mkdirSync(opts.outDir, { recursive: true });
   const tmp = mkdtempSync(join(tmpdir(), 'akleg-build-'));
 
@@ -67,7 +70,13 @@ export async function build(opts: BuildOptions): Promise<BuildSummary> {
     bills: new HistoryTable('bills', COLUMNS.bills, key(['BillId']), legislatureOfKey, tmp),
     votes: new HistoryTable('votes', COLUMNS.votes, key(['VoteId']), legislatureOfKey, tmp),
     choices: new HistoryTable('choices', COLUMNS.choices, key(['VoteId', 'MemberId']), legislatureOfKey, tmp),
-    bill_versions: new HistoryTable('bill_versions', COLUMNS.bill_versions, key(['BillVersionId']), legislatureOfKey, tmp),
+    bill_versions: new HistoryTable(
+      'bill_versions',
+      COLUMNS.bill_versions,
+      key(['BillVersionId']),
+      legislatureOfKey,
+      tmp,
+    ),
   };
 
   try {
@@ -84,16 +93,24 @@ export async function build(opts: BuildOptions): Promise<BuildSummary> {
         if (last.get(leg) === fingerprint) continue;
         last.set(leg, fingerprint);
         const isLast = date === dates.at(-1);
-        const replay = createTables(createBasis({ fetch: replayFetch(opts.raw, view), maxAttempts: 1, logger: quiet }), {
-          curated,
-          logger: { warn: (m: string) => void (isLast && warnings.add(m)) },
-        });
+        const replay = createTables(
+          createBasis({ fetch: replayFetch(opts.raw, view), maxAttempts: 1, logger: quiet }),
+          {
+            curated,
+            logger: { warn: (m: string) => void (isLast && warnings.add(m)) },
+          },
+        );
         let bills, votes, versions;
         try {
           bills = await replay.bills({ legislature: leg });
-          votes = leg >= FIRST_VOTE_LEGISLATURE ? await replay.votes({ legislature: leg, bills }) : { votes: [], choices: [] };
+          votes =
+            leg >= FIRST_VOTE_LEGISLATURE
+              ? await replay.votes({ legislature: leg, bills })
+              : { votes: [], choices: [] };
           versions =
-            leg >= FIRST_VERSION_LEGISLATURE ? await replay.billVersions({ legislature: leg, bills: bills.map((b) => b.BillNumber) }) : [];
+            leg >= FIRST_VERSION_LEGISLATURE
+              ? await replay.billVersions({ legislature: leg, bills: bills.map((b) => b.BillNumber) })
+              : [];
         } catch (e) {
           if (e instanceof BasisError && e.isDataUnavailable) continue;
           if (e instanceof NotInStoreError) {
@@ -118,7 +135,8 @@ export async function build(opts: BuildOptions): Promise<BuildSummary> {
     }
 
     const rows = {} as BuildSummary['rows'];
-    for (const [name, t] of Object.entries(tables) as Array<[TableName, HistoryTable]>) rows[name] = await t.write(opts.outDir);
+    for (const [name, t] of Object.entries(tables) as Array<[TableName, HistoryTable]>)
+      rows[name] = await t.write(opts.outDir);
     for (const w of warnings) log.warn(w);
     return { dates, builds, rows, warnings: [...warnings] };
   } finally {

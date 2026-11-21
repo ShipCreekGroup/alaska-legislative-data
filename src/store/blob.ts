@@ -120,7 +120,13 @@ export class R2Store implements BlobStore {
     });
   }
 
-  private async send(method: string, key: string, query: Record<string, string> = {}, body?: Uint8Array, contentType?: string) {
+  private async send(
+    method: string,
+    key: string,
+    query: Record<string, string> = {},
+    body?: Uint8Array,
+    contentType?: string,
+  ) {
     const path = `/${this.opts.bucket}/${key.split('/').map(encodeRfc3986).join('/')}`;
     const url = new URL(path, this.endpoint);
     for (const [k, v] of Object.entries(query)) url.searchParams.set(k, v);
@@ -176,7 +182,9 @@ export class R2Store implements BlobStore {
       const xml = await res.text();
       if (!res.ok) throw new Error(`R2 list ${prefix}: HTTP ${res.status} ${xml}`);
       for (const m of xml.matchAll(/<Key>([\s\S]*?)<\/Key>/g)) out.push(decodeXml(m[1]!));
-      token = /<IsTruncated>true<\/IsTruncated>/.test(xml) ? decodeXml(/<NextContinuationToken>([\s\S]*?)<\/NextContinuationToken>/.exec(xml)?.[1] ?? '') : undefined;
+      token = /<IsTruncated>true<\/IsTruncated>/.test(xml)
+        ? decodeXml(/<NextContinuationToken>([\s\S]*?)<\/NextContinuationToken>/.exec(xml)?.[1] ?? '')
+        : undefined;
     } while (token);
     return out.sort();
   }
@@ -192,7 +200,12 @@ function sleep(ms: number): Promise<void> {
 }
 
 function decodeXml(s: string): string {
-  return s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
+  return s
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, '&');
 }
 
 function encodeRfc3986(s: string): string {
@@ -214,7 +227,10 @@ export interface SignParams {
 
 /** AWS Signature Version 4. Returns all headers to send, including Authorization. */
 export function signV4(p: SignParams): Record<string, string> {
-  const amzDate = p.date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const amzDate = p.date
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}/, '');
   const day = amzDate.slice(0, 8);
   const payloadHash = sha256Hex(p.body);
   const headers: Record<string, string> = {

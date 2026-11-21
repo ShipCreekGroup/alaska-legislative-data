@@ -86,7 +86,15 @@ export class HistoryTable {
       .sort((a, b) => {
         const x = this.versions[a]!;
         const y = this.versions[b]!;
-        return x.key < y.key ? -1 : x.key > y.key ? 1 : x.validFrom < y.validFrom ? -1 : x.validFrom > y.validFrom ? 1 : 0;
+        return x.key < y.key
+          ? -1
+          : x.key > y.key
+            ? 1
+            : x.validFrom < y.validFrom
+              ? -1
+              : x.validFrom > y.validFrom
+                ? 1
+                : 0;
       });
     const current = new CsvWriter(join(outDir, `${this.name}.csv`), this.columns);
     const history = new CsvWriter(join(outDir, `${this.name}_history.csv`), [...this.columns, 'ValidFrom', 'ValidTo']);

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       full:
-        description: "Fetch every legislature, not just the current one (takes hours; needed once to fill the raw store)"
+        description: 'Fetch every legislature, not just the current one (takes hours; needed once to fill the raw store)'
         type: boolean
         default: false
   schedule:

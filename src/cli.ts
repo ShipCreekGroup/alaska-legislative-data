@@ -129,7 +129,11 @@ async function main(argv: string[]): Promise<number> {
       logger.info(`Done: ${summary.requests} responses, ${summary.warnings.length} warnings`);
     } else {
       const summary = await build({ raw, curated, logger, outDir: values.out!, date: values.date });
-      logger.info(`Done: ${summary.dates.length} dates, ${summary.builds} builds.`, JSON.stringify(summary.rows), `${summary.warnings.length} warnings`);
+      logger.info(
+        `Done: ${summary.dates.length} dates, ${summary.builds} builds.`,
+        JSON.stringify(summary.rows),
+        `${summary.warnings.length} warnings`,
+      );
     }
     return 0;
   }

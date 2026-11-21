@@ -8,7 +8,7 @@
     "test/fixtures/",
     "index.html",
     "schema/basis.schema.json",
-    "src/*.gen.ts",
+    "src/**/*.gen.ts",
     "pnpm-lock.yaml"
   ]
 }

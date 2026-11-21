@@ -16,7 +16,7 @@ export function ordinal(legislature: number): string {
     throw new Error(`Legislature must be 1-99: ${legislature}`);
   }
   const teen = legislature % 100 >= 11 && legislature % 100 <= 13;
-  const suffix = teen ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[legislature % 10] ?? 'th';
+  const suffix = teen ? 'th' : (({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[legislature % 10] ?? 'th');
   return `${String(legislature).padStart(2, '0')}${suffix}`;
 }
 
@@ -92,9 +92,16 @@ export function voteId(legislature: number, voteNum: string): string {
   return `vot_${ordinal(legislature)}_${rollCall(voteNum)}`;
 }
 
-export function amendmentId(legislature: number, billNumber: string, chamber: string, amendment: number, sub: number | null = null): string {
+export function amendmentId(
+  legislature: number,
+  billNumber: string,
+  chamber: string,
+  amendment: number,
+  sub: number | null = null,
+): string {
   if (chamber !== 'H' && chamber !== 'S') throw new Error(`Not a chamber: ${chamber}`);
-  if (!Number.isInteger(amendment) || amendment < 1 || amendment > 999) throw new Error(`Bad amendment number ${amendment}`);
+  if (!Number.isInteger(amendment) || amendment < 1 || amendment > 999)
+    throw new Error(`Bad amendment number ${amendment}`);
   let id = `amd_${ordinal(legislature)}_${billCode(billNumber)}_${chamber}${String(amendment).padStart(3, '0')}`;
   if (sub !== null) {
     if (!Number.isInteger(sub) || sub < 1 || sub > 99) throw new Error(`Bad sub-amendment number ${sub}`);
