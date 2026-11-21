@@ -145,12 +145,13 @@ export class RawStore {
 
   /**
    * Wraps a fetch so every GET response below 500 is stored, and its log entry
-   * pushed to `sink`. Server errors aren't recorded: the client retries them.
+   * pushed to `sink`. Server errors and "too many requests" (429) aren't
+   * recorded: the client retries them.
    */
   recordingFetch(inner: FetchFn, sink: LogEntry[], date: string): FetchFn {
     return async (url, init) => {
       const res = await inner(url, init);
-      if (init.method !== 'GET' || res.status >= 500) return res;
+      if (init.method !== 'GET' || res.status >= 500 || res.status === 429) return res;
       const body = await res.text();
       const hash = await this.putBody(body);
       sink.push({
