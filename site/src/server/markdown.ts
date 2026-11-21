@@ -7,7 +7,6 @@ import {
   SITE_URL,
   akleg,
   chamberName,
-  date,
   legFull,
   legName,
   legYears,

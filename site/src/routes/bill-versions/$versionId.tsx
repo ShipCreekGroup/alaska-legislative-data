@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/solid-router';
 import { Show } from 'solid-js';
 import { Breadcrumbs, Container, DataLinks, PageTitle, Section } from '~/components/site';
 import { fetchBillVersion } from '~/server/fns';
-import { SITE_URL, clip, date, legName, legYears, legFull } from '~/lib/format';
+import { SITE_URL, clip, date, legName, legYears } from '~/lib/format';
 import { versionSummary as summary } from '~/lib/summaries';
 import { seo } from '~/lib/seo';
 import type { BillVersion } from '~/lib/types';

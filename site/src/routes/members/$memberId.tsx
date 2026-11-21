@@ -3,18 +3,7 @@ import { For, Show } from 'solid-js';
 import { Breadcrumbs, Container, DataLinks, PageTitle, Pager, SearchBox, Section, Stat } from '~/components/site';
 import { MemberVotesTable } from '~/components/lists';
 import { fetchMember } from '~/server/fns';
-import {
-  SITE_URL,
-  akleg,
-  chamberName,
-  clip,
-  fmt,
-  legName,
-  legYears,
-  memberTitle,
-  partyName,
-  legFull,
-} from '~/lib/format';
+import { SITE_URL, akleg, chamberName, clip, fmt, legName, legYears, memberTitle, partyName } from '~/lib/format';
 import { memberSummary as summary } from '~/lib/summaries';
 import { isVariant, seo } from '~/lib/seo';
 import { href, num, str } from '~/lib/search';

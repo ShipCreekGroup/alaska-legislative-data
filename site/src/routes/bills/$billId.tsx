@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { Breadcrumbs, Container, DataLinks, PageTitle, Section } from '~/components/site';
 import { VotesTable } from '~/components/lists';
 import { fetchBill } from '~/server/fns';
-import { SITE_URL, akleg, clip, date, legName, legYears, legFull } from '~/lib/format';
+import { SITE_URL, akleg, clip, date, legName, legYears } from '~/lib/format';
 import { billSummary as summary } from '~/lib/summaries';
 import { seo } from '~/lib/seo';
 import type { Bill } from '~/lib/types';
