@@ -174,8 +174,9 @@ the DuckDB script and `akleg publish`, then publishes the export as the only Git
 releases are deleted). A separate job runs the contract tests against the live API. Run the workflow
 by hand with "full" checked to fetch every legislature again.
 
-It needs four GitHub Actions secrets for an R2 bucket: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`,
-`R2_SECRET_ACCESS_KEY` (an R2 API token with read and write access to the bucket) and `R2_BUCKET`.
+It reads the R2 bucket's location from two GitHub Actions variables, `CLOUDFLARE_ACCOUNT_ID` and
+`R2_BUCKET`, and its credentials from two secrets, `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` (an
+R2 API token with read and write access to the bucket).
 The first run fills the raw store from scratch.
 
 ### Development
