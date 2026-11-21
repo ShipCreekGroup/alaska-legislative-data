@@ -1,0 +1,13 @@
+// Cloudflare Workers deployment. Build with: NITRO_PRESET=cloudflare-module VITE_SITE_URL=https://<domain> pnpm build
+// then deploy with: npx wrangler deploy
+{
+  "name": "akleg-site",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": ".output/server/index.mjs",
+  "assets": { "directory": ".output/public" },
+  "r2_buckets": [
+    // The nightly job uploads the output of scripts/extract.ts to site/latest/ in this bucket.
+    { "binding": "SITE_DATA", "bucket_name": "REPLACE_WITH_R2_BUCKET" },
+  ],
+}
