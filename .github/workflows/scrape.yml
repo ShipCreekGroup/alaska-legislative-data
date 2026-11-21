@@ -1,10 +1,10 @@
-name: Scrape and Publish
+name: Fetch, Build and Publish
 
 on:
   workflow_dispatch:
     inputs:
       full:
-        description: 'Rebuild everything from scratch instead of updating the latest release (takes hours)'
+        description: "Fetch every legislature, not just the current one (takes hours; needed once to fill the raw store)"
         type: boolean
         default: false
   schedule:
@@ -16,7 +16,7 @@ permissions:
 jobs:
   contract:
     # Checks the live API still matches schema/basis.schema.json.
-    # A failure here means the Legislature changed something; the scrape still runs.
+    # A failure here means the Legislature changed something; the nightly job still runs.
     name: API contract tests
     runs-on: ubuntu-latest
     steps:
@@ -29,12 +29,16 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:live
 
-  scrape:
-    name: Scrape and Release
+  nightly:
+    name: Fetch, build and publish
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
       GH_TOKEN: ${{ github.token }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -44,27 +48,28 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
-      - name: Download the previous release as the baseline
-        if: ${{ !inputs.full }}
-        run: |
-          mkdir -p baseline
-          gh release download --pattern export.zip --dir baseline
-          unzip -q baseline/export.zip -d baseline
+      # Raw objects never change, so a local copy saves downloading them again.
+      - uses: actions/cache@v4
+        with:
+          path: .akleg-cache
+          key: raw-objects-${{ github.run_id }}
+          restore-keys: raw-objects-
 
-      - name: Scrape
-        run: |
-          if [ -d baseline/export ]; then
-            node src/cli.ts scrape --out export --baseline baseline/export
-          else
-            node src/cli.ts scrape --out export
-          fi
+      - name: Fetch new API responses into the raw store
+        run: node src/cli.ts fetch --store r2 ${{ inputs.full && '--all' || '' }}
 
-      - name: Build ak_leg.duckdb
+      - name: Build the tables and their history
+        run: node src/cli.ts build --store r2 --out export
+
+      - name: Build ak_leg.duckdb and Parquet files
         run: |
           curl -sSL -o duckdb.zip https://github.com/duckdb/duckdb/releases/download/v1.4.2/duckdb_cli-linux-amd64.zip
           unzip -q duckdb.zip -d "$RUNNER_TEMP"
           cd export && "$RUNNER_TEMP/duckdb" ak_leg.duckdb < ../scripts/build-duckdb.sql
           "$RUNNER_TEMP/duckdb" ak_leg.duckdb -c "SELECT 'bills' AS t, count(*) FROM bills UNION ALL SELECT 'votes', count(*) FROM votes UNION ALL SELECT 'choices', count(*) FROM choices UNION ALL SELECT 'billVersions', count(*) FROM billVersions"
 
-      - name: Publish the export directory as a GitHub release
+      - name: Publish to R2 (published/<date>/ and published/latest/; the last 30 days are kept)
+        run: node src/cli.ts publish --store r2 --dir export
+
+      - name: Publish as the only GitHub release
         run: scripts/release.sh export

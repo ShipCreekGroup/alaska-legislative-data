@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# This script zips a directory and creates a GitHub release with the zip file.
+# Zips a directory, publishes it as a new GitHub release, and deletes every
+# older release (R2 keeps the last 30 days; the raw store can rebuild any day).
 # Usage: scripts/release.sh <directory>
 directory=${1}
 if [ -z "$directory" ]; then
@@ -21,7 +22,8 @@ zip -r "$zip_file" "$directory"
 echo "Zip file size: $(du -h "$zip_file" | cut -f1)"
 
 # Create GitHub release with the zip file
-gh release create "$(date -u '+%Y%m%d-%H%M%S')" \
+tag="$(date -u '+%Y%m%d-%H%M%S')"
+gh release create "$tag" \
     "$zip_file" \
     --title "$(date -u -Iseconds)" \
     --notes "Released at $(TZ='America/Anchorage' date) AK time"
@@ -29,3 +31,11 @@ gh release create "$(date -u '+%Y%m%d-%H%M%S')" \
 # Clean up
 echo "Cleaning up temporary zip file"
 rm "$zip_file"
+
+# Delete older releases and their tags
+gh release list --limit 1000 --json tagName --jq '.[].tagName' | while read -r old; do
+    if [ "$old" != "$tag" ]; then
+        echo "Deleting release $old"
+        gh release delete "$old" --yes --cleanup-tag
+    fi
+done

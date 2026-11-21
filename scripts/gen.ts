@@ -2,11 +2,14 @@
 // - rewrites the schema itself in one standard layout
 // - src/types.gen.ts: TypeScript types
 // - src/zod.gen.ts: zod/mini validators
-// Run with `pnpm gen` after editing the schema. A test fails if any of
-// the three committed files is out of date.
+// and src/tables/curated.gen.ts, the compact form of data/curated/*.csv.
+// Run with `pnpm gen` after editing the schema or the curated CSVs. A test
+// fails if any generated file is out of date.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { compile } from 'json-schema-to-typescript';
 import { format as prettier } from 'prettier';
+import { readCsvAll } from '../src/build/csv.ts';
+import { curatedFromCsv, encodeCurated } from '../src/tables/curated.ts';
 
 const SCHEMA_URL = new URL('../schema/basis.schema.json', import.meta.url);
 
@@ -227,10 +230,39 @@ function regex(pattern: string): string {
   return `/${pattern.replace(/\//g, '\\/')}/`;
 }
 
+// ---------------------------------------------------------------------------
+// bundled curated data
+// ---------------------------------------------------------------------------
+
+/** src/tables/curated.gen.ts: the curated CSVs in a compact form, one row per line. */
+export async function generateCurated(dir: URL = new URL('../data/curated/', import.meta.url)): Promise<string> {
+  const read = (f: string) => readCsvAll(new URL(f, dir).pathname);
+  const curated = curatedFromCsv(await read('people.csv'), await read('members.csv'), await read('vote_descriptions.csv'));
+  const { people, members, voteDescriptions } = encodeCurated(curated);
+  return [
+    '/* Generated from data/curated/*.csv by scripts/gen.ts. Do not edit by hand. */',
+    "import type { CompactCurated } from './curated.ts';",
+    '',
+    'export const CURATED: CompactCurated = {',
+    '  people: [',
+    ...people.map((p) => `${JSON.stringify(p)},`),
+    '  ],',
+    '  members: [',
+    ...members.map((m) => `${JSON.stringify(m)},`),
+    '  ],',
+    '  voteDescriptions: [',
+    ...voteDescriptions.map((d) => `${JSON.stringify(d)},`),
+    '  ],',
+    '};',
+    '',
+  ].join('\n');
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const schema = readSchema();
   writeFileSync(SCHEMA_URL, formatSchema(schema));
   writeFileSync(new URL('../src/types.gen.ts', import.meta.url), await generateTypes(schema));
   writeFileSync(new URL('../src/zod.gen.ts', import.meta.url), await generateZod(schema));
-  console.log('wrote schema/basis.schema.json, src/types.gen.ts, src/zod.gen.ts');
+  writeFileSync(new URL('../src/tables/curated.gen.ts', import.meta.url), await generateCurated());
+  console.log('wrote schema/basis.schema.json, src/types.gen.ts, src/zod.gen.ts, src/tables/curated.gen.ts');
 }
