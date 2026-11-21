@@ -121,6 +121,7 @@ async function main(argv: string[]): Promise<number> {
         legislatures: values.legislatures ? values.legislatures.split(',').map(Number) : undefined,
         skipText: values['skip-text'],
         recheckMissingVersions: values['recheck-missing-versions'],
+        saveOnSignal: true,
         client: {
           maxConcurrency: values.concurrency ? Number(values.concurrency) : undefined,
           validate: values.validate ? (await import('./zod.ts')).validate : undefined,

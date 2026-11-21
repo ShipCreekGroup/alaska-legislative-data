@@ -3,6 +3,9 @@
 // The same tables code that `akleg build` replays makes the requests, so
 // every response a build needs is recorded. Bill text is downloaded once per
 // version; every other response is re-requested on each fetch.
+//
+// The log of what was fetched is saved every minute (and on cancel), so an
+// interrupted run's downloads aren't fetched again next time.
 import {
   BasisError,
   billTextUrl,
@@ -33,6 +36,12 @@ export interface FetchOptions {
   logger?: Logger;
   /** The run's date, yyyy-mm-dd. Default today (UTC). */
   date?: string;
+  /** Save the log of what's been fetched this often, so a cancelled or crashed run keeps its progress. Default 60s. */
+  checkpointMs?: number;
+  /** Also save it after this many new responses. Default 1000. */
+  checkpointEvery?: number;
+  /** Save progress, then exit, on SIGINT or SIGTERM (eg when a GitHub Actions run is cancelled). */
+  saveOnSignal?: boolean;
   now?: Date;
 }
 
@@ -58,9 +67,53 @@ export async function fetchRaw(opts: FetchOptions): Promise<FetchSummary> {
   const legislatures = opts.legislatures ?? defaultLegislatures(index, current, opts.all ?? false);
   log.info(`Fetching legislatures ${legislatures.join(', ')} into ${opts.raw.blobs.name}`);
 
+  // Log entries not yet saved. Each one's body is already in the store.
   const sink: LogEntry[] = [];
+  let saved = 0;
+  let saving: Promise<void> = Promise.resolve();
+  const checkpoint = (): Promise<void> => {
+    const run = async () => {
+      const batch = sink.splice(0);
+      if (!batch.length) return;
+      try {
+        await opts.raw.appendLog(date, batch);
+        saved += batch.length;
+      } catch (e) {
+        sink.unshift(...batch);
+        throw e;
+      }
+    };
+    const p = saving.then(run);
+    saving = p.catch(() => {});
+    return p;
+  };
+  const checkpointQuietly = () =>
+    void checkpoint().catch((e) => log.warn(`Couldn't save progress (will try again): ${String(e)}`));
+  const timer = setInterval(checkpointQuietly, opts.checkpointMs ?? 60_000);
+  timer.unref();
+  const checkpointEvery = opts.checkpointEvery ?? 1000;
+  const onSignal = (signal: NodeJS.Signals) => {
+    log.warn(`${signal}: saving progress, then exiting`);
+    checkpoint()
+      .catch((e) => log.error(`Couldn't save progress: ${String(e)}`))
+      .finally(() => process.exit(130));
+  };
+  if (opts.saveOnSignal) {
+    process.once('SIGINT', onSignal);
+    process.once('SIGTERM', onSignal);
+  }
+
   const baseFetch = opts.client?.fetch ?? ((url, init) => fetch(url, init));
-  const basis = createBasis({ logger: log, ...opts.client, fetch: opts.raw.recordingFetch(baseFetch, sink, date) });
+  const recording = opts.raw.recordingFetch(baseFetch, sink, date);
+  const basis = createBasis({
+    logger: log,
+    ...opts.client,
+    fetch: async (url, init) => {
+      const res = await recording(url, init);
+      if (sink.length >= checkpointEvery) checkpointQuietly();
+      return res;
+    },
+  });
   const tables = createTables(basis, { curated: opts.curated, logger: { warn } });
   const haveText = index.textUrls();
   const wantText = ({ legislature, bill, version }: { legislature: number; bill: string; version: string }) =>
@@ -115,11 +168,14 @@ export async function fetchRaw(opts: FetchOptions): Promise<FetchSummary> {
       }
     }
   } finally {
+    clearInterval(timer);
+    process.off('SIGINT', onSignal);
+    process.off('SIGTERM', onSignal);
     // Keep what was fetched even if the run fails part way.
-    await opts.raw.appendLog(date, sink);
+    await checkpoint();
   }
-  log.info(`Recorded ${sink.length} responses for ${date}`);
-  return { date, legislatures, requests: sink.length, warnings };
+  log.info(`Recorded ${saved} responses for ${date}`);
+  return { date, legislatures, requests: saved, warnings };
 }
 
 /** The current legislature, the latest one with data, and any never fetched (all of them on the first run). */
