@@ -2,7 +2,10 @@
 //
 // The same tables code that `akleg build` replays makes the requests, so
 // every response a build needs is recorded. Bill text is downloaded once per
-// version; every other response is re-requested on each fetch.
+// version. With `refetch: 'as-needed'` (the default), closed legislatures (not
+// the current one or the latest with data) are answered from the store where
+// a response is already recorded, so a fill that was interrupted picks up
+// where it stopped; the current and latest legislatures are always re-requested.
 //
 // The log of what was fetched is saved every minute (and on cancel), so an
 // interrupted run's downloads aren't fetched again next time.
@@ -14,7 +17,14 @@ import {
   type ClientOptions,
   type Logger,
 } from '../client.ts';
-import { RawIndex, replayFetch, type LogEntry, type RawStore } from '../store/raw.ts';
+import {
+  NotInStoreError,
+  RawIndex,
+  legislatureOfUrl,
+  replayFetch,
+  type LogEntry,
+  type RawStore,
+} from '../store/raw.ts';
 import { FIRST_BILL_LEGISLATURE, FIRST_VOTE_LEGISLATURE, createTables, type Curated } from '../tables/index.ts';
 
 /** Bill text is only kept from the 26th legislature on. */
@@ -26,6 +36,12 @@ export interface FetchOptions {
   legislatures?: number[];
   /** Fetch every legislature (the one-time full fill takes hours, mostly bill text). */
   all?: boolean;
+  /**
+   * 'as-needed' (default): in closed legislatures, reuse responses already in
+   * the store and request only the missing ones. 'always': re-request everything
+   * except bill text.
+   */
+  refetch?: Refetch;
   /** Don't download bill text for new versions. */
   skipText?: boolean;
   /** Also re-check bills that had no versions yet in legislatures not being fetched (slow). */
@@ -44,6 +60,8 @@ export interface FetchOptions {
   saveOnSignal?: boolean;
   now?: Date;
 }
+
+export type Refetch = 'always' | 'as-needed';
 
 export interface FetchSummary {
   date: string;
@@ -65,7 +83,10 @@ export async function fetchRaw(opts: FetchOptions): Promise<FetchSummary> {
   const index = new RawIndex(await opts.raw.loadLog());
   const current = currentLegislature(opts.now);
   const legislatures = opts.legislatures ?? defaultLegislatures(index, current, opts.all ?? false);
-  log.info(`Fetching legislatures ${legislatures.join(', ')} into ${opts.raw.blobs.name}`);
+  const refetch = opts.refetch ?? 'as-needed';
+  const latest = Math.max(0, ...index.legislatures());
+  const reusable = (leg: number | null) => refetch === 'as-needed' && leg !== null && leg < current && leg !== latest;
+  log.info(`Fetching legislatures ${legislatures.join(', ')} into ${opts.raw.blobs.name} (refetch ${refetch})`);
 
   // Log entries not yet saved. Each one's body is already in the store.
   const sink: LogEntry[] = [];
@@ -105,10 +126,21 @@ export async function fetchRaw(opts: FetchOptions): Promise<FetchSummary> {
 
   const baseFetch = opts.client?.fetch ?? ((url, init) => fetch(url, init));
   const recording = opts.raw.recordingFetch(baseFetch, sink, date);
+  const stored = replayFetch(opts.raw, index.view(date));
+  let reused = 0;
   const basis = createBasis({
     logger: log,
     ...opts.client,
     fetch: async (url, init) => {
+      if (reusable(legislatureOfUrl(url))) {
+        try {
+          const res = await stored(url, init);
+          reused++;
+          return res;
+        } catch (e) {
+          if (!(e instanceof NotInStoreError)) throw e;
+        }
+      }
       const res = await recording(url, init);
       if (sink.length >= checkpointEvery) checkpointQuietly();
       return res;
@@ -174,7 +206,7 @@ export async function fetchRaw(opts: FetchOptions): Promise<FetchSummary> {
     // Keep what was fetched even if the run fails part way.
     await checkpoint();
   }
-  log.info(`Recorded ${saved} responses for ${date}`);
+  log.info(`Recorded ${saved} responses for ${date}${reused ? `; reused ${reused} already stored` : ''}`);
   return { date, legislatures, requests: saved, warnings };
 }
 

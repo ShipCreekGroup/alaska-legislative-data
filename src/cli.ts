@@ -19,6 +19,9 @@ Commands:
     --legislatures L  Comma separated, eg 33,34. Default: the current one, the latest with
                       data, and any never fetched (all of them on the first run: hours)
     --all             Every legislature
+    --refetch R       as-needed (default): in legislatures before the current one and the
+                      latest with data, reuse responses already in the store and request
+                      only the missing ones. always: re-request everything but bill text
     --skip-text       Don't download bill text for new versions
     --recheck-missing-versions
                       Also re-check older bills that had no versions yet (slow)
@@ -67,6 +70,7 @@ async function main(argv: string[]): Promise<number> {
       date: { type: 'string' },
       all: { type: 'boolean', default: false },
       legislatures: { type: 'string' },
+      refetch: { type: 'string', default: 'as-needed' },
       curated: { type: 'string' },
       'skip-text': { type: 'boolean', default: false },
       'recheck-missing-versions': { type: 'boolean', default: false },
@@ -112,12 +116,17 @@ async function main(argv: string[]): Promise<number> {
         )
       : undefined;
     if (command === 'fetch') {
+      if (values.refetch !== 'always' && values.refetch !== 'as-needed') {
+        console.error(`--refetch must be always or as-needed, not ${values.refetch}`);
+        return 1;
+      }
       const summary = await fetchRaw({
         raw,
         curated,
         logger,
         date: values.date,
         all: values.all,
+        refetch: values.refetch,
         legislatures: values.legislatures ? values.legislatures.split(',').map(Number) : undefined,
         skipText: values['skip-text'],
         recheckMissingVersions: values['recheck-missing-versions'],

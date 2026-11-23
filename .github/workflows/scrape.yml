@@ -3,10 +3,17 @@ name: Fetch, Build and Publish
 on:
   workflow_dispatch:
     inputs:
-      full:
-        description: 'Fetch every legislature, not just the current one (takes hours; needed once to fill the raw store)'
-        type: boolean
-        default: false
+      legislatures:
+        description: 'Legislatures to fetch: comma separated (eg 26,27,28) or "all". Blank: the current one, the latest with data, and any never fetched'
+        type: string
+        default: ''
+      refetch:
+        description: 'as needed: reuse responses already in the raw store for closed legislatures (the current and latest are always re-requested). always: re-request everything but bill text'
+        type: choice
+        options:
+          - as needed
+          - always
+        default: as needed
   schedule:
     - cron: '37 2 * * *' # Every day at 2:37 UTC
 
@@ -56,8 +63,17 @@ jobs:
           restore-keys: raw-objects-
 
       - name: Fetch new API responses into the raw store
+        env:
+          LEGISLATURES: ${{ inputs.legislatures }}
+          REFETCH: ${{ inputs.refetch == 'always' && 'always' || 'as-needed' }}
         # exec, so a cancel signals node directly and it can save its progress.
-        run: exec node src/cli.ts fetch --store r2 ${{ inputs.full && '--all' || '' }}
+        run: |
+          args=(--store r2 --refetch "$REFETCH")
+          legs="${LEGISLATURES// /}"
+          if [ "$legs" = all ]; then args+=(--all)
+          elif [ -n "$legs" ]; then args+=(--legislatures "$legs")
+          fi
+          exec node src/cli.ts fetch "${args[@]}"
 
       - name: Build the tables and their history
         run: node src/cli.ts build --store r2 --out export

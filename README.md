@@ -171,8 +171,16 @@ their name does. `members.csv` has no `MemberId` column: it's built from `Legisl
 
 [`.github/workflows/scrape.yml`](./.github/workflows/scrape.yml) runs `akleg fetch`, `akleg build`,
 the DuckDB script and `akleg publish`, then publishes the export as the only GitHub release (older
-releases are deleted). A separate job runs the contract tests against the live API. Run the workflow
-by hand with "full" checked to fetch every legislature again.
+releases are deleted). A separate job runs the contract tests against the live API.
+
+Running the workflow by hand takes two inputs:
+
+- **legislatures**: comma separated numbers (eg `26,27,28`) or `all`. Blank means the current
+  legislature, the latest with data, and any never fetched.
+- **refetch**: `as needed` (the default) answers requests for closed legislatures from responses
+  already in the raw store and fetches only the missing ones, so `all` with `as needed` resumes an
+  interrupted fill. The current and latest legislatures are always re-requested. `always`
+  re-requests everything but bill text.
 
 It reads the R2 bucket's location from two GitHub Actions variables, `CLOUDFLARE_ACCOUNT_ID` and
 `R2_BUCKET`, and its credentials from two secrets, `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` (an
