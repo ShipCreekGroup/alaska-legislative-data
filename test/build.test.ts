@@ -150,6 +150,44 @@ describe('fetch checkpoints', () => {
   });
 });
 
+describe('fetch refetch modes', () => {
+  // In 2027 the current legislature is 35, so 34 is closed once 35 has data.
+  const now = new Date('2027-03-01T12:00:00Z');
+  const run = (store: FileStore, date: string, refetch: 'always' | 'as-needed', legislatures: number[]) => {
+    const fetch = api(1);
+    return fetchRaw({
+      raw: new RawStore(store),
+      curated,
+      logger: silent,
+      date,
+      now,
+      legislatures,
+      refetch,
+      client: { fetch, sleep: async () => {} },
+    }).then((summary) => ({ summary, calls: fetch.calls.length }));
+  };
+
+  it('reuses stored responses for closed legislatures as needed, and re-requests them always', async () => {
+    const store = new FileStore(mkdtempSync(join(tmpdir(), 'akleg-refetch-')));
+    const first = await run(store, '2027-03-01', 'as-needed', [34, 35]);
+    assert.ok(first.calls > 1);
+
+    const asNeeded = await run(store, '2027-03-02', 'as-needed', [34]);
+    assert.equal(asNeeded.calls, 0);
+    assert.equal(asNeeded.summary.requests, 0);
+
+    const always = await run(store, '2027-03-03', 'always', [34]);
+    assert.ok(always.calls > 0);
+  });
+
+  it('always re-requests the current legislature', async () => {
+    const store = new FileStore(mkdtempSync(join(tmpdir(), 'akleg-refetch-')));
+    await run(store, '2027-03-01', 'as-needed', [35]);
+    const again = await run(store, '2027-03-02', 'as-needed', [35]);
+    assert.ok(again.calls > 0);
+  });
+});
+
 describe('fetch and build', () => {
   it('builds current tables and SCD2 history from the raw store', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'akleg-build-'));
